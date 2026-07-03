@@ -48,11 +48,14 @@ function json(res, code, obj, headers) {
 }
 function clean(s, max) { return String(s == null ? '' : s).trim().slice(0, max || 4000); }
 
+const ADMIN_USER = (process.env.ADMIN_USER || '').toLowerCase();
 async function currentUser(req) {
   const sid = parseCookies(req).sid;
   if (!sid || !db.enabled) return null;
   const r = await db.query('SELECT u.id, u.username, u.role FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token=$1 AND s.expires_at > now()', [sid]);
-  return r.rows[0] || null;
+  const u = r.rows[0];
+  if (u && ADMIN_USER && u.username.toLowerCase() === ADMIN_USER) u.role = 'admin';
+  return u || null;
 }
 function setSessionCookie(res, token) {
   const days = 30;
