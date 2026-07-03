@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>doswiki — the wants-first drug & supplement wiki</title>
+<meta name="description" content="A wants-first wiki of ~220 health, fitness and longevity compounds — approved and non-approved. Mechanism, gene target, and plain English for every one.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
+</head>
+<body>
+<header class="topbar">
+  <a href="#/" class="brand">🧬 dos<span>wiki</span></a>
+  <div class="search-wrap">
+    <input id="search" type="search" placeholder="Search 220+ compounds, pathways, terms…" autocomplete="off" spellcheck="false">
+    <div id="search-results" class="search-results" hidden></div>
+  </div>
+  <nav class="topnav">
+    <a href="#/browse">Browse</a>
+    <a href="#/learn">Learn</a>
+    <a href="#/pathways">Pathways</a>
+    <a href="#/stack">Stack <span id="stack-badge" class="stack-badge" hidden>0</span></a>
+    <a href="#/az">A–Z</a>
+    <a href="#/about">About</a>
+  </nav>
+  <button id="menu-btn" class="menu-btn" aria-label="Menu">☰</button>
+</header>
+
+<main id="app"><!-- rendered by app.js --></main>
+
+<footer class="foot">
+  <div>doswiki · educational content, not medical advice · content source: <code>content/*.md</code></div>
+  <div class="foot-stats" id="foot-stats"></div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

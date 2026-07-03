@@ -1,0 +1,13 @@
+{
+  "name": "doswiki",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wants-first drug & supplement wiki — static, zero-dependency.",
+  "scripts": {
+    "build": "node build/parse.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
