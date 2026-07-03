@@ -1,4 +1,4 @@
-// Zero-dependency static file server for doswiki (Railway/Nixpacks: `npm start`).
+// Zero-dependency static file server for PBswiki (Railway/Nixpacks: `npm start`).
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -26,4 +26,4 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
     res.end(data);
   });
-}).listen(PORT, () => console.log('doswiki serving on :' + PORT));
+}).listen(PORT, () => console.log('PBswiki serving on :' + PORT));

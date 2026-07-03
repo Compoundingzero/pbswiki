@@ -72,6 +72,14 @@ a.counter:hover{border-color:var(--accent);transform:translateY(-2px);text-decor
 .tchip b{color:var(--accent2)}
 .tchip span{background:var(--panel2);color:var(--muted);border-radius:999px;padding:0 .5rem;font-size:.78rem}
 
+/* legend */
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:1rem;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem 1.4rem;box-shadow:var(--shadow);margin:.4rem 0}
+.legend-h{font-size:.9rem;font-weight:700;color:var(--head);margin-bottom:.7rem}
+.legend-h span{font-weight:400;color:var(--faint);font-size:.82rem}
+.legend-row{display:flex;align-items:center;gap:.7rem;padding:.28rem 0;font-size:.9rem;color:var(--muted)}
+.legend-row .stars{min-width:5.6em}
+.legend-row .pill{font-size:.78rem}
+
 /* learn cards */
 .learn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.9rem}
 .learn-card{padding:1.2rem;background:#fff;border:1px solid var(--line);border-radius:var(--radius);cursor:pointer;transition:.15s;box-shadow:var(--shadow)}
@@ -195,6 +203,7 @@ a.ex-node:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 @media(max-width:760px){
   .ex-flow{flex-direction:column}
   .ex-arrow{transform:rotate(90deg)}
+  .legend{grid-template-columns:1fr}
   .stack-grid{grid-template-columns:1fr}
   .target-hero{flex-direction:column}
   .detail-head{flex-direction:column}

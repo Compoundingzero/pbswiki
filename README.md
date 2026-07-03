@@ -1,9 +1,9 @@
-# doswiki
+# PBswiki — the Personal Bests Wiki
 
-**A wants-first wiki of the health, fitness & longevity compound universe** — approved and non-approved. Start from a goal ("build muscle", "lose fat", "live longer"), and every compound is exploded into the receptor, gene, and pathway it pulls, then explained in plain English.
+**Chase your personal best, and know exactly what gets you there.** A goal-first wiki of the health, fitness & longevity compound universe — approved and non-approved. Pick what you want to improve, see the compounds that actually help (ranked by human evidence), and get the real mechanism plus the honest catch, in plain English.
 
 🌐 **Live site:** https://doswiki-production.up.railway.app
-📚 **~220 compounds · 102 molecular targets · 16 master pathways · ~150 gene-target links**
+📚 **~220 compounds · 102 molecular targets · 16 pathways · ~150 gene-target links**
 
 > Educational content only — **not medical advice**. Non-approved and controlled substances are documented for completeness and harm-reduction, not endorsement.
 
@@ -53,7 +53,7 @@ Markdown is the source of truth. A build step parses it into the site's data; th
 content/*.md                    ← you edit these
    │  node build/parse.js       ← parses markdown → structured data
    ▼
-site/data.js                    ← generated (window.DOSWIKI_DATA)
+site/data.js                    ← generated (window.PBSWIKI_DATA)
 site/index.html + app.js + styles.css   ← the site (hash-router SPA)
 server.js                       ← tiny zero-dependency static server (for hosting)
 ```

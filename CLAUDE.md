@@ -1,4 +1,4 @@
-# doswiki — Project Briefing
+# PBswiki — Project Briefing
 
 ## What This Is
 A "wants-first" wiki of health, fitness, and longevity compounds — approved and non-approved.
