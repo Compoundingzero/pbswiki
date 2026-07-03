@@ -134,20 +134,39 @@ a.counter:hover{border-color:var(--accent);transform:translateY(-2px);text-decor
 .body a{border-bottom:1px dotted var(--faint)}
 .related{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.6rem;margin-top:1rem}
 
-/* exploded view */
-.exploded{background:linear-gradient(180deg,#fbfdff,#f4f7fb);border:1px solid var(--line);border-radius:14px;padding:1.2rem;margin:1.4rem 0}
-.ex-title{font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);margin-bottom:1rem}
-.ex-flow{display:flex;align-items:stretch;gap:.6rem;flex-wrap:wrap}
-.ex-col{display:flex;flex-direction:column;gap:.5rem;min-width:130px;flex:1}
-.ex-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--faint)}
-.ex-nodes{display:flex;flex-direction:column;gap:.4rem}
+/* small inline node chips (used on target page + stack builder) */
 .ex-node{padding:.45rem .7rem;border-radius:9px;font-size:.85rem;border:1px solid var(--line);text-align:center;font-weight:500;background:#fff}
 .ex-node.c{background:var(--accent);color:#fff;font-weight:700;border-color:var(--accent)}
 .ex-node.t{font-family:var(--mono);color:var(--accent2);background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.25)}
 .ex-node.p{color:var(--purple);background:rgba(124,58,237,.06);border-color:rgba(124,58,237,.25)}
 .ex-node.g{color:var(--green);background:rgba(5,150,105,.06);border-color:rgba(5,150,105,.25)}
 a.ex-node:hover{text-decoration:none;filter:brightness(.97);transform:translateY(-1px)}
-.ex-arrow{align-self:center;color:var(--faint);font-size:.75rem;white-space:nowrap;padding:0 .2rem}
+
+/* mechanism chain (compound page) */
+.mech{background:linear-gradient(180deg,#fbfdff,#f1f5fb);border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.2rem;margin:1.4rem 0}
+.mech-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.8rem;flex-wrap:wrap}
+.mech-title{font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-weight:700}
+.mech-help-btn{background:#fff;border:1px solid var(--line);border-radius:999px;padding:.3rem .75rem;font-size:.78rem;color:var(--accent2);cursor:pointer;transition:.12s}
+.mech-help-btn:hover,.mech-help-btn.open{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.mech-guide{background:#fff;border:1px solid var(--line);border-left:3px solid var(--accent2);border-radius:10px;padding:.85rem 1.05rem;font-size:.92rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem}
+.mech-guide b{color:var(--head)}
+.mech-chain{display:flex;flex-direction:column;align-items:center}
+.mstage{width:100%;max-width:560px;text-align:center}
+.mstage-lbl{font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;color:var(--faint);margin-bottom:.5rem}
+.mstage-lbl em{display:block;text-transform:none;letter-spacing:0;font-style:normal;font-size:.76rem;opacity:.9;margin-top:.15rem}
+.mstage-row{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center}
+.mnode{padding:.6rem 1rem;border-radius:11px;border:1px solid var(--line);font-size:.92rem;font-weight:600;background:#fff;transition:.16s cubic-bezier(.2,.7,.3,1)}
+.mnode.c{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700;box-shadow:0 8px 20px rgba(13,148,136,.25)}
+.mnode.t{font-family:var(--mono);color:var(--accent2);background:rgba(37,99,235,.07);border-color:rgba(37,99,235,.3)}
+.mnode.p{color:var(--purple);background:rgba(124,58,237,.07);border-color:rgba(124,58,237,.3)}
+.mnode.g{color:var(--green);background:rgba(5,150,105,.07);border-color:rgba(5,150,105,.3)}
+a.mnode:hover{text-decoration:none;transform:translateY(-2px) scale(1.03);box-shadow:0 10px 24px rgba(15,30,50,.14);filter:brightness(1.02)}
+.mconn{position:relative;height:48px;display:flex;align-items:center;justify-content:center;margin:.35rem 0}
+.mconn::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;transform:translateX(-50%);background:linear-gradient(var(--accent2),rgba(37,99,235,.28))}
+.mconn::after{content:"";position:absolute;left:50%;top:0;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:var(--accent2);box-shadow:0 0 8px rgba(37,99,235,.6);animation:mflow 2s ease-in-out infinite}
+@keyframes mflow{0%{top:2px;opacity:0}18%{opacity:1}82%{opacity:1}100%{top:42px;opacity:0}}
+.mconn-word{position:relative;z-index:1;background:#eef3fb;border:1px solid rgba(37,99,235,.3);color:var(--accent2);border-radius:999px;padding:.14rem .8rem;font-size:.78rem;white-space:nowrap}
+@media(prefers-reduced-motion:reduce){.mconn::after{animation:none;opacity:0}}
 
 /* target page + parts catalog */
 .target-hero{display:flex;gap:1.2rem;align-items:flex-start;margin-bottom:1rem}
