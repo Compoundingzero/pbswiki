@@ -1,0 +1,71 @@
+name: Backup community data
+
+# Durably versions all community-generated data (comments, compound edits,
+# votes, stewardship proposals, expert domains) from Railway Postgres into the
+# `community-backups` branch of this repo. Runs on a schedule and on demand.
+#
+# One-time setup (see scripts/backup-community.js header):
+#   1. In Railway, enable PUBLIC networking on the Postgres service and copy its
+#      PUBLIC connection string (host ends in .proxy.rlwy.net).
+#   2. Add it as a repo secret named DATABASE_URL
+#      (Settings -> Secrets and variables -> Actions -> New repository secret),
+#      or run:  gh secret set DATABASE_URL --repo Compoundingzero/pbswiki
+# Until the secret exists the job simply no-ops (it will not fail loudly).
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'   # every 6 hours
+  workflow_dispatch: {}       # manual "Run workflow" button
+
+permissions:
+  contents: write             # push to the community-backups branch
+
+concurrency:
+  group: community-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+
+      - name: Export community data from Postgres
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CI: 'true'
+        run: node scripts/backup-community.js
+
+      - name: Commit snapshot to community-backups branch
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "DATABASE_URL secret not set — skipping backup commit."
+            exit 0
+          fi
+          if [ ! -d backups ]; then echo "No backups produced — skipping."; exit 0; fi
+          git config user.name "pbswiki-backup-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          tmp="$(mktemp -d)"
+          cp -r backups/* "$tmp"/
+          git fetch origin community-backups || true
+          if git rev-parse --verify origin/community-backups >/dev/null 2>&1; then
+            git checkout -B community-backups origin/community-backups
+          else
+            git checkout --orphan community-backups
+            git rm -rf . >/dev/null 2>&1 || true
+          fi
+          rm -rf backups && mkdir -p backups && cp -r "$tmp"/* backups/
+          git add -f backups
+          if git diff --cached --quiet; then
+            echo "No community changes since last backup."
+          else
+            git commit -m "Community backup $(date -u +%FT%TZ)"
+            git push origin community-backups
+            echo "Pushed community backup."
+          fi
