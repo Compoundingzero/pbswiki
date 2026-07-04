@@ -195,6 +195,39 @@ D.modules.forEach((m, i) => {
 // solve hub
 add('/solve', shell({ route: '/solve', title: 'Solve a problem or reach a goal — protocol engine · PBswiki', desc: 'Tell us the problem to fix or goal to reach. Get a full Move · Fuel · Stack protocol for the root cause, localised for Singapore.', breadcrumbs: [{ name: 'Home', route: '/' }, { name: 'Solve', route: '/solve' }], body: `<h1>Stop guessing. Start solving.</h1><p>Pick a problem or goal and get a full protocol — the movement to fix it, Singapore foods to fuel it, and evidence-ranked compounds.</p><ul>${GRAPH.problems.map((p) => `<li><a href="/protocol/${p.id}/${p.root_causes[0].id}">${esc(p.name)}</a></li>`).join('')}</ul>` }));
 
+// ---- crawlable home page (SPA shell has an empty body; this gives Google real content) ----
+// Written to home.html; the server serves it for "/" and falls back to index.html.
+{
+  const byCat = {};
+  GRAPH.problems.forEach((p) => { (byCat[p.category] = byCat[p.category] || []).push(p); });
+  const problemList = Object.keys(byCat).map((cat) => `<section><h2>${esc(cat)}</h2><ul class="seo-links">${byCat[cat]
+    .map((p) => `<li><a href="/protocol/${p.id}/${p.root_causes[0].id}">${esc(p.name)}</a></li>`).join('')}</ul></section>`).join('');
+  const goalLinks = D.goals.map((g) => `<li><a href="/goal/${g.id}">${esc(g.label)}</a></li>`).join('');
+  const homeBody = `
+    <section class="hero funnel-hero">
+      <div class="kicker">Precision protocols · localised for Singapore</div>
+      <h1>Stop guessing. <span class="lead">Start solving.</span></h1>
+      <p class="hero-lead">Tired of US-centric supplement lists and generic internet advice? Your body is a system. Don't just treat the symptom — fix the root cause.</p>
+      <p><a class="cta-primary" href="/solve">Find my root cause →</a></p>
+    </section>
+    <section class="how-3"><h2>How it works</h2>
+      <ol><li><b>Diagnose</b> — tell us your pain or goal and answer one clinical question to find the exact root cause.</li>
+      <li><b>Execute</b> — get your precision protocol: the movement, evidence-ranked compounds, and biological targets for your recovery.</li>
+      <li><b>Fuel</b> — log your local Singaporean meals and watch your nutrient bars fill toward the targets that heal your issue.</li></ol>
+    </section>
+    <section><h2>Start a protocol</h2>${problemList}</section>
+    <section><h2>Or browse by goal</h2><ul class="seo-links">${goalLinks}</ul></section>`;
+  // write directly (not via add()) so "/home" never leaks into the sitemap; canonical is "/"
+  fs.writeFileSync(path.join(SITE, 'home.html'), shell({
+    route: '/',
+    title: 'PBswiki — Stop guessing, start solving. Precision health protocols for Singapore',
+    desc: 'Fix the root cause, not the symptom. Get a precision Move · Fuel · Stack protocol for pain, metabolic, sleep, hormonal, cognitive, longevity and performance goals — evidence-ranked and localised for Singapore.',
+    jsonld: { '@context': 'https://schema.org', '@type': 'WebSite', name: 'PBswiki', url: SITE_URL + '/', description: 'Precision, root-cause health protocols localised for Singapore.' },
+    breadcrumbs: [{ name: 'Home', route: '/' }],
+    body: homeBody,
+  }));
+}
+
 // ---- write files ----
 let written = 0;
 pages.forEach(({ route, html }) => {

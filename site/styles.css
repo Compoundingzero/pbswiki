@@ -572,3 +572,72 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 .auth-or{display:flex;align-items:center;text-align:center;color:var(--faint);font-size:.78rem;margin:.5rem 0}
 .auth-or::before,.auth-or::after{content:"";flex:1;border-top:1px solid var(--line)}
 .auth-or span{padding:0 .6rem}
+
+/* ================= Conversion landing (funnel hero, steps, personas, intake) ================= */
+.funnel-hero{background:radial-gradient(1200px 400px at 50% -80px,#eafcf3 0,transparent 70%),radial-gradient(900px 360px at 50% -40px,#eef4ff 0,transparent 65%);border-radius:20px;padding:3rem 1rem 2rem}
+.funnel-hero h1{font-size:3rem}
+.hero-lead{font-size:1.18rem!important;max-width:640px}
+.funnel{display:flex;gap:.6rem;justify-content:center;align-items:stretch;max-width:720px;margin:1.6rem auto 0;flex-wrap:wrap}
+.funnel-search{position:relative;flex:1;min-width:280px;text-align:left}
+.funnel-search .fs-ico{position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:1.05rem;opacity:.6;pointer-events:none}
+#hero-solve-input{width:100%;font-size:1.1rem;padding:1rem 1rem 1rem 2.7rem;border:2px solid var(--line);border-radius:14px;background:#fff;box-shadow:var(--shadow);color:var(--ink);transition:border-color .15s}
+#hero-solve-input:focus{outline:none;border-color:var(--accent)}
+.funnel-btn{align-self:center;white-space:nowrap;padding:1rem 1.5rem;font-size:1.02rem;border:none;cursor:pointer}
+.funnel-out{position:absolute;left:0;right:0;top:calc(100% + .4rem);background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 50px rgba(12,21,34,.18);overflow:hidden;z-index:50}
+.funnel-hit{display:flex;align-items:center;gap:.7rem;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--line);padding:.7rem .9rem;cursor:pointer}
+.funnel-hit:last-child{border-bottom:none}
+.funnel-hit:hover,.funnel-hit.on{background:var(--panel2)}
+.funnel-hit .fh-i{font-size:1.3rem;width:1.7rem;text-align:center}
+.funnel-hit .fh-b{display:flex;flex-direction:column}
+.funnel-hit .fh-b b{color:var(--head);font-size:.98rem}
+.funnel-hit .fh-b small{color:var(--faint);font-size:.78rem}
+.seed-row{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:1.1rem;align-items:center}
+.seed-chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:.4rem .85rem;font-size:.85rem;color:var(--ink);cursor:pointer;transition:.15s}
+.seed-chip:hover{border-color:var(--accent);color:var(--accent)}
+.seed-all{font-size:.82rem;color:var(--muted);padding:.4rem .3rem}
+.home-counters{margin-top:2.4rem}
+
+.section-title.center{justify-content:center}
+.how-3{margin:2.6rem 0 1rem}
+.steps-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.step3{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem 1.2rem;box-shadow:var(--shadow)}
+.step3 .s3-n{position:absolute;top:-.7rem;left:1.2rem;width:1.9rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--head);color:#fff;border-radius:999px;font-family:var(--mono);font-weight:800;font-size:.95rem}
+.step3 .s3-tag{display:inline-block;margin:.4rem 0 .5rem;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:999px}
+.step3 .s3-tag.mv{color:var(--mv);background:#eaf1ff}.step3 .s3-tag.st{color:var(--st);background:#f5edff}.step3 .s3-tag.fl{color:var(--fl);background:#e8f9ee}
+.step3 h3{margin:.1rem 0 .35rem;color:var(--head);font-size:1.12rem}
+.step3 p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.5}
+
+.persona{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:2.6rem 0 1rem}
+.persona-card{border-radius:18px;padding:1.8rem 1.6rem;border:1px solid var(--line)}
+.persona-card.users{background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;border-color:transparent}
+.persona-card.pros{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;border-color:transparent}
+.persona-card .p-tag{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-bottom:.5rem}
+.persona-card h3{margin:.1rem 0 .5rem;font-size:1.4rem;color:#fff}
+.persona-card p{margin:0 0 1.1rem;opacity:.92;line-height:1.55;font-size:.95rem}
+.persona-card .cta-primary{background:#fff;color:var(--head)}
+.persona-card .cta-ghost{display:inline-block;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.35);padding:.7rem 1.25rem;border-radius:999px;font-weight:700}
+.persona-card .cta-ghost:hover{background:rgba(255,255,255,.24);text-decoration:none}
+
+/* intake modal */
+.intake .intake-head{margin-bottom:1rem}
+.intake .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.intake h2{margin:.35rem 0 .4rem;font-size:1.5rem;color:var(--head)}
+.intake .intake-head p{color:var(--muted);font-size:.92rem;margin:0;line-height:1.5}
+.intake-opts{display:flex;flex-direction:column;gap:.55rem}
+.intake-opt{display:flex;align-items:flex-start;gap:.75rem;text-align:left;width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:.85rem .95rem;cursor:pointer;transition:.15s}
+.intake-opt:hover{border-color:var(--accent);background:#fff;box-shadow:var(--shadow)}
+.intake-opt .io-i{flex:none;width:1.7rem;height:1.7rem;display:flex;align-items:center;justify-content:center;background:var(--head);color:#fff;border-radius:999px;font-family:var(--mono);font-weight:800;font-size:.85rem}
+.intake-opt .io-b{display:flex;flex-direction:column;flex:1}
+.intake-opt .io-b b{color:var(--head);font-size:.98rem}
+.intake-opt .io-b small{color:var(--muted);font-size:.83rem;margin-top:.15rem;line-height:1.4}
+.intake-opt .io-go{color:var(--accent);font-weight:800;align-self:center}
+.intake-skip{display:block;width:100%;margin-top:.9rem;background:none;border:none;color:var(--muted);font-size:.85rem;cursor:pointer;text-decoration:underline}
+.intake-skip:hover{color:var(--accent)}
+
+@media(max-width:720px){
+  .funnel-hero h1{font-size:2rem}
+  .hero-lead{font-size:1.02rem!important}
+  .funnel-btn{width:100%}
+  .steps-3{grid-template-columns:1fr}
+  .persona{grid-template-columns:1fr}
+}

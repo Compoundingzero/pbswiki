@@ -394,7 +394,13 @@ function sendFile(res, file, code) {
 }
 function serveStatic(req, res, url) {
   let p = decodeURIComponent(url.split('?')[0]);
-  if (p === '/') p = '/index.html';
+  // "/" serves the prerendered crawlable home if present, else the SPA shell
+  if (p === '/') {
+    return fs.readFile(path.join(DIR, 'home.html'), (e, html) => {
+      if (!e) { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); return res.end(html); }
+      sendFile(res, path.join(DIR, 'index.html'));
+    });
+  }
   const safe = path.normalize(p).replace(/^(\.\.[/\\])+/, '');
   const file = path.join(DIR, safe);
   if (!file.startsWith(DIR)) { res.writeHead(403); return res.end('Forbidden'); }
