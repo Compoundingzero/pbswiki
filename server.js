@@ -258,6 +258,21 @@ async function api(req, res, url) {
     return json(res, 200, { ok: true });
   }
 
+  // --- admin: credential verification for stewardship ---
+  if (seg[0] === 'admin' && seg[1] === 'experts' && method === 'GET') {
+    const u = await currentUser(req); if (!u || u.role !== 'admin') return json(res, 403, { error: 'Admin only' });
+    const r = await db.query('SELECT username, domain, credential, domain_verified, created_at FROM users WHERE domain IS NOT NULL ORDER BY domain_verified ASC, created_at ASC');
+    return json(res, 200, { experts: r.rows });
+  }
+  if (seg[0] === 'admin' && seg[1] === 'verify-domain' && method === 'POST') {
+    const u = await currentUser(req); if (!u || u.role !== 'admin') return json(res, 403, { error: 'Admin only' });
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const username = clean(b.username, 24); const verified = b.verified !== false;
+    const r = await db.query('UPDATE users SET domain_verified=$1 WHERE username=$2 RETURNING username, domain, domain_verified', [verified, username]);
+    if (!r.rows[0]) return json(res, 404, { error: 'No such user' });
+    return json(res, 200, { ok: true, user: r.rows[0] });
+  }
+
   return json(res, 404, { error: 'Not found' });
 }
 
