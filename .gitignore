@@ -5,3 +5,12 @@ node_modules/
 .railway/
 tmp/
 backups/
+site/c/
+site/goal/
+site/protocol/
+site/target/
+site/pathway/
+site/learn/
+site/solve.html
+site/sitemap.xml
+site/robots.txt

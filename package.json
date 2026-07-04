@@ -4,8 +4,8 @@
   "private": true,
   "description": "Personal-bests drug & supplement wiki with community editing & comments.",
   "scripts": {
-    "build": "node build/parse.js",
-    "prestart": "node build/parse.js",
+    "build": "node build/parse.js && node build/prerender.js",
+    "prestart": "node build/parse.js && (node build/prerender.js || echo '[prestart] prerender skipped (SPA fallback still serves)')",
     "start": "node server.js"
   },
   "dependencies": {

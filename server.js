@@ -277,18 +277,33 @@ async function api(req, res, url) {
 }
 
 // ---------- static ----------
+function sendFile(res, file, code) {
+  fs.readFile(file, (err, data) => {
+    if (err) { res.writeHead(404); return res.end('Not found'); }
+    res.writeHead(code || 200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
+    res.end(data);
+  });
+}
 function serveStatic(req, res, url) {
   let p = decodeURIComponent(url.split('?')[0]);
   if (p === '/') p = '/index.html';
-  const file = path.join(DIR, path.normalize(p).replace(/^(\.\.[/\\])+/, ''));
+  const safe = path.normalize(p).replace(/^(\.\.[/\\])+/, '');
+  const file = path.join(DIR, safe);
   if (!file.startsWith(DIR)) { res.writeHead(403); return res.end('Forbidden'); }
   fs.readFile(file, (err, data) => {
-    if (err) return fs.readFile(path.join(DIR, 'index.html'), (e2, idx) => {
-      if (e2) { res.writeHead(404); return res.end('Not found'); }
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); res.end(idx);
-    });
-    res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
-    res.end(data);
+    if (!err) {
+      res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
+      return res.end(data);
+    }
+    // clean-path routing: try the prerendered <path>.html for crawlable SEO pages
+    if (!path.extname(file)) {
+      return fs.readFile(file + '.html', (e2, html) => {
+        if (!e2) { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); return res.end(html); }
+        // SPA fallback so client-side routing still resolves the view
+        sendFile(res, path.join(DIR, 'index.html'));
+      });
+    }
+    sendFile(res, path.join(DIR, 'index.html'));
   });
 }
 
