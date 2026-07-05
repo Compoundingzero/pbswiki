@@ -21,7 +21,7 @@ const SITE_URL = (process.env.SITE_URL || 'https://rnawiki.com').replace(/\/$/, 
 // ---- load data (data.js assigns to window global) ----
 global.window = {};
 require(path.join(SITE, 'data.js'));
-const D = global.window.PBSWIKI_DATA;
+const D = global.window.RNAWIKI_DATA;
 const readJSON = (p) => { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch (e) { return null; } };
 const EX = readJSON(path.join(ROOT, 'data', 'clinical_exercises.json'));
 const FO = readJSON(path.join(ROOT, 'data', 'foods.json'));
