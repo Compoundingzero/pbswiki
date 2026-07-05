@@ -553,8 +553,28 @@ function serveProfileShell(res, handle) {
 }
 function serveStatic(req, res, url) {
   let p = decodeURIComponent(url.split('?')[0]);
+  const qp = new URLSearchParams(url.split('?')[1] || '');
   // profile pages get server-injected meta for sharing + SEO
   if (/^\/u\/[^/]+\/?$/.test(p)) return serveProfileShell(res, p.split('/')[2]);
+  // Proof-of-Progress share links: a protocol opened via ?by=/?log= gets a share-flavoured preview
+  if (/^\/protocol\//.test(p) && (qp.get('by') || qp.get('s'))) {
+    return fs.readFile(path.join(DIR, p.replace(/^\//, '') + '.html'), 'utf8', (e, html) => {
+      if (e) return sendFile(res, path.join(DIR, 'index.html'));
+      const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      const by = clean(qp.get('by'), 24);
+      const nm = html.match(/<title>([^—<]+)/);
+      const problemName = nm ? nm[1].trim() : 'their protocol';
+      const t = `${by ? '@' + by : 'Someone'} shared their ${problemName} progress on RNAwiki`;
+      const desc = `See the exact movement, stack, and Singapore food log for ${problemName} — then start your own. Stop guessing, start solving.`;
+      const out = html
+        .replace(/<meta property="og:title"[^>]*>/, `<meta property="og:title" content="${esc(t)}">`)
+        .replace(/<meta property="og:description"[^>]*>/, `<meta property="og:description" content="${esc(desc)}">`)
+        .replace(/<meta name="twitter:title"[^>]*>/, `<meta name="twitter:title" content="${esc(t)}">`)
+        .replace(/<meta name="twitter:description"[^>]*>/, `<meta name="twitter:description" content="${esc(desc)}">`);
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(out);
+    });
+  }
   // "/" serves the prerendered crawlable home if present, else the SPA shell
   if (p === '/') {
     return fs.readFile(path.join(DIR, 'home.html'), (e, html) => {

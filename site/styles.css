@@ -789,3 +789,26 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 .prof-stewarded{display:flex;flex-wrap:wrap;gap:.5rem}
 .prof-steward{background:#ecfdf5;border:1px solid #bbf7d0;border-radius:999px;padding:.4rem .9rem;font-size:.85rem;font-weight:600;color:#0f766e}
 .prof-steward:hover{text-decoration:none;filter:brightness(.98);border-color:var(--accent)}
+
+/* ================= Proof-of-Progress: share card + banners ================= */
+.shared-prog{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:linear-gradient(135deg,#eef2ff,#eafcf3);border:1px solid #c7d2fe;border-radius:14px;padding:.85rem 1.1rem;margin:0 0 1.1rem}
+.shared-prog .sp-l{flex:1;min-width:220px;font-size:.9rem;color:var(--ink)}
+.shared-prog .sp-l b{display:block;color:var(--head)}
+.fuel-foot .share{color:var(--accent);font-weight:700}
+.celebrate{text-align:center}
+.celebrate h2{margin:.2rem 0 .2rem;font-size:1.4rem}
+.pcard-wrap{display:flex;justify-content:center;margin:1rem 0}
+.celebrate-btns{display:flex;gap:.6rem;justify-content:center;margin-top:.4rem}
+.celebrate-btns button{flex:1;padding:.7rem 1rem}
+/* the shareable card (Instagram-story proportions) */
+.pcard{width:300px;min-height:400px;border-radius:22px;padding:26px 22px;display:flex;flex-direction:column;gap:14px;
+  background:radial-gradient(600px 300px at 20% 0,#134e4a 0,transparent 60%),linear-gradient(160deg,#0f172a,#134e4a);color:#fff;box-shadow:0 20px 50px rgba(12,21,34,.35);text-align:left}
+.pcard-top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.pcard-hit{font-size:1.5rem;font-weight:800;line-height:1.15;letter-spacing:-.02em;margin-top:8px}
+.pcard-prob{font-size:.95rem;opacity:.92}
+.pcard-prob small{display:block;opacity:.7;font-size:.8rem;margin-top:2px}
+.pcard-sec{margin-top:4px}
+.pcard-sec b{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;opacity:.6;display:block;margin-bottom:5px}
+.pcard-sec div{display:flex;flex-wrap:wrap;gap:6px}
+.pcard-sec span{background:rgba(255,255,255,.12);border-radius:8px;padding:4px 9px;font-size:.8rem}
+.pcard-foot{margin-top:auto;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;opacity:.85;border-top:1px solid rgba(255,255,255,.15);padding-top:12px}
