@@ -95,6 +95,22 @@ CREATE TABLE IF NOT EXISTS stewardships (
 );
 CREATE INDEX IF NOT EXISTS idx_steward_user ON stewardships(user_id);
 
+-- Local partners (gyms/clinics/stores). To be shown they must link back to rnawiki.com
+-- (backlink_url) and be approved — a strict, transparent link exchange for lead-gen.
+CREATE TABLE IF NOT EXISTS partners (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  type TEXT,
+  location TEXT,
+  link TEXT,
+  backlink_url TEXT,
+  serves TEXT,                 -- problem category it serves
+  submitted_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  status TEXT NOT NULL DEFAULT 'pending',  -- pending | active | rejected
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_partners_serves ON partners(serves, status);
+
 CREATE TABLE IF NOT EXISTS proposals (
   id SERIAL PRIMARY KEY,
   problem_id TEXT NOT NULL,

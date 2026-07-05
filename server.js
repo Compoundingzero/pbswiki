@@ -398,6 +398,38 @@ async function api(req, res, url) {
     await db.query('DELETE FROM stewardships WHERE problem_id=$1 AND root_cause_id=$2 AND user_id=$3', [pid, rcid, u.id]);
     return json(res, 200, { ok: true });
   }
+  // --- local partners (backlink-verified lead-gen) ---
+  if (seg[0] === 'partners' && method === 'GET') {
+    const cat = clean(new URL('http://x/' + url).searchParams.get('category'), 60);
+    const r = cat
+      ? await db.query("SELECT name,type,location,link,serves FROM partners WHERE status='active' AND serves=$1 ORDER BY created_at DESC LIMIT 6", [cat])
+      : await db.query("SELECT name,type,location,link,serves FROM partners WHERE status='active' ORDER BY created_at DESC LIMIT 30");
+    return json(res, 200, { partners: r.rows });
+  }
+  if (seg[0] === 'partners' && method === 'POST') {
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const name = clean(b.name, 80), type = clean(b.type, 20), location = clean(b.location, 60);
+    const link = safeUrl(b.link), backlink = safeUrl(b.backlink_url), serves = clean(b.serves, 60);
+    if (!name || !link || !backlink) return json(res, 400, { error: 'Business name, your website, and the page where you linked to RNAwiki are all required.' });
+    if (!/rnawiki\.com|rnawiki\.ai|rna-wiki\.com/i.test(backlink)) return json(res, 400, { error: 'The backlink page must link to rnawiki.com — that link exchange is how listings stay free.' });
+    const u = await currentUser(req);
+    const r = await db.query('INSERT INTO partners(name,type,location,link,backlink_url,serves,submitted_by) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING id',
+      [name, type || null, location || null, link, backlink, serves || null, u ? u.id : null]);
+    return json(res, 200, { ok: true, id: r.rows[0].id, status: 'pending' });
+  }
+  if (seg[0] === 'admin' && seg[1] === 'partners' && method === 'GET') {
+    const u = await currentUser(req); if (!u || u.role !== 'admin') return json(res, 403, { error: 'Admin only' });
+    const r = await db.query('SELECT id,name,type,location,link,backlink_url,serves,status,created_at FROM partners ORDER BY status ASC, created_at DESC LIMIT 200');
+    return json(res, 200, { partners: r.rows });
+  }
+  if (seg[0] === 'admin' && seg[1] === 'partners' && seg[2] && method === 'POST') {
+    const u = await currentUser(req); if (!u || u.role !== 'admin') return json(res, 403, { error: 'Admin only' });
+    const id = parseInt(seg[2], 10); const b = await readBody(req) || {};
+    const status = ['active', 'rejected', 'pending'].includes(b.status) ? b.status : 'active';
+    const r = await db.query('UPDATE partners SET status=$1 WHERE id=$2 RETURNING id,name,status', [status, id]);
+    if (!r.rows[0]) return json(res, 404, { error: 'No such partner' });
+    return json(res, 200, { ok: true, partner: r.rows[0] });
+  }
   if (seg[0] === 'proposals' && method === 'GET') {
     const sp = new URL('http://x/' + url).searchParams;
     const pid = clean(sp.get('problem'), 60), rcid = clean(sp.get('rc'), 60);
@@ -490,7 +522,9 @@ async function api(req, res, url) {
         (SELECT COUNT(*) FROM comments c WHERE c.user_id=u.id) +
         (SELECT COUNT(*) FROM proposals p WHERE p.user_id=u.id)) DESC LIMIT 25`);
     const leaderboard = board.rows.filter(r => (r.edits + r.comments + r.proposals) > 0);
-    return json(res, 200, { experts: experts.rows, leaderboard });
+    const top = await db.query(`SELECT username, domain, domain_verified, reputation_points, socials
+      FROM users WHERE reputation_points > 0 ORDER BY reputation_points DESC, username ASC LIMIT 5`);
+    return json(res, 200, { experts: experts.rows, leaderboard, top: top.rows });
   }
 
   // --- admin: credential verification for stewardship ---

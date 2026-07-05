@@ -812,3 +812,20 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 .pcard-sec div{display:flex;flex-wrap:wrap;gap:6px}
 .pcard-sec span{background:rgba(255,255,255,.12);border-radius:8px;padding:4px 9px;font-size:.8rem}
 .pcard-foot{margin-top:auto;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;opacity:.85;border-top:1px solid rgba(255,255,255,.15);padding-top:12px}
+
+/* ================= Phase 4: leaderboard, Digital Rx, cite, partner submit ================= */
+.lb-row{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
+.lb-card{display:flex;align-items:center;gap:.6rem;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:.5rem 1rem;color:var(--ink);box-shadow:var(--shadow)}
+.lb-card:hover{border-color:var(--accent);text-decoration:none}
+.lb-rank{font-family:var(--mono);font-weight:800;color:var(--faint)}
+.lb-name{font-weight:700;color:var(--head)}
+.lb-pts{font-family:var(--mono);color:var(--accent);font-weight:700}
+.clinic-header{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:linear-gradient(135deg,#0f172a,#134e4a);color:#fff;border-radius:16px;padding:1.1rem 1.3rem;margin:0 0 1.1rem}
+.clinic-header .ch-l{flex:1;min-width:200px}
+.clinic-header .ch-tag{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-bottom:.2rem}
+.clinic-header .ch-name{font-size:1.25rem;font-weight:800;color:#fff}
+.clinic-header .ch-name:hover{color:#bff3ea}
+.clinic-header .cta-primary{background:#fff;color:var(--head)}
+.cite-modal textarea,.partner-modal input,.partner-modal select{width:100%;border:1px solid var(--line);border-radius:9px;padding:.55rem .65rem;font:inherit;font-size:.9rem;box-sizing:border-box}
+.partner-modal label{display:block;font-size:.8rem;font-weight:700;color:var(--head);margin:.6rem 0 .25rem}
+.partner-modal h2,.cite-modal h2{margin:.2rem 0 .3rem}
