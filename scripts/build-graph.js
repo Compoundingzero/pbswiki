@@ -114,10 +114,20 @@ function targets(...keys) { return Object.assign({}, ...keys.map((k) => PRESET[k
 const PHYSIO = 'physio', DIET = 'dietitian', PHARM = 'pharmacist';
 
 // helper builders
+// Tags that are pure mobility/stretch (their exercises are stretches, not loading).
+const STRETCH_ONLY_TAGS = new Set(['mobility_stretch']);
 function rc(o) {
+  const move = o.move || [];
+  // Split move tags into strengthening vs stretching intent. Explicit o.strengthen / o.stretch
+  // override; otherwise strengthen = all loading tags, stretch = the anatomical tags (used to
+  // muscle-match region-appropriate stretches at generation time) plus any pure-stretch tag.
+  const strengthen_tags = o.strengthen || move.filter((t) => !STRETCH_ONLY_TAGS.has(t));
+  const stretch_tags = o.stretch || move;
   return {
     id: o.id, name: o.name, diagnostic: o.diagnostic || '',
-    move_tags: o.move || [], fuel_tags: o.fuel || [], pathway_ids: o.pathways || [],
+    move_tags: move, // kept for backward-compat / reverse links
+    strengthen_tags, stretch_tags,
+    fuel_tags: o.fuel || [], pathway_ids: o.pathways || [],
     goal_ids: o.goals || [], compounds: o.compounds || [],
     nutrient_targets: o.nutrients || {},
     prescription: o.rx || null,
