@@ -17,6 +17,8 @@ const TYPES = {
 const EDITABLE = ['mechanism', 'target', 'plain', 'protocol', 'watch', 'bottom'];
 // Hard domain isolation for stewardship: each expert domain owns exactly one layer.
 const DOMAIN_LAYER = { physio: 'move', dietitian: 'fuel', pharmacist: 'stack' };
+const DOMAIN_LABEL = { physio: 'Movement', dietitian: 'Nutrition', pharmacist: 'Pharmacology' };
+const SITE_URL = (process.env.SITE_URL || 'https://rnawiki.com').replace(/\/$/, '');
 // AI food-photo scanner (opt-in: does nothing until ANTHROPIC_API_KEY is set).
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';   // enables Gmail sign-in when set
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
@@ -88,11 +90,36 @@ function json(res, code, obj, headers) {
 }
 function clean(s, max) { return String(s == null ? '' : s).trim().slice(0, max || 4000); }
 
+// ---------- reputation ----------
+// Points per action. Idempotent via rep_events UNIQUE(user,kind,ref): the same action can never
+// award twice (re-voting, re-sharing the same day, re-merging the same proposal, etc.).
+const REWARDS = { vote: 2, comment: 3, edit: 10, proposal: 50, merged: 200, food_log: 5, share: 10 };
+async function award(userId, kind, ref, pts) {
+  if (!userId || !db.enabled) return;
+  const points = pts != null ? pts : (REWARDS[kind] || 0);
+  if (!points) return;
+  try {
+    const r = await db.query(
+      `INSERT INTO rep_events(user_id,kind,ref,points) VALUES($1,$2,$3,$4)
+       ON CONFLICT (user_id,kind,ref) DO NOTHING RETURNING id`, [userId, kind, String(ref), points]);
+    if (r.rows[0]) await db.query('UPDATE users SET reputation_points = reputation_points + $1 WHERE id=$2', [points, userId]);
+  } catch (e) { console.error('[award]', e.message); }
+}
+async function addBadge(userId, badge) {
+  try { await db.query(`UPDATE users SET badges = (CASE WHEN badges ? $2 THEN badges ELSE badges || to_jsonb($2::text) END) WHERE id=$1`, [userId, badge]); }
+  catch (e) { console.error('[badge]', e.message); }
+}
+function safeUrl(s, max) {
+  const v = clean(s, max || 200);
+  if (!v) return '';
+  return /^https?:\/\/[^\s]+$/i.test(v) ? v : '';
+}
+
 const ADMIN_USER = (process.env.ADMIN_USER || '').toLowerCase();
 async function currentUser(req) {
   const sid = parseCookies(req).sid;
   if (!sid || !db.enabled) return null;
-  const r = await db.query('SELECT u.id, u.username, u.role, u.domain, u.credential, u.domain_verified FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token=$1 AND s.expires_at > now()', [sid]);
+  const r = await db.query('SELECT u.id, u.username, u.role, u.domain, u.credential, u.domain_verified, u.reputation_points, u.socials, u.badges FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token=$1 AND s.expires_at > now()', [sid]);
   const u = r.rows[0];
   if (u && ADMIN_USER && u.username.toLowerCase() === ADMIN_USER) u.role = 'admin';
   return u || null;
@@ -211,6 +238,7 @@ async function api(req, res, url) {
     const goalId = clean(b.goalId, 80), body = clean(b.body, 2000);
     if (!goalId || !body) return json(res, 400, { error: 'Write something first' });
     const r = await db.query('INSERT INTO comments(goal_id,user_id,body) VALUES($1,$2,$3) RETURNING id,goal_id,body,created_at', [goalId, u.id, body]);
+    await award(u.id, 'comment', r.rows[0].id);
     return json(res, 200, { comment: Object.assign(r.rows[0], { username: u.username, user_id: u.id }) });
   }
   if (seg[0] === 'comments' && seg[1] && method === 'DELETE') {
@@ -239,7 +267,8 @@ async function api(req, res, url) {
     const fields = {};
     for (const k of EDITABLE) if (b.fields[k] != null) fields[k] = clean(b.fields[k], 6000);
     const note = clean(b.note, 200);
-    await db.query('INSERT INTO edits(compound_id,compound_name,user_id,fields,note) VALUES($1,$2,$3,$4,$5)', [cid, name, u.id, JSON.stringify(fields), note || null]);
+    const er = await db.query('INSERT INTO edits(compound_id,compound_name,user_id,fields,note) VALUES($1,$2,$3,$4,$5) RETURNING id', [cid, name, u.id, JSON.stringify(fields), note || null]);
+    await award(u.id, 'edit', er.rows[0].id);
     return json(res, 200, { ok: true, by: u.username });
   }
 
@@ -267,6 +296,8 @@ async function api(req, res, url) {
     }
     const r = await db.query(`SELECT SUM(CASE WHEN value>0 THEN 1 ELSE 0 END)::int AS up,
       SUM(CASE WHEN value<0 THEN 1 ELSE 0 END)::int AS down FROM votes WHERE target_id=$1`, [targetId]);
+    // reputation: a signed-in voter earns points once per target (idempotent)
+    if (value !== 0) { const vu = await currentUser(req); if (vu) await award(vu.id, 'vote', targetId); }
     return json(res, 200, { score: { up: r.rows[0].up || 0, down: r.rows[0].down || 0 } });
   }
 
@@ -278,6 +309,54 @@ async function api(req, res, url) {
     if (!DOMAIN_LAYER[domain] && domain !== '') return json(res, 400, { error: 'Unknown domain' });
     await db.query('UPDATE users SET domain=$1, credential=$2 WHERE id=$3', [domain || null, credential || null, u.id]);
     return json(res, 200, { ok: true, domain: domain || null, credential: credential || null });
+  }
+  // --- profile: update your public socials / booking link ---
+  if (seg[0] === 'profile' && !seg[1] && method === 'POST') {
+    const u = await currentUser(req); if (!u) return json(res, 401, { error: 'Please sign in' });
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const s = b.socials || {};
+    const socials = {
+      instagram: clean(s.instagram, 40).replace(/^@/, ''),
+      twitter: clean(s.twitter, 40).replace(/^@/, ''),
+      linkedin: safeUrl(s.linkedin),
+      website: safeUrl(s.website),
+      booking_link: safeUrl(s.booking_link),
+    };
+    await db.query('UPDATE users SET socials=$1 WHERE id=$2', [JSON.stringify(socials), u.id]);
+    return json(res, 200, { ok: true, socials });
+  }
+  // --- reputation: client-driven awards (login required, daily-idempotent) ---
+  if (seg[0] === 'rep' && method === 'POST') {
+    const u = await currentUser(req); if (!u) return json(res, 401, { error: 'Please sign in' });
+    const b = await readBody(req) || {};
+    const kind = clean(b.kind, 20);
+    if (kind !== 'food_log' && kind !== 'share') return json(res, 400, { error: 'unknown action' });
+    const day = new Date().toISOString().slice(0, 10); // once per day per kind
+    await award(u.id, kind, day);
+    const rp = (await db.query('SELECT reputation_points FROM users WHERE id=$1', [u.id])).rows[0];
+    return json(res, 200, { ok: true, reputation_points: rp ? rp.reputation_points : 0 });
+  }
+  // --- public expert profile / portfolio (backlink + prestige asset) ---
+  if (seg[0] === 'u' && seg[1] && method === 'GET') {
+    const handle = clean(seg[1], 24);
+    const ur = await db.query('SELECT id,username,domain,domain_verified,reputation_points,socials,badges,created_at FROM users WHERE lower(username)=lower($1)', [handle]);
+    const uu = ur.rows[0];
+    if (!uu) return json(res, 404, { error: 'No such user' });
+    const accepted = await db.query(`SELECT problem_id,root_cause_id,layer,domain,change,created_at
+      FROM proposals WHERE user_id=$1 AND status='endorsed' ORDER BY created_at DESC LIMIT 30`, [uu.id]);
+    const counts = (await db.query(`SELECT
+      (SELECT COUNT(*)::int FROM proposals WHERE user_id=$1) AS proposals,
+      (SELECT COUNT(*)::int FROM proposals WHERE user_id=$1 AND status='endorsed') AS accepted,
+      (SELECT COUNT(*)::int FROM edits WHERE user_id=$1) AS edits,
+      (SELECT COUNT(*)::int FROM comments WHERE user_id=$1) AS comments`, [uu.id])).rows[0];
+    return json(res, 200, {
+      user: {
+        username: uu.username, domain: uu.domain, domain_verified: uu.domain_verified,
+        reputation_points: uu.reputation_points, socials: uu.socials || {}, badges: uu.badges || [],
+        created_at: uu.created_at,
+      },
+      counts, accepted: accepted.rows, stewarded: [],
+    });
   }
   if (seg[0] === 'proposals' && method === 'GET') {
     const sp = new URL('http://x/' + url).searchParams;
@@ -303,6 +382,7 @@ async function api(req, res, url) {
     const r = await db.query(
       `INSERT INTO proposals(problem_id,root_cause_id,layer,domain,user_id,change,evidence)
        VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING id,created_at`, [pid, rcid, layer, u.domain, u.id, change, evidence || null]);
+    await award(u.id, 'proposal', r.rows[0].id);
     return json(res, 200, { ok: true, id: r.rows[0].id });
   }
   if (seg[0] === 'proposals' && seg[1] && seg[2] === 'endorse' && method === 'POST') {
@@ -314,9 +394,14 @@ async function api(req, res, url) {
     // STRICT peer review: endorsement must come from the SAME domain, not the author.
     if (pr.user_id === u.id) return json(res, 403, { error: 'You cannot endorse your own proposal.' });
     if (pr.domain !== u.domain) return json(res, 403, { error: `Only another ${pr.domain} can endorse this. Cross-domain experts may Flag instead.` });
-    await db.query(`INSERT INTO proposal_actions(proposal_id,user_id,action) VALUES($1,$2,'endorse')
-      ON CONFLICT (proposal_id,user_id,action) DO NOTHING`, [id, u.id]);
+    const ins = await db.query(`INSERT INTO proposal_actions(proposal_id,user_id,action) VALUES($1,$2,'endorse')
+      ON CONFLICT (proposal_id,user_id,action) DO NOTHING RETURNING id`, [id, u.id]);
     await db.query(`UPDATE proposals SET status='endorsed' WHERE id=$1 AND status!='flagged'`, [id]);
+    // merged (peer-reviewed): +200 to both author and endorser, and the Verified Expert badge.
+    if (ins.rows[0]) {
+      await award(pr.user_id, 'merged', id); await addBadge(pr.user_id, 'verified-expert');
+      await award(u.id, 'merged', 'endorse:' + id); await addBadge(u.id, 'verified-expert');
+    }
     return json(res, 200, { ok: true });
   }
   if (seg[0] === 'proposals' && seg[1] && seg[2] === 'flag' && method === 'POST') {
@@ -392,8 +477,42 @@ function sendFile(res, file, code) {
     res.end(data);
   });
 }
+// /u/:handle — serve the SPA shell but inject profile-specific title/meta/OG + Person JSON-LD,
+// so a shared profile link previews well and Google can index the expert (backlink value).
+function serveProfileShell(res, handle) {
+  const shell = () => sendFile(res, path.join(DIR, 'index.html'));
+  if (!db.enabled) return shell();
+  db.query('SELECT username,domain,domain_verified,reputation_points FROM users WHERE lower(username)=lower($1)', [clean(handle, 24)])
+    .then((r) => {
+      const u = r.rows[0];
+      if (!u) return shell();
+      fs.readFile(path.join(DIR, 'index.html'), 'utf8', (e, html) => {
+        if (e) return shell();
+        const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        const domLabel = DOMAIN_LABEL[u.domain] || '';
+        const title = `${u.username}${domLabel ? ' — ' + domLabel + ' contributor' : ''} · RNAwiki`;
+        const desc = `${u.username}'s clinical contribution portfolio on RNAwiki${u.domain_verified ? ' (verified expert)' : ''} — ${u.reputation_points || 0} reputation. Stewarded protocols, accepted edits, and professional links.`;
+        const purl = `${SITE_URL}/u/${encodeURIComponent(u.username)}`;
+        const ld = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Person', name: u.username, url: purl, description: desc });
+        const out = html
+          .replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`)
+          .replace(/<meta name="description"[^>]*>/, `<meta name="description" content="${esc(desc)}">`)
+          .replace(/<link rel="canonical"[^>]*>/, `<link rel="canonical" href="${esc(purl)}">`)
+          .replace(/<meta property="og:type"[^>]*>/, `<meta property="og:type" content="profile">`)
+          .replace(/<meta property="og:title"[^>]*>/, `<meta property="og:title" content="${esc(title)}">`)
+          .replace(/<meta property="og:description"[^>]*>/, `<meta property="og:description" content="${esc(desc)}">`)
+          .replace(/<meta property="og:url"[^>]*>/, `<meta property="og:url" content="${esc(purl)}">`)
+          .replace('</head>', `<script type="application/ld+json">${ld}</script></head>`);
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(out);
+      });
+    })
+    .catch(() => shell());
+}
 function serveStatic(req, res, url) {
   let p = decodeURIComponent(url.split('?')[0]);
+  // profile pages get server-injected meta for sharing + SEO
+  if (/^\/u\/[^/]+\/?$/.test(p)) return serveProfileShell(res, p.split('/')[2]);
   // "/" serves the prerendered crawlable home if present, else the SPA shell
   if (p === '/') {
     return fs.readFile(path.join(DIR, 'home.html'), (e, html) => {

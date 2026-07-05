@@ -65,6 +65,22 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS domain_verified BOOLEAN NOT NULL DEFA
 ALTER TABLE users ADD COLUMN IF NOT EXISTS google_sub TEXT UNIQUE;
 ALTER TABLE users ALTER COLUMN pass DROP NOT NULL;
 
+-- Reputation + public profile (Phase 5) -----------------------------------
+ALTER TABLE users ADD COLUMN IF NOT EXISTS reputation_points INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS socials JSONB NOT NULL DEFAULT '{}';   -- {instagram,twitter,linkedin,website,booking_link}
+ALTER TABLE users ADD COLUMN IF NOT EXISTS badges JSONB NOT NULL DEFAULT '[]';
+-- Points ledger. UNIQUE(user,kind,ref) makes every award idempotent (no double-counting).
+CREATE TABLE IF NOT EXISTS rep_events (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  kind TEXT NOT NULL,     -- vote | comment | edit | proposal | merged | food_log | share
+  ref TEXT NOT NULL,      -- dedupe key (target id, row id, or YYYY-MM-DD for daily caps)
+  points INTEGER NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE(user_id, kind, ref)
+);
+CREATE INDEX IF NOT EXISTS idx_rep_user ON rep_events(user_id);
+
 CREATE TABLE IF NOT EXISTS proposals (
   id SERIAL PRIMARY KEY,
   problem_id TEXT NOT NULL,

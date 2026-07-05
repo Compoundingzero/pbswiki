@@ -735,3 +735,40 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 /* domain roles hint (who qualifies for each stewardship domain) */
 .domain-roles{display:flex;flex-direction:column;gap:.25rem;margin-top:.6rem;font-size:.78rem;color:var(--muted);line-height:1.45}
 .domain-roles b{color:var(--head)}
+
+/* ================= Reputation + expert profile (/u/:handle) ================= */
+.acct-rep{font-family:var(--mono);font-size:.8rem;color:var(--accent);font-weight:700;margin:0 .4rem}
+.acct-name{color:var(--head);text-decoration:none}
+.acct-name:hover{color:var(--accent)}
+
+.prof-head{display:flex;align-items:center;gap:1.1rem;margin:1.4rem 0 1rem;flex-wrap:wrap}
+.prof-avatar{width:64px;height:64px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.9rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--accent),#0f766e)}
+.prof-id{flex:1;min-width:200px}
+.prof-id h1{margin:0;font-size:1.7rem}
+.prof-badges{display:flex;gap:.4rem;flex-wrap:wrap;margin:.35rem 0}
+.prof-domain{font-size:.72rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:.2rem .55rem;border-radius:999px;color:#fff}
+.prof-domain.physio{background:#2563eb}.prof-domain.dietitian{background:#16a34a}.prof-domain.pharmacist{background:#7c3aed}
+.prof-badge{font-size:.72rem;font-weight:700;padding:.2rem .55rem;border-radius:999px;background:#fef3c7;color:#b45309;border:1px solid #fde68a}
+.prof-rep{color:var(--muted);font-size:.86rem}
+.prof-rep b{color:var(--head);font-family:var(--mono)}
+.prof-socials{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0 1rem}
+.prof-social{border:1px solid var(--line);background:#fff;border-radius:999px;padding:.4rem .95rem;font-size:.85rem;font-weight:600;color:var(--ink)}
+.prof-social:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.prof-social.book{background:var(--accent);color:#fff;border-color:transparent}
+.prof-social.book:hover{color:#fff;filter:brightness(1.06)}
+.prof-share{background:#faf5ff;border:1px solid #e9d5ff;border-radius:14px;padding:1rem 1.1rem;margin:0 0 1.4rem}
+.prof-share b{color:var(--st)}
+.prof-share p{margin:.35rem 0 .7rem;font-size:.88rem;color:var(--muted);line-height:1.5}
+.prof-share-row{display:flex;gap:.5rem}
+.prof-share-row input{flex:1;border:1px solid var(--line);border-radius:9px;padding:.5rem .65rem;font:inherit;font-size:.85rem;background:#fff;color:var(--ink)}
+.prof-share-row button{border:none;background:var(--st);color:#fff;border-radius:9px;padding:.5rem 1rem;font-weight:700;cursor:pointer}
+.prof-contribs{display:flex;flex-direction:column;gap:.6rem}
+.prof-contrib{display:flex;gap:.7rem;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.8rem .9rem;color:var(--ink)}
+.prof-contrib:hover{border-color:var(--accent);box-shadow:var(--shadow);text-decoration:none}
+.pc-dom{flex:none;font-size:.66rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:.15rem .45rem;border-radius:6px;color:#fff}
+.pc-dom.physio{background:#2563eb}.pc-dom.dietitian{background:#16a34a}.pc-dom.pharmacist{background:#7c3aed}
+.pc-body b{display:block;color:var(--head);font-size:.9rem}
+.pc-body small{color:var(--muted);font-size:.8rem}
+.edit-profile h2{margin:.2rem 0 .3rem}
+.edit-profile label{display:block;font-size:.8rem;font-weight:700;color:var(--head);margin:.7rem 0 .25rem}
+.edit-profile input{width:100%;border:1px solid var(--line);border-radius:9px;padding:.55rem .65rem;font:inherit;font-size:.9rem;box-sizing:border-box}
