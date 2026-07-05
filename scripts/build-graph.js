@@ -450,10 +450,25 @@ for (const p of problems) {
     rcIds.add(c.id); rcCount++;
   }
 }
+// Domain KEYS are stable identifiers (used in the DB, votes, proposals) — never rename them.
+// Labels/roles are inclusive: each layer is owned by a family of equivalent professions, so a
+// chiropractor is welcome on Move, a nutritionist on Fuel, a biomedical researcher on Stack.
 const domains = {
-  physio: { label: 'Physiotherapy', layer: 'Move', color: '#2563eb' },
-  dietitian: { label: 'Dietetics', layer: 'Fuel', color: '#16a34a' },
-  pharmacist: { label: 'Pharmacist / MD', layer: 'Stack', color: '#9333ea' },
+  physio: {
+    label: 'Movement', layer: 'Move', color: '#2563eb',
+    roles: ['Physiotherapist', 'Chiropractor', 'Osteopath', 'Sports therapist', 'S&C coach', 'Exercise physiologist'],
+    blurb: 'Movement, rehab & musculoskeletal professionals',
+  },
+  dietitian: {
+    label: 'Nutrition', layer: 'Fuel', color: '#16a34a',
+    roles: ['Dietitian', 'Nutritionist', 'Sports nutritionist'],
+    blurb: 'Nutrition & dietetics professionals',
+  },
+  pharmacist: {
+    label: 'Pharmacology', layer: 'Stack', color: '#9333ea',
+    roles: ['Pharmacist', 'Physician (MD)', 'Biomedical / biology researcher', 'Biotech / pharmacology scientist'],
+    blurb: 'Pharmacology, medicine & biomedical research',
+  },
 };
 const payload = {
   generated_by: 'scripts/build-graph.js',
