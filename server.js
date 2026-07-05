@@ -119,7 +119,7 @@ const ADMIN_USER = (process.env.ADMIN_USER || '').toLowerCase();
 async function currentUser(req) {
   const sid = parseCookies(req).sid;
   if (!sid || !db.enabled) return null;
-  const r = await db.query('SELECT u.id, u.username, u.role, u.domain, u.credential, u.domain_verified, u.reputation_points, u.socials, u.badges FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token=$1 AND s.expires_at > now()', [sid]);
+  const r = await db.query('SELECT u.id, u.username, u.role, u.domain, u.credential, u.domain_verified, u.reputation_points, u.socials, u.badges, u.profile_views, u.booking_clicks FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token=$1 AND s.expires_at > now()', [sid]);
   const u = r.rows[0];
   if (u && ADMIN_USER && u.username.toLowerCase() === ADMIN_USER) u.role = 'admin';
   return u || null;
@@ -143,6 +143,13 @@ async function api(req, res, url) {
   const seg = parts.slice(1);
   // public client config (works even if the DB is down, so the UI can adapt)
   if (seg[0] === 'config' && req.method === 'GET') return json(res, 200, { googleClientId: GOOGLE_CLIENT_ID || null, dbEnabled: db.enabled });
+  // lightweight lead tracking (fire-and-forget beacon) — always 204, no-ops without a DB
+  if (seg[0] === 'track' && req.method === 'GET') {
+    const q = new URL('http://x/' + url).searchParams;
+    const e = clean(q.get('e'), 20), handle = clean(q.get('u'), 24);
+    if (db.enabled && e === 'booking' && handle) db.query('UPDATE users SET booking_clicks = booking_clicks + 1 WHERE lower(username)=lower($1)', [handle]).catch(() => {});
+    res.writeHead(204); return res.end();
+  }
   if (!db.enabled) return json(res, 503, { error: 'Accounts are not available right now.' });
   const method = req.method;
 
@@ -342,6 +349,7 @@ async function api(req, res, url) {
     const ur = await db.query('SELECT id,username,domain,domain_verified,reputation_points,socials,badges,created_at FROM users WHERE lower(username)=lower($1)', [handle]);
     const uu = ur.rows[0];
     if (!uu) return json(res, 404, { error: 'No such user' });
+    db.query('UPDATE users SET profile_views = profile_views + 1 WHERE id=$1', [uu.id]).catch(() => {});
     const accepted = await db.query(`SELECT problem_id,root_cause_id,layer,domain,change,created_at
       FROM proposals WHERE user_id=$1 AND status='endorsed' ORDER BY created_at DESC LIMIT 30`, [uu.id]);
     const counts = (await db.query(`SELECT

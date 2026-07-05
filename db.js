@@ -69,6 +69,8 @@ ALTER TABLE users ALTER COLUMN pass DROP NOT NULL;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS reputation_points INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS socials JSONB NOT NULL DEFAULT '{}';   -- {instagram,twitter,linkedin,website,booking_link}
 ALTER TABLE users ADD COLUMN IF NOT EXISTS badges JSONB NOT NULL DEFAULT '[]';
+ALTER TABLE users ADD COLUMN IF NOT EXISTS profile_views INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS booking_clicks INTEGER NOT NULL DEFAULT 0;
 -- Points ledger. UNIQUE(user,kind,ref) makes every award idempotent (no double-counting).
 CREATE TABLE IF NOT EXISTS rep_events (
   id SERIAL PRIMARY KEY,
