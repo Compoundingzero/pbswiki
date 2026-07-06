@@ -1129,3 +1129,9 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 .learn-muscles{display:flex;flex-wrap:wrap;gap:.5rem;margin:.5rem 0 1rem}
 .learn-muscle{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:.35rem .8rem;font-size:.85rem;font-weight:600;color:var(--head);text-decoration:none}
 .learn-muscle:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Per-section edit affordance on protocols */
+.lyr-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem}
+.lyr-head h2{margin:0}
+.sec-edit{flex:none;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:8px;padding:.25rem .6rem;font-size:.76rem;font-weight:700;cursor:pointer}
+.sec-edit:hover{border-color:var(--accent);color:var(--accent)}
