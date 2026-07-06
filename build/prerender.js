@@ -29,6 +29,13 @@ const GRAPH = D.graph || { problems: [], domains: {} };
 
 // ---- helpers ----
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// Meta descriptions: strip markdown and truncate at a word boundary (no mid-word "…Nia" cuts).
+const cleanDesc = (s, max = 155) => {
+  let t = String(s || '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`]/g, '').replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  t = t.slice(0, max); const sp = t.lastIndexOf(' ');
+  return (sp > max * 0.6 ? t.slice(0, sp) : t).replace(/[\s,;:.\-—–]+$/, '') + '…';
+};
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const tkey = (s) => s.toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-|-$/g, '');
 const stars = (n) => '★'.repeat(n) + '☆'.repeat(Math.max(0, 5 - n));
@@ -150,7 +157,7 @@ D.compounds.forEach((c) => {
     about: { '@type': 'Drug', name: c.name }, description: (c.plain || c.bottom || '').slice(0, 300),
     url: SITE_URL + route, inLanguage: 'en-SG',
   };
-  add(route, shell({ route, title: `${c.name} — evidence, mechanism & how it works · RNAwiki`, desc: (c.plain || c.bottom || c.mechanism || c.name).slice(0, 155), jsonld, breadcrumbs: [{ name: 'Home', route: '/' }, { name: c.name, route }], body }));
+  add(route, shell({ route, title: `${c.name} — evidence, mechanism & how it works · RNAwiki`, desc: cleanDesc(c.plain || c.bottom || c.mechanism || c.name), jsonld, breadcrumbs: [{ name: 'Home', route: '/' }, { name: c.name, route }], body }));
 });
 
 // goals
