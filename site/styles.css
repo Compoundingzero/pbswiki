@@ -1198,3 +1198,19 @@ a.anat-ex b{color:var(--head)}
 /* Community analogy / simplify suggestion row */
 .suggest-row{margin:.8rem 0 1.2rem}
 .suggest-row .linkbtn{font-size:.85rem;color:var(--accent);font-weight:600}
+
+/* ================= Community forks (protocol variations) ================= */
+.fork-items{max-height:34vh;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:.4rem;margin:.3rem 0}
+.fork-item{display:flex;align-items:center;gap:.5rem;padding:.35rem .5rem;border-radius:8px;font-size:.9rem}
+.fork-item:hover{background:var(--panel)}
+.fork-item b{color:var(--head)}
+.fork-empty{background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:.8rem 1rem;color:var(--muted);font-size:.9rem;margin:1rem 0}
+.fork-list{display:flex;flex-direction:column;gap:.6rem;margin:.5rem 0}
+.fork-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem}
+.fork-head{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;flex-wrap:wrap}
+.fork-title{text-decoration:none}.fork-title b{color:var(--head)}
+.fork-by{font-size:.76rem;color:var(--muted);white-space:nowrap}
+.fork-note{font-size:.85rem;color:var(--head);margin:.35rem 0}
+.fork-stack{font-size:.82rem;color:var(--muted);margin:.2rem 0 .5rem}
+.fork-clone{border:1px solid var(--accent);color:var(--accent);background:#fff;border-radius:9px;padding:.35rem .7rem;font-size:.82rem;font-weight:700;cursor:pointer}
+.fork-clone:hover{background:var(--accent);color:#fff}

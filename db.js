@@ -187,6 +187,31 @@ CREATE TABLE IF NOT EXISTS feedback (
 );
 CREATE INDEX IF NOT EXISTS idx_feedback_status ON feedback(status, created_at DESC);
 
+-- Protocol "forks": a user's named, annotated variation of an existing protocol's stack.
+-- Clearly community-made (NOT the authoritative protocol). When others clone a fork, its author
+-- earns reputation — a zero-effort user-generated-content engine.
+CREATE TABLE IF NOT EXISTS protocol_forks (
+  id SERIAL PRIMARY KEY,
+  problem_id TEXT NOT NULL,
+  root_cause_id TEXT NOT NULL,
+  user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  title TEXT NOT NULL,
+  note TEXT,
+  stack JSONB NOT NULL DEFAULT '[]',        -- array of compound ids the forker chose
+  clones INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_forks_protocol ON protocol_forks(problem_id, root_cause_id, clones DESC);
+CREATE INDEX IF NOT EXISTS idx_forks_popular ON protocol_forks(clones DESC, created_at DESC);
+-- one clone per browser per fork (idempotent) — drives the author's reputation
+CREATE TABLE IF NOT EXISTS fork_clones (
+  id SERIAL PRIMARY KEY,
+  fork_id INTEGER NOT NULL REFERENCES protocol_forks(id) ON DELETE CASCADE,
+  voter_key TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE(fork_id, voter_key)
+);
+
 CREATE TABLE IF NOT EXISTS proposals (
   id SERIAL PRIMARY KEY,
   problem_id TEXT NOT NULL,

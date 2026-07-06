@@ -512,6 +512,42 @@ async function api(req, res, url) {
     await db.query('UPDATE protocol_requests SET status=$1 WHERE id=$2', [status, id]);
     return json(res, 200, { ok: true });
   }
+  // --- protocol forks (community variations — UGC engine) ---
+  if (seg[0] === 'forks' && seg[1] === 'popular' && method === 'GET') {
+    const r = await db.query("SELECT f.id,f.title,f.problem_id,f.root_cause_id,f.clones,u.username AS by_user FROM protocol_forks f LEFT JOIN users u ON u.id=f.user_id WHERE f.clones > 0 ORDER BY f.clones DESC, f.created_at DESC LIMIT 12");
+    return json(res, 200, { forks: r.rows });
+  }
+  if (seg[0] === 'forks' && !seg[1] && method === 'GET') {
+    const q = new URL('http://x/' + url).searchParams;
+    const problem = clean(q.get('problem'), 80), rc = clean(q.get('rc'), 80);
+    if (!problem || !rc) return json(res, 200, { forks: [] });
+    const r = await db.query("SELECT f.id,f.title,f.note,f.stack,f.clones,f.created_at,u.username AS by_user,u.domain,u.domain_verified FROM protocol_forks f LEFT JOIN users u ON u.id=f.user_id WHERE f.problem_id=$1 AND f.root_cause_id=$2 ORDER BY f.clones DESC, f.created_at DESC LIMIT 30", [problem, rc]);
+    return json(res, 200, { forks: r.rows });
+  }
+  if (seg[0] === 'forks' && !seg[1] && method === 'POST') {
+    const u = await currentUser(req); if (!u) return json(res, 401, { error: 'Please sign in to fork a protocol' });
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const problem_id = clean(b.problem_id, 80), root_cause_id = clean(b.root_cause_id, 80), title = clean(b.title, 80), note = clean(b.note, 500);
+    if (!problem_id || !root_cause_id || !title) return json(res, 400, { error: 'Name your variation' });
+    const stack = Array.isArray(b.stack) ? b.stack.filter((x) => typeof x === 'string').slice(0, 30) : [];
+    const r = await db.query('INSERT INTO protocol_forks(problem_id,root_cause_id,user_id,title,note,stack) VALUES($1,$2,$3,$4,$5,$6) RETURNING id', [problem_id, root_cause_id, u.id, title, note || null, JSON.stringify(stack)]);
+    await award(u.id, 'fork', 'fork:' + r.rows[0].id, 10);
+    return json(res, 200, { ok: true, id: r.rows[0].id });
+  }
+  if (seg[0] === 'forks' && seg[1] && seg[2] === 'clone' && method === 'POST') {
+    const id = parseInt(seg[1], 10); const b = await readBody(req) || {}; const voterKey = clean(b.voterKey, 64);
+    if (!id || !voterKey) return json(res, 400, { error: 'Missing' });
+    const fr = await db.query('SELECT * FROM protocol_forks WHERE id=$1', [id]); const f = fr.rows[0]; if (!f) return json(res, 404, { error: 'No such fork' });
+    const ins = await db.query('INSERT INTO fork_clones(fork_id,voter_key) VALUES($1,$2) ON CONFLICT (fork_id,voter_key) DO NOTHING RETURNING id', [id, voterKey]);
+    if (ins.rows[0]) { await db.query('UPDATE protocol_forks SET clones=clones+1 WHERE id=$1', [id]); if (f.user_id) await award(f.user_id, 'fork_clone', 'forkclone:' + id + ':' + voterKey, 5); }
+    return json(res, 200, { ok: true, stack: f.stack, problem_id: f.problem_id, root_cause_id: f.root_cause_id, title: f.title });
+  }
+  if (seg[0] === 'forks' && seg[1] && method === 'GET') {
+    const id = parseInt(seg[1], 10);
+    const r = await db.query("SELECT f.id,f.title,f.note,f.stack,f.clones,f.problem_id,f.root_cause_id,f.created_at,u.username AS by_user,u.domain,u.domain_verified FROM protocol_forks f LEFT JOIN users u ON u.id=f.user_id WHERE f.id=$1", [id]);
+    if (!r.rows[0]) return json(res, 404, { error: 'No such fork' });
+    return json(res, 200, { fork: r.rows[0] });
+  }
   // --- wiki-improvement feedback (open to everyone) ---
   if (seg[0] === 'feedback' && !seg[1] && method === 'POST') {
     const u = await currentUser(req);
