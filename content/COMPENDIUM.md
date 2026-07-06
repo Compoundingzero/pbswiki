@@ -147,6 +147,9 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **In plain English:** Most of your testosterone is "handcuffed" to a carrier protein and unusable. Boron loosens those handcuffs so more testosterone is actually active. Cheap and underused.
 **Protocol:** 3–10 mg/day with food. >20 mg is toxic.
 **Bottom line:** Add 10 mg to a zinc + D3 stack — strong evidence per dollar.
+**Human evidence:** Small human studies show a modest rise in free testosterone and a drop in inflammatory markers over ~1 week at 6–10 mg, plus a role in bone and vitamin-D/magnesium handling. Low-dose, low-risk, but effect sizes are small.
+**Stacks with:** Vitamin D3 and magnesium (boron supports their metabolism).
+**Cost:** Very cheap — a year of 6 mg capsules for ~S$15–25.
 
 ---
 
@@ -157,6 +160,9 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **In plain English:** An amino acid that keeps heart and muscle cells stable and calm. Its levels fall as you age; topping it up extended healthy lifespan in animals and is cheap and safe in humans.
 **Protocol:** 1–3 g/day (up to 6 g in performance studies).
 **Bottom line:** Low-risk, promising longevity and endurance support.
+**Human evidence:** Human trials are mixed but several show modest gains in endurance and recovery at 1–3 g; a large 2023 animal study revived longevity interest, but human lifespan data do not yet exist. Solid safety record.
+**Stacks with:** Caffeine (the classic energy-drink pairing) and creatine.
+**Cost:** Cheap — ~S$15–25 for months of powder.
 
 ---
 
@@ -167,6 +173,10 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **In plain English:** Your cells' main antioxidant (glutathione) needs a specific building block that runs low. NAC delivers it, restocking your internal rust-protection — especially for the liver.
 **Protocol:** 600–1,200 mg/day. Longevity: pair with glycine ("GlyNAC").
 **Bottom line:** Cheap, versatile, genuinely useful for liver and antioxidant capacity.
+**Human evidence:** Gold-standard, hospital-proven as the antidote for paracetamol (acetaminophen) overdose. Beyond that, moderate evidence for mucus/COPD and emerging psychiatric use (OCD, trichotillomania, addiction) as a glutathione/glutamate modulator.
+**Stacks with:** Glycine — together as GlyNAC they restore glutathione more than either alone.
+**Avoid:** High doses taken right around training can blunt some of the adaptive benefit of exercise (it is an antioxidant). Caution alongside nitroglycerin.
+**Cost:** Cheap — ~S$20–35 for a few months.
 
 ---
 
@@ -206,6 +216,10 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **Protocol:** 3.2–6.4 g/day (split doses to reduce tingling); saturates over 4–6 weeks.
 **Watch out:** Harmless skin tingling (paraesthesia).
 **Bottom line:** Excellent for Hyrox-style intervals. Stacks with creatine (different energy systems).
+**Human evidence:** Multiple meta-analyses (e.g. Hobson 2012, Saunders 2017) show a small but reliable improvement in high-intensity exercise capacity for efforts lasting ~1–4 minutes, via raised muscle carnosine buffering acid build-up. Well-replicated; benefit is specific to that time domain, not to strength or endurance.
+**Stacks with:** Creatine (different energy system — complementary) and sodium bicarbonate (intracellular + extracellular buffering).
+**Avoid:** Nothing serious. The harmless skin-tingling (paraesthesia) fades if you split doses or use a sustained-release form.
+**Cost:** Cheap — ~S$20–30 for 2–3 months. Buy plain beta-alanine powder; the branded "CarnoSyn" is the same molecule.
 
 ---
 
@@ -228,6 +242,9 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **In plain English:** It helps your body make more of its own creatine and swells muscle cells with water so they contract harder. Small but real strength effect.
 **Protocol:** 2.5 g/day.
 **Bottom line:** Modest, cheap add-on with several small positive trials.
+**Human evidence:** Several small RCTs suggest modest gains in power output and body composition at 2.5 g/day; also a reliable methyl donor that lowers homocysteine. Evidence is promising but not as deep as creatine or caffeine.
+**Stacks with:** Creatine (both raise cellular methylation/hydration) and choline.
+**Cost:** Cheap — ~S$20–30 for a couple of months.
 
 ---
 
@@ -239,6 +256,10 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **Protocol:** 0.2–0.3 g/kg, 60–150 min pre-effort (or enteric-coated to avoid GI distress).
 **Watch out:** GI upset is common — trial in training first.
 **Bottom line:** Real ergogenic for repeated sprints; stomach tolerance is the limiter.
+**Human evidence:** Well-established ergogenic for repeated high-intensity efforts of ~1–10 minutes (e.g. 400–1500 m, rowing, combat sports), buffering blood acidity. Consistent meta-analytic support at ~0.2–0.3 g/kg taken 60–150 min pre-effort.
+**Stacks with:** Beta-alanine (buffers inside the cell, bicarbonate outside it) and creatine.
+**Avoid:** GI distress is the main limiter — split the dose, take with a carb meal, or use enteric-coated capsules. High sodium load: caution if hypertensive.
+**Cost:** Almost free — plain baking soda. Capsules cost more for convenience.
 
 ---
 
@@ -249,6 +270,9 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **In plain English:** It signals "don't break down muscle." Most useful when you're dieting hard, ill, or older — much less impressive in already-trained lifters who eat enough protein.
 **Protocol:** 3 g/day split.
 **Bottom line:** Useful in a deficit or for the elderly; marginal for fed, trained athletes.
+**Human evidence:** A leucine metabolite that meaningfully helps the untrained, elderly, or catabolic (bed-rest, illness) preserve muscle, but shows little benefit in already-trained lifters who eat enough protein. Match your expectations to your situation.
+**Stacks with:** Adequate protein, creatine and vitamin D; most useful when protein intake is hard to hit.
+**Cost:** Moderate — ~S$25–40/month; for most trained people, spending on protein and creatine first makes more sense.
 
 ---
 
@@ -288,6 +312,10 @@ The most disrupted category in medicine. GLP-1 drugs have made every previous fa
 **Protocol:** Weekly injection titrated 0.25 → 2.4 mg. Chronic — weight returns if stopped.
 **Watch out:** Nausea; **major muscle loss** — resistance training + 1.6–2 g/kg protein are non-negotiable. Rare pancreatitis; thyroid C-cell black-box warning.
 **Bottom line:** The most powerful weight-loss drug in history until tirzepatide/retatrutide.
+**Human evidence:** Landmark STEP trials show ~15% average body-weight loss over ~68 weeks in obesity; the SELECT trial showed reduced cardiovascular events in people with overweight/obesity and established heart disease. Among the strongest weight-loss evidence bases in medicine.
+**Stacks with:** Prescription only, under medical supervision. Pair with adequate protein and resistance training to preserve muscle during rapid weight loss.
+**Avoid:** Contraindicated with a personal/family history of medullary thyroid carcinoma or MEN2; stop and seek care for signs of pancreatitis. Nausea is common early — titrate slowly.
+**Cost:** Singapore: private-pay, roughly S$300–500/month depending on dose and pharmacy; not generally subsidised for weight loss. Prescription required.
 
 ---
 
@@ -299,6 +327,10 @@ The most disrupted category in medicine. GLP-1 drugs have made every previous fa
 **Protocol:** Weekly injection titrated 2.5 → 15 mg.
 **Watch out:** Same as semaglutide; muscle-loss risk is greater given larger total loss.
 **Bottom line:** Currently the most effective *approved* obesity drug.
+**Human evidence:** SURMOUNT trials show ~20–22% average body-weight loss — the largest yet for a pharmacological agent — via dual GIP/GLP-1 receptor action. SURPASS trials show strong glucose control in type 2 diabetes.
+**Stacks with:** Prescription only. As with any GLP-1, protect muscle with protein and resistance training.
+**Avoid:** Same thyroid (MTC/MEN2) contraindication as GLP-1 agonists; watch for pancreatitis and gallbladder issues. Titrate to manage GI side effects.
+**Cost:** Singapore: private-pay, typically higher than semaglutide; prescription required.
 
 ---
 
@@ -406,6 +438,10 @@ The most disrupted category in medicine. GLP-1 drugs have made every previous fa
 **Protocol:** 400–500 mg EGCG/day.
 **Watch out:** Rare liver toxicity at high isolated doses — take with food.
 **Bottom line:** Minor helper, not a driver.
+**Human evidence:** Meta-analyses show a modest increase in fat oxidation and small weight loss, strongest when paired with caffeine and in non-habitual caffeine users. The effect is real but small.
+**Stacks with:** Caffeine (synergistic thermogenesis).
+**Avoid:** High-dose extracts taken fasted carry a rare risk of liver injury — take with food and keep to sensible doses; whole brewed tea is safest.
+**Cost:** Cheap — brewed green tea costs almost nothing; standardised extract ~S$20–30/month.
 
 ---
 
@@ -816,6 +852,10 @@ The most active frontier in medicine. Most are repurposed metabolic or cancer dr
 **Protocol (off-label):** 500–1,000 mg/day; add B12.
 **Watch out:** GI upset (use ER), blunts exercise adaptation, B12 depletion.
 **Bottom line:** Best for the sedentary/metabolically-at-risk; may cost gains if you train hard.
+**Human evidence:** First-line, extensively proven for type 2 diabetes (UKPDS and decades of use). The longevity case is observational and unproven — the TAME trial is designed to test it. Do not treat the anti-aging use as established.
+**Stacks with:** Nothing that improves it; note it can modestly blunt aerobic training adaptations and lowers B12 over years — monitor B12 and consider timing away from training.
+**Avoid:** Combining with heavy endurance training if peak adaptation matters; long-term B12 depletion.
+**Cost:** Very cheap and subsidised for diabetes in Singapore; a generic staple.
 
 ---
 
@@ -878,6 +918,9 @@ The most active frontier in medicine. Most are repurposed metabolic or cancer dr
 **In plain English:** Switches on the cell's self-cleaning (autophagy) — clearing junk proteins the way fasting does. Found in wheat germ and aged cheese; people who eat more of it live longer in population studies.
 **Protocol:** 1–5 mg/day (or wheat-germ extract).
 **Bottom line:** Mechanistically credible, food-derived, growing human data.
+**Human evidence:** A dietary autophagy inducer; population studies link higher intake to lower mortality, and a small trial (SmartAge) hinted at memory benefit in at-risk older adults. Mechanism is strong, human outcome data still thin.
+**Stacks with:** Broad longevity/autophagy habits (fasting, exercise).
+**Cost:** Wheat-germ (a rich food source) is cheap; concentrated extracts are moderate (~S$30–50/month).
 
 ---
 
@@ -888,6 +931,9 @@ The most active frontier in medicine. Most are repurposed metabolic or cancer dr
 **In plain English:** Your muscle cells' power plants get damaged with age; this compound tells the cell to recycle the broken ones. Human trials show improved muscle endurance in older adults. Many people can't make it from pomegranate alone, so the supplement guarantees a dose.
 **Protocol:** 500–1,000 mg/day (Mitopure).
 **Bottom line:** One of the better-evidenced mitochondrial-longevity supplements.
+**Human evidence:** Human RCTs (Andreux 2019; Singh 2022) show improved muscle mitochondrial gene expression and endurance/strength in middle-aged and older adults by triggering mitophagy — the clean-up of worn-out mitochondria. Promising, still a young evidence base.
+**Stacks with:** Regular exercise (same mitophagy pathway) and omega-3.
+**Cost:** Premium — the studied form (Mitopure) runs ~S$60–90/month. Pomegranate does not reliably yield it (depends on gut bacteria).
 
 ---
 
@@ -906,6 +952,9 @@ The most active frontier in medicine. Most are repurposed metabolic or cancer dr
 **In plain English:** Older bodies run low on glutathione (the main antioxidant). Giving both building blocks restocks it, and small human trials showed improvements across many aging measures at once.
 **Protocol:** Glycine ~100 mg/kg + NAC ~100 mg/kg daily (trial doses; high).
 **Bottom line:** Among the better human-trial-supported longevity stacks.
+**Human evidence:** Small trials from Baylor (Kumar/Sekhar) show that combining glycine and NAC restores glutathione and improves mitochondrial function, strength and several aging markers in older adults better than either alone. Early but mechanistically coherent.
+**Stacks with:** It is the stack — glycine + NAC. Glycine also aids sleep on its own.
+**Cost:** Cheap — buy plain glycine and NAC separately for a fraction of branded "GlyNAC" products.
 
 ---
 
@@ -915,6 +964,9 @@ The most active frontier in medicine. Most are repurposed metabolic or cancer dr
 **In plain English:** Turns on your body's master "detox and antioxidant defence" gene program (NRF2). Broccoli sprouts are the richest source; supplements standardise it.
 **Protocol:** ~10–40 mg (sprout extract with active myrosinase).
 **Bottom line:** Best natural NRF2 activator; good safety.
+**Human evidence:** A potent Nrf2 activator from broccoli sprouts; human trials show effects on oxidative-stress and detoxification markers, with smaller studies in autism and metabolic health. Bioactivity depends on the enzyme myrosinase being present.
+**Stacks with:** Take with an active myrosinase source (fresh sprouts or added mustard-seed powder) for real absorption.
+**Cost:** Moderate — broccoli sprouts are cheap to grow; standardised extracts cost more.
 
 ---
 
@@ -933,6 +985,9 @@ The most active frontier in medicine. Most are repurposed metabolic or cancer dr
 **In plain English:** One of nature's strongest antioxidants (what makes salmon pink). Protects cell membranes, skin against UV, and mitochondria.
 **Protocol:** 4–12 mg/day with fat.
 **Bottom line:** Potent, safe antioxidant with skin and mitochondrial benefits.
+**Human evidence:** A fat-soluble carotenoid antioxidant; the best human evidence is for skin (UV resilience, elasticity), with smaller studies suggesting modest endurance and eye-fatigue benefit. Very safe.
+**Stacks with:** Take with a fatty meal or omega-3 for absorption.
+**Cost:** Moderate — ~S$20–40/month for a quality algae-derived source.
 
 ---
 
