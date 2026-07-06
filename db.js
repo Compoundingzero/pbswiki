@@ -244,6 +244,19 @@ CREATE TABLE IF NOT EXISTS scans (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_scans_user_day ON scans(user_id, created_at);
+
+-- Founding-clinician waitlist (Phase-2 marketplace demand capture). A public, no-account form:
+-- a physio/dietitian/pharmacist/MD registers interest to shape protocols in their field. Surfaced,
+-- with a one-click CSV export, in the super-admin control room. UNIQUE(email) keeps it de-duped.
+CREATE TABLE IF NOT EXISTS clinician_interest (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  discipline TEXT,
+  note TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_clinician_created ON clinician_interest(created_at DESC);
 `;
 
 async function init() {

@@ -1292,3 +1292,27 @@ a.dp-name:hover{color:var(--accent)}
 .evidence-block[open] summary::before{content:'▾ '}
 .ev-hint{font-weight:400;color:var(--muted);font-size:.82rem}
 .ev-body{padding:.1rem 0 .85rem;color:var(--head);line-height:1.62;font-size:.92rem}
+
+/* ---- Founding-clinician page (/for-clinicians) + admin export ---- */
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 .4rem}
+.clin-wrap{max-width:720px}
+.clin-wrap h1{margin:.1rem 0 .5rem}
+.clin-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:1.6rem 0}
+.clin-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--panel)}
+.clin-card h3{margin:0 0 .3rem;font-size:1rem;color:var(--head)}
+.clin-card p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.5}
+.clin-form{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:12px;padding:22px 24px;background:linear-gradient(135deg,rgba(13,148,136,.05),var(--panel));box-shadow:var(--shadow)}
+.clin-form h3{margin:0 0 1rem;color:var(--head)}
+.clin-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.clin-form input,.clin-form select{flex:1 1 200px;padding:11px 13px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);font-size:.95rem;font-family:var(--font)}
+.clin-form input:focus,.clin-form select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.clin-btn{margin-top:.4rem;padding:12px 22px;border:0;border-radius:9px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.98rem;cursor:pointer}
+.clin-btn:hover{filter:brightness(1.06)}
+.clin-btn:disabled{opacity:.6;cursor:default}
+.clin-consent{font-size:.78rem;margin:.7rem 0 0}
+.clin-msg{margin-top:.7rem;font-size:.88rem}
+.clin-msg.err{color:var(--red)}
+.clin-done{text-align:center;padding:1.5rem 0}
+.clin-tick{width:52px;height:52px;border-radius:50%;background:var(--accent);color:#fff;font-size:1.6rem;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem}
+.clin-done h3{margin:0 0 .4rem;color:var(--head)}
+@media(max-width:560px){.clin-grid{grid-template-columns:1fr}}

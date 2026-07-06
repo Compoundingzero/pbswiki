@@ -106,6 +106,15 @@ function json(res, code, obj, headers) {
   res.end(JSON.stringify(obj));
 }
 function clean(s, max) { return String(s == null ? '' : s).trim().slice(0, max || 4000); }
+// CSV export helpers for the super-admin control room (member + waitlist extraction).
+function csvCell(v) { const s = v == null ? '' : String(v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+function csvExport(res, filename, headers, rows) {
+  const lines = [headers.map(csvCell).join(',')];
+  for (const r of rows) lines.push(r.map(csvCell).join(','));
+  const body = '﻿' + lines.join('\r\n'); // UTF-8 BOM so Excel opens it cleanly
+  res.writeHead(200, { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': `attachment; filename="${filename}"` });
+  res.end(body);
+}
 
 // ---------- reputation ----------
 // Points per action. Idempotent via rep_events UNIQUE(user,kind,ref): the same action can never
@@ -577,6 +586,33 @@ async function api(req, res, url) {
     if (u) await award(u.id, 'feedback', 'fb:' + Date.now(), 2);
     return json(res, 200, { ok: true });
   }
+  // --- founding-clinician waitlist (public, no account needed) ---
+  if (seg[0] === 'clinician-interest' && method === 'POST') {
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const name = clean(b.name, 120), email = clean(b.email, 160).toLowerCase();
+    const discipline = clean(b.discipline, 60), note = clean(b.note, 600);
+    if (!name) return json(res, 400, { error: 'Please add your name' });
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json(res, 400, { error: 'Please add a valid email' });
+    try {
+      await db.query(`INSERT INTO clinician_interest(name,email,discipline,note) VALUES($1,$2,$3,$4)
+        ON CONFLICT (email) DO UPDATE SET name=EXCLUDED.name, discipline=EXCLUDED.discipline, note=EXCLUDED.note`,
+        [name, email, discipline || null, note || null]);
+      return json(res, 200, { ok: true });
+    } catch (e) { console.error('[clinician-interest]', e.message); return json(res, 500, { error: 'Could not save — please try again' }); }
+  }
+  // --- one-click CSV export of members / waitlist (super-admin only) ---
+  if (seg[0] === 'admin' && seg[1] === 'export' && method === 'GET') {
+    const u = await currentUser(req); if (!isSuper(u)) return json(res, 403, { error: 'Super-admin only' });
+    const type = clean(new URL('http://x/' + url).searchParams.get('type'), 20);
+    if (type === 'clinicians') {
+      const r = await db.query('SELECT name,email,discipline,note,created_at FROM clinician_interest ORDER BY created_at DESC');
+      return csvExport(res, 'rnawiki-clinicians.csv', ['name', 'email', 'discipline', 'note', 'joined'],
+        r.rows.map(x => [x.name, x.email, x.discipline, x.note, x.created_at && x.created_at.toISOString()]));
+    }
+    const r = await db.query('SELECT username,email,role,domain,domain_verified,reputation_points,created_at FROM users ORDER BY created_at DESC');
+    return csvExport(res, 'rnawiki-members.csv', ['username', 'email', 'role', 'domain', 'domain_verified', 'reputation', 'joined'],
+      r.rows.map(x => [x.username, x.email, x.role, x.domain, x.domain_verified, x.reputation_points, x.created_at && x.created_at.toISOString()]));
+  }
   if (seg[0] === 'admin' && seg[1] === 'feedback' && seg[2] && method === 'POST') {
     const u = await currentUser(req); if (!isSuper(u)) return json(res, 403, { error: 'Super-admin only' });
     const id = parseInt(seg[2], 10); const b = await readBody(req) || {};
@@ -647,7 +683,7 @@ async function api(req, res, url) {
   // --- consolidated super-admin control room: everything the superadmin needs in one call ---
   if (seg[0] === 'admin' && seg[1] === 'overview' && method === 'GET') {
     const u = await currentUser(req); if (!isSuper(u)) return json(res, 403, { error: 'Super-admin only' });
-    const [experts, partners, foods, requests, rcc, feedback, proposals, cedits] = await Promise.all([
+    const [experts, partners, foods, requests, rcc, feedback, proposals, cedits, members, memberCount, clinicians] = await Promise.all([
       db.query("SELECT id,username,domain,requested_domain,domain_verified,application_status,credential,role_backlink,reputation_points FROM users WHERE domain IS NOT NULL OR requested_domain IS NOT NULL ORDER BY (application_status='pending') DESC, domain_verified ASC, created_at ASC"),
       db.query('SELECT id,name,type,location,link,backlink_url,serves,status,created_at FROM partners ORDER BY status ASC, created_at DESC LIMIT 200'),
       db.query("SELECT f.id,f.name,f.serving,f.data,f.status,f.created_at,u.username AS by_user FROM user_foods f LEFT JOIN users u ON u.id=f.submitted_by WHERE f.status='pending' ORDER BY f.created_at ASC LIMIT 200"),
@@ -660,8 +696,11 @@ async function api(req, res, url) {
         (SELECT COUNT(*)::int FROM proposal_actions a WHERE a.proposal_id=p.id AND a.action='endorse') AS endorsements
         FROM proposals p JOIN users u ON u.id=p.user_id WHERE p.status='pending' ORDER BY p.created_at ASC LIMIT 100`),
       db.query("SELECT e.id,e.compound_id,e.compound_name,e.note,e.created_at,u.username AS by_user FROM edits e JOIN users u ON u.id=e.user_id ORDER BY e.created_at DESC LIMIT 60"),
+      db.query("SELECT username,email,role,domain,domain_verified,reputation_points,created_at FROM users ORDER BY created_at DESC LIMIT 500"),
+      db.query('SELECT count(*)::int AS n FROM users'),
+      db.query('SELECT name,email,discipline,note,created_at FROM clinician_interest ORDER BY created_at DESC LIMIT 500'),
     ]);
-    return json(res, 200, { experts: experts.rows, partners: partners.rows, foods: foods.rows, requests: requests.rows, rootcauseChanges: rcc.rows, feedback: feedback.rows, proposals: proposals.rows, compoundEdits: cedits.rows, threshold: PANEL_THRESHOLD });
+    return json(res, 200, { experts: experts.rows, partners: partners.rows, foods: foods.rows, requests: requests.rows, rootcauseChanges: rcc.rows, feedback: feedback.rows, proposals: proposals.rows, compoundEdits: cedits.rows, members: members.rows, memberCount: memberCount.rows[0].n, clinicians: clinicians.rows, threshold: PANEL_THRESHOLD });
   }
   if (seg[0] === 'foods' && seg[1] && seg[2] === 'verify' && method === 'POST') {
     const u = await currentUser(req); if (!u || !(u.role === 'admin' || (u.domain === 'dietitian' && u.domain_verified))) return json(res, 403, { error: 'Verified dietitians only' });
