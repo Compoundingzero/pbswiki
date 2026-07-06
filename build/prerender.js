@@ -39,6 +39,19 @@ const cleanDesc = (s, max = 155) => {
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const tkey = (s) => s.toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-|-$/g, '');
 const stars = (n) => '★'.repeat(n) + '☆'.repeat(Math.max(0, 5 - n));
+// Singapore availability from approval status (see app.js sgAvailability) + shared-pathway synergy.
+const sgAvail = (c) => {
+  const ap = c.approvals || [];
+  if (ap.includes('⚫')) return { tag: 'Controlled in Singapore', body: 'A controlled substance under Singapore law — illegal to buy, sell or possess without authorisation (HSA / CNB). Education only.' };
+  if (c.isRx) return { tag: 'Prescription only in Singapore', body: 'Prescription-only here — a doctor must prescribe it (HSA-regulated). Not sold over the counter.' };
+  if (ap.includes('🔴')) return { tag: 'Not approved in Singapore', body: 'Not approved for sale in Singapore. Grey-market only — dose, purity and legality uncertain.' };
+  if (ap.includes('🟡') || ap.includes('🟢')) return { tag: 'Available over the counter', body: 'Widely available in Singapore: iHerb (ships to SG), Guardian, Watsons, GNC, and Shopee / Lazada. Look for a third-party-tested / GMP mark and check the dose per serving.' };
+  return { tag: 'Check locally', body: 'Availability varies — check its HSA status before buying in Singapore.' };
+};
+const derivedStacks = (c) => {
+  const pw = new Set(c.pathwayIds || []); if (!pw.size) return [];
+  return D.compounds.filter((o) => o.id !== c.id && !o.isNote && (o.pathwayIds || []).some((i) => pw.has(i))).sort((a, b) => b.stars - a.stars).slice(0, 4);
+};
 
 // ---- per-page Open Graph card generator (branded 1200×630 PNG per entity) ----
 // Uses @resvg/resvg-js + a bundled font (works on Railway's minimal container). If either is
@@ -195,6 +208,12 @@ D.compounds.forEach((c) => {
     ${c.watch ? `<h2>Watch out</h2><p>${esc(c.watch)}</p>` : ''}
     ${c.bottom ? `<h2>Bottom line</h2><p>${esc(c.bottom)}</p>` : ''}
     ${goalLinks ? `<p><b>Helps with:</b> ${goalLinks}</p>` : ''}
+    ${(() => {
+      const sg = sgAvail(c); const d = derivedStacks(c); const strip = (t) => String(t || '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`]/g, '');
+      return `${c.stacksWith || d.length ? `<h2>Stacks with</h2>${c.stacksWith ? `<p>${esc(strip(c.stacksWith))}</p>` : ''}${d.length ? `<p>Shares a pathway — often paired with: ${d.map((o) => `<a href="/c/${slug(o.name)}">${esc(o.name)}</a>`).join(', ')}.</p>` : ''}` : ''}
+        ${c.avoid ? `<h2>Avoid combining with</h2><p>${esc(strip(c.avoid))}</p>` : ''}
+        <h2>Where to buy in Singapore</h2><p><b>${esc(sg.tag)}.</b> ${sg.body.replace(/<\/?b>/g, '')}${c.cost ? ' ' + esc(strip(c.cost)) : ''}</p>`;
+    })()}
     ${pathLink}
     ${usedInHtml}</div>`;
   const jsonld = {

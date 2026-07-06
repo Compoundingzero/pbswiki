@@ -51,6 +51,8 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **Protocol:** 3–5 g/day, monohydrate, any time. No loading needed.
 **Watch out:** 1–2 kg water weight in week one (not fat). Safe long-term in healthy kidneys.
 **Bottom line:** If you take one supplement, this is it.
+**Stacks with:** Whey/protein and carbs post-workout (the insulin bump helps uptake).
+**Cost:** The cheapest effective supplement — ~S$20–40 for 3–6 months of monohydrate. Buy plain “creatine monohydrate” (Creapure is a quality mark); skip pricey “advanced” forms.
 
 ---
 
@@ -62,6 +64,9 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **Protocol:** 3–6 mg/kg, 45–60 min pre-effort. Cycle off 10–14 days every ~2 months.
 **Watch out:** 5–6 h half-life (up to 9 h in slow metabolisers) — afternoon doses wreck deep sleep.
 **Bottom line:** With creatine, one of the two most proven performance aids on earth.
+**Stacks with:** L-theanine (~200 mg) to smooth the jitters without dulling the focus.
+**Avoid:** Other strong stimulants (yohimbine, high-dose synephrine) — additive heart-rate and blood-pressure load. Keep it >8–10 h from bedtime. Go easy if you’re prone to anxiety.
+**Cost:** Pennies — caffeine tablets are ~S$10–20 for months, or just coffee.
 
 ---
 
@@ -103,6 +108,9 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **In plain English:** A mineral your body uses in hundreds of reactions and burns through when you train and stress. Topping it up — especially glycinate at night — reliably improves sleep.
 **Protocol:** 200–400 mg elemental. Glycinate (sleep/calm), L-threonate (brain), citrate (constipation). Avoid oxide (4% absorbed).
 **Bottom line:** Cheap, safe, most athletes are low. Glycinate before bed.
+**Stacks with:** Vitamin D3/K2 (magnesium is a cofactor for activating vitamin D) and vitamin B6 (aids uptake).
+**Avoid:** High doses alongside tetracycline or quinolone antibiotics — separate by ~2 hours.
+**Cost:** ~S$15–30/month; glycinate/threonate cost more than oxide but absorb better and are gentler on the gut.
 
 ---
 
@@ -360,6 +368,8 @@ The most disrupted category in medicine. GLP-1 drugs have made every previous fa
 **Protocol:** 500 mg 3×/day with meals; dihydroberberine for better absorption.
 **Watch out:** GI upset early; CYP3A4 inhibitor (drug interactions).
 **Bottom line:** Strong metabolic supplement; pair with glucose monitoring.
+**Avoid:** Other blood-sugar-lowering drugs (metformin, insulin) without monitoring — additive hypoglycaemia. It inhibits CYP3A4, so it interacts with many prescriptions (statins, immunosuppressants, some blood thinners) — check with a pharmacist first.
+**Cost:** ~S$25–45/month; dihydroberberine costs more but absorbs far better.
 
 ---
 
@@ -799,6 +809,8 @@ The most active frontier in medicine. Most are repurposed metabolic or cancer dr
 **Protocol:** NMN or NR 250–500 mg in the **morning** — NAD⁺ tracks your body clock and peaks in the active phase. Often stacked with pterostilbene, and with **TMG** to replace the methyl groups NAD⁺ metabolism uses up.
 **Watch out:** NMN is a US legal grey area (FDA drug-exclusion ruling); **NR is the clean supplement.** No prescription drug is involved — but skip NAD⁺ IVs from unlicensed providers.
 **Bottom line:** The most exciting longevity lever right now; NR the cleaner legal status, NMN the newer trials, niacin the best value. Full mechanism lives on [the NAD⁺ pathway](/pathway/12).
+**Stacks with:** Pterostilbene (sirtuin activation from another angle) and TMG / betaine (replaces the methyl groups NAD⁺ metabolism uses up).
+**Cost:** ~S$40–90/month for NMN; NR (Niagen) is pricier. On iHerb / Shopee — verify third-party testing, purity varies widely.
 
 ---
 
@@ -1108,6 +1120,8 @@ From the best-evidenced wakefulness drugs to the experimental "smart drugs."
 **Protocol:** 300–600 mg/day KSM-66 or Sensoril.
 **Watch out:** Stimulates thyroid; caution in autoimmune disease/thyroid meds; rare liver reports.
 **Bottom line:** Best-evidenced adaptogen for stress, sleep, and hormones.
+**Avoid:** Sedatives and benzodiazepines (additive drowsiness), thyroid medication (it can raise thyroid hormone), and immunosuppressants (it’s immune-stimulating). Skip in pregnancy.
+**Cost:** ~S$20–40/month for a standardised extract (KSM-66 or Sensoril). Guardian, Watsons, iHerb.
 
 ---
 
