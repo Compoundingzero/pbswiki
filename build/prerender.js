@@ -42,11 +42,11 @@ const stars = (n) => '★'.repeat(n) + '☆'.repeat(Math.max(0, 5 - n));
 // Singapore availability from approval status (see app.js sgAvailability) + shared-pathway synergy.
 const sgAvail = (c) => {
   const ap = c.approvals || [];
-  if (ap.includes('⚫')) return { tag: 'Controlled in Singapore', body: 'A controlled substance under Singapore law — illegal to buy, sell or possess without authorisation (HSA / CNB). Education only.' };
-  if (c.isRx) return { tag: 'Prescription only in Singapore', body: 'Prescription-only here — a doctor must prescribe it (HSA-regulated). Not sold over the counter.' };
-  if (ap.includes('🔴')) return { tag: 'Not approved in Singapore', body: 'Not approved for sale in Singapore. Grey-market only — dose, purity and legality uncertain.' };
-  if (ap.includes('🟡') || ap.includes('🟢')) return { tag: 'Available over the counter', body: 'Widely available in Singapore: iHerb (ships to SG), Guardian, Watsons, GNC, and Shopee / Lazada. Look for a third-party-tested / GMP mark and check the dose per serving.' };
-  return { tag: 'Check locally', body: 'Availability varies — check its HSA status before buying in Singapore.' };
+  if (ap.includes('⚫')) return { tag: 'Controlled substance', body: 'A controlled substance in most countries — illegal to buy, sell or possess without authorisation (in Singapore: HSA / CNB). Education only.' };
+  if (c.isRx) return { tag: 'Prescription only', body: 'Prescription-only — a doctor must prescribe it. Not sold over the counter. (In Singapore: HSA-regulated.)' };
+  if (ap.includes('🔴')) return { tag: 'Not widely approved', body: 'Not approved for general sale in most markets (Singapore included). Grey-market only — dose, purity and legality uncertain.' };
+  if (ap.includes('🟡') || ap.includes('🟢')) return { tag: 'Available over the counter', body: 'Widely available OTC — e.g. iHerb (ships worldwide); in Singapore also Guardian, Watsons, GNC, Shopee / Lazada. Look for a third-party-tested / GMP mark and check the dose per serving.' };
+  return { tag: 'Check locally', body: 'Availability and legal status vary by country — check your national regulator (in Singapore, the HSA) before buying.' };
 };
 const derivedStacks = (c) => {
   const pw = new Set(c.pathwayIds || []); if (!pw.size) return [];
