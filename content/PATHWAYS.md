@@ -130,7 +130,7 @@ You don't need a science background. Each lesson starts with a one-liner and a p
 
 **Why it matters for you:** Citrulline and beetroot are among the best-evidenced natural endurance and pump aids. The same pathway keeps blood pressure healthy and drives erections.
 
-**Turn it up:** citrulline, beetroot/nitrate, PDE-5 inhibitors (Viagra-type). **One catch:** don't combine strong versions (e.g. beetroot + ED drugs + nitrates) — blood pressure can crash.
+**Turn it up:** two ways — *make more NO* with [citrulline](/c/l-citrulline-citrulline-malate) and [beetroot / nitrate](/c/beetroot-dietary-nitrate), or *stop breaking cGMP down* with [PDE-5 inhibitors](/c/pde-5-inhibitors-sildenafil-tadalafil) (Viagra-type). **One catch:** don't combine strong versions (e.g. beetroot + ED drugs + nitrates) — blood pressure can crash.
 
 **Don't be fooled:** antibacterial mouthwash kills the mouth bacteria that turn beetroot's nitrate into the active form — it can wipe out the benefit.
 
@@ -204,7 +204,7 @@ You don't need a science background. Each lesson starts with a one-liner and a p
 
 **Why it matters for you:** Caffeine and modafinil raise alertness; ADHD stimulants strongly raise dopamine and noradrenaline (powerful focus, real addiction risk); antidepressants keep serotonin around longer to lift mood over weeks.
 
-**Turn it up:** caffeine, modafinil, stimulants, L-tyrosine (raw material). **Don't be fooled:** forcing dopamine hard (strong stimulants) feels great short-term but builds tolerance and dependence — the brain turns down its own supply to compensate.
+**Turn it up:** [caffeine](/c/caffeine), [modafinil](/c/modafinil-armodafinil), stimulants, [L-tyrosine](/c/l-tyrosine) (raw material) — often paired with [L-theanine](/c/l-theanine) to smooth the edge. **Don't be fooled:** forcing dopamine hard (strong stimulants) feels great short-term but builds tolerance and dependence — the brain turns down its own supply to compensate.
 
 ---
 
