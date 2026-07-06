@@ -211,12 +211,36 @@ GRAPH.problems.forEach((p) => p.root_causes.forEach((rc) => {
     if (c && !seen.has(c.id)) { seen.add(c.id); (compoundProtocols[c.id] = compoundProtocols[c.id] || []).push({ name: p.name, route: `/protocol/${p.id}/${rc.id}` }); }
   });
 }));
+
+// ---- comparison pairs (Phase 9 long-tail): compounds sharing a goal, both "full", top by evidence ----
+// Non-thin by construction — each page is two full profiles side-by-side + an honest evidence verdict.
+const fullForCompare = D.compounds.filter((c) => c.mechanism && c.plain);
+const comparePairs = new Map(); // canonical "slugA|slugB" -> {a, b, goalLabel, goalId}
+D.goals.forEach((g) => {
+  const list = fullForCompare.filter((c) => (c.goalIds || []).includes(g.id)).sort((a, b) => b.stars - a.stars).slice(0, 8);
+  for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+    let a = list[i], b = list[j];
+    if (slug(a.name) > slug(b.name)) { const t = a; a = b; b = t; } // canonical alphabetical
+    const key = slug(a.name) + '|' + slug(b.name);
+    if (!comparePairs.has(key)) comparePairs.set(key, { a, b, goalLabel: g.label, goalId: g.id });
+  }
+});
+// reverse index for internal linking off each compound page (so comparison pages aren't SEO orphans)
+const compoundCompareLinks = {};
+comparePairs.forEach(({ a, b }) => {
+  const route = `/compare/${slug(a.name)}-vs-${slug(b.name)}`;
+  (compoundCompareLinks[a.id] = compoundCompareLinks[a.id] || []).push({ other: b.name, route });
+  (compoundCompareLinks[b.id] = compoundCompareLinks[b.id] || []).push({ other: a.name, route });
+});
+
 // compounds
 D.compounds.forEach((c) => {
   const route = '/c/' + slug(c.name);
   const goalLinks = (c.goalIds || []).map((g) => `<a href="/goal/${g}">${esc(goalById[g].label)}</a>`).join(' · ');
   const usedIn = compoundProtocols[c.id] || [];
   const usedInHtml = usedIn.length ? `<h2>Used in these protocols</h2><ul>${usedIn.slice(0, 8).map((u) => `<li><a href="${u.route}">${esc(u.name)}</a></li>`).join('')}</ul>` : '';
+  const cmpLinks = compoundCompareLinks[c.id] || [];
+  const compareHtml = cmpLinks.length ? `<h2>Compare ${esc(c.name)}</h2><ul>${cmpLinks.slice(0, 8).map((x) => `<li><a href="${x.route}">${esc(c.name)} vs ${esc(x.other)}</a></li>`).join('')}</ul>` : '';
   const pathLink = (c.pathwayIds || []).length && D.pathways[c.pathwayIds[0]] ? `<p><b>How it works:</b> <a href="/pathway/${c.pathwayIds[0]}">the ${esc(D.pathways[c.pathwayIds[0]].shortLabel)} pathway →</a></p>` : '';
   const body = `${crumbHtml([{ name: 'Home', route: '/' }, { name: c.category, route: '/' }, { name: c.name }])}
     <div class="detail"><h1>${esc(c.name)}</h1>
@@ -235,7 +259,7 @@ D.compounds.forEach((c) => {
         <h2>Availability &amp; where to buy</h2><p><b>${esc(sg.tag)}.</b> ${sg.body.replace(/<\/?b>/g, '')}${c.cost ? ' ' + esc(strip(c.cost)) : ''}</p>`;
     })()}
     ${pathLink}
-    ${usedInHtml}</div>`;
+    ${usedInHtml}${compareHtml}</div>`;
   const cqa = faqBlock([
     (c.bottom || c.plain) ? { q: `Does ${c.name} actually work?`, a: `Human-evidence rating: ${c.stars} of 5. ${snip(c.bottom || c.plain, 240)}` } : null,
     c.protocol ? { q: `How do you take ${c.name}?`, a: snip(c.protocol, 300) } : null,
@@ -248,6 +272,36 @@ D.compounds.forEach((c) => {
     url: SITE_URL + route, inLanguage: 'en', lastReviewed: BUILD_DATE, publisher: PUB.publisher, isPartOf: PUB.isPartOf, dateModified: PUB.dateModified,
   }].concat(cqa.ld || []);
   add(route, shell({ route, title: `${c.name}: dosage, evidence & uses · RNAwiki`, desc: cleanDesc(c.plain || c.bottom || c.mechanism || c.name), jsonld, ogImage: renderOgCard(`og/c/${slug(c.name)}.png`, { kind: 'Compound · ' + (c.category || ''), title: c.name, sub: cleanDesc(c.plain || c.bottom || c.mechanism, 120), starN: c.stars, rx: c.isRx }), breadcrumbs: [{ name: 'Home', route: '/' }, { name: c.name, route }], body: body + cqa.html }));
+});
+
+// comparison pages ([A] vs [B]) — high-intent long-tail, non-thin (two full profiles + honest verdict)
+comparePairs.forEach(({ a, b, goalLabel, goalId }) => {
+  const route = `/compare/${slug(a.name)}-vs-${slug(b.name)}`;
+  const gl = goalLabel.toLowerCase();
+  const verdict = a.stars === b.stars
+    ? `Both carry a comparable human-evidence rating (${stars(a.stars)}). Choose on mechanism fit, side-effects, availability and cost rather than evidence strength alone — they work through different mechanisms.`
+    : `${(a.stars > b.stars ? a : b).name} has the stronger human-evidence rating (${stars(Math.max(a.stars, b.stars))} vs ${stars(Math.min(a.stars, b.stars))}), but the right choice still depends on your goal, tolerance and budget.`;
+  const cmp = (k, va, vb) => `<tr><th>${esc(k)}</th><td>${va}</td><td>${vb}</td></tr>`;
+  const table = `<div class="cmp-wrap"><table class="cmp-table"><thead><tr><th></th><th><a href="/c/${slug(a.name)}">${esc(a.name)}</a></th><th><a href="/c/${slug(b.name)}">${esc(b.name)}</a></th></tr></thead><tbody>
+    ${cmp('Human evidence', stars(a.stars), stars(b.stars))}
+    ${cmp('Legal status', esc((a.approvalLabels || []).join(', ') || '—'), esc((b.approvalLabels || []).join(', ') || '—'))}
+    ${cmp('How it works', esc(snip(a.mechanism, 240)), esc(snip(b.mechanism, 240)))}
+    ${cmp('In plain English', esc(snip(a.plain, 240)), esc(snip(b.plain, 240)))}
+    ${cmp('Bottom line', esc(snip(a.bottom || '—', 200)), esc(snip(b.bottom || '—', 200)))}
+    ${cmp('Availability', esc(sgAvail(a).tag), esc(sgAvail(b).tag))}
+  </tbody></table></div>`;
+  const body = `${crumbHtml([{ name: 'Home', route: '/' }, { name: 'Compare', route: '/compare' }, { name: `${a.name} vs ${b.name}` }])}
+    <div class="detail"><h1>${esc(a.name)} vs ${esc(b.name)}</h1>
+    <p>Both are used for <a href="/goal/${goalId}">${esc(gl)}</a>. Here's how they compare on human evidence, mechanism, safety and availability — in plain English.</p>
+    ${table}
+    <h2>Which is better for ${esc(gl)}?</h2><p>${esc(verdict)}</p>
+    <p>Full breakdowns: <a href="/c/${slug(a.name)}">${esc(a.name)}</a> · <a href="/c/${slug(b.name)}">${esc(b.name)}</a>.</p></div>`;
+  const faq = faqBlock([
+    { q: `Is ${a.name} or ${b.name} better for ${gl}?`, a: verdict },
+    { q: `What's the difference between ${a.name} and ${b.name}?`, a: `${a.name}: ${snip(a.bottom || a.plain, 130)} — ${b.name}: ${snip(b.bottom || b.plain, 130)}` },
+  ]);
+  const jsonld = [{ '@context': 'https://schema.org', '@type': 'MedicalWebPage', name: `${a.name} vs ${b.name}`, description: `Compare ${a.name} and ${b.name} for ${gl}.`, url: SITE_URL + route, inLanguage: 'en', lastReviewed: BUILD_DATE, publisher: PUB.publisher, isPartOf: PUB.isPartOf, dateModified: PUB.dateModified }].concat(faq.ld || []);
+  add(route, shell({ route, title: `${a.name} vs ${b.name}: which works better? · RNAwiki`, desc: `${a.name} vs ${b.name} for ${gl}: human evidence, mechanism, safety and availability compared — plain English, honest verdict.`, jsonld, breadcrumbs: [{ name: 'Home', route: '/' }, { name: 'Compare', route: '/compare' }, { name: `${a.name} vs ${b.name}`, route }], body: body + faq.html }));
 });
 
 // goals
