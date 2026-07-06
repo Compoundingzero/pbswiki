@@ -283,11 +283,17 @@ This is why some supplements (like boron and tongkat ali) can help even without 
 ---
 
 ## SIRT1
-**In one line:** A repair-crew enzyme that switches on longevity and maintenance programs — powered by NAD⁺.
+**In one line:** One specific sirtuin enzyme that switches repair and stress-resistance programs on by stripping "off" tags from key proteins.
 
-**SIRT1** is one of the **sirtuins** — enzymes that act like cellular maintenance foremen. When switched on, they turn on genes for DNA repair, healthy mitochondria, and stress resistance — programs linked to longer, healthier life in animals. They run on the fuel NAD⁺, which declines with age.
+**SIRT1** is a **deacetylase** — it removes acetyl groups from proteins, and that flips their programs on or off. It is one of **seven human sirtuins (SIRT1–7)** and is not interchangeable with them: **SIRT3** works inside mitochondria, **SIRT6** guards DNA and genome stability, while SIRT1 sits mostly in the nucleus flipping master switches.
 
-This is why the longevity world cares about both NAD⁺ boosters (which supply the fuel) and compounds like resveratrol (which activate the sirtuins directly). Fasting and exercise switch them on for free. Think of them as the crew that keeps the cell in good repair — as long as they have fuel.
+What SIRT1 actually acts on — the reason it matters: it deacetylates **PGC-1α** (turning up mitochondrial biogenesis — more, healthier cellular power plants), the **FOXO** transcription factors (stress resistance and antioxidant defence), **p53** (tuning cell-survival decisions), and **NF-κB** (dialling chronic inflammation *down*). Those four levers are why one enzyme touches ageing, metabolism and inflammation at once.
+
+**The controversy an expert should know:** whether **resveratrol** activates SIRT1 *directly* is genuinely disputed. Sinclair's 2006 work said yes; a 2009–2010 line of research argued the effect was an **assay artifact** — a fluorescent tag on the test peptide — rather than real activation in the body. Honest read: SIRT1's importance is solid; resveratrol's claim to switch it on directly is not settled.
+
+**What raises it for free:** fasting, exercise and caloric restriction all raise SIRT1 activity — no supplement required.
+
+SIRT1 runs on the fuel **NAD⁺**, which halves with age. That decline story — and how boosters refill it — lives on [the NAD⁺ &amp; sirtuins pathway](/pathway/12); this page is about the enzyme itself.
 
 ---
 

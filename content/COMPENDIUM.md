@@ -793,12 +793,12 @@ The most active frontier in medicine. Most are repurposed metabolic or cancer dr
 
 ### NMN / NR (NAD⁺ precursors)  🟡 ⭐⭐⭐ (metabolic) ⭐⭐ (performance)
 **Goals:** Longevity · Energy metabolism · Endurance (40+)
-**Technical mechanism:** Raise cellular **NAD⁺**, the coenzyme for the electron transport chain, **sirtuins (SIRT1)** (deacetylases regulating aging genes), and PARP DNA-repair enzymes. NAD⁺ falls ~50% from age 20→50. NR converts to NMN intracellularly; NMN enters via the **Slc12a8** transporter.
+**Technical mechanism:** Refill cellular **NAD⁺** — the fuel your sirtuins (SIRT1) and PARP DNA-repair enzymes run on. *Why NAD⁺ matters and how it halves with age → [the NAD⁺ &amp; sirtuins pathway](/pathway/12).* The forms differ only in how they reach NAD⁺: **NR** converts to NMN inside the cell; **NMN** is thought to enter via the **Slc12a8** transporter; **niacin** is the cheap classic precursor; a **NAD⁺ IV** infuses it directly.
 **Molecular target:** [NAMPT NAD biosynthesis (NCBI Gene)](https://www.ncbi.nlm.nih.gov/gene/10135) · [SIRT1 sirtuin 1 (NCBI Gene)](https://www.ncbi.nlm.nih.gov/gene/23411) · [NMN (PubChem CID 14180)](https://pubchem.ncbi.nlm.nih.gov/compound/14180)
-**In plain English:** NAD⁺ is the fuel your cellular power plants and DNA-repair crews run on, and it drains as you age. NMN/NR refill it. Animal data is spectacular; human benefits look real but modest, and matter more after 40.
-**Protocol:** NMN 250–500 mg or NR 250–500 mg, morning.
-**Watch out:** NMN is a legal grey area in the US (FDA drug-exclusion ruling); NR is a clean supplement.
-**Bottom line:** Most exciting longevity supplement; NR has cleaner legal status, NMN more recent trials.
+**In plain English:** Age drains NAD⁺; these refill it. Which form? **NR** — cleanest legal status, most human data. **NMN** — the most-hyped, newer, a US legal grey area. **Niacin (B3)** — cheapest, but flushes. **NAD⁺ drip** — fastest and priciest, least evidence per dollar, clinic-only. Animal data is spectacular; human benefits look real but modest, and matter more after 40.
+**Protocol:** NMN or NR 250–500 mg in the **morning** — NAD⁺ tracks your body clock and peaks in the active phase. Often stacked with pterostilbene, and with **TMG** to replace the methyl groups NAD⁺ metabolism uses up.
+**Watch out:** NMN is a US legal grey area (FDA drug-exclusion ruling); **NR is the clean supplement.** No prescription drug is involved — but skip NAD⁺ IVs from unlicensed providers.
+**Bottom line:** The most exciting longevity lever right now; NR the cleaner legal status, NMN the newer trials, niacin the best value. Full mechanism lives on [the NAD⁺ pathway](/pathway/12).
 
 ---
 

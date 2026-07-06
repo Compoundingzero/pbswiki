@@ -322,6 +322,11 @@ You don't need a science background. Each lesson starts with a one-liner and a p
 
 **Turn it up:** NMN, NR, niacin (the cheap but flush-causing version), exercise. **Don't be fooled:** the mouse results are stronger than the human results so far — this is promising, not proven, and most useful for people over 40.
 
+**The three ways to pull this pathway** (each compound page has the dose, legal status and how to take it):
+- **Fuel-suppliers** — refill NAD⁺ itself: [NMN / NR](/c/nmn-nr-nad-precursors) and [niacin (B3)](/c/niacin-nadh-vitamin-b3).
+- **Direct-activators** — poke the sirtuins from another angle: [resveratrol / pterostilbene](/c/resveratrol-pterostilbene) — though whether they switch on [SIRT1](/target/SIRT1) *directly* is disputed.
+- **The free levers** — no supplement needed: fasting, exercise and caloric restriction.
+
 ---
 
 ## PATHWAY 14 — Inflammation (the NF-κB switch)
