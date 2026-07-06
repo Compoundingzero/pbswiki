@@ -1316,3 +1316,13 @@ a.dp-name:hover{color:var(--accent)}
 .clin-tick{width:52px;height:52px;border-radius:50%;background:var(--accent);color:#fff;font-size:1.6rem;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem}
 .clin-done h3{margin:0 0 .4rem;color:var(--head)}
 @media(max-width:560px){.clin-grid{grid-template-columns:1fr}}
+
+/* ---- SEO FAQ blocks (compound + protocol pages; prerender + client parity) ---- */
+.faq{display:flex;flex-direction:column;gap:8px;margin:.4rem 0 1.2rem}
+.faq h2{margin:.2rem 0 .4rem}
+.faq-q{border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:0 14px}
+.faq-q summary{cursor:pointer;font-weight:600;color:var(--head);padding:11px 0;list-style:none;display:flex;gap:8px;align-items:baseline}
+.faq-q summary::-webkit-details-marker{display:none}
+.faq-q summary::before{content:"＋";color:var(--accent);font-weight:700}
+.faq-q[open] summary::before{content:"－"}
+.faq-q p{margin:0 0 12px;color:var(--ink);line-height:1.55}

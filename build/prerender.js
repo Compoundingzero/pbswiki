@@ -124,7 +124,7 @@ function protoMove(rc) {
 }
 
 // ---- page shell ----
-function shell({ route, title, desc, jsonld, body, breadcrumbs, ogImage }) {
+function shell({ route, title, desc, jsonld, body, breadcrumbs, ogImage, ogType, robots }) {
   const img = ogImage || (SITE_URL + '/og.png');
   const url = SITE_URL + route;
   const ld = [].concat(jsonld || []).map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join('');
@@ -133,18 +133,17 @@ function shell({ route, title, desc, jsonld, body, breadcrumbs, ogImage }) {
     itemListElement: breadcrumbs.map((b, i) => ({ '@type': 'ListItem', position: i + 1, name: b.name, item: SITE_URL + b.route })),
   })}</script>` : '';
   return `<!DOCTYPE html>
-<html lang="en-SG">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${esc(url)}">
-<meta name="robots" content="index,follow,max-image-preview:large">
-<meta name="geo.region" content="SG"><meta name="geo.placename" content="Singapore">
-<meta property="og:type" content="article">
+<meta name="robots" content="${robots || 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'}">
+<meta property="og:type" content="${ogType || 'article'}">
 <meta property="og:site_name" content="${SITE_NAME}">
-<meta property="og:locale" content="en_SG">
+<meta property="og:locale" content="en_US">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${esc(url)}">
@@ -178,6 +177,26 @@ ${crumbLd}${ld}
 }
 
 const crumbHtml = (items) => `<div class="crumbs">${items.map((it, i) => it.route ? `<a href="${it.route}">${esc(it.name)}</a>` : `<span>${esc(it.name)}</span>`).join('<span class="sep">›</span>')}</div>`;
+
+// ---- SEO entities & structured-data helpers ----
+const BUILD_DATE = new Date().toISOString().slice(0, 10); // real freshness signal for dateModified/lastReviewed
+// The publisher entity (E-E-A-T). Referenced by @id from every clinical page; defined in full on home.
+const ORG = { '@type': 'Organization', '@id': SITE_URL + '/#org', name: SITE_NAME, url: SITE_URL + '/', logo: SITE_URL + '/og.png',
+  sameAs: ['https://twitter.com/Compoundingzero', 'https://compoundingzero.substack.com', 'https://github.com/Compoundingzero'] };
+const WEBSITE = { '@type': 'WebSite', '@id': SITE_URL + '/#website', url: SITE_URL + '/', name: SITE_NAME, inLanguage: 'en', publisher: { '@id': SITE_URL + '/#org' } };
+const PUB = { publisher: { '@id': SITE_URL + '/#org' }, isPartOf: { '@id': SITE_URL + '/#website' }, dateModified: BUILD_DATE };
+const stripMd = (t) => String(t == null ? '' : t).replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`>#]+/g, '').replace(/\s+/g, ' ').trim();
+// Trim to a word boundary so answers never cut mid-word.
+const snip = (t, max = 300) => { const s = stripMd(t); if (s.length <= max) return s; const cut = s.slice(0, max); return cut.slice(0, cut.lastIndexOf(' ')).replace(/[,;:]$/, '') + '…'; };
+// Build a visible FAQ section + matching FAQPage JSON-LD from real fields. Google requires the two to
+// match, so both come from the same source. Needs ≥2 real Q&As or it renders nothing (no thin markup).
+function faqBlock(qas) {
+  const items = qas.filter((x) => x && x.q && x.a && String(x.a).trim().length > 8);
+  if (items.length < 2) return { html: '', ld: null };
+  const html = `<section class="faq"><h2>Common questions</h2>${items.map((x) => `<details class="faq-q"><summary>${esc(x.q)}</summary><p>${esc(x.a)}</p></details>`).join('')}</section>`;
+  const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: items.map((x) => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) };
+  return { html, ld };
+}
 
 // ---- renderers ----
 const pages = []; // {route, html}
@@ -213,16 +232,22 @@ D.compounds.forEach((c) => {
       const sg = sgAvail(c); const d = derivedStacks(c); const strip = (t) => String(t || '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`]/g, '');
       return `${c.stacksWith || d.length ? `<h2>Stacks with</h2>${c.stacksWith ? `<p>${esc(strip(c.stacksWith))}</p>` : ''}${d.length ? `<p>Shares a pathway — often paired with: ${d.map((o) => `<a href="/c/${slug(o.name)}">${esc(o.name)}</a>`).join(', ')}.</p>` : ''}` : ''}
         ${c.avoid ? `<h2>Avoid combining with</h2><p>${esc(strip(c.avoid))}</p>` : ''}
-        <h2>Where to buy in Singapore</h2><p><b>${esc(sg.tag)}.</b> ${sg.body.replace(/<\/?b>/g, '')}${c.cost ? ' ' + esc(strip(c.cost)) : ''}</p>`;
+        <h2>Availability &amp; where to buy</h2><p><b>${esc(sg.tag)}.</b> ${sg.body.replace(/<\/?b>/g, '')}${c.cost ? ' ' + esc(strip(c.cost)) : ''}</p>`;
     })()}
     ${pathLink}
     ${usedInHtml}</div>`;
-  const jsonld = {
+  const cqa = faqBlock([
+    (c.bottom || c.plain) ? { q: `Does ${c.name} actually work?`, a: `Human-evidence rating: ${c.stars} of 5. ${snip(c.bottom || c.plain, 240)}` } : null,
+    c.protocol ? { q: `How do you take ${c.name}?`, a: snip(c.protocol, 300) } : null,
+    c.watch ? { q: `What are the risks or side effects of ${c.name}?`, a: snip(c.watch, 300) } : null,
+    (c.approvalLabels || []).length ? { q: `Is ${c.name} legal or approved?`, a: `Regulatory status: ${(c.approvalLabels || []).join(', ')}.` } : null,
+  ]);
+  const jsonld = [{
     '@context': 'https://schema.org', '@type': 'MedicalWebPage', name: c.name,
     about: { '@type': 'Drug', name: c.name }, description: (c.plain || c.bottom || '').slice(0, 300),
-    url: SITE_URL + route, inLanguage: 'en-SG',
-  };
-  add(route, shell({ route, title: `${c.name} — evidence, mechanism & how it works · RNAwiki`, desc: cleanDesc(c.plain || c.bottom || c.mechanism || c.name), jsonld, ogImage: renderOgCard(`og/c/${slug(c.name)}.png`, { kind: 'Compound · ' + (c.category || ''), title: c.name, sub: cleanDesc(c.plain || c.bottom || c.mechanism, 120), starN: c.stars, rx: c.isRx }), breadcrumbs: [{ name: 'Home', route: '/' }, { name: c.name, route }], body }));
+    url: SITE_URL + route, inLanguage: 'en', lastReviewed: BUILD_DATE, publisher: PUB.publisher, isPartOf: PUB.isPartOf, dateModified: PUB.dateModified,
+  }].concat(cqa.ld || []);
+  add(route, shell({ route, title: `${c.name}: dosage, evidence & uses · RNAwiki`, desc: cleanDesc(c.plain || c.bottom || c.mechanism || c.name), jsonld, ogImage: renderOgCard(`og/c/${slug(c.name)}.png`, { kind: 'Compound · ' + (c.category || ''), title: c.name, sub: cleanDesc(c.plain || c.bottom || c.mechanism, 120), starN: c.stars, rx: c.isRx }), breadcrumbs: [{ name: 'Home', route: '/' }, { name: c.name, route }], body: body + cqa.html }));
 });
 
 // goals
@@ -232,10 +257,11 @@ D.goals.forEach((g) => {
   const protos = GRAPH.problems.filter((p) => p.root_causes.some((rc) => (rc.goal_ids || []).includes(g.id)));
   const body = `${crumbHtml([{ name: 'Home', route: '/' }, { name: g.label }])}
     <h1>${g.icon} ${esc(g.label)}</h1>
-    <p>${list.length} compounds that help you ${esc(g.label.toLowerCase())}, ranked by strength of human evidence — in plain English, localised for Singapore.</p>
+    <p>${list.length} compounds that help you ${esc(g.label.toLowerCase())}, ranked by strength of human evidence — in plain English, with honest verdicts.</p>
     <ul>${list.map((c) => `<li><a href="/c/${slug(c.name)}">${esc(c.name)}</a> — ${stars(c.stars)}</li>`).join('')}</ul>
     ${protos.length ? `<h2>Full protocols</h2><ul>${protos.map((p) => `<li><a href="/protocol/${p.id}/${p.root_causes[0].id}">${esc(p.name)} — Move, Fuel &amp; Stack</a></li>`).join('')}</ul>` : ''}`;
-  add(route, shell({ route, title: `${g.label} — what actually helps · RNAwiki`, desc: `Compounds and full protocols that help you ${g.label.toLowerCase()}, ranked by human evidence. Plain English, honest verdicts, localised for Singapore.`, ogImage: renderOgCard(`og/goal/${g.id}.png`, { kind: 'Goal', title: g.label, sub: 'What actually helps you ' + g.label.toLowerCase() + ' — ranked by human evidence.' }), breadcrumbs: [{ name: 'Home', route: '/' }, { name: g.label, route }], body }));
+  const goalLd = { '@context': 'https://schema.org', '@type': 'MedicalWebPage', name: `${g.label} — what actually helps`, description: `Compounds ranked by human evidence for ${g.label.toLowerCase()}.`, url: SITE_URL + route, inLanguage: 'en', lastReviewed: BUILD_DATE, publisher: PUB.publisher, isPartOf: PUB.isPartOf, dateModified: PUB.dateModified };
+  add(route, shell({ route, title: `${g.label}: what actually helps (ranked by evidence) · RNAwiki`, desc: `Compounds and full protocols that help you ${g.label.toLowerCase()}, ranked by human evidence — plain English, honest verdicts.`, jsonld: goalLd, ogImage: renderOgCard(`og/goal/${g.id}.png`, { kind: 'Goal', title: g.label, sub: 'What actually helps you ' + g.label.toLowerCase() + ' — ranked by human evidence.' }), breadcrumbs: [{ name: 'Home', route: '/' }, { name: g.label, route }], body }));
 });
 
 // protocols
@@ -250,21 +276,36 @@ GRAPH.problems.forEach((p) => {
       <h3>Move — the mechanics that fix it${rc.prescription ? `: ${esc(rc.prescription.scheme)}` : ''}</h3>
       ${rc.prescription ? `<p>${esc(rc.prescription.detail)}</p>` : ''}
       ${move.length ? `<ul>${move.map((e) => `<li>${esc(e.name)}</li>`).join('')}</ul>` : ''}
-      <h3>Fuel — Singapore foods to fuel it</h3>
+      <h3>Fuel — foods to fuel it</h3>
       ${fuel.length ? `<ul>${fuel.map((f) => `<li>${esc(f.name)}${f.sg_local ? ' (local SG)' : ''}</li>`).join('')}</ul>` : ''}
       ${nt ? `<p><b>Daily nutrient targets:</b> ${esc(nt)}</p>` : ''}
       <h3>Stack — evidence-ranked compounds</h3>
       <ul>${stack.map((c) => `<li><a href="/c/${slug(c.name)}">${esc(c.name)}</a> — ${stars(c.stars)}</li>`).join('')}</ul>
       <p><a href="/fuel/${p.id}/${rc.id}">Open the Fuel Tracker for this protocol →</a></p>
       <p><em>Educational protocol, not medical advice.</em></p>`;
-    const protoLd = {
-      '@context': 'https://schema.org', '@type': 'MedicalWebPage', inLanguage: 'en-SG',
+    const rcShort = rc.name.replace(/\s*\([^)]*\)/, '');
+    const moveNames = move.slice(0, 5).map((e) => e.name).join(', ');
+    const fuelNames = fuel.slice(0, 5).map((f) => f.name).join(', ');
+    const stackNames = stack.slice(0, 5).map((c) => c.name).join(', ');
+    const pqa = faqBlock([
+      rc.diagnostic ? { q: `What causes ${p.name.toLowerCase()}?`, a: `${rc.name}. ${snip(rc.diagnostic, 240)}` } : null,
+      move.length ? { q: `What exercises help ${p.name.toLowerCase()}?`, a: `Key movements: ${moveNames}.` } : null,
+      fuel.length ? { q: `What should you eat for ${p.name.toLowerCase()}?`, a: `Foods that support it: ${fuelNames}.` } : null,
+      stack.length ? { q: `What supplements help ${p.name.toLowerCase()}?`, a: `Evidence-ranked options: ${stackNames}.` } : null,
+    ]);
+    const howto = (move.length || fuel.length || stack.length) ? { '@context': 'https://schema.org', '@type': 'HowTo', name: `How to address ${p.name} — ${rcShort}`, description: snip(rc.diagnostic || p.name, 200), step: [
+      move.length ? { '@type': 'HowToStep', name: 'Move', text: `Corrective movement: ${moveNames}.` } : null,
+      fuel.length ? { '@type': 'HowToStep', name: 'Fuel', text: `Eat to support recovery: ${fuelNames}.` } : null,
+      stack.length ? { '@type': 'HowToStep', name: 'Stack', text: `Evidence-ranked supplements to consider: ${stackNames}.` } : null,
+    ].filter(Boolean) } : null;
+    const protoLd = [{
+      '@context': 'https://schema.org', '@type': 'MedicalWebPage', inLanguage: 'en',
       name: `${p.name} — ${rc.name} protocol`, description: (rc.diagnostic || p.name),
       about: { '@type': 'MedicalCondition', name: p.name },
-      audience: { '@type': 'MedicalAudience', geographicArea: { '@type': 'AdministrativeArea', name: 'Singapore' } },
-      lastReviewed: '2026-07-06', url: SITE_URL + route,
-    };
-    add(route, shell({ route, title: `${p.name} in Singapore — how to fix ${rc.name.replace(/\s*\([^)]*\)/, '').toLowerCase()} (Move · Fuel · Stack) · RNAwiki`, desc: `${p.name} (${rc.name}): the exercises to fix it, Singapore foods to fuel it, and evidence-ranked supplements — a full root-cause protocol for Singapore. Not medical advice.`, jsonld: protoLd, ogImage: renderOgCard(`og/protocol/${p.id}/${rc.id}.png`, { kind: 'Protocol · ' + (p.category || ''), title: p.name, sub: rc.plain || rc.diagnostic || rc.name }), breadcrumbs: [{ name: 'Home', route: '/' }, { name: 'Solve', route: '/solve' }, { name: p.name, route }], body }));
+      audience: { '@type': 'MedicalAudience', audienceType: 'Patient' },
+      lastReviewed: BUILD_DATE, url: SITE_URL + route, publisher: PUB.publisher, isPartOf: PUB.isPartOf, dateModified: PUB.dateModified,
+    }].concat(howto || []).concat(pqa.ld || []);
+    add(route, shell({ route, title: `${p.name} (${rcShort.toLowerCase()}): exercises, supplements & what works · RNAwiki`, desc: `${p.name} — ${rc.name}: the exercises to fix it, foods to fuel it, and evidence-ranked supplements. A full root-cause protocol. Not medical advice.`, jsonld: protoLd, ogImage: renderOgCard(`og/protocol/${p.id}/${rc.id}.png`, { kind: 'Protocol · ' + (p.category || ''), title: p.name, sub: rc.plain || rc.diagnostic || rc.name }), breadcrumbs: [{ name: 'Home', route: '/' }, { name: 'Solve', route: '/solve' }, { name: p.name, route }], body: body + pqa.html }));
   });
 });
 
@@ -412,7 +453,7 @@ add('/solve', shell({ route: '/solve', title: 'Solve a problem or reach a goal �
   const goalLinks = D.goals.map((g) => `<li><a href="/goal/${g.id}">${esc(g.label)}</a></li>`).join('');
   const homeBody = `
     <section class="hero funnel-hero">
-      <div class="kicker">The open protocol engine · Singapore</div>
+      <div class="kicker">The open protocol engine</div>
       <h1>DNA is the idea that never came to life. RNA is the action.</h1>
       <p class="hero-lead">DNA is a blueprint locked in a vault. RNA is the messenger, the architect, and the builder — it reads the code and makes it real. RNAwiki is the RNA for your health: name a problem or a goal, and we build the exact movement, food, and supplements that fix its root cause — with every supplement broken down to its compounds, pathways, and molecular targets, and every food to the nutrients that matter, all in plain English.</p>
       <p><a class="cta-primary" href="/solve">Build my protocol →</a></p>
@@ -428,10 +469,10 @@ add('/solve', shell({ route: '/solve', title: 'Solve a problem or reach a goal �
     <section><h2>Or browse by goal</h2><ul class="seo-links">${goalLinks}</ul></section>`;
   // write directly (not via add()) so "/home" never leaks into the sitemap; canonical is "/"
   fs.writeFileSync(path.join(SITE, 'home.html'), shell({
-    route: '/',
-    title: 'RNAwiki — Stop guessing, start solving. Precision health protocols for Singapore',
-    desc: 'Fix the root cause, not the symptom. Get a precision Move · Fuel · Stack protocol for pain, metabolic, sleep, hormonal, cognitive, longevity and performance goals — evidence-ranked and localised for Singapore.',
-    jsonld: { '@context': 'https://schema.org', '@type': 'WebSite', name: 'RNAwiki', url: SITE_URL + '/', description: 'Precision, root-cause health protocols localised for Singapore.' },
+    route: '/', ogType: 'website',
+    title: 'RNAwiki — Stop guessing, start solving. Precision root-cause health protocols',
+    desc: 'Fix the root cause, not the symptom. Get a precision Move · Fuel · Stack protocol for pain, metabolic, sleep, hormonal, cognitive, longevity and performance goals — evidence-ranked, honest, in plain English.',
+    jsonld: [WEBSITE, ORG],
     breadcrumbs: [{ name: 'Home', route: '/' }],
     body: homeBody,
   }));
