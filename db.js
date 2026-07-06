@@ -173,6 +173,20 @@ CREATE TABLE IF NOT EXISTS rootcause_endorsements (
   UNIQUE(change_id, user_id)
 );
 
+-- Wiki-improvement feedback: anyone (signed in or not) can suggest an improvement or report
+-- something wrong. Surfaced in the super-admin control room.
+CREATE TABLE IF NOT EXISTS feedback (
+  id SERIAL PRIMARY KEY,
+  body TEXT NOT NULL,
+  page TEXT,
+  kind TEXT,                               -- idea | wrong | other
+  user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  contact TEXT,
+  status TEXT NOT NULL DEFAULT 'open',      -- open | done | archived
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_feedback_status ON feedback(status, created_at DESC);
+
 CREATE TABLE IF NOT EXISTS proposals (
   id SERIAL PRIMARY KEY,
   problem_id TEXT NOT NULL,

@@ -493,6 +493,24 @@ async function api(req, res, url) {
     await db.query('UPDATE protocol_requests SET status=$1 WHERE id=$2', [status, id]);
     return json(res, 200, { ok: true });
   }
+  // --- wiki-improvement feedback (open to everyone) ---
+  if (seg[0] === 'feedback' && !seg[1] && method === 'POST') {
+    const u = await currentUser(req);
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const body = clean(b.body, 2000); if (!body) return json(res, 400, { error: 'Tell us what to improve' });
+    const kind = ['idea', 'wrong', 'other'].includes(b.kind) ? b.kind : 'idea';
+    await db.query('INSERT INTO feedback(body,page,kind,user_id,contact) VALUES($1,$2,$3,$4,$5)',
+      [body, clean(b.page, 200) || null, kind, u ? u.id : null, clean(b.contact, 120) || null]);
+    if (u) await award(u.id, 'feedback', 'fb:' + Date.now(), 2);
+    return json(res, 200, { ok: true });
+  }
+  if (seg[0] === 'admin' && seg[1] === 'feedback' && seg[2] && method === 'POST') {
+    const u = await currentUser(req); if (!isSuper(u)) return json(res, 403, { error: 'Super-admin only' });
+    const id = parseInt(seg[2], 10); const b = await readBody(req) || {};
+    const status = ['open', 'done', 'archived'].includes(b.status) ? b.status : 'done';
+    await db.query('UPDATE feedback SET status=$1 WHERE id=$2', [status, id]);
+    return json(res, 200, { ok: true });
+  }
   // --- root-cause governance: experts propose add/remove; the relevant panel endorses ---
   if (seg[0] === 'rootcause-changes' && !seg[1] && method === 'GET') {
     const problem = clean(new URL('http://x/' + url).searchParams.get('problem'), 80);
@@ -556,7 +574,7 @@ async function api(req, res, url) {
   // --- consolidated super-admin control room: everything the superadmin needs in one call ---
   if (seg[0] === 'admin' && seg[1] === 'overview' && method === 'GET') {
     const u = await currentUser(req); if (!isSuper(u)) return json(res, 403, { error: 'Super-admin only' });
-    const [experts, partners, foods, requests, rcc] = await Promise.all([
+    const [experts, partners, foods, requests, rcc, feedback] = await Promise.all([
       db.query("SELECT id,username,domain,requested_domain,domain_verified,application_status,credential,role_backlink,reputation_points FROM users WHERE domain IS NOT NULL OR requested_domain IS NOT NULL ORDER BY (application_status='pending') DESC, domain_verified ASC, created_at ASC"),
       db.query('SELECT id,name,type,location,link,backlink_url,serves,status,created_at FROM partners ORDER BY status ASC, created_at DESC LIMIT 200'),
       db.query("SELECT f.id,f.name,f.serving,f.data,f.status,f.created_at,u.username AS by_user FROM user_foods f LEFT JOIN users u ON u.id=f.submitted_by WHERE f.status='pending' ORDER BY f.created_at ASC LIMIT 200"),
@@ -564,8 +582,9 @@ async function api(req, res, url) {
       db.query(`SELECT c.id,c.problem_id,c.action,c.root_cause_id,c.name,c.diagnostic,c.domains,c.rationale,c.status,c.created_at,u.username AS by_user,
         (SELECT count(*)::int FROM rootcause_endorsements e WHERE e.change_id=c.id) AS endorsements
         FROM rootcause_changes c LEFT JOIN users u ON u.id=c.submitted_by ORDER BY (c.status='pending') DESC, c.created_at DESC LIMIT 100`),
+      db.query("SELECT f.id,f.body,f.page,f.kind,f.contact,f.status,f.created_at,u.username AS by_user FROM feedback f LEFT JOIN users u ON u.id=f.user_id WHERE f.status='open' ORDER BY f.created_at DESC LIMIT 200"),
     ]);
-    return json(res, 200, { experts: experts.rows, partners: partners.rows, foods: foods.rows, requests: requests.rows, rootcauseChanges: rcc.rows, threshold: PANEL_THRESHOLD });
+    return json(res, 200, { experts: experts.rows, partners: partners.rows, foods: foods.rows, requests: requests.rows, rootcauseChanges: rcc.rows, feedback: feedback.rows, threshold: PANEL_THRESHOLD });
   }
   if (seg[0] === 'foods' && seg[1] && seg[2] === 'verify' && method === 'POST') {
     const u = await currentUser(req); if (!u || !(u.role === 'admin' || (u.domain === 'dietitian' && u.domain_verified))) return json(res, 403, { error: 'Verified dietitians only' });

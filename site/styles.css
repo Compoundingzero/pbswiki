@@ -1096,3 +1096,12 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 /* Intake: plain-language options + demoted clinical label */
 .io-clin{display:inline-block;margin-top:.3rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:.1rem .45rem}
 .intake-opt .io-b b{font-size:1rem;line-height:1.35}
+
+/* Feedback FAB + share prompt + attribution label */
+.feedback-fab{position:fixed;right:16px;bottom:16px;z-index:150;background:var(--head,#0e1420);color:#fff;border:none;border-radius:24px;padding:.6rem 1rem;font-size:.85rem;font-weight:700;cursor:pointer;box-shadow:0 8px 24px -8px rgba(0,0,0,.4);opacity:.9}
+.feedback-fab:hover{opacity:1;transform:translateY(-1px)}
+@media(max-width:640px){.feedback-fab{right:12px;bottom:12px;padding:.5rem .8rem;font-size:.78rem}}
+.sp-row{display:flex;gap:.6rem;align-items:center;margin-top:.6rem}
+.sp-row .cta-primary{flex:1}
+.bl-label{display:block;font-size:.78rem;color:var(--muted);line-height:1.5;margin:.5rem 0 .3rem}
+.bl-label b{color:var(--head)}
