@@ -115,10 +115,22 @@ const crumbHtml = (items) => `<div class="crumbs">${items.map((it, i) => it.rout
 const pages = []; // {route, html}
 function add(route, html) { pages.push({ route, html }); }
 
+// reverse index: which protocols explicitly list each compound (the "Used in" module + flow)
+const compoundProtocols = {};
+GRAPH.problems.forEach((p) => p.root_causes.forEach((rc) => {
+  const seen = new Set();
+  (rc.compounds || []).forEach((n) => {
+    const c = findCpt(n);
+    if (c && !seen.has(c.id)) { seen.add(c.id); (compoundProtocols[c.id] = compoundProtocols[c.id] || []).push({ name: p.name, route: `/protocol/${p.id}/${rc.id}` }); }
+  });
+}));
 // compounds
 D.compounds.forEach((c) => {
   const route = '/c/' + slug(c.name);
   const goalLinks = (c.goalIds || []).map((g) => `<a href="/goal/${g}">${esc(goalById[g].label)}</a>`).join(' · ');
+  const usedIn = compoundProtocols[c.id] || [];
+  const usedInHtml = usedIn.length ? `<h2>Used in these protocols</h2><ul>${usedIn.slice(0, 8).map((u) => `<li><a href="${u.route}">${esc(u.name)}</a></li>`).join('')}</ul>` : '';
+  const pathLink = (c.pathwayIds || []).length && D.pathways[c.pathwayIds[0]] ? `<p><b>How it works:</b> <a href="/pathway/${c.pathwayIds[0]}">the ${esc(D.pathways[c.pathwayIds[0]].shortLabel)} pathway →</a></p>` : '';
   const body = `${crumbHtml([{ name: 'Home', route: '/' }, { name: c.category, route: '/' }, { name: c.name }])}
     <div class="detail"><h1>${esc(c.name)}</h1>
     <p><b>Evidence:</b> ${stars(c.stars)} · <b>Status:</b> ${(c.approvalLabels || []).join(', ')}</p>
@@ -128,7 +140,8 @@ D.compounds.forEach((c) => {
     ${c.watch ? `<h2>Watch out</h2><p>${esc(c.watch)}</p>` : ''}
     ${c.bottom ? `<h2>Bottom line</h2><p>${esc(c.bottom)}</p>` : ''}
     ${goalLinks ? `<p><b>Helps with:</b> ${goalLinks}</p>` : ''}
-    <p><a href="/c/${slug(c.name)}">Open the interactive page →</a></p></div>`;
+    ${pathLink}
+    ${usedInHtml}</div>`;
   const jsonld = {
     '@context': 'https://schema.org', '@type': 'MedicalWebPage', name: c.name,
     about: { '@type': 'Drug', name: c.name }, description: (c.plain || c.bottom || '').slice(0, 300),
@@ -167,7 +180,7 @@ GRAPH.problems.forEach((p) => {
       ${nt ? `<p><b>Daily nutrient targets:</b> ${esc(nt)}</p>` : ''}
       <h3>Stack — evidence-ranked compounds</h3>
       <ul>${stack.map((c) => `<li><a href="/c/${slug(c.name)}">${esc(c.name)}</a> — ${stars(c.stars)}</li>`).join('')}</ul>
-      <p><a href="${route}">Open the interactive protocol with the Fuel Tracker →</a></p>
+      <p><a href="/fuel/${p.id}/${rc.id}">Open the Fuel Tracker for this protocol →</a></p>
       <p><em>Educational protocol, not medical advice.</em></p>`;
     const protoLd = {
       '@context': 'https://schema.org', '@type': 'MedicalWebPage', inLanguage: 'en-SG',

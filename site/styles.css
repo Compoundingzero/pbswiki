@@ -1158,3 +1158,8 @@ a.anat-ex b{color:var(--head)}
 .anat-3d.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;background:linear-gradient(135deg,#eef4ff,#f1ecff);color:var(--head);text-align:center;padding:2rem 1rem;min-height:180px}
 .anat-3d.placeholder span{font-weight:700}
 .anat-3d.placeholder small{color:var(--muted)}
+
+/* Rx / medical-supervision separation + evidence legend */
+.pill.rx{background:#fff1f0;color:#b3261e;border:1px solid #f5c2bd;font-weight:800}
+.st-card.rx{border-left:3px solid #e5484d;background:linear-gradient(90deg,#fff6f5,var(--panel) 12%)}
+.st-card .stars{cursor:help}
