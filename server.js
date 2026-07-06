@@ -119,7 +119,7 @@ const ADMIN_USER = (process.env.ADMIN_USER || '').toLowerCase();
 async function currentUser(req) {
   const sid = parseCookies(req).sid;
   if (!sid || !db.enabled) return null;
-  const r = await db.query('SELECT u.id, u.username, u.role, u.domain, u.credential, u.domain_verified, u.reputation_points, u.socials, u.badges, u.profile_views, u.booking_clicks FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token=$1 AND s.expires_at > now()', [sid]);
+  const r = await db.query('SELECT u.id, u.username, u.role, u.domain, u.credential, u.domain_verified, u.requested_domain, u.application_status, u.reputation_points, u.socials, u.badges, u.profile_views, u.booking_clicks FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token=$1 AND s.expires_at > now()', [sid]);
   const u = r.rows[0];
   if (u && ADMIN_USER && u.username.toLowerCase() === ADMIN_USER) u.role = 'admin';
   return u || null;
@@ -308,14 +308,18 @@ async function api(req, res, url) {
     return json(res, 200, { score: { up: r.rows[0].up || 0, down: r.rows[0].down || 0 } });
   }
 
-  // --- Tier 2: domain-isolated stewardship ---
+  // --- apply for an expert role (you CANNOT self-assign; an admin grants it) ---
   if (seg[0] === 'profile' && seg[1] === 'domain' && method === 'POST') {
     const u = await currentUser(req); if (!u) return json(res, 401, { error: 'Please sign in' });
     const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
-    const domain = clean(b.domain, 20), credential = clean(b.credential, 200);
-    if (!DOMAIN_LAYER[domain] && domain !== '') return json(res, 400, { error: 'Unknown domain' });
-    await db.query('UPDATE users SET domain=$1, credential=$2 WHERE id=$3', [domain || null, credential || null, u.id]);
-    return json(res, 200, { ok: true, domain: domain || null, credential: credential || null });
+    const domain = clean(b.domain, 20), credential = clean(b.credential, 200), backlink = safeUrl(b.backlink_url);
+    if (u.domain_verified) return json(res, 400, { error: 'You already hold a verified role. Ask the admin to change it.' });
+    if (!DOMAIN_LAYER[domain]) return json(res, 400, { error: 'Choose a domain to apply for.' });
+    if (!credential) return json(res, 400, { error: 'Add your registration/credential so we can verify you.' });
+    if (!backlink) return json(res, 400, { error: 'Add the URL of a page on your site or socials that links back to rnawiki.com — that link exchange is how we verify experts.' });
+    // sets a PENDING application only — domain stays null until an admin approves it.
+    await db.query("UPDATE users SET requested_domain=$1, credential=$2, role_backlink=$3, application_status='pending' WHERE id=$4", [domain, credential, backlink, u.id]);
+    return json(res, 200, { ok: true, application_status: 'pending', requested_domain: domain });
   }
   // --- profile: update your public socials / booking link ---
   if (seg[0] === 'profile' && !seg[1] && method === 'POST') {
@@ -457,8 +461,13 @@ async function api(req, res, url) {
     const pid = clean(b.problemId, 60), rcid = clean(b.rootCauseId, 60), layer = clean(b.layer, 12);
     const change = clean(b.change, 4000), evidence = clean(b.evidence, 500);
     if (!pid || !rcid || !change) return json(res, 400, { error: 'Describe the change' });
-    // HARD domain isolation: you may only propose on the layer your domain owns.
-    if (DOMAIN_LAYER[u.domain] !== layer) return json(res, 403, { error: `A ${u.domain} may only edit the ${DOMAIN_LAYER[u.domain]} layer.` });
+    // STEWARD-ONLY editing: only the protocol's admin-approved steward (or an admin) may edit it.
+    if (u.role !== 'admin') {
+      const st = (await db.query('SELECT user_id FROM stewardships WHERE problem_id=$1 AND root_cause_id=$2', [pid, rcid])).rows[0];
+      if (!st || st.user_id !== u.id) return json(res, 403, { error: 'Only this protocol’s steward can edit it. Adopt the protocol from your Pro dashboard to become its steward.' });
+    }
+    // HARD domain isolation: you may only edit the layer your competence covers.
+    if (u.domain && DOMAIN_LAYER[u.domain] !== layer) return json(res, 403, { error: `A ${(({physio:'movement',dietitian:'nutrition',pharmacist:'pharmacology'})[u.domain])||u.domain} expert may only edit the ${DOMAIN_LAYER[u.domain]} layer.` });
     const r = await db.query(
       `INSERT INTO proposals(problem_id,root_cause_id,layer,domain,user_id,change,evidence)
        VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING id,created_at`, [pid, rcid, layer, u.domain, u.id, change, evidence || null]);
@@ -538,14 +547,17 @@ async function api(req, res, url) {
   // --- admin: credential verification for stewardship ---
   if (seg[0] === 'admin' && seg[1] === 'experts' && method === 'GET') {
     const u = await currentUser(req); if (!u || u.role !== 'admin') return json(res, 403, { error: 'Admin only' });
-    const r = await db.query('SELECT username, domain, credential, domain_verified, created_at FROM users WHERE domain IS NOT NULL ORDER BY domain_verified ASC, created_at ASC');
+    const r = await db.query("SELECT username, domain, requested_domain, application_status, credential, role_backlink, domain_verified, created_at FROM users WHERE domain IS NOT NULL OR requested_domain IS NOT NULL ORDER BY (application_status='pending') DESC, domain_verified ASC, created_at ASC");
     return json(res, 200, { experts: r.rows });
   }
   if (seg[0] === 'admin' && seg[1] === 'verify-domain' && method === 'POST') {
     const u = await currentUser(req); if (!u || u.role !== 'admin') return json(res, 403, { error: 'Admin only' });
     const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
     const username = clean(b.username, 24); const verified = b.verified !== false;
-    const r = await db.query('UPDATE users SET domain_verified=$1 WHERE username=$2 RETURNING username, domain, domain_verified', [verified, username]);
+    // approve = grant the requested (or current) domain + verified; reject/unverify = revoke it.
+    const r = verified
+      ? await db.query("UPDATE users SET domain=COALESCE(requested_domain, domain), domain_verified=true, application_status='approved', requested_domain=null WHERE username=$1 RETURNING username, domain, domain_verified", [username])
+      : await db.query("UPDATE users SET domain_verified=false, domain=null, application_status='rejected' WHERE username=$1 RETURNING username, domain, domain_verified", [username]);
     if (!r.rows[0]) return json(res, 404, { error: 'No such user' });
     return json(res, 200, { ok: true, user: r.rows[0] });
   }

@@ -886,3 +886,11 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 #home-leaderboard:not(:empty){margin-top:1.6rem}
 
 .page-cta{text-align:center;margin:1.8rem 0}
+
+/* ================= /pros professional landing ================= */
+.pros-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;max-width:820px;margin:1.4rem auto 0}
+.pros-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem;box-shadow:var(--shadow)}
+.pros-card b{color:var(--head);font-size:1rem}
+.pros-card p{margin:.4rem 0 0;color:var(--muted);font-size:.9rem;line-height:1.5}
+.pro-row-acts{display:inline-flex;gap:.6rem;white-space:nowrap}
+@media(max-width:620px){ .pros-grid{grid-template-columns:1fr} }

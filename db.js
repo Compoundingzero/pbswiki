@@ -58,9 +58,14 @@ CREATE TABLE IF NOT EXISTS votes (
 CREATE INDEX IF NOT EXISTS idx_votes_target ON votes(target_id);
 
 -- Tier 2: domain-isolated expert stewardship.
+-- domain = the GRANTED role (only an admin sets it, by approving an application). A user cannot
+-- self-assign it — they set requested_domain via an application, admin approval promotes it.
 ALTER TABLE users ADD COLUMN IF NOT EXISTS domain TEXT;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS credential TEXT;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS domain_verified BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS requested_domain TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS application_status TEXT; -- null | pending | approved | rejected
+ALTER TABLE users ADD COLUMN IF NOT EXISTS role_backlink TEXT;      -- their site/socials page that links back to rnawiki.com (admin checks it)
 -- Google (Gmail) sign-in: google_sub links the Google account; pass is now optional.
 ALTER TABLE users ADD COLUMN IF NOT EXISTS google_sub TEXT UNIQUE;
 ALTER TABLE users ALTER COLUMN pass DROP NOT NULL;
