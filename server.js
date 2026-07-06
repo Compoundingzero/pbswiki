@@ -544,6 +544,22 @@ async function api(req, res, url) {
     return json(res, 200, { experts: experts.rows, leaderboard, top: top.rows });
   }
 
+  // --- top 3 contributors on a specific protocol (comments + proposals here) ---
+  if (seg[0] === 'protocol-contributors' && method === 'GET') {
+    const q = new URL('http://x/' + url).searchParams;
+    const pid = clean(q.get('problem'), 60), rcid = clean(q.get('rc'), 60);
+    if (!pid || !rcid) return json(res, 400, { error: 'problem & rc required' });
+    const key = `p:${pid}:${rcid}`;
+    const r = await db.query(`SELECT u.username, u.domain, u.domain_verified, u.reputation_points,
+        (SELECT COUNT(*)::int FROM comments c WHERE c.user_id=u.id AND c.goal_id=$3) AS comments,
+        (SELECT COUNT(*)::int FROM proposals p WHERE p.user_id=u.id AND p.problem_id=$1 AND p.root_cause_id=$2) AS edits
+      FROM users u
+      WHERE u.id IN (SELECT user_id FROM comments WHERE goal_id=$3
+                     UNION SELECT user_id FROM proposals WHERE problem_id=$1 AND root_cause_id=$2)
+      ORDER BY (comments + edits) DESC, u.reputation_points DESC LIMIT 3`, [pid, rcid, key]);
+    return json(res, 200, { contributors: r.rows });
+  }
+
   // --- admin: credential verification for stewardship ---
   if (seg[0] === 'admin' && seg[1] === 'experts' && method === 'GET') {
     const u = await currentUser(req); if (!u || u.role !== 'admin') return json(res, 403, { error: 'Admin only' });

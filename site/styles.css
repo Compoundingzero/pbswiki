@@ -894,3 +894,21 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 .pros-card p{margin:.4rem 0 0;color:var(--muted);font-size:.9rem;line-height:1.5}
 .pro-row-acts{display:inline-flex;gap:.6rem;white-space:nowrap}
 @media(max-width:620px){ .pros-grid{grid-template-columns:1fr} }
+
+/* ================= Prominent discussions + per-page top contributors ================= */
+.page-discuss{margin-top:2rem;border-top:2px solid var(--line);padding-top:1.4rem}
+.discuss-head{margin-bottom:.9rem}
+.discuss-head h2{margin:0 0 .2rem;font-size:1.3rem}
+.discuss-sub{margin:0;color:var(--muted);font-size:.9rem}
+.comment-form{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.8rem;box-shadow:var(--shadow)}
+.comment-form textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:.6rem;font:inherit;font-size:.92rem;box-sizing:border-box;resize:vertical}
+.comment-signin{background:#eef7ff;border:1px solid #c7d2fe;border-radius:12px;padding:.9rem 1.1rem;font-size:.92rem}
+.comment-user{color:var(--head);font-weight:700;text-decoration:none}
+.comment-user:hover{color:var(--accent)}
+.proto-contributors,#proto-contributors:empty{margin:0}
+.pc-title{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin:1.2rem 0 .5rem}
+.pc-row{display:flex;flex-wrap:wrap;gap:.5rem}
+.pc-chip{display:inline-flex;align-items:center;gap:.45rem;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;color:var(--ink);box-shadow:var(--shadow)}
+.pc-chip:hover{border-color:var(--accent);text-decoration:none}
+.pc-u{font-weight:700;color:var(--head)}
+.pc-n{font-size:.76rem;color:var(--faint)}
