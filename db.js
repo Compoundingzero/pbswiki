@@ -118,6 +118,20 @@ CREATE TABLE IF NOT EXISTS partners (
 );
 CREATE INDEX IF NOT EXISTS idx_partners_serves ON partners(serves, status);
 
+-- Crowdsourced local foods: anyone can submit a missing dish; a verified dietitian (or admin)
+-- approves it, after which it shows in the fuel tracker's search with a verified badge.
+CREATE TABLE IF NOT EXISTS user_foods (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  serving TEXT,
+  data JSONB NOT NULL,        -- {kcal, protein_g, carbs_g, sugar_g, fat_g, fiber_g, sodium_mg, ...}
+  submitted_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  verified_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  status TEXT NOT NULL DEFAULT 'pending',  -- pending | active | rejected
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_userfoods_status ON user_foods(status);
+
 CREATE TABLE IF NOT EXISTS proposals (
   id SERIAL PRIMARY KEY,
   problem_id TEXT NOT NULL,

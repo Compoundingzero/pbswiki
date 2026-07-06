@@ -268,6 +268,9 @@ async function api(req, res, url) {
   }
   if (seg[0] === 'edits' && method === 'POST') {
     const u = await currentUser(req); if (!u) return json(res, 401, { error: 'Please sign in to edit' });
+    // Compound pages = the pharmacology knowledge base: only verified pharmacist/MD/biomedical
+    // researchers (or admin) may edit them.
+    if (u.role !== 'admin' && !(u.domain === 'pharmacist' && u.domain_verified)) return json(res, 403, { error: 'Compound pages are maintained by verified pharmacology experts (pharmacist / MD / biomedical researcher). Apply for that role in your Pro dashboard.' });
     const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
     const cid = clean(b.compoundId, 40); const name = clean(b.compoundName, 120);
     if (!cid || !b.fields || typeof b.fields !== 'object') return json(res, 400, { error: 'Nothing to save' });
@@ -429,6 +432,35 @@ async function api(req, res, url) {
       [name, type || null, location || null, link, backlink, serves || null, u ? u.id : null]);
     return json(res, 200, { ok: true, id: r.rows[0].id, status: 'pending' });
   }
+  // --- crowdsourced local foods (anyone submits; a verified dietitian verifies) ---
+  if (seg[0] === 'foods' && !seg[1] && method === 'GET') {
+    const r = await db.query("SELECT id,name,serving,data FROM user_foods WHERE status='active' ORDER BY created_at DESC LIMIT 500");
+    return json(res, 200, { foods: r.rows });
+  }
+  if (seg[0] === 'foods' && seg[1] === 'pending' && method === 'GET') {
+    const u = await currentUser(req); if (!u || !(u.role === 'admin' || (u.domain === 'dietitian' && u.domain_verified))) return json(res, 403, { error: 'Verified dietitians only' });
+    const r = await db.query("SELECT f.id,f.name,f.serving,f.data,f.created_at,uu.username AS by FROM user_foods f LEFT JOIN users uu ON uu.id=f.submitted_by WHERE f.status='pending' ORDER BY f.created_at ASC LIMIT 100");
+    return json(res, 200, { foods: r.rows });
+  }
+  if (seg[0] === 'foods' && !seg[1] && method === 'POST') {
+    const u = await currentUser(req); if (!u) return json(res, 401, { error: 'Please sign in to add a food' });
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const name = clean(b.name, 80), serving = clean(b.serving, 60);
+    if (!name) return json(res, 400, { error: 'Food name is required' });
+    const num = (x) => (x === 0 || x) && isFinite(x) ? Number(x) : null;
+    const data = { kcal: num(b.kcal), protein_g: num(b.protein_g), carbs_g: num(b.carbs_g), sugar_g: num(b.sugar_g), fat_g: num(b.fat_g), fiber_g: num(b.fiber_g), sodium_mg: num(b.sodium_mg), vitamin_c_mg: num(b.vitamin_c_mg) };
+    const r = await db.query('INSERT INTO user_foods(name,serving,data,submitted_by) VALUES($1,$2,$3,$4) RETURNING id', [name, serving || null, JSON.stringify(data), u.id]);
+    await award(u.id, 'food_submit', 'food:' + r.rows[0].id, 20);
+    return json(res, 200, { ok: true, id: r.rows[0].id, status: 'pending' });
+  }
+  if (seg[0] === 'foods' && seg[1] && seg[2] === 'verify' && method === 'POST') {
+    const u = await currentUser(req); if (!u || !(u.role === 'admin' || (u.domain === 'dietitian' && u.domain_verified))) return json(res, 403, { error: 'Verified dietitians only' });
+    const id = parseInt(seg[1], 10); const b = await readBody(req) || {};
+    const status = ['active', 'rejected'].includes(b.status) ? b.status : 'active';
+    const r = await db.query('UPDATE user_foods SET status=$1, verified_by=$2 WHERE id=$3 RETURNING id,name,status', [status, u.id, id]);
+    if (!r.rows[0]) return json(res, 404, { error: 'No such food' });
+    return json(res, 200, { ok: true, food: r.rows[0] });
+  }
   if (seg[0] === 'admin' && seg[1] === 'partners' && method === 'GET') {
     const u = await currentUser(req); if (!u || u.role !== 'admin') return json(res, 403, { error: 'Admin only' });
     const r = await db.query('SELECT id,name,type,location,link,backlink_url,serves,status,created_at FROM partners ORDER BY status ASC, created_at DESC LIMIT 200');
@@ -461,13 +493,10 @@ async function api(req, res, url) {
     const pid = clean(b.problemId, 60), rcid = clean(b.rootCauseId, 60), layer = clean(b.layer, 12);
     const change = clean(b.change, 4000), evidence = clean(b.evidence, 500);
     if (!pid || !rcid || !change) return json(res, 400, { error: 'Describe the change' });
-    // STEWARD-ONLY editing: only the protocol's admin-approved steward (or an admin) may edit it.
-    if (u.role !== 'admin') {
-      const st = (await db.query('SELECT user_id FROM stewardships WHERE problem_id=$1 AND root_cause_id=$2', [pid, rcid])).rows[0];
-      if (!st || st.user_id !== u.id) return json(res, 403, { error: 'Only this protocol’s steward can edit it. Adopt the protocol from your Pro dashboard to become its steward.' });
-    }
-    // HARD domain isolation: you may only edit the layer your competence covers.
-    if (u.domain && DOMAIN_LAYER[u.domain] !== layer) return json(res, 403, { error: `A ${(({physio:'movement',dietitian:'nutrition',pharmacist:'pharmacology'})[u.domain])||u.domain} expert may only edit the ${DOMAIN_LAYER[u.domain]} layer.` });
+    // Any VERIFIED domain expert may edit their layer on any protocol (dietitian→fuel/nutrition,
+    // pharmacist→stack, physio→move); the protocol's steward + a same-domain peer review it.
+    if (u.role !== 'admin' && !u.domain_verified) return json(res, 403, { error: 'Get your expert role verified first (Pro dashboard) to edit protocols.' });
+    if (u.domain && DOMAIN_LAYER[u.domain] !== layer) return json(res, 403, { error: `A ${(({ physio: 'movement', dietitian: 'nutrition', pharmacist: 'pharmacology' })[u.domain]) || u.domain} expert may only edit the ${DOMAIN_LAYER[u.domain]} layer.` });
     const r = await db.query(
       `INSERT INTO proposals(problem_id,root_cause_id,layer,domain,user_id,change,evidence)
        VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING id,created_at`, [pid, rcid, layer, u.domain, u.id, change, evidence || null]);

@@ -912,3 +912,8 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 .pc-chip:hover{border-color:var(--accent);text-decoration:none}
 .pc-u{font-weight:700;color:var(--head)}
 .pc-n{font-size:.76rem;color:var(--faint)}
+
+/* crowd-food add form + verified badge */
+.uf-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.3rem}
+.uf-grid input{width:100%;border:1px solid var(--line);border-radius:8px;padding:.45rem .55rem;font:inherit;font-size:.88rem;box-sizing:border-box}
+.uf-badge{color:var(--green);font-weight:700;font-size:.72rem}
