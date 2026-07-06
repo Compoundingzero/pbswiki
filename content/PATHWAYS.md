@@ -78,7 +78,7 @@ You don't need a science background. Each lesson starts with a one-liner and a p
 
 **Why it matters for you:** If your goal is muscle, you want to spike mTOR after training — protein and leucine do exactly that. If your goal is longevity, you periodically want mTOR *low* (via fasting or the drug rapamycin) so cells clean house.
 
-**Turn it up:** protein, leucine, whey, insulin, resistance training. **Turn it down:** rapamycin, fasting, going low on protein.
+**Turn it up:** protein, leucine, [whey](/c/whey-casein-protein), insulin, resistance training. **Turn it down:** [rapamycin](/c/rapamycin-sirolimus), fasting, going low on protein. Its energy-sensing opposite is [the AMPK pathway](/pathway/3).
 
 **Don't be fooled:** more mTOR isn't always better. Chronically high growth signalling is linked to faster ageing — the goal is to spike it around training, not keep it pinned on all day.
 
@@ -104,7 +104,7 @@ You don't need a science background. Each lesson starts with a one-liner and a p
 
 **Why it matters for you:** This is why metformin and berberine help blood sugar and fat loss — they flip the same "burn, don't hoard" switch that exercise does. It's also the catch: because metformin partly *duplicates* the exercise signal, it can blunt some of the gains you'd get from hard training.
 
-**Turn it up:** exercise, fasting, metformin, berberine, MOTS-c, alpha-lipoic acid. **Turn it down:** constant overeating.
+**Turn it up:** exercise, fasting, [metformin](/c/metformin), [berberine](/c/berberine), [MOTS-c](/c/mots-c), [alpha-lipoic acid](/c/alpha-lipoic-acid-ala). **Turn it down:** constant overeating. Its growth-signalling opposite is [the mTOR pathway](/pathway/2).
 
 **Don't be fooled:** a pill that mimics exercise isn't the same as exercise — you still miss the muscle, bone, and heart benefits training gives on top.
 

@@ -354,9 +354,9 @@ The most disrupted category in medicine. GLP-1 drugs have made every previous fa
 
 ### Berberine  🟡 ⭐⭐⭐⭐ (glucose) ⭐⭐⭐ (weight)
 **Goals:** Fat loss · Glucose · Lipids · Gut
-**Technical mechanism:** Activates **AMPK (PRKAA1/2)** — the cellular energy sensor — mimicking metformin: lowers hepatic glucose output, improves insulin sensitivity, shifts fuel toward fat oxidation, and reshapes gut microbiota.
+**Technical mechanism:** Activates **AMPK** by the same energy-sensor route as [metformin](/c/metformin). *The AMPK switch → [the AMPK pathway](/pathway/3).* Downstream: lowers hepatic glucose output, improves insulin sensitivity, shifts fuel toward fat oxidation, and reshapes gut microbiota. Its real weakness is **poor oral bioavailability** — dihydroberberine absorbs far better.
 **Molecular target:** [PRKAA1 AMPK catalytic subunit (NCBI Gene)](https://www.ncbi.nlm.nih.gov/gene/5562) · [Berberine (PubChem CID 2353)](https://pubchem.ncbi.nlm.nih.gov/compound/2353)
-**In plain English:** Flips the same "low fuel, start burning and stop hoarding" master switch that the diabetes drug metformin does — hence "nature's metformin." Best for pre-diabetes and high triglycerides.
+**In plain English:** "Nature's metformin" — it flips the same low-fuel switch ([AMPK](/pathway/3)). Best for pre-diabetes and high triglycerides. Poorly absorbed, so split the dose with meals or use dihydroberberine.
 **Protocol:** 500 mg 3×/day with meals; dihydroberberine for better absorption.
 **Watch out:** GI upset early; CYP3A4 inhibitor (drug interactions).
 **Bottom line:** Strong metabolic supplement; pair with glucose monitoring.
@@ -761,9 +761,9 @@ The most active frontier in medicine. Most are repurposed metabolic or cancer dr
 
 ### Rapamycin (Sirolimus)  🟠 (off-label) / 🟢 (transplant) ⭐⭐⭐⭐⭐ (animal) ⭐⭐⭐ (human, emerging)
 **Goals:** Longevity · Immune rejuvenation
-**Technical mechanism:** Binds FKBP12 to inhibit **mTOR complex 1 (MTOR)** — the master nutrient/growth sensor. Inhibition shifts cells from growth to maintenance: **autophagy** (recycling of damaged components), stress resistance, reduced senescence. Intermittent dosing spares mTORC2 (avoiding insulin resistance).
+**Technical mechanism:** Binds FKBP12 to inhibit **mTOR complex 1** — flipping cells from growth to maintenance (autophagy, stress resistance, less senescence). *What mTOR is and why dialling it down matters → [the mTOR pathway](/pathway/2).* The compound-specific nuance is **intermittent** dosing: weekly dosing inhibits mTORC1 while sparing **mTORC2**, avoiding the insulin resistance daily dosing causes.
 **Molecular target:** [MTOR mechanistic target of rapamycin (NCBI Gene 2475)](https://www.ncbi.nlm.nih.gov/gene/2475) · [Sirolimus (PubChem CID 5284616)](https://pubchem.ncbi.nlm.nih.gov/compound/5284616)
-**In plain English:** mTOR is your body's "grow" switch; leave it on constantly and cells accumulate damage. Rapamycin dials it down periodically, flipping cells into "clean and repair" mode. It extends lifespan in every animal tested — the single most reliable longevity drug — but human data is still coming in.
+**In plain English:** Rapamycin dials the "grow" switch ([mTOR](/pathway/2)) *down* periodically, flipping cells into "clean and repair." It extends lifespan in every animal tested — the single most reliable longevity drug — but human data is still coming in. Taken weekly, not daily.
 **Protocol (off-label):** ~5–6 mg once weekly (intermittent), physician-monitored.
 **Watch out:** Immunosuppression (dose-dependent), mouth sores, raised lipids/glucose. Not a self-prescription.
 **Bottom line:** The most compelling longevity drug we have; still needs human RCTs (PEARL, others ongoing).
@@ -772,9 +772,9 @@ The most active frontier in medicine. Most are repurposed metabolic or cancer dr
 
 ### Metformin  🟠 (longevity) / 🟢 (T2DM) ⭐⭐⭐ (longevity) ⭐⭐⭐⭐⭐ (diabetes)
 **Goals:** Longevity · Glucose · Metabolic health
-**Technical mechanism:** Inhibits mitochondrial **Complex I**, raising AMP:ATP → activates **AMPK (PRKAA1/2)**; lowers hepatic gluconeogenesis, improves insulin sensitivity, alters gut microbiome. The TAME trial is the first FDA-sanctioned trial targeting aging itself.
+**Technical mechanism:** Inhibits mitochondrial **Complex I**, raising the AMP:ATP ratio → activates **AMPK**. *How the AMPK "burn, don't hoard" switch works → [the AMPK pathway](/pathway/3).* On top of that it lowers hepatic gluconeogenesis, improves insulin sensitivity and reshapes the gut microbiome. The **TAME** trial is the first FDA-sanctioned trial targeting ageing itself.
 **Molecular target:** [PRKAA1 AMPK (NCBI Gene)](https://www.ncbi.nlm.nih.gov/gene/5562) · [Metformin (PubChem CID 4091)](https://pubchem.ncbi.nlm.nih.gov/compound/4091)
-**In plain English:** Flips the "low energy, conserve and clean up" switch (AMPK). Diabetics on it have outlived non-diabetics in some data. The catch for athletes: it can *blunt* muscle and fitness gains from training.
+**In plain English:** Metformin trips the same low-fuel switch ([AMPK](/pathway/3)) that exercise does. Diabetics on it have outlived non-diabetics in some data. The catch for athletes: because it partly *duplicates* the exercise signal, it can blunt muscle and fitness gains from hard training.
 **Protocol (off-label):** 500–1,000 mg/day; add B12.
 **Watch out:** GI upset (use ER), blunts exercise adaptation, B12 depletion.
 **Bottom line:** Best for the sedentary/metabolically-at-risk; may cost gains if you train hard.
