@@ -1248,3 +1248,17 @@ a.dp-name:hover{color:var(--accent)}
 .dp-why summary{font-size:.74rem;color:var(--accent);cursor:pointer;list-style:none}
 .dp-why summary::-webkit-details-marker{display:none}
 .dp-why p{font-size:.82rem;color:var(--muted);margin:.3rem 0 0;line-height:1.5}
+
+/* ================= Community pulse (live activity feed) ================= */
+.pulse-feed{max-width:640px;margin:.8rem auto 0;display:flex;flex-direction:column}
+.pl-item{display:flex;gap:.7rem;padding:.6rem .2rem;border-top:1px solid var(--line);align-items:flex-start}
+.pl-item:first-child{border-top:none}
+.pl-ic{flex:none;font-size:1rem;width:1.6rem;text-align:center;line-height:1.4}
+.pl-item>div{flex:1;font-size:.9rem;color:var(--head);line-height:1.5}
+.pl-item a{color:var(--accent);text-decoration:none;font-weight:600}
+.pl-item a:hover{text-decoration:underline}
+.pl-actor{font-weight:700}
+.pl-item small{color:var(--muted)}
+.pl-dom{font-size:.66rem;font-weight:700;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:.05rem .35rem;color:var(--muted);margin:0 .15rem}
+.pl-t{display:block;font-size:.72rem;color:var(--muted);margin-top:.1rem}
+.center{text-align:center}

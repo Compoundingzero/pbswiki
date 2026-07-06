@@ -548,6 +548,24 @@ async function api(req, res, url) {
     if (!r.rows[0]) return json(res, 404, { error: 'No such fork' });
     return json(res, 200, { fork: r.rows[0] });
   }
+  // --- community pulse: a live feed of recent activity (forks, expert edits, discussion, foods) ---
+  if (seg[0] === 'pulse' && method === 'GET') {
+    const q = (sql) => db.query(sql).then((r) => r.rows).catch(() => []);
+    const [forks, edits, comments, foods] = await Promise.all([
+      q("SELECT f.id, f.title, f.problem_id, f.root_cause_id, f.created_at AS at, u.username AS actor, u.domain, u.domain_verified AS verified FROM protocol_forks f JOIN users u ON u.id=f.user_id ORDER BY f.created_at DESC LIMIT 8"),
+      q("SELECT p.problem_id, p.root_cause_id, p.layer, p.created_at AS at, u.username AS actor, u.domain, u.domain_verified AS verified FROM proposals p JOIN users u ON u.id=p.user_id WHERE p.status='endorsed' ORDER BY p.created_at DESC LIMIT 8"),
+      q("SELECT c.goal_id, c.created_at AS at, u.username AS actor, u.domain, u.domain_verified AS verified FROM comments c JOIN users u ON u.id=c.user_id ORDER BY c.created_at DESC LIMIT 8"),
+      q("SELECT f.name, f.created_at AS at, u.username AS actor FROM user_foods f JOIN users u ON u.id=f.submitted_by WHERE f.status='active' ORDER BY f.created_at DESC LIMIT 5"),
+    ]);
+    const items = []
+      .concat(forks.map((r) => Object.assign({ type: 'fork' }, r)))
+      .concat(edits.map((r) => Object.assign({ type: 'edit' }, r)))
+      .concat(comments.map((r) => Object.assign({ type: 'comment' }, r)))
+      .concat(foods.map((r) => Object.assign({ type: 'food' }, r)))
+      .sort((a, b) => new Date(b.at) - new Date(a.at))
+      .slice(0, 14);
+    return json(res, 200, { pulse: items });
+  }
   // --- wiki-improvement feedback (open to everyone) ---
   if (seg[0] === 'feedback' && !seg[1] && method === 'POST') {
     const u = await currentUser(req);
