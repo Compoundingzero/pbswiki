@@ -141,6 +141,36 @@ function safeUrl(s, max) {
   return /^https?:\/\/[^\s]+$/i.test(v) ? v : '';
 }
 
+// ---------- outcome loop helpers ----------
+function todayUTC() { return new Date().toISOString().slice(0, 10); }
+// A streak stays alive through today until a full day is missed: if today isn't checked yet, count
+// back from yesterday; otherwise from today. Uses UTC day boundaries consistently.
+function streakFromDays(daySet) {
+  const iso = d => d.toISOString().slice(0, 10);
+  let d = new Date(todayUTC() + 'T00:00:00Z'), streak = 0;
+  if (!daySet.has(iso(d))) d.setUTCDate(d.getUTCDate() - 1);
+  while (daySet.has(iso(d))) { streak++; d.setUTCDate(d.getUTCDate() - 1); }
+  return streak;
+}
+// participant = the signed-in user, else their anonymous voter key (so anyone can take part and the
+// ledger still dedupes to one row per person per protocol).
+async function resolveParticipant(req, extra) {
+  const u = await currentUser(req);
+  if (u) return { key: 'u:' + u.id, user: u };
+  const vk = clean((extra && extra.voterKey) || '', 64);
+  return { key: vk ? 'v:' + vk : null, user: null };
+}
+async function getOrCreateExperiment(part, pid, rcid) {
+  const r = await db.query(`INSERT INTO experiments(participant,user_id,problem_id,root_cause_id)
+    VALUES($1,$2,$3,$4) ON CONFLICT (participant,problem_id,root_cause_id) DO UPDATE SET participant=EXCLUDED.participant
+    RETURNING id,status,outcome`, [part.key, part.user ? part.user.id : null, pid, rcid]);
+  return r.rows[0];
+}
+async function checkinDays(expId) {
+  const cr = await db.query("SELECT to_char(day,'YYYY-MM-DD') AS day FROM experiment_checkins WHERE experiment_id=$1 ORDER BY day DESC LIMIT 90", [expId]);
+  return new Set(cr.rows.map(x => x.day));
+}
+
 const ADMIN_USER = (process.env.ADMIN_USER || '').toLowerCase();
 // The single super-admin: only this account sees the consolidated control room and can
 // verify accounts / approve root-cause changes. Locked to Felix's email by default.
@@ -599,6 +629,72 @@ async function api(req, res, url) {
         [name, email, discipline || null, note || null]);
       return json(res, 200, { ok: true });
     } catch (e) { console.error('[clinician-interest]', e.message); return json(res, 500, { error: 'Could not save — please try again' }); }
+  }
+  // ---------- the outcome loop: experiments · check-ins · results ledger ----------
+  // collective counter for the home page (movement heartbeat)
+  if (seg[0] === 'stats' && method === 'GET') {
+    const r = await db.query("SELECT count(*)::int AS experiments, count(*) FILTER (WHERE outcome='better')::int AS improved FROM experiments");
+    return json(res, 200, r.rows[0] || { experiments: 0, improved: 0 });
+  }
+  // public aggregate for one protocol (the Results Ledger)
+  if (seg[0] === 'ledger' && method === 'GET') {
+    const q = new URL('http://x/' + url).searchParams;
+    const pid = clean(q.get('problem'), 80), rcid = clean(q.get('rc'), 80);
+    if (!pid || !rcid) return json(res, 400, { error: 'Missing protocol' });
+    const r = await db.query(`SELECT count(*)::int AS total,
+        count(*) FILTER (WHERE status='running')::int AS running,
+        count(*) FILTER (WHERE outcome='better')::int AS better,
+        count(*) FILTER (WHERE outcome='same')::int AS same,
+        count(*) FILTER (WHERE outcome='worse')::int AS worse
+      FROM experiments WHERE problem_id=$1 AND root_cause_id=$2`, [pid, rcid]);
+    return json(res, 200, r.rows[0]);
+  }
+  // my state for one protocol (running? streak? checked today? outcome?)
+  if (seg[0] === 'experiments' && seg[1] === 'mine' && method === 'GET') {
+    const q = new URL('http://x/' + url).searchParams;
+    const pid = clean(q.get('problem'), 80), rcid = clean(q.get('rc'), 80);
+    const part = await resolveParticipant(req, { voterKey: q.get('voterKey') });
+    if (!part.key || !pid || !rcid) return json(res, 200, { experiment: null, streak: 0, checkedToday: false });
+    const er = await db.query('SELECT id,status,outcome,started_at FROM experiments WHERE participant=$1 AND problem_id=$2 AND root_cause_id=$3', [part.key, pid, rcid]);
+    const exp = er.rows[0];
+    if (!exp) return json(res, 200, { experiment: null, streak: 0, checkedToday: false });
+    const set = await checkinDays(exp.id);
+    return json(res, 200, { experiment: { status: exp.status, outcome: exp.outcome, started_at: exp.started_at }, streak: streakFromDays(set), checkedToday: set.has(todayUTC()) });
+  }
+  if (seg[0] === 'experiments' && seg[1] === 'start' && method === 'POST') {
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const pid = clean(b.problemId, 80), rcid = clean(b.rootCauseId, 80);
+    const part = await resolveParticipant(req, b);
+    if (!part.key) return json(res, 400, { error: 'Could not identify you — enable cookies or sign in' });
+    if (!pid || !rcid) return json(res, 400, { error: 'Missing protocol' });
+    const exp = await getOrCreateExperiment(part, pid, rcid);
+    await db.query("UPDATE experiments SET status='running' WHERE id=$1", [exp.id]);
+    if (part.user) await award(part.user.id, 'experiment', 'start:' + exp.id, 10);
+    return json(res, 200, { ok: true, experimentId: exp.id, streak: 0 });
+  }
+  if (seg[0] === 'experiments' && seg[1] === 'checkin' && method === 'POST') {
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const pid = clean(b.problemId, 80), rcid = clean(b.rootCauseId, 80);
+    const part = await resolveParticipant(req, b);
+    if (!part.key || !pid || !rcid) return json(res, 400, { error: 'Missing protocol' });
+    const exp = await getOrCreateExperiment(part, pid, rcid);
+    const day = todayUTC();
+    await db.query('INSERT INTO experiment_checkins(experiment_id,day) VALUES($1,$2) ON CONFLICT (experiment_id,day) DO NOTHING', [exp.id, day]);
+    if (part.user) await award(part.user.id, 'checkin', 'ci:' + exp.id + ':' + day, 3);
+    const set = await checkinDays(exp.id);
+    return json(res, 200, { ok: true, streak: streakFromDays(set), checkedToday: true });
+  }
+  if (seg[0] === 'experiments' && seg[1] === 'outcome' && method === 'POST') {
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const pid = clean(b.problemId, 80), rcid = clean(b.rootCauseId, 80);
+    const outcome = ['better', 'same', 'worse'].includes(b.outcome) ? b.outcome : null;
+    if (!outcome) return json(res, 400, { error: 'Pick better, same, or worse' });
+    const part = await resolveParticipant(req, b);
+    if (!part.key || !pid || !rcid) return json(res, 400, { error: 'Missing protocol' });
+    const exp = await getOrCreateExperiment(part, pid, rcid);
+    await db.query("UPDATE experiments SET outcome=$1, status='completed', outcome_at=now() WHERE id=$2", [outcome, exp.id]);
+    if (part.user) await award(part.user.id, 'outcome', 'oc:' + exp.id, 15);
+    return json(res, 200, { ok: true, outcome });
   }
   // --- one-click CSV export of members / waitlist (super-admin only) ---
   if (seg[0] === 'admin' && seg[1] === 'export' && method === 'GET') {

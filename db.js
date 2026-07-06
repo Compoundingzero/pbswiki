@@ -257,6 +257,32 @@ CREATE TABLE IF NOT EXISTS clinician_interest (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_clinician_created ON clinician_interest(created_at DESC);
+
+-- The outcome loop (Phase 4). One experiment = one participant running one protocol. participant is
+-- 'u:<user id>' when signed in, else 'v:<anonymous voter key>' so anyone can take part and the ledger
+-- aggregates honestly (one row per participant per protocol = no double counting).
+CREATE TABLE IF NOT EXISTS experiments (
+  id SERIAL PRIMARY KEY,
+  participant TEXT NOT NULL,
+  user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  problem_id TEXT NOT NULL,
+  root_cause_id TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'running',   -- running | completed
+  outcome TEXT,                             -- better | same | worse
+  started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  outcome_at TIMESTAMPTZ,
+  UNIQUE(participant, problem_id, root_cause_id)
+);
+CREATE INDEX IF NOT EXISTS idx_exp_protocol ON experiments(problem_id, root_cause_id);
+CREATE INDEX IF NOT EXISTS idx_exp_user ON experiments(user_id);
+-- One daily check-in per experiment (UNIQUE(experiment,day) keeps streaks idempotent).
+CREATE TABLE IF NOT EXISTS experiment_checkins (
+  id SERIAL PRIMARY KEY,
+  experiment_id INTEGER NOT NULL REFERENCES experiments(id) ON DELETE CASCADE,
+  day DATE NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE(experiment_id, day)
+);
 `;
 
 async function init() {
