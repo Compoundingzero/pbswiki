@@ -132,6 +132,18 @@ CREATE TABLE IF NOT EXISTS user_foods (
 );
 CREATE INDEX IF NOT EXISTS idx_userfoods_status ON user_foods(status);
 
+-- "Don't see a protocol?" — users request one; others upvote; experts/admin pick them up.
+CREATE TABLE IF NOT EXISTS protocol_requests (
+  id SERIAL PRIMARY KEY,
+  request TEXT NOT NULL,
+  detail TEXT,
+  submitted_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  votes INTEGER NOT NULL DEFAULT 1,
+  status TEXT NOT NULL DEFAULT 'open',   -- open | building | done | declined
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_protoreq_status ON protocol_requests(status, votes DESC);
+
 CREATE TABLE IF NOT EXISTS proposals (
   id SERIAL PRIMARY KEY,
   problem_id TEXT NOT NULL,

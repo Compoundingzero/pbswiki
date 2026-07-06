@@ -917,3 +917,17 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 .uf-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.3rem}
 .uf-grid input{width:100%;border:1px solid var(--line);border-radius:8px;padding:.45rem .55rem;font:inherit;font-size:.88rem;box-sizing:border-box}
 .uf-badge{color:var(--green);font-weight:700;font-size:.72rem}
+
+/* ================= Request a protocol + contribute prompts ================= */
+.request-cta{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:linear-gradient(135deg,#eef4ff,#eafcf3);border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.3rem;margin:2rem 0 1rem}
+.request-cta b{color:var(--head)}
+.request-cta span{color:var(--muted);font-size:.9rem}
+.req-list{display:flex;flex-direction:column;gap:.5rem}
+.req-row{display:flex;align-items:center;gap:.7rem;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.6rem .8rem}
+.req-vote{flex:none;display:flex;flex-direction:column;align-items:center;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:9px;padding:.3rem .55rem;cursor:pointer;font-size:.75rem;line-height:1.1;min-width:2.4rem}
+.req-vote:hover,.req-vote.voted{border-color:var(--accent);color:var(--accent)}
+.req-vote .rv-n{font-family:var(--mono);font-weight:800;font-size:.9rem;color:var(--head)}
+.req-b b{color:var(--head);font-size:.92rem}
+.req-b small{display:block;color:var(--muted);font-size:.8rem}
+.req-status{display:inline-block;margin-top:.2rem;font-size:.72rem;color:var(--green);font-weight:700}
+.fuel-contribute{background:#f0f9ff;border:1px dashed #bae6fd;border-radius:10px;padding:.55rem .75rem;font-size:.82rem;color:var(--muted);line-height:1.5;margin:.5rem 0}

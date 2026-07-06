@@ -209,7 +209,7 @@ add('/solve', shell({ route: '/solve', title: 'Solve a problem or reach a goal �
     <section class="hero funnel-hero">
       <div class="kicker">The open protocol engine · Singapore</div>
       <h1>DNA is the idea that never came to life. RNA is the action.</h1>
-      <p class="hero-lead">DNA is a blueprint locked in a vault. RNA is the messenger, the architect, and the builder — it reads the code and makes it real. RNAwiki is the RNA for your health: name a problem or a goal, and we build the exact movement, food, and supplements that fix its root cause.</p>
+      <p class="hero-lead">DNA is a blueprint locked in a vault. RNA is the messenger, the architect, and the builder — it reads the code and makes it real. RNAwiki is the RNA for your health: name a problem or a goal, and we build the exact movement, food, and supplements that fix its root cause — with every supplement broken down to its compounds, pathways, and molecular targets, and every food to the nutrients that matter, all in plain English.</p>
       <p><a class="cta-primary" href="/solve">Build my protocol →</a></p>
     </section>
     <section class="how-3"><h2>How it works</h2>

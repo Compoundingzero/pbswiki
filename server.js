@@ -453,6 +453,35 @@ async function api(req, res, url) {
     await award(u.id, 'food_submit', 'food:' + r.rows[0].id, 20);
     return json(res, 200, { ok: true, id: r.rows[0].id, status: 'pending' });
   }
+  // --- "request a protocol" board ---
+  if (seg[0] === 'protocol-requests' && !seg[1] && method === 'GET') {
+    const r = await db.query("SELECT id,request,detail,votes,status,created_at FROM protocol_requests WHERE status IN ('open','building') ORDER BY votes DESC, created_at DESC LIMIT 60");
+    return json(res, 200, { requests: r.rows });
+  }
+  if (seg[0] === 'protocol-requests' && !seg[1] && method === 'POST') {
+    const u = await currentUser(req); if (!u) return json(res, 401, { error: 'Please sign in to request a protocol' });
+    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const request = clean(b.request, 120), detail = clean(b.detail, 1000);
+    if (!request) return json(res, 400, { error: 'Describe the problem or goal you want a protocol for' });
+    const r = await db.query('INSERT INTO protocol_requests(request,detail,submitted_by) VALUES($1,$2,$3) RETURNING id', [request, detail || null, u.id]);
+    await award(u.id, 'request', 'req:' + r.rows[0].id, 5);
+    return json(res, 200, { ok: true, id: r.rows[0].id });
+  }
+  if (seg[0] === 'protocol-requests' && seg[1] && seg[2] === 'vote' && method === 'POST') {
+    const b = await readBody(req) || {}; const voterKey = clean(b.voterKey, 64); const id = parseInt(seg[1], 10);
+    if (!voterKey || !id) return json(res, 400, { error: 'Missing vote' });
+    const ins = await db.query("INSERT INTO votes(target_id,voter_key,value) VALUES($1,$2,1) ON CONFLICT (target_id,voter_key) DO NOTHING RETURNING id", ['req:' + id, voterKey]);
+    if (ins.rows[0]) await db.query('UPDATE protocol_requests SET votes=votes+1 WHERE id=$1', [id]);
+    const r = await db.query('SELECT votes FROM protocol_requests WHERE id=$1', [id]);
+    return json(res, 200, { votes: r.rows[0] ? r.rows[0].votes : 0 });
+  }
+  if (seg[0] === 'admin' && seg[1] === 'requests' && seg[2] && method === 'POST') {
+    const u = await currentUser(req); if (!u || u.role !== 'admin') return json(res, 403, { error: 'Admin only' });
+    const id = parseInt(seg[2], 10); const b = await readBody(req) || {};
+    const status = ['open', 'building', 'done', 'declined'].includes(b.status) ? b.status : 'open';
+    await db.query('UPDATE protocol_requests SET status=$1 WHERE id=$2', [status, id]);
+    return json(res, 200, { ok: true });
+  }
   if (seg[0] === 'foods' && seg[1] && seg[2] === 'verify' && method === 'POST') {
     const u = await currentUser(req); if (!u || !(u.role === 'admin' || (u.domain === 'dietitian' && u.domain_verified))) return json(res, 403, { error: 'Verified dietitians only' });
     const id = parseInt(seg[1], 10); const b = await readBody(req) || {};
