@@ -1452,5 +1452,6 @@ a.dp-name:hover{color:var(--accent)}
 .anat-3d-soon p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.5}
 
 /* ---- Metabolic mill diagram (light background so the pathway colours read) ---- */
-.mm-fig{background:var(--panel);padding:1rem .6rem .4rem}
-.mm-fig svg{width:100%;height:auto}
+.mm-fig,.pd-fig{background:var(--panel);padding:1rem .6rem .4rem}
+.mm-fig svg,.pd-fig svg{width:100%;height:auto}
+.mm-fig svg text,.pd-fig svg text{font-family:-apple-system,system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}

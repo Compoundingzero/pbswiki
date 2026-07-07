@@ -487,10 +487,56 @@ ANAT.energy_systems.forEach((e) => {
     <p><b>Byproduct:</b> ${esc(e.byproduct)}</p><p><b>Recovery:</b> ${esc(e.recovery)}</p><p><b>Training:</b> ${esc(e.training)}</p></div>`;
   add(route, shell({ route, title: `${e.name} — how it fuels muscle · RNAwiki`, desc: (e.overview || '').slice(0, 155), ogImage: renderOgCard(`og/energy/${e.id}.png`, { kind: 'Energy system', title: e.name.split('(')[0].trim(), sub: e.plain || e.overview }), breadcrumbs: anatCrumb(e.name, route), body }));
 });
+function physioDiagram(id) {
+  const C = { glu: '#475569', ins: '#0d9488', mito: '#0d9488', fat: '#b5533a', prot: '#2563eb', atp: '#d97706', line: '#64748b', up: '#059669', down: '#b3261e', mut: '#94a3b8' };
+  const box = (x, y, w, h, label, fill, sub) => `<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${fill}" fill-opacity="0.12" stroke="${fill}" stroke-width="1.5"/><text x="${x + w / 2}" y="${sub ? y + h / 2 - 2 : y + h / 2 + 4}" text-anchor="middle" font-size="13" font-weight="700" fill="${fill}">${label}</text>${sub ? `<text x="${x + w / 2}" y="${y + h / 2 + 14}" text-anchor="middle" font-size="10.5" fill="${C.line}">${sub}</text>` : ''}</g>`;
+  const arr = (x1, y1, x2, y2, col) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col || C.line}" stroke-width="2.2" marker-end="url(#pd-a)"/>`;
+  const t = (x, y, txt, col, size, anchor, ital) => `<text x="${x}" y="${y}" font-size="${size || 10.5}" fill="${col || C.line}" text-anchor="${anchor || 'middle'}"${ital ? ' font-style="italic"' : ''}>${txt}</text>`;
+  const D = {
+    'insulin-blood-sugar': ['760 400', 'How insulin is released, and what it tells your body to do.',
+      box(280, 16, 200, 44, 'Blood glucose ↑', C.glu, 'after a meal') + arr(380, 60, 380, 80) +
+      box(240, 80, 280, 52, 'Pancreas β-cell senses it', C.ins, 'glucose → ATP↑ → Ca²⁺ → release') +
+      t(534, 110, '← GLP-1 / GIP (gut) amplify it', C.line, 10.5, 'start', true) + arr(380, 132, 380, 152) +
+      box(300, 152, 160, 44, 'INSULIN', C.ins, 'released into blood') +
+      arr(380, 196, 140, 232) + arr(380, 196, 380, 232) + arr(380, 196, 620, 232) +
+      box(30, 232, 220, 62, 'Muscle & fat', C.glu, 'GLUT4 opens → glucose in') +
+      box(270, 232, 220, 62, 'Liver', C.glu, 'store glycogen · stop new glucose') +
+      box(510, 232, 220, 62, 'Fat', C.fat, 'store fat · block fat-burning') +
+      arr(380, 294, 380, 330) + box(180, 330, 400, 46, 'Fed state → store & build, pause fat-burning', C.atp)],
+    'glucose-conversion': ['810 380', 'Blood glucose is held in a tight range by four conversions.',
+      box(300, 150, 170, 66, 'Blood glucose', C.ins, 'kept in a tight range') +
+      box(605, 150, 185, 66, 'Glycogen store', C.glu, 'liver + muscle') +
+      box(20, 150, 185, 66, 'New glucose', C.glu, 'gluconeogenesis') +
+      box(300, 300, 170, 56, 'Burned for energy', C.atp, 'glycolysis → ATP') +
+      arr(470, 170, 605, 170) + t(537, 162, 'store (insulin)', C.up, 10) +
+      arr(605, 200, 470, 200) + t(537, 218, 'release (glucagon)', C.down, 10) +
+      arr(205, 183, 300, 183) + t(112, 240, 'from lactate · amino acids · glycerol', C.mut, 9, 'middle', true) +
+      arr(385, 216, 385, 300)],
+    'fat-management': ['900 300', 'Fat is stored when insulin is high and burned when it is low.',
+      box(20, 110, 160, 64, 'Glucose + dietary fat', C.glu, 'fed · high insulin') +
+      box(250, 100, 160, 84, 'FAT CELL', C.fat, 'triglyceride store') +
+      box(490, 110, 160, 64, 'Fatty acids + glycerol', C.fat, 'released to blood') +
+      box(720, 110, 160, 64, 'Muscle mitochondria', C.mito, 'β-oxidation → ATP') +
+      arr(180, 142, 250, 142) + t(215, 128, 'store', C.up, 10) + t(215, 160, 'lipogenesis', C.mut, 9, 'middle', true) +
+      arr(410, 142, 490, 142) + t(450, 126, 'burn · lipolysis', C.down, 9.5) + t(450, 160, 'low insulin', C.mut, 9, 'middle', true) +
+      arr(650, 142, 720, 142) + t(685, 128, 'travel', C.mut, 9.5, 'middle', true) + t(685, 160, '+ carnitine', C.mut, 9, 'middle', true) +
+      box(230, 230, 440, 46, 'Insulin is the gate — you burn fat mainly when insulin is LOW', C.atp)],
+    'protein-muscle-turnover': ['760 400', 'Muscle grows when building outpaces breakdown.',
+      box(40, 20, 300, 40, 'BUILD — synthesis (MPS)', C.up) + box(420, 20, 300, 40, 'BREAK DOWN — (MPB)', C.down) +
+      box(40, 78, 300, 40, 'Resistance training', C.up) + box(40, 126, 300, 40, 'Protein + leucine → mTOR ↑', C.up) +
+      box(40, 174, 300, 40, 'Testosterone · growth hormone', C.up) + box(40, 222, 300, 40, 'Insulin — blocks breakdown', C.up) +
+      box(420, 78, 300, 40, 'Fasting / low energy → AMPK ↑', C.down) + box(420, 126, 300, 40, 'Cortisol', C.down) +
+      `<line x1="380" y1="72" x2="380" y2="268" stroke="${C.mut}" stroke-width="1.4" stroke-dasharray="5 5"/>` +
+      box(150, 320, 460, 52, 'Net muscle GAIN when build > break down', C.up)]
+  };
+  const d = D[id]; if (!d) return '';
+  return `<figure class="learn-fig pd-fig"><svg viewBox="0 0 ${d[0]}" role="img" aria-label="${esc(d[1])}"><defs><marker id="pd-a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="${C.line}"/></marker></defs>${d[2]}</svg><figcaption class="fig-credit">${esc(d[1])}</figcaption></figure>`;
+}
 ANAT.metabolism.forEach((p) => {
   const route = '/physiology/' + p.id;
   const steps = p.how_it_works || p.how_insulin_is_made || p.steps || [];
   const body = `<div class="article"><h1>${esc(p.name)}</h1><p>${esc(p.overview)}</p>
+    ${physioDiagram(p.id)}
     <h2>How it works</h2><ol>${steps.map((x) => `<li>${esc(x)}</li>`).join('')}</ol>
     ${p.what_insulin_does ? `<h2>What insulin does</h2><ul>${p.what_insulin_does.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
     ${p.when_it_matters ? `<h2>Why it matters</h2><p>${esc(p.when_it_matters)}</p>` : ''}
