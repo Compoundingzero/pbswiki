@@ -101,7 +101,7 @@ a.counter:hover{border-color:var(--accent);transform:translateY(-2px);text-decor
 .cpd-card .mech{color:var(--muted);font-size:.88rem;margin:.5rem 0 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .badges{display:flex;gap:.4rem;align-items:center;margin-top:.6rem;flex-wrap:wrap}
 .stars{color:var(--star);letter-spacing:1px;font-size:.82rem}
-.pill{font-size:.72rem;padding:.15rem .5rem;border-radius:999px;font-weight:600}
+.pill{display:inline-block;white-space:nowrap;vertical-align:middle;font-size:.72rem;padding:.15rem .5rem;border-radius:999px;font-weight:600}
 .pill.g{background:rgba(5,150,105,.12);color:var(--green)}
 .pill.y{background:rgba(180,83,9,.12);color:var(--yellow)}
 .pill.b{background:rgba(37,99,235,.12);color:var(--blue)}

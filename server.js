@@ -186,8 +186,9 @@ const ADMIN_USER = (process.env.ADMIN_USER || '').toLowerCase();
 // verify accounts / approve root-cause changes. Locked to Felix's email by default.
 const SUPERADMIN_EMAIL = (process.env.SUPERADMIN_EMAIL || 'felix360506@gmail.com').toLowerCase();
 const isSuper = u => !!(u && u.email && u.email.toLowerCase() === SUPERADMIN_EMAIL);
-// how many relevant-panel endorsements auto-approve a root-cause change (superadmin can override)
-const PANEL_THRESHOLD = 2;
+// how many relevant-panel peer approvals move a change to 'peer_approved' (awaiting the
+// superadmin's final approval before it goes live). Peer approval never publishes on its own.
+const PANEL_THRESHOLD = 1;
 async function currentUser(req) {
   const sid = parseCookies(req).sid;
   if (!sid || !db.enabled) return null;
@@ -240,7 +241,7 @@ async function api(req, res, url) {
       const u = r.rows[0]; const token = crypto.randomBytes(24).toString('hex');
       await db.query('INSERT INTO sessions(token,user_id,expires_at) VALUES($1,$2, now()+interval \'30 days\')', [token, u.id]);
       setSessionCookie(res, token);
-      return json(res, 200, { user: { id: u.id, username: u.username, role: u.role } });
+      return json(res, 200, { user: { id: u.id, username: u.username, role: u.role, is_super: isSuper(u) } });
     } catch (e) {
       if (e.code === '23505') return json(res, 409, { error: 'That username is taken' });
       console.error(e); return json(res, 500, { error: 'Server error' });
@@ -249,13 +250,13 @@ async function api(req, res, url) {
   if (seg[0] === 'login' && method === 'POST') {
     const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
     const username = clean(b.username, 24), password = String(b.password || '');
-    const r = await db.query('SELECT id,username,role,pass,domain,credential,domain_verified FROM users WHERE username=$1', [username]);
+    const r = await db.query('SELECT id,username,email,role,pass,domain,credential,domain_verified FROM users WHERE username=$1', [username]);
     const u = r.rows[0];
     if (!u || !verifyPassword(password, u.pass)) return json(res, 401, { error: 'Wrong username or password' });
     const token = crypto.randomBytes(24).toString('hex');
     await db.query('INSERT INTO sessions(token,user_id,expires_at) VALUES($1,$2, now()+interval \'30 days\')', [token, u.id]);
     setSessionCookie(res, token);
-    return json(res, 200, { user: { id: u.id, username: u.username, role: u.role, domain: u.domain, credential: u.credential, domain_verified: u.domain_verified } });
+    return json(res, 200, { user: { id: u.id, username: u.username, role: u.role, domain: u.domain, credential: u.credential, domain_verified: u.domain_verified, is_super: isSuper(u) } });
   }
   if (seg[0] === 'logout' && method === 'POST') {
     const sid = parseCookies(req).sid; if (sid) await db.query('DELETE FROM sessions WHERE token=$1', [sid]);
@@ -298,6 +299,7 @@ async function api(req, res, url) {
       const token = crypto.randomBytes(24).toString('hex');
       await db.query('INSERT INTO sessions(token,user_id,expires_at) VALUES($1,$2, now()+interval \'30 days\')', [token, u.id]);
       setSessionCookie(res, token);
+      u.email = email; u.is_super = isSuper(u);
       return json(res, 200, { user: u });
     } catch (e) { console.error('[google-auth]', e.message); return json(res, 500, { error: 'Sign-in failed' }); }
   }
@@ -795,7 +797,9 @@ async function api(req, res, url) {
     await award(u.id, 'rc_endorse', 'rcc:' + id, 5);
     const cnt = await db.query('SELECT count(*)::int AS n FROM rootcause_endorsements WHERE change_id=$1', [id]);
     let status = ch.status;
-    if (cnt.rows[0].n >= PANEL_THRESHOLD) { await db.query("UPDATE rootcause_changes SET status='approved' WHERE id=$1 AND status='pending'", [id]); status = 'approved'; }
+    // A peer approval never publishes. It moves the change to 'peer_approved' — awaiting the
+    // superadmin's final approval, which is the only thing that makes it live.
+    if (cnt.rows[0].n >= PANEL_THRESHOLD) { await db.query("UPDATE rootcause_changes SET status='peer_approved' WHERE id=$1 AND status='pending'", [id]); status = 'peer_approved'; }
     return json(res, 200, { ok: true, endorsements: cnt.rows[0].n, status });
   }
   if (seg[0] === 'rootcause-overlay' && method === 'GET') {
@@ -819,7 +823,7 @@ async function api(req, res, url) {
       db.query("SELECT id,request,detail,votes,status,created_at FROM protocol_requests ORDER BY (status='open') DESC, votes DESC, created_at DESC LIMIT 100"),
       db.query(`SELECT c.id,c.problem_id,c.action,c.root_cause_id,c.name,c.diagnostic,c.domains,c.rationale,c.status,c.created_at,u.username AS by_user,
         (SELECT count(*)::int FROM rootcause_endorsements e WHERE e.change_id=c.id) AS endorsements
-        FROM rootcause_changes c LEFT JOIN users u ON u.id=c.submitted_by ORDER BY (c.status='pending') DESC, c.created_at DESC LIMIT 100`),
+        FROM rootcause_changes c LEFT JOIN users u ON u.id=c.submitted_by ORDER BY (c.status='peer_approved') DESC, (c.status='pending') DESC, c.created_at DESC LIMIT 100`),
       db.query("SELECT f.id,f.body,f.page,f.kind,f.contact,f.status,f.created_at,u.username AS by_user FROM feedback f LEFT JOIN users u ON u.id=f.user_id WHERE f.status='open' ORDER BY f.created_at DESC LIMIT 200"),
       db.query(`SELECT p.id,p.problem_id,p.root_cause_id,p.layer,p.domain,p.change,p.evidence,p.status,p.created_at,u.username AS by_user,
         (SELECT COUNT(*)::int FROM proposal_actions a WHERE a.proposal_id=p.id AND a.action='endorse') AS endorsements
