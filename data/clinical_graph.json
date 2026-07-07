@@ -3451,7 +3451,7 @@
         {
           "id": "stimulus-recovery",
           "name": "Insufficient stimulus or recovery",
-          "diagnostic": "Gains stalled; training hard but not progressing.",
+          "diagnostic": "Gains stalled despite consistent hard training — the plateau of an experienced lifter, not a novice.",
           "move_tags": [
             "hypertrophy_upper",
             "hypertrophy_lower",
@@ -3500,15 +3500,22 @@
             }
           },
           "prescription": {
-            "scheme": "Progressive overload",
-            "detail": "Add volume/load progressively, 10–20 hard sets/muscle/week, 1.6–2.2 g/kg protein, sleep."
+            "scheme": "Progressive overload — the only thing that truly breaks a plateau",
+            "detail": "Anchor on heavy compounds (squat, RDL/deadlift, bench, row, pull-up, overhead press) — they load the most muscle under tension. Progress with DOUBLE PROGRESSION: hold a rep range (e.g. 6–12), add a rep every session until you hit the top across all working sets, then add load and reset. Take each hard set to 0–2 reps in reserve, with a controlled 2–3s eccentric and a full stretch at the bottom (lengthened partials at the end of a set add growth). Run 10–20 hard sets per muscle per week; add 2–4 sets to a muscle that has stalled. REST 2–3 min between hard sets — longer rest keeps volume-load high and builds more muscle than short pump rests. Then recover it: 1.6–2.2 g/kg protein, 7–9h sleep, and a deload (halve the volume) every 4–8 weeks."
           },
           "required_expert_domains": [
             "physio",
             "dietitian",
             "pharmacist"
           ],
-          "plain": "My gains have stalled — I train hard but I'm not progressing"
+          "plain": "I train hard but my gains have stalled — the beginner progress is long gone",
+          "anchor_exercises": [
+            "Barbell_Full_Squat",
+            "Barbell_Bench_Press_-_Medium_Grip",
+            "Barbell_Deadlift",
+            "Bent_Over_Barbell_Row",
+            "Barbell_Shoulder_Press"
+          ]
         }
       ]
     },

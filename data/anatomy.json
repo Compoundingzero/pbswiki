@@ -326,7 +326,8 @@
       "problems": [
         "low-back-pain",
         "hypertrophy"
-      ]
+      ],
+      "model_embed": "https://sketchfab.com/models/a6831716a15540d1889efb57305572f8/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "abductors",
@@ -363,7 +364,8 @@
       "stretching": "Figure-4 / crossed-leg glute stretch and standing IT-band-region stretches.",
       "problems": [
         "hip-mobility",
-        "knee-pain"
+        "knee-pain",
+        "hypertrophy"
       ],
       "model_embed": "https://sketchfab.com/models/17f9fd854c5342dd9ecd59ff9466af42/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
@@ -403,8 +405,10 @@
       "stretching": "Butterfly stretch, wide-stance / side-lunge groin stretches.",
       "problems": [
         "hip-mobility",
-        "knee-pain"
-      ]
+        "knee-pain",
+        "hypertrophy"
+      ],
+      "model_embed": "https://sketchfab.com/models/39729159b6d34c32a8ccc41b1a296c40/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "biceps",
@@ -442,7 +446,8 @@
       "problems": [
         "elbow-wrist",
         "hypertrophy"
-      ]
+      ],
+      "model_embed": "https://sketchfab.com/models/85fb3e1b8c864ee18b42a1e4c55d53e7/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "calves",
@@ -481,7 +486,8 @@
       "stretching": "Straight-knee wall stretch (gastrocnemius) and bent-knee stretch (soleus).",
       "problems": [
         "ankle-foot",
-        "knee-pain"
+        "knee-pain",
+        "hypertrophy"
       ],
       "model_embed": "https://sketchfab.com/models/6e79f238b65e4490841d02fd30fd374c/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
@@ -522,7 +528,8 @@
       "problems": [
         "neck-shoulder",
         "hypertrophy"
-      ]
+      ],
+      "model_embed": "https://sketchfab.com/models/da9b88ac8abc4ab08ac39c308aded810/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "forearms",
@@ -560,8 +567,10 @@
       "training": "Dead hangs, farmer's carries, wrist curls and extensions, reverse curls.",
       "stretching": "Wrist flexor stretch (palm up, gently pull fingers back) and extensor stretch (palm down).",
       "problems": [
-        "elbow-wrist"
-      ]
+        "elbow-wrist",
+        "hypertrophy"
+      ],
+      "model_embed": "https://sketchfab.com/models/ca285c324d2d4a9c844c3bdd7629e39e/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "glutes",
@@ -602,7 +611,8 @@
       "problems": [
         "low-back-pain",
         "hip-mobility",
-        "knee-pain"
+        "knee-pain",
+        "hypertrophy"
       ],
       "model_embed": "https://sketchfab.com/models/537556cb8be54bf58d1defa95b8958aa/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
@@ -645,7 +655,8 @@
       "problems": [
         "knee-pain",
         "low-back-pain",
-        "hip-mobility"
+        "hip-mobility",
+        "hypertrophy"
       ],
       "model_embed": "https://sketchfab.com/models/8c70d9533a3e46c89803d5ce5085d3d1/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
@@ -689,7 +700,8 @@
         "neck-shoulder",
         "low-back-pain",
         "hypertrophy"
-      ]
+      ],
+      "model_embed": "https://sketchfab.com/models/fa2ca759f6a24738be744aaaf2ed9b5f/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "lower-back",
@@ -728,8 +740,10 @@
       "training": "Hip hinges with neutral spine, back extensions, bird-dogs, carries, deadlifts.",
       "stretching": "Child's pose, knees-to-chest, cat-camel mobility.",
       "problems": [
-        "low-back-pain"
-      ]
+        "low-back-pain",
+        "hypertrophy"
+      ],
+      "model_embed": "https://sketchfab.com/models/e5f0faac281444e8ae11d4d1d4af0d03/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "middle-back",
@@ -766,8 +780,10 @@
       "training": "Rows, face pulls, scapular retractions, prone Y-T-W raises.",
       "stretching": "Cross-body reach; thoracic 'hug and round' between the blades.",
       "problems": [
-        "neck-shoulder"
-      ]
+        "neck-shoulder",
+        "hypertrophy"
+      ],
+      "model_embed": "https://sketchfab.com/models/afe1f2a8cecb4558bbf012c241588cc2/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "neck",
@@ -804,8 +820,10 @@
       "training": "Chin tucks (deep neck flexors), controlled neck range-of-motion, isometric holds.",
       "stretching": "Gentle side-bend (ear to shoulder) and upper-trap/levator stretches.",
       "problems": [
-        "neck-shoulder"
-      ]
+        "neck-shoulder",
+        "hypertrophy"
+      ],
+      "model_embed": "https://sketchfab.com/models/95c33373ffb14d22a5a630a528d4ba59/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "quadriceps",
@@ -888,7 +906,8 @@
       "problems": [
         "neck-shoulder",
         "hypertrophy"
-      ]
+      ],
+      "model_embed": "https://sketchfab.com/models/759009c34c954b2d9c19b311409933cd/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "traps",
@@ -924,8 +943,10 @@
       "training": "Shrugs (upper), rows & face pulls (mid), Y-raises and prone lower-trap work.",
       "stretching": "Upper-trap stretch (ear to shoulder, gentle overpressure).",
       "problems": [
-        "neck-shoulder"
-      ]
+        "neck-shoulder",
+        "hypertrophy"
+      ],
+      "model_embed": "https://sketchfab.com/models/566cf6b9815e42638c235e7e0b42170c/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     },
     {
       "id": "triceps",
@@ -962,7 +983,8 @@
       "problems": [
         "elbow-wrist",
         "hypertrophy"
-      ]
+      ],
+      "model_embed": "https://sketchfab.com/models/2d448e5749ec4d77b65c57b26e32312b/embed?ui_theme=dark&autospin=0.2&ui_infos=1&ui_watermark=0&ui_hint=0&transparent=0"
     }
   ]
 }

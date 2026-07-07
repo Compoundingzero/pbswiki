@@ -1450,3 +1450,7 @@ a.dp-name:hover{color:var(--accent)}
 .anat-3d-soon{display:flex;align-items:center;gap:14px;padding:18px 20px;border:1px dashed var(--line);border-radius:14px;background:var(--panel2);margin:.4rem 0 .2rem}
 .anat-3d-soon .a3d-ico{font-size:1.8rem;flex:none}
 .anat-3d-soon p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.5}
+
+/* ---- Metabolic mill diagram (light background so the pathway colours read) ---- */
+.mm-fig{background:var(--panel);padding:1rem .6rem .4rem}
+.mm-fig svg{width:100%;height:auto}
