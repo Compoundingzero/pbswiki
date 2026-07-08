@@ -73,6 +73,12 @@
       else if (local) api.savePlan(local);
     } catch (e) {}
   }
+  function planDay(plan) { plan.log = plan.log || {}; const k = today(); plan.log[k] = plan.log[k] || { done: [], keystone: false }; return plan.log[k]; }
+  function planStreak(plan) {
+    const log = (plan && plan.log) || {}; const set = new Set(Object.keys(log).filter(d => log[d] && log[d].keystone));
+    let s = 0; const d = new Date(); for (; ;) { const key = d.toISOString().slice(0, 10); if (set.has(key)) { s++; d.setDate(d.getDate() - 1); } else break; }
+    return s;
+  }
 
   const STACK_KEY = 'rnawiki_stack';
   function getStack() { try { return JSON.parse(localStorage.getItem(STACK_KEY)) || []; } catch (e) { return []; } }
@@ -2734,6 +2740,75 @@
     el.hidden = false;
   }
 
+  // ---------- My Plan — the personal execution page (the "kitchen") ----------
+  function planLoading() { return `<div class="empty"><h1>Loading your plan…</h1></div>`; }
+  function emptyPlan() {
+    return `${crumbs([{ label: 'Home', href: '#/' }, { label: 'My Plan' }])}
+      <section class="plan-empty">
+        <div class="plan-empty-ico">🧪</div>
+        <h1>You haven't started a plan yet</h1>
+        <p class="hero-lead">Find your root cause, then tap <b>“Start this plan”</b> — this is where you'll pick your movements and supplements and track your food, day by day. One place, one plan.</p>
+        <a class="cta-primary" href="#/solve">Find my root cause →</a>
+      </section>`;
+  }
+  async function renderPlan() {
+    try { await ensureProtocolData(); } catch (e) { app.innerHTML = emptyPlan(); return; }
+    const plan = getPlan();
+    if (!plan || !plan.pid) { app.innerHTML = emptyPlan(); return; }
+    const found = findRootCause(plan.pid, plan.rcid);
+    if (!found) { app.innerHTML = emptyPlan(); return; }
+    const { problem, rc } = found;
+    const P = generateProtocol(rc);
+    const allSupp = (P.stack || []).map(c => c.id);
+    const suppSel = plan.supps === 'none' ? [] : (Array.isArray(plan.supps) ? plan.supps : allSupp);
+    const selStack = (P.stack || []).filter(c => suppSel.includes(c.id));
+    const dk = today();
+    const dayLog = (plan.log || {})[dk] || { done: [], keystone: false };
+    const streak = planStreak(plan);
+    const moves = [...(P.strengthen || []), ...(P.stretch || [])];
+    app.innerHTML = `${crumbs([{ label: 'Home', href: '#/' }, { label: 'My Plan' }])}
+      <section class="plan-hd">
+        <div><div class="kicker">My Plan · ${esc(problem.category)}</div><h1>${problem.icon || ''} ${esc(problem.name)}</h1><p class="muted">${esc(rc.name)}</p></div>
+        <div class="plan-hd-actions"><a class="cta-ghost" href="#/protocol/${problem.id}/${rc.id}">Full protocol →</a><a class="cta-ghost" href="#/solve">Switch plan</a></div>
+      </section>
+      ${rc.keystone ? `<div class="keystone-card">
+        <div class="ks-badge">⭐ Your one keystone</div>
+        <p class="ks-one">${esc(rc.keystone.one)}</p>
+        <div class="plan-streak"><button class="ks-done-btn ${dayLog.keystone ? 'done' : ''}" id="ks-done">${dayLog.keystone ? '✅ Done today' : 'Mark done today'}</button><span class="streak-badge">🔥 <b id="streak-n">${streak}</b>-day streak</span></div>
+      </div>` : ''}
+      ${dayPlanHtml(problem, rc, P)}
+      <div class="proto-grid">
+        <section class="layer move" id="p-move"><div class="lyr-head"><h2><span class="lyr-dot mv"></span>Move</h2></div>
+          <p class="lyr-sub">Tick each as you do it today.</p>
+          ${moves.length ? moves.map(e => `<div class="plan-item"><input type="checkbox" class="plan-cb" data-done="${esc(e.id)}" ${dayLog.done.includes(e.id) ? 'checked' : ''} aria-label="Mark done">${exerciseCard(e)}</div>`).join('') : '<p class="muted">Movement isn’t the main lever for this one — the Fuel and Stack do the work.</p>'}
+        </section>
+        <section class="layer stack" id="p-stack"><div class="lyr-head"><h2><span class="lyr-dot st"></span>Stack</h2></div>
+          <p class="lyr-sub">Pick what you'll take — or go food-only.</p>
+          <button class="chip food-only ${plan.supps === 'none' ? 'on' : ''}" id="food-only">🍚 ${plan.supps === 'none' ? '✓ ' : ''}Food only — no supplements</button>
+          ${(P.stack || []).length ? `<div class="plan-supps">${(P.stack || []).map(c => `<div class="plan-item"><input type="checkbox" class="plan-cb" data-supp="${c.id}" ${suppSel.includes(c.id) ? 'checked' : ''} aria-label="Include ${esc(c.name)}">${stackCard(c)}</div>`).join('')}</div>` : '<p class="muted">No supplements mapped — food does the work here.</p>'}
+          <div id="plan-ixn">${selStack.length > 1 ? interactionPanel(selStack, { tiers: ['danger', 'timing'] }) : ''}</div>
+        </section>
+        <section class="layer fuel" id="p-fuel"><div class="lyr-head"><h2><span class="lyr-dot fl"></span>Fuel</h2></div>
+          <p class="lyr-sub">Log meals to fill this protocol's targets.</p>
+          <div id="fuel-tracker" data-rc="${problem.id}:${rc.id}"></div>
+        </section>
+      </div>`;
+    mountFuelTracker(problem, rc);
+    const ks = document.getElementById('ks-done');
+    if (ks) ks.onclick = () => { const pl = getPlan(); const d = planDay(pl); d.keystone = !d.keystone; pl.streak = planStreak(pl); setPlan(pl); renderPlan(); };
+    app.querySelectorAll('[data-done]').forEach(cb => cb.onchange = () => {
+      const pl = getPlan(); const d = planDay(pl); const id = cb.dataset.done;
+      const i = d.done.indexOf(id); if (cb.checked && i < 0) d.done.push(id); else if (!cb.checked && i >= 0) d.done.splice(i, 1); setPlan(pl);
+    });
+    app.querySelectorAll('[data-supp]').forEach(cb => cb.onchange = () => {
+      const pl = getPlan(); const cur = pl.supps === 'none' ? [] : (Array.isArray(pl.supps) ? pl.supps.slice() : allSupp.slice());
+      const id = cb.dataset.supp; const i = cur.indexOf(id); if (cb.checked && i < 0) cur.push(id); else if (!cb.checked && i >= 0) cur.splice(i, 1);
+      pl.supps = cur; setPlan(pl); renderPlan();
+    });
+    const fo = document.getElementById('food-only');
+    if (fo) fo.onclick = () => { const pl = getPlan(); pl.supps = pl.supps === 'none' ? allSupp.slice() : 'none'; setPlan(pl); renderPlan(); };
+  }
+
   async function renderProtocol(pid, rcid, clinicHandle) {
     try { await ensureProtocolData(); } catch (e) { app.innerHTML = `<div class="empty"><h1>Couldn’t load protocol data</h1><p><a href="#/solve">← Back</a></p></div>`; return; }
     const found = findRootCause(pid, rcid);
@@ -2790,6 +2865,7 @@
         </div>`;
       })()}
       ${journeyRail}
+      <div class="start-plan-row"><button class="cta-primary start-plan" id="start-plan">▶ Start this plan</button><span class="start-plan-note">Pick your movements &amp; supplements and track it daily on <b>My Plan</b>.</span></div>
       ${rcSwitch}
       ${rc.keystone ? `<div class="keystone-card">
         <div class="ks-badge">⭐ Your one keystone</div>
@@ -2843,6 +2919,11 @@
     app.querySelectorAll('.journey-rail [data-scroll]').forEach(b => b.onclick = () => {
       const el = document.getElementById(b.dataset.scroll); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+    const startBtn = document.getElementById('start-plan');
+    if (startBtn) startBtn.onclick = () => {
+      const pl = { pid: problem.id, rcid: rc.id, supps: (P.stack || []).map(c => c.id), startedAt: today(), log: {} };
+      setPlan(pl); navigate('/plan');
+    };
     app.querySelectorAll('.tg-coach').forEach(b => b.onclick = async () => {
       const orig = b.textContent; b.disabled = true; b.textContent = 'Opening Telegram…';
       try {
@@ -3837,6 +3918,7 @@
     else if (parts[0] === 'compare') html = parts[1] ? renderComparison(parts[1]) : comparePage();
     else if (parts[0] === 'stack') html = stackPage();
     else if (parts[0] === 'fuel') html = fuelPage(parts[1], parts[2]);
+    else if (parts[0] === 'plan') html = planLoading();
     else if (parts[0] === 'legend') html = legendPage();
     else if (parts[0] === 'for-clinicians') html = forClinicians();
     else if (parts[0] === 'about') { history.replaceState(null, '', '/'); parts.length = 0; html = home(); }
@@ -3859,6 +3941,7 @@
     if (parts[0] === 'solve') bindSolve();
     if (parts[0] === 'for-clinicians') bindForClinicians();
     if (parts[0] === 'fuel') bindFuel(parts[1], parts[2]);
+    if (parts[0] === 'plan') renderPlan();
     if (parts[0] === 'stewardship') renderStewardHub();
     if (parts[0] === 'pro') renderPro();
     if (parts[0] === 'pros') renderPros();
