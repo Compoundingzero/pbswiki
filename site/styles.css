@@ -1494,3 +1494,14 @@ a.dp-name:hover{color:var(--accent)}
 .ks-one{font-size:1.12rem;font-weight:700;color:#3a2a05;margin:.35rem 0 .3rem;line-height:1.35}
 .ks-why{font-size:.9rem;color:#6b5320;margin:0 0 .4rem}
 .ks-note{font-size:.78rem;color:#95803f;margin:0}
+
+/* ---- Protocol journey rail (frames Move·Stack·Fuel as one sequence) ---- */
+.journey-rail{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:999px;padding:.4rem .6rem;margin:0 0 1rem;box-shadow:var(--shadow)}
+.journey-rail .jr-step{font-size:.82rem;font-weight:700;color:var(--muted);background:transparent;border:none;border-radius:999px;padding:.28rem .7rem;cursor:pointer;transition:.15s;font-family:inherit}
+.journey-rail button.jr-step:hover{background:var(--bg);color:var(--accent)}
+.journey-rail .jr-step.done{color:var(--accent);cursor:default}
+.journey-rail .jr-step.track{color:#fff;background:var(--accent)}
+.journey-rail .jr-step.track:hover{background:#0b7a6e;color:#fff}
+.journey-rail .jr-sep{color:var(--faint);font-weight:800;font-size:.8rem}
+#p-move,#p-stack,#p-fuel{scroll-margin-top:5rem}
+@media(max-width:560px){.journey-rail{gap:.2rem;padding:.35rem .4rem}.journey-rail .jr-step{font-size:.76rem;padding:.24rem .55rem}}
