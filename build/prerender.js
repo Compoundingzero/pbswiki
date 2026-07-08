@@ -172,6 +172,7 @@ ${crumbLd}${ld}
 <footer class="foot"><div>💡 Not medical advice · <a href="/solve">Solve</a> · <a href="/browse">Browse</a> · <a href="/anatomy">Anatomy</a> · <a href="/pathways">Pathways</a> · <a href="/az">A–Z</a> · <a href="/for-clinicians">For pros &amp; clinicians</a> · <a href="/legend">Legend</a> · <a href="/about">About</a></div><div class="foot-stats" id="foot-stats"></div></footer>
 <script src="/data.js"></script>
 <script src="/facts.js"></script>
+<script src="/interactions.js"></script>
 <script src="/app.js"></script>
 </body>
 </html>`;

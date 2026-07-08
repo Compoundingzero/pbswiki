@@ -1468,3 +1468,22 @@ a.dp-name:hover{color:var(--accent)}
 .df-link{display:inline-block;font-size:.82rem;font-weight:700;color:#0c1a16;background:#7fe9d4;padding:.42rem .8rem;border-radius:999px;position:relative;z-index:1;transition:.15s}
 .df-link:hover{background:#a9f3e2;transform:translateX(2px)}
 @media(max-width:560px){.df-text{font-size:.96rem}}
+
+/* ---- Supplement interaction check (Stack builder) ---- */
+.ixn-panel{border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:var(--shadow);padding:.9rem 1rem;margin:0 0 1rem}
+.ixn-top{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;font-size:.95rem;margin-bottom:.5rem}
+.ixn-verdict{font-size:.76rem;font-weight:700;padding:.15rem .55rem;border-radius:999px}
+.ixn-verdict.bad{background:#fdeaea;color:#a11}
+.ixn-verdict.warn{background:#fef3e2;color:#a76100}
+.ixn-verdict.ok{background:#e9f7ef;color:#0b7a4b}
+.ixn-verdict.good{background:#e6f5f1;color:#0b6b5c}
+.ixn{border-left:3px solid var(--line);border-radius:0 8px 8px 0;background:#fafbfc;padding:.55rem .75rem;margin:.45rem 0}
+.ixn.danger{border-left-color:#c0392b;background:#fdf3f2}
+.ixn.blunt{border-left-color:#e08e0b;background:#fff9f0}
+.ixn.timing{border-left-color:#2563eb;background:#f2f6ff}
+.ixn.good{border-left-color:#0d9488;background:#f0faf7}
+.ixn-h{font-size:.9rem}
+.ixn-who{font-size:.74rem;color:var(--muted);font-weight:600}
+.ixn-why{font-size:.84rem;color:var(--ink);margin:.2rem 0}
+.ixn-act{font-size:.82rem;color:var(--muted);margin:.15rem 0 0}
+.ixn-foot{font-size:.72rem;color:var(--faint);margin:.6rem 0 0}
