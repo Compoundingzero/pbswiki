@@ -319,13 +319,13 @@ async function api(req, res, url) {
   // Telegram bot — handled before the same-origin/db gates (Telegram posts cross-origin; auth is the secret header)
   if (seg[0] === 'telegram') {
     if (!BOT_TOKEN || !db.enabled) return json(res, 503, { error: 'Bot not enabled' });
-    if (seg[1] === 'webhook' && method === 'POST') {
+    if (seg[1] === 'webhook' && req.method === 'POST') {
       if (req.headers['x-telegram-bot-api-secret-token'] !== TG_SECRET) { res.writeHead(401); return res.end(); }
       const update = await readBody(req, 1e6);
       try { await handleTgUpdate(update || {}); } catch (e) { console.error('[tg] update:', e.message); }
       return json(res, 200, { ok: true });
     }
-    if (seg[1] === 'link' && method === 'GET') {
+    if (seg[1] === 'link' && req.method === 'GET') {
       const u = await currentUser(req);
       const q = new URL('http://x/' + url).searchParams;
       const pid = clean(q.get('pid'), 64), rcid = clean(q.get('rcid'), 64);
