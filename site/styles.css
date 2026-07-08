@@ -1516,3 +1516,8 @@ a.dp-name:hover{color:var(--accent)}
 .cpd-fact .cf-k{font-size:.72rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:#0b6b5c;display:block;margin-bottom:.15rem}
 .cpd-fact .cf-t{font-size:.96rem;color:var(--ink);line-height:1.45}
 .cpd-fact .cf-t b{color:var(--accent)}
+
+/* ---- "Coach me on Telegram" button (protocol keystone card) ---- */
+.tg-coach{margin-top:.7rem;display:inline-block;background:#229ED9;color:#fff;border:none;border-radius:999px;padding:.5rem .95rem;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+.tg-coach:hover{background:#1b8ec4}
+.tg-coach:disabled{opacity:.7;cursor:default}

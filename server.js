@@ -210,6 +210,97 @@ function sameOrigin(req) {
   try { return new URL(o).host === req.headers.host; } catch (e) { return false; }
 }
 
+// ---------- Telegram coach (@rnawikibot) ----------
+// Dormant until BOT_TOKEN is set. A per-user, per-protocol keystone coach: link from a protocol
+// page, get the one keystone habit, tap "Did it today" to build a streak. All content is authored
+// (keystones/protocol names) — no AI, nothing generated at runtime.
+const BOT_TOKEN = process.env.BOT_TOKEN || '';
+const BOT_USERNAME = process.env.BOT_USERNAME || 'rnawikibot';
+const TG_SECRET = crypto.createHmac('sha256', SECRET).update('tg-webhook').digest('hex').slice(0, 40);
+const TG_HELP = 'What I can do:\n<b>/keystone</b> — your one keystone habit\n<b>/done</b> — mark it done today (builds your streak)\n<b>/streak</b> — your current streak\n<b>/plan</b> — your full protocol link\n<b>/help</b> — this menu';
+let TG_PROTO = {};
+try {
+  const g = require('./data/clinical_graph.json'); const ks = require('./data/keystones.json');
+  g.problems.forEach(p => p.root_causes.forEach(rc => {
+    TG_PROTO[p.id + '/' + rc.id] = { problem: p.name, rc: rc.name.replace(/\s*\([^)]*\)/, ''), keystone: ks[rc.id] || null };
+  }));
+} catch (e) { console.error('[tg] proto load failed:', e.message); }
+function tgEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+async function tgApi(method, body) {
+  if (!BOT_TOKEN) return null;
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/${method}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    return await r.json();
+  } catch (e) { console.error('[tg] api', method, e.message); return null; }
+}
+function tgSend(chatId, text, extra) { return tgApi('sendMessage', Object.assign({ chat_id: chatId, text, parse_mode: 'HTML', disable_web_page_preview: true }, extra || {})); }
+async function tgGet(chatId) { return (await db.query('SELECT * FROM telegram_users WHERE chat_id=$1', [chatId])).rows[0]; }
+function tgComputeStreak(days) {
+  const set = new Set(days || []); let s = 0; const d = new Date();
+  for (; ;) { const key = d.toISOString().slice(0, 10); if (set.has(key)) { s++; d.setDate(d.getDate() - 1); } else break; }
+  return s;
+}
+async function tgSendKeystone(chatId, pid, rcid) {
+  const p = TG_PROTO[(pid || '') + '/' + (rcid || '')];
+  if (!p) return tgSend(chatId, `You're linked! Open ${SITE_URL}/solve and pick a protocol, then tap “📲 Coach me on Telegram”.`);
+  const k = p.keystone;
+  const body = `✅ You're set for <b>${tgEsc(p.problem)}</b> — ${tgEsc(p.rc)}.\n\n⭐ <b>Your one keystone</b>\n${k ? tgEsc(k.one) : 'See your full plan on the site.'}` +
+    (k ? `\n\n<i>${tgEsc(k.why)}</i>` : '') +
+    `\n\nDo it today, then tap the button (or send <b>/done</b>) and I'll track your streak.\n\nFull plan → ${SITE_URL}/protocol/${pid}/${rcid}`;
+  return tgSend(chatId, body, { reply_markup: { inline_keyboard: [[{ text: '✅ Did it today', callback_data: 'done' }]] } });
+}
+async function tgMarkDone(chatId) {
+  const row = await tgGet(chatId); if (!row) return;
+  const today = new Date().toISOString().slice(0, 10);
+  let days = Array.isArray(row.keystone_days) ? row.keystone_days : [];
+  if (days.includes(today)) return tgSend(chatId, `Already logged today ✅ — you're on a <b>${row.streak}-day streak</b>. See you tomorrow!`);
+  days = days.concat(today).slice(-120);
+  const streak = tgComputeStreak(days);
+  await db.query('UPDATE telegram_users SET keystone_days=$2, streak=$3, last_active=now() WHERE chat_id=$1', [chatId, JSON.stringify(days), streak]);
+  const cheer = ['Nice.', 'That\'s the one thing.', 'Consistency wins.', 'This is how it compounds.', 'Love it.'][streak % 5];
+  return tgSend(chatId, `✅ Logged! ${cheer} 🔥 <b>${streak}-day streak</b>.`);
+}
+async function handleTgUpdate(update) {
+  if (update.callback_query) {
+    const cb = update.callback_query; const chatId = cb.message && cb.message.chat && cb.message.chat.id;
+    await tgApi('answerCallbackQuery', { callback_query_id: cb.id });
+    if (cb.data === 'done' && chatId) return tgMarkDone(chatId);
+    return;
+  }
+  const msg = update.message; if (!msg || !msg.chat) return;
+  const chatId = msg.chat.id; const text = (msg.text || '').trim();
+  const first = (msg.from && msg.from.first_name) || msg.chat.first_name || '';
+  await db.query(`INSERT INTO telegram_users(chat_id,first_name) VALUES($1,$2)
+    ON CONFLICT(chat_id) DO UPDATE SET last_active=now(), active=true, first_name=COALESCE(EXCLUDED.first_name, telegram_users.first_name)`, [chatId, first || null]);
+  if (text.startsWith('/start')) {
+    const param = text.split(/\s+/)[1];
+    if (param) {
+      const t = (await db.query('SELECT * FROM telegram_link_tokens WHERE token=$1', [param])).rows[0];
+      if (t) {
+        await db.query('UPDATE telegram_users SET user_id=$2, pid=$3, rcid=$4 WHERE chat_id=$1', [chatId, t.user_id, t.pid, t.rcid]);
+        await db.query('DELETE FROM telegram_link_tokens WHERE token=$1', [param]);
+        return tgSendKeystone(chatId, t.pid, t.rcid);
+      }
+    }
+    return tgSend(chatId, `👋 Hi${first ? ' ' + tgEsc(first) : ''}! I'm your RNAwiki coach.\n\nOpen a protocol at ${SITE_URL}/solve and tap <b>“📲 Coach me on Telegram”</b> — I'll then coach you on that exact plan, one keystone habit at a time.\n\n${TG_HELP}`);
+  }
+  const cmd = text.toLowerCase().replace(/^\//, '');
+  if (cmd === 'keystone' || cmd === 'plan' || cmd === 'today') {
+    const row = await tgGet(chatId);
+    if (!row || !row.pid) return tgSend(chatId, `You haven't linked a protocol yet. Open ${SITE_URL}/solve and tap “📲 Coach me on Telegram”.`);
+    return tgSendKeystone(chatId, row.pid, row.rcid);
+  }
+  if (cmd === 'done' || cmd === 'done ✅' || cmd === '✅' || cmd === 'did it') return tgMarkDone(chatId);
+  if (cmd === 'streak') { const row = await tgGet(chatId); return tgSend(chatId, `🔥 You're on a <b>${(row && row.streak) || 0}-day streak</b>. Keep it going — /done when you've done today's keystone.`); }
+  if (cmd === 'help' || cmd === 'start') return tgSend(chatId, TG_HELP);
+  return tgSend(chatId, `Got it. When you've done today's keystone, tap <b>/done</b>. See <b>/keystone</b> for the habit, or <b>/help</b> for everything.`);
+}
+async function tgSetup() {
+  if (!BOT_TOKEN) { console.log('[tg] BOT_TOKEN not set — bot dormant.'); return; }
+  const r = await tgApi('setWebhook', { url: `${SITE_URL}/api/telegram/webhook`, secret_token: TG_SECRET, allowed_updates: ['message', 'callback_query'] });
+  console.log('[tg] setWebhook:', r && r.ok ? 'ok → ' + SITE_URL + '/api/telegram/webhook' : JSON.stringify(r));
+}
+
 // ---------- API ----------
 async function api(req, res, url) {
   // url keeps its query string (handlers parse ?goal=/?ids=/?problem= from it);
@@ -224,6 +315,26 @@ async function api(req, res, url) {
     const e = clean(q.get('e'), 20), handle = clean(q.get('u'), 24);
     if (db.enabled && e === 'booking' && handle) db.query('UPDATE users SET booking_clicks = booking_clicks + 1 WHERE lower(username)=lower($1)', [handle]).catch(() => {});
     res.writeHead(204); return res.end();
+  }
+  // Telegram bot — handled before the same-origin/db gates (Telegram posts cross-origin; auth is the secret header)
+  if (seg[0] === 'telegram') {
+    if (!BOT_TOKEN || !db.enabled) return json(res, 503, { error: 'Bot not enabled' });
+    if (seg[1] === 'webhook' && method === 'POST') {
+      if (req.headers['x-telegram-bot-api-secret-token'] !== TG_SECRET) { res.writeHead(401); return res.end(); }
+      const update = await readBody(req, 1e6);
+      try { await handleTgUpdate(update || {}); } catch (e) { console.error('[tg] update:', e.message); }
+      return json(res, 200, { ok: true });
+    }
+    if (seg[1] === 'link' && method === 'GET') {
+      const u = await currentUser(req);
+      const q = new URL('http://x/' + url).searchParams;
+      const pid = clean(q.get('pid'), 64), rcid = clean(q.get('rcid'), 64);
+      const token = crypto.randomBytes(9).toString('base64url');
+      await db.query('INSERT INTO telegram_link_tokens(token,user_id,pid,rcid) VALUES($1,$2,$3,$4)', [token, u ? u.id : null, pid || null, rcid || null]);
+      db.query("DELETE FROM telegram_link_tokens WHERE created_at < now() - interval '1 day'").catch(() => {});
+      return json(res, 200, { url: `https://t.me/${BOT_USERNAME}?start=${token}` });
+    }
+    return json(res, 404, { error: 'Not found' });
   }
   if (!db.enabled) return json(res, 503, { error: 'Accounts are not available right now.' });
   const method = req.method;
@@ -732,6 +843,15 @@ async function api(req, res, url) {
     return json(res, 200, { ok: true, outcome });
   }
   // --- one-click CSV export of members / waitlist (super-admin only) ---
+  if (seg[0] === 'admin' && seg[1] === 'telegram' && method === 'GET') {
+    const u = await currentUser(req); if (!isSuper(u)) return json(res, 403, { error: 'Super-admin only' });
+    const total = (await db.query('SELECT count(*)::int AS n FROM telegram_users WHERE active')).rows[0].n;
+    const linked = (await db.query('SELECT count(*)::int AS n FROM telegram_users WHERE active AND pid IS NOT NULL')).rows[0].n;
+    const active7 = (await db.query("SELECT count(*)::int AS n FROM telegram_users WHERE last_active > now() - interval '7 days'")).rows[0].n;
+    const done7 = (await db.query("SELECT count(*)::int AS n FROM telegram_users WHERE keystone_days @> to_jsonb(to_char(now(),'YYYY-MM-DD'))")).rows[0].n;
+    const top = (await db.query('SELECT pid, count(*)::int AS n FROM telegram_users WHERE pid IS NOT NULL GROUP BY pid ORDER BY n DESC LIMIT 8')).rows;
+    return json(res, 200, { activated: total, linkedToProtocol: linked, activeLast7d: active7, doneKeystoneToday: done7, topProtocols: top });
+  }
   if (seg[0] === 'admin' && seg[1] === 'export' && method === 'GET') {
     const u = await currentUser(req); if (!isSuper(u)) return json(res, 403, { error: 'Super-admin only' });
     const type = clean(new URL('http://x/' + url).searchParams.get('type'), 20);
@@ -1102,4 +1222,5 @@ const server = http.createServer((req, res) => {
 
 db.init().catch(e => console.error('[db] init failed:', e.message)).finally(() => {
   server.listen(PORT, () => console.log('RNAwiki serving on :' + PORT + (db.enabled ? ' (accounts on)' : ' (read-only)')));
+  if (db.enabled) tgSetup().catch(e => console.error('[tg] setup:', e.message));
 });

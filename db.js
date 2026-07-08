@@ -294,6 +294,33 @@ CREATE TABLE IF NOT EXISTS referrals (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_ref_referrer ON referrals(referrer);
+
+-- Telegram coach: one row per chat that has activated @rnawikibot. Linked (optionally) to a web
+-- user and pinned to a protocol (pid/rcid) so the bot coaches that person on that exact protocol.
+-- keystone_days = dates the user marked their keystone done; streak derived from it.
+CREATE TABLE IF NOT EXISTS telegram_users (
+  chat_id BIGINT PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  pid TEXT,
+  rcid TEXT,
+  first_name TEXT,
+  keystone_days JSONB NOT NULL DEFAULT '[]',
+  streak INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  last_active TIMESTAMPTZ NOT NULL DEFAULT now(),
+  active BOOLEAN NOT NULL DEFAULT true
+);
+CREATE INDEX IF NOT EXISTS idx_tg_active ON telegram_users(active, last_active DESC);
+
+-- Short-lived deep-link tokens: web mints one when a user taps "Coach me on Telegram" on a
+-- protocol; the bot's /start <token> consumes it to link the chat to that user + protocol.
+CREATE TABLE IF NOT EXISTS telegram_link_tokens (
+  token TEXT PRIMARY KEY,
+  user_id INTEGER,
+  pid TEXT,
+  rcid TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 `;
 
 async function init() {
