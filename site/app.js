@@ -694,21 +694,12 @@
     <section class="trust reveal">
       <div class="section-title center">Open, and honest</div>
       <h2 class="wr-head">Not a wiki of opinions.<br>An <span class="lead">open, evidence-ranked</span> engine.</h2>
-      <p class="trust-lead">Every protocol here is ranked by the strength of real human evidence — hype earns nothing. It’s free to read and use today. The next step is verified-clinician review, where each expert can only vet work inside their own field — a physio can’t sign off a dietitian’s call, a pharmacist can’t approve a stretch — so every change is checked before it goes live.</p>
+      <p class="trust-lead">Every protocol here is ranked by the strength of real human evidence — hype earns nothing, and it’s free to read and use today. Each protocol is owned and kept accurate by a verified expert: a GP for the clinical side, a nutritionist for the food.</p>
       <div class="trust-row">
         <div class="trust-pill"><b>${cc.compounds}</b> compounds, evidence-ranked</div>
         <div class="trust-pill"><b>${GRAPH.problems.length}</b> problems, mapped to root causes</div>
         <div class="trust-pill">open · evidence-first · free</div>
       </div>
-      <div id="home-leaderboard"></div>
-      <div id="home-pulse" class="reveal"></div>
-    </section>
-
-    <section class="pro-strip reveal">
-      <div class="ps-copy"><span class="p-tag">For professionals</span>
-        <h2>Contribute your expertise. Get featured. Get local leads.</h2>
-        <p>Physio · chiro · dietitian · nutritionist · pharmacist · researcher — no one owns a protocol, but the experts who keep each one accurate get featured on it, with a link to their profile and booking.</p></div>
-      <a class="cta-ghost" href="#/pros">See how it works →</a>
     </section>
 
     <section class="browse-sec reveal">
@@ -2903,19 +2894,14 @@
       </div>
       <div class="proto-after">
         ${voteFoot(problem.id, rc.id, 'protocol')}
-        <div id="proto-contributors"></div>
-        <div id="community-forks"></div>
-        <div id="rc-governance"></div>
         ${pfaq}
         <div id="goal-comments" class="page-discuss"></div>
         <p class="proto-foot muted">Educational protocol, not medical advice. Nutrient targets are general adult guidance with a stated reason. · <button class="linkbtn" id="cite-proto">Cite this protocol</button></p>
-        <div class="pro-footer"><span>Physio, dietitian, nutritionist or pharmacist?</span> <a href="#/pros">Improve this protocol &amp; get featured for local leads →</a></div>
       </div>`;
     mountFuelTracker(problem, rc);
     mountExperiment(problem, rc);
     if (clinicHandle) mountClinicHeader(clinicHandle, problem, rc);
     else mountSharedProgress(problem, rc);
-    mountContextPartners(problem, rc); // steward + partners, placed contextually by layer
     app.querySelectorAll('.journey-rail [data-scroll]').forEach(b => b.onclick = () => {
       const el = document.getElementById(b.dataset.scroll); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
@@ -2938,11 +2924,7 @@
     const citeBtn = document.getElementById('cite-proto');
     if (citeBtn) citeBtn.onclick = () => citeModal(`${problem.name} — ${rc.name.split('(')[0].trim()} protocol`, (location.origin || 'https://rnawiki.com') + '/protocol/' + problem.id + '/' + rc.id);
     mountVotes([`${problem.id}:${rc.id}:protocol`]);
-    app.querySelectorAll('[data-edit-sec]').forEach(b => b.onclick = () => openEditSection(problem.id, rc.id, b.dataset.editSec, () => renderProtocol(problem.id, rc.id, clinicHandle)));
     app.querySelectorAll('[data-share-sec]').forEach(b => b.onclick = () => shareSection(b.dataset.shareSec, problem, rc));
-    mountProtocolContributors(problem, rc);
-    mountForks(problem, rc);
-    mountRcGovernance(problem, rc);
     renderComments(`p:${problem.id}:${rc.id}`, problem.name);
     app.querySelectorAll('[data-add]').forEach(b => b.onclick = () => {
       toggleStack(b.dataset.add);
@@ -3922,6 +3904,7 @@
     else if (parts[0] === 'legend') html = legendPage();
     else if (parts[0] === 'for-clinicians') html = forClinicians();
     else if (parts[0] === 'about') { history.replaceState(null, '', '/'); parts.length = 0; html = home(); }
+    else if (['pros', 'pro', 'stewardship', 'contributors', 'for-clinicians', 'clinic', 'u'].indexOf(parts[0]) >= 0) { history.replaceState(null, '', '/'); parts.length = 0; html = home(); } // retired expert/community system → home
     else if (parts[0] === 'solve') html = solvePage();
     else if (parts[0] === 'stewardship') html = stewardHubLoading();
     else if (parts[0] === 'pro') html = proLoading();
@@ -3929,7 +3912,7 @@
     else if (parts[0] === 'u' && parts[1]) html = profileLoading(parts[1]);
     else if (parts[0] === 'contributors') html = contribLoading();
     else if (parts[0] === 'admin') html = adminLoading();
-    else if (parts[0] === 'protocol') { html = parts[3] === 'stewardship' ? stewardLoading() : protocolLoading(); }
+    else if (parts[0] === 'protocol') html = protocolLoading();
     else if (parts[0] === 'clinic' && parts[3]) html = protocolLoading();
     else html = notFound();
     app.innerHTML = html; window.scrollTo(0, 0);
@@ -3948,7 +3931,7 @@
     if (parts[0] === 'u' && parts[1]) renderProfile(parts[1]);
     if (parts[0] === 'contributors') renderContributors();
     if (parts[0] === 'admin') renderAdmin();
-    if (parts[0] === 'protocol') { if (parts[3] === 'stewardship') renderStewardship(parts[1], parts[2]); else renderProtocol(parts[1], parts[2]); }
+    if (parts[0] === 'protocol') renderProtocol(parts[1], parts[2]);
     if (parts[0] === 'clinic' && parts[3]) renderProtocol(parts[2], parts[3], parts[1]);
     // community discussion on compound + pathway pages
     if (parts[0] === 'c' && bySlug[parts[1]]) renderComments('c:' + bySlug[parts[1]].id, bySlug[parts[1]].name);
