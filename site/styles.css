@@ -1559,3 +1559,35 @@ a.dp-name:hover{color:var(--accent)}
 .lq-item[open] summary::before{content:"▾"}
 .lq-n{font-size:.72rem;font-weight:800;color:var(--accent);background:#e6f5f1;border-radius:6px;padding:.05rem .35rem}
 .lq-a{margin:.5rem 0 .2rem 1.1rem;padding:.55rem .8rem;background:var(--bg);border-radius:8px;font-size:.9rem;line-height:1.5;color:var(--ink)}
+
+/* ---- Fix: day-plan columns stretching to equal height (massive whitespace) ---- */
+.dp-blocks{align-items:start}
+.proto-grid{align-items:start}
+
+/* ---- Protocol page "what's inside" teaser (details now live in the builder) ---- */
+.proto-inside{background:#f6faf9;border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem;margin:1rem 0}
+.proto-inside .pi-k{font-size:.72rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+.proto-inside p{margin:.25rem 0 0;font-size:.92rem;color:var(--ink)}
+
+/* ---- My Plan builder wizard ---- */
+.build-steps{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;margin:.2rem 0 1rem}
+.bstep{font-size:.8rem;font-weight:700;color:var(--faint);padding:.25rem .6rem;border-radius:999px;background:#fff;border:1px solid var(--line)}
+.bstep.on{color:#fff;background:var(--accent);border-color:var(--accent)}
+.bstep.done{color:var(--accent);border-color:#b4e2c9;background:#f2fbf5}
+.bsep{color:var(--faint);font-weight:800;font-size:.8rem}
+.build-list{margin:.4rem 0}
+.build-item{display:flex;align-items:flex-start;gap:.7rem;padding:.5rem;border:1px solid transparent;border-radius:12px;margin:.35rem 0;transition:.12s}
+.build-item.sel{background:#f2fbf5;border-color:#cdeadd}
+.build-item .build-cb{margin-top:.9rem;width:1.25rem;height:1.25rem;flex:0 0 auto;accent-color:var(--accent);cursor:pointer}
+.build-item .ex-card,.build-item .st-card{flex:1;min-width:0;margin:0}
+.build-nav{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin:1.2rem 0 .5rem;position:sticky;bottom:.6rem;background:var(--bg);padding:.5rem 0}
+.build-count{font-size:.85rem;color:var(--muted)}
+.plan-tg{margin:.8rem 0}
+.plan-tg .tg-coach{background:#229ED9;color:#fff;border:none;border-radius:999px;padding:.5rem .95rem;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit}
+.plan-tg .tg-coach:hover{background:#1b8ec4}
+.plan-built-banner{background:linear-gradient(135deg,#f2fbf5,#eafaf1);border:1px solid #b4e2c9;border-radius:12px;padding:.7rem 1rem;margin:0 0 1rem;font-size:.95rem}
+
+/* ---- Tighten stack-card badges (were bulky / clashing) ---- */
+.st-card{padding:.85rem 1rem}
+.st-meta{gap:.35rem;align-items:center}
+.pill.rx{background:rgba(220,38,38,.1);color:var(--red);border:1px solid rgba(220,38,38,.25)}

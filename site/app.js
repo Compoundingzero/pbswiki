@@ -2751,6 +2751,34 @@
         <a class="cta-primary" href="#/solve">Find my root cause →</a>
       </section>`;
   }
+  // The Telegram-coach CTA appears at every stage of building + tracking.
+  function tgCoachRow(problem, rc) {
+    return `<div class="plan-tg"><button class="tg-coach" data-tg-pid="${problem.id}" data-tg-rc="${rc.id}">📲 Coach me on Telegram — daily nudges for this</button></div>`;
+  }
+  function wireTgCoach() {
+    app.querySelectorAll('.tg-coach').forEach(b => b.onclick = async () => {
+      const orig = b.textContent; b.disabled = true; b.textContent = 'Opening Telegram…';
+      try {
+        const r = await fetch('/api/telegram/link?pid=' + encodeURIComponent(b.dataset.tgPid) + '&rcid=' + encodeURIComponent(b.dataset.tgRc));
+        const j = await r.json().catch(() => ({}));
+        if (j && j.url) { window.open(j.url, '_blank'); b.textContent = '✓ Opened in Telegram'; }
+        else { b.textContent = '📲 Telegram coach — coming soon'; }
+      } catch (e) { b.textContent = orig; b.disabled = false; }
+    });
+  }
+  function keystoneCardHtml(rc, dayLog, streak) {
+    if (!rc.keystone) return '';
+    return `<div class="keystone-card"><div class="ks-badge">⭐ Your one keystone</div><p class="ks-one">${esc(rc.keystone.one)}</p>
+      <div class="plan-streak"><button class="ks-done-btn ${dayLog.keystone ? 'done' : ''}" id="ks-done">${dayLog.keystone ? '✅ Done today' : 'Mark done today'}</button><span class="streak-badge">🔥 <b>${streak}</b>-day streak</span></div></div>`;
+  }
+  function buildSteps(P) {
+    const s = [];
+    if ((P.strengthen || []).length) s.push({ title: 'Movements', icon: '💪', kind: 'move', items: P.strengthen });
+    if ((P.stretch || []).length) s.push({ title: 'Stretches', icon: '🧘', kind: 'move', items: P.stretch });
+    if ((P.stack || []).length) s.push({ title: 'Supplements', icon: '💊', kind: 'supp', items: P.stack });
+    return s;
+  }
+
   async function renderPlan() {
     try { await ensureProtocolData(); } catch (e) { app.innerHTML = emptyPlan(); return; }
     const plan = getPlan();
@@ -2759,54 +2787,99 @@
     if (!found) { app.innerHTML = emptyPlan(); return; }
     const { problem, rc } = found;
     const P = generateProtocol(rc);
+    if (plan.built) return renderPlanTracking(plan, problem, rc, P);
+    return renderPlanBuilder(plan, problem, rc, P);
+  }
+
+  // ---- Builder: browse → learn → select each category, then confirm ----
+  function renderPlanBuilder(plan, problem, rc, P) {
+    const steps = buildSteps(P);
+    const allMoves = [...(P.strengthen || []), ...(P.stretch || [])].map(e => e.id);
     const allSupp = (P.stack || []).map(c => c.id);
-    const suppSel = plan.supps === 'none' ? [] : (Array.isArray(plan.supps) ? plan.supps : allSupp);
-    const selStack = (P.stack || []).filter(c => suppSel.includes(c.id));
-    const dk = today();
-    const dayLog = (plan.log || {})[dk] || { done: [], keystone: false };
-    const streak = planStreak(plan);
-    const moves = [...(P.strengthen || []), ...(P.stretch || [])];
+    if (!steps.length) { const pl = getPlan(); pl.built = true; setPlan(pl); return renderPlan(); }
+    const si = Math.max(0, Math.min(plan.step || 0, steps.length - 1));
+    const step = steps[si]; const isLast = si === steps.length - 1;
+    const selMoves = () => Array.isArray(getPlan().moves) ? getPlan().moves : allMoves;
+    const selSupps = () => { const s = getPlan().supps; return s === 'none' ? [] : (Array.isArray(s) ? s : allSupp); };
+    const mSel = selMoves(), sSel = selSupps();
+    const items = step.items.map(it => {
+      if (step.kind === 'move') { const on = mSel.includes(it.id); return `<div class="build-item ${on ? 'sel' : ''}"><input type="checkbox" class="build-cb" data-move="${esc(it.id)}" ${on ? 'checked' : ''} aria-label="Include ${esc(it.name)}">${exerciseCard(it)}</div>`; }
+      const on = sSel.includes(it.id); return `<div class="build-item ${on ? 'sel' : ''}"><input type="checkbox" class="build-cb" data-supp="${it.id}" ${on ? 'checked' : ''} aria-label="Include ${esc(it.name)}">${stackCard(it)}</div>`;
+    }).join('');
+    const chips = steps.map((s, i) => `<span class="bstep ${i === si ? 'on' : i < si ? 'done' : ''}">${s.icon} ${s.title}</span>`).join('<span class="bsep">›</span>') + '<span class="bsep">›</span><span class="bstep">🍽️ Fuel</span>';
+    const count = step.kind === 'move' ? step.items.filter(it => mSel.includes(it.id)).length : step.items.filter(it => sSel.includes(it.id)).length;
+    const foodOnly = step.kind === 'supp' ? `<button class="chip food-only ${plan.supps === 'none' ? 'on' : ''}" id="food-only">🍚 ${plan.supps === 'none' ? '✓ ' : ''}I'll go food-only — no supplements</button>` : '';
+    const ixn = step.kind === 'supp' ? `<div id="build-ixn">${sSel.length > 1 ? interactionPanel((P.stack || []).filter(c => sSel.includes(c.id)), { tiers: ['danger', 'timing'] }) : ''}</div>` : '';
+    app.innerHTML = `${crumbs([{ label: 'Home', href: '#/' }, { label: 'Build my plan' }])}
+      <section class="plan-hd"><div><div class="kicker">Build your plan · ${esc(problem.name)}</div><h1>${step.icon} ${esc(step.title)}</h1>
+        <p class="muted">Browse each one, read what it does, and keep what you'll actually do — this becomes <b>your</b> protocol.</p></div></section>
+      <div class="build-steps">${chips}</div>
+      ${foodOnly}
+      <div class="build-list">${items}</div>
+      ${ixn}
+      <div class="build-nav">
+        ${si > 0 ? '<button class="cta-ghost" id="build-back">← Back</button>' : `<a class="cta-ghost" href="#/protocol/${problem.id}/${rc.id}">← Cancel</a>`}
+        <span class="build-count"><b>${count}</b> of ${step.items.length} kept</span>
+        <button class="cta-primary" id="build-next">${isLast ? '✓ Confirm — build my protocol' : 'Next: ' + steps[si + 1].title + ' →'}</button>
+      </div>
+      ${tgCoachRow(problem, rc)}`;
+    wireTgCoach();
+    const updCount = () => { const el = app.querySelector('.build-count'); if (!el) return; const n = step.kind === 'move' ? step.items.filter(it => selMoves().includes(it.id)).length : step.items.filter(it => selSupps().includes(it.id)).length; el.innerHTML = '<b>' + n + '</b> of ' + step.items.length + ' kept'; };
+    app.querySelectorAll('[data-move]').forEach(cb => cb.onchange = () => {
+      const pl = getPlan(); const cur = Array.isArray(pl.moves) ? pl.moves.slice() : allMoves.slice(); const id = cb.dataset.move;
+      const i = cur.indexOf(id); if (cb.checked && i < 0) cur.push(id); else if (!cb.checked && i >= 0) cur.splice(i, 1);
+      pl.moves = cur; setPlan(pl); cb.closest('.build-item').classList.toggle('sel', cb.checked); updCount();
+    });
+    app.querySelectorAll('[data-supp]').forEach(cb => cb.onchange = () => {
+      const pl = getPlan(); const cur = pl.supps === 'none' ? [] : (Array.isArray(pl.supps) ? pl.supps.slice() : allSupp.slice()); const id = cb.dataset.supp;
+      const i = cur.indexOf(id); if (cb.checked && i < 0) cur.push(id); else if (!cb.checked && i >= 0) cur.splice(i, 1);
+      pl.supps = cur; setPlan(pl); cb.closest('.build-item').classList.toggle('sel', cb.checked);
+      const ix = document.getElementById('build-ixn'); if (ix) ix.innerHTML = cur.length > 1 ? interactionPanel((P.stack || []).filter(c => cur.includes(c.id)), { tiers: ['danger', 'timing'] }) : '';
+      updCount();
+    });
+    const fo = document.getElementById('food-only'); if (fo) fo.onclick = () => { const pl = getPlan(); pl.supps = pl.supps === 'none' ? allSupp.slice() : 'none'; setPlan(pl); renderPlan(); };
+    const back = document.getElementById('build-back'); if (back) back.onclick = () => { const pl = getPlan(); pl.step = Math.max(0, (pl.step || 0) - 1); setPlan(pl); renderPlan(); };
+    const next = document.getElementById('build-next'); if (next) next.onclick = () => { const pl = getPlan(); if (isLast) { pl.built = true; setPlan(pl); if (typeof toast === 'function') toast('🎉 Your protocol is built!'); } else { pl.step = (pl.step || 0) + 1; setPlan(pl); } renderPlan(); };
+  }
+
+  // ---- Tracking: the finalised protocol — selected items + Fuel (revealed here only) ----
+  function renderPlanTracking(plan, problem, rc, P) {
+    const allSupp = (P.stack || []).map(c => c.id);
+    const sSel = plan.supps === 'none' ? [] : (Array.isArray(plan.supps) ? plan.supps : allSupp);
+    const selStack = (P.stack || []).filter(c => sSel.includes(c.id));
+    const allMovesArr = [...(P.strengthen || []), ...(P.stretch || [])];
+    const mSelIds = Array.isArray(plan.moves) ? plan.moves : allMovesArr.map(e => e.id);
+    const selMovesArr = allMovesArr.filter(e => mSelIds.includes(e.id));
+    const dk = today(); const dayLog = (plan.log || {})[dk] || { done: [], keystone: false }; const streak = planStreak(plan);
+    const selP = { strengthen: (P.strengthen || []).filter(e => mSelIds.includes(e.id)), stretch: (P.stretch || []).filter(e => mSelIds.includes(e.id)), stack: selStack, fuel: P.fuel };
     app.innerHTML = `${crumbs([{ label: 'Home', href: '#/' }, { label: 'My Plan' }])}
-      <section class="plan-hd">
-        <div><div class="kicker">My Plan · ${esc(problem.category)}</div><h1>${problem.icon || ''} ${esc(problem.name)}</h1><p class="muted">${esc(rc.name)}</p></div>
-        <div class="plan-hd-actions"><a class="cta-ghost" href="#/protocol/${problem.id}/${rc.id}">Full protocol →</a><a class="cta-ghost" href="#/solve">Switch plan</a></div>
-      </section>
-      ${rc.keystone ? `<div class="keystone-card">
-        <div class="ks-badge">⭐ Your one keystone</div>
-        <p class="ks-one">${esc(rc.keystone.one)}</p>
-        <div class="plan-streak"><button class="ks-done-btn ${dayLog.keystone ? 'done' : ''}" id="ks-done">${dayLog.keystone ? '✅ Done today' : 'Mark done today'}</button><span class="streak-badge">🔥 <b id="streak-n">${streak}</b>-day streak</span></div>
-      </div>` : ''}
-      ${dayPlanHtml(problem, rc, P)}
+      <div class="plan-built-banner">🎉 <b>You built your own protocol.</b> <button class="linkbtn" id="plan-share">Share it →</button> · <button class="linkbtn" id="plan-edit">Edit my selections</button></div>
+      <section class="plan-hd"><div><div class="kicker">My Plan · ${esc(problem.category)}</div><h1>${problem.icon || ''} ${esc(problem.name)}</h1><p class="muted">${esc(rc.name)}</p></div>
+        <div class="plan-hd-actions"><a class="cta-ghost" href="#/protocol/${problem.id}/${rc.id}">Full protocol →</a></div></section>
+      ${keystoneCardHtml(rc, dayLog, streak)}
+      ${dayPlanHtml(problem, rc, selP)}
       <div class="proto-grid">
         <section class="layer move" id="p-move"><div class="lyr-head"><h2><span class="lyr-dot mv"></span>Move</h2></div>
           <p class="lyr-sub">Tick each as you do it today.</p>
-          ${moves.length ? moves.map(e => `<div class="plan-item"><input type="checkbox" class="plan-cb" data-done="${esc(e.id)}" ${dayLog.done.includes(e.id) ? 'checked' : ''} aria-label="Mark done">${exerciseCard(e)}</div>`).join('') : '<p class="muted">Movement isn’t the main lever for this one — the Fuel and Stack do the work.</p>'}
+          ${selMovesArr.length ? selMovesArr.map(e => `<div class="plan-item"><input type="checkbox" class="plan-cb" data-done="${esc(e.id)}" ${dayLog.done.includes(e.id) ? 'checked' : ''} aria-label="Mark done">${exerciseCard(e)}</div>`).join('') : '<p class="muted">No movements in your plan — Fuel and Stack do the work.</p>'}
         </section>
         <section class="layer stack" id="p-stack"><div class="lyr-head"><h2><span class="lyr-dot st"></span>Stack</h2></div>
-          <p class="lyr-sub">Pick what you'll take — or go food-only.</p>
-          <button class="chip food-only ${plan.supps === 'none' ? 'on' : ''}" id="food-only">🍚 ${plan.supps === 'none' ? '✓ ' : ''}Food only — no supplements</button>
-          ${(P.stack || []).length ? `<div class="plan-supps">${(P.stack || []).map(c => `<div class="plan-item"><input type="checkbox" class="plan-cb" data-supp="${c.id}" ${suppSel.includes(c.id) ? 'checked' : ''} aria-label="Include ${esc(c.name)}">${stackCard(c)}</div>`).join('')}</div>` : '<p class="muted">No supplements mapped — food does the work here.</p>'}
+          ${selStack.length ? selStack.map(stackCard).join('') : '<p class="muted">Food-only — no supplements in your plan.</p>'}
           <div id="plan-ixn">${selStack.length > 1 ? interactionPanel(selStack, { tiers: ['danger', 'timing'] }) : ''}</div>
         </section>
         <section class="layer fuel" id="p-fuel"><div class="lyr-head"><h2><span class="lyr-dot fl"></span>Fuel</h2></div>
           <p class="lyr-sub">Log meals to fill this protocol's targets.</p>
           <div id="fuel-tracker" data-rc="${problem.id}:${rc.id}"></div>
         </section>
-      </div>`;
+      </div>
+      ${tgCoachRow(problem, rc)}`;
     mountFuelTracker(problem, rc);
+    wireTgCoach();
     const ks = document.getElementById('ks-done');
     if (ks) ks.onclick = () => { const pl = getPlan(); const d = planDay(pl); d.keystone = !d.keystone; pl.streak = planStreak(pl); setPlan(pl); renderPlan(); };
-    app.querySelectorAll('[data-done]').forEach(cb => cb.onchange = () => {
-      const pl = getPlan(); const d = planDay(pl); const id = cb.dataset.done;
-      const i = d.done.indexOf(id); if (cb.checked && i < 0) d.done.push(id); else if (!cb.checked && i >= 0) d.done.splice(i, 1); setPlan(pl);
-    });
-    app.querySelectorAll('[data-supp]').forEach(cb => cb.onchange = () => {
-      const pl = getPlan(); const cur = pl.supps === 'none' ? [] : (Array.isArray(pl.supps) ? pl.supps.slice() : allSupp.slice());
-      const id = cb.dataset.supp; const i = cur.indexOf(id); if (cb.checked && i < 0) cur.push(id); else if (!cb.checked && i >= 0) cur.splice(i, 1);
-      pl.supps = cur; setPlan(pl); renderPlan();
-    });
-    const fo = document.getElementById('food-only');
-    if (fo) fo.onclick = () => { const pl = getPlan(); pl.supps = pl.supps === 'none' ? allSupp.slice() : 'none'; setPlan(pl); renderPlan(); };
+    app.querySelectorAll('[data-done]').forEach(cb => cb.onchange = () => { const pl = getPlan(); const d = planDay(pl); const id = cb.dataset.done; const i = d.done.indexOf(id); if (cb.checked && i < 0) d.done.push(id); else if (!cb.checked && i >= 0) d.done.splice(i, 1); setPlan(pl); });
+    const ed = document.getElementById('plan-edit'); if (ed) ed.onclick = () => { const pl = getPlan(); pl.built = false; pl.step = 0; setPlan(pl); renderPlan(); };
+    const sh = document.getElementById('plan-share'); if (sh) sh.onclick = () => { const url = (location.origin || 'https://rnawiki.com') + '/protocol/' + problem.id + '/' + rc.id; const txt = 'I built my own ' + problem.name + ' protocol on RNAwiki 💪'; if (navigator.share) navigator.share({ title: 'RNAwiki', text: txt, url }).catch(() => {}); else { navigator.clipboard && navigator.clipboard.writeText(txt + ' ' + url); if (typeof toast === 'function') toast('Copied — share it anywhere 🔗'); } };
   }
 
   async function renderProtocol(pid, rcid, clinicHandle) {
@@ -2864,59 +2937,28 @@
           <div class="ps-cell"><span class="ps-k">This protocol</span><b>${moveN ? moveN + ' move' + (moveN !== 1 ? 's' : '') + ' · ' : ''}${P.stack.length} supplement${P.stack.length !== 1 ? 's' : ''}${ntN ? ' · ' + ntN + ' food target' + (ntN !== 1 ? 's' : '') : ''}</b></div>
         </div>`;
       })()}
-      ${journeyRail}
-      <div class="start-plan-row"><button class="cta-primary start-plan" id="start-plan">▶ Start this plan</button><span class="start-plan-note">Pick your movements &amp; supplements and track it daily on <b>My Plan</b>.</span></div>
+      <div class="start-plan-row"><button class="cta-primary start-plan" id="start-plan">▶ Start building my plan</button><span class="start-plan-note">Browse the movements &amp; supplements, keep what fits you, then track it daily on <b>My Plan</b>.</span></div>
       ${rcSwitch}
       ${rc.keystone ? `<div class="keystone-card">
         <div class="ks-badge">⭐ Your one keystone</div>
         <p class="ks-one">${esc(rc.keystone.one)}</p>
         <p class="ks-why">${esc(rc.keystone.why)}</p>
-        <p class="ks-note">The highest-impact, lowest-effort habit for this. Nail this one thing and the rest compounds — the full plan is below.</p>
+        <p class="ks-note">The highest-impact, lowest-effort habit for this. Nail this one thing and the rest compounds.</p>
         <button class="tg-coach" data-tg-pid="${problem.id}" data-tg-rc="${rc.id}">📲 Coach me on Telegram — a daily nudge for this</button>
       </div>` : ''}
-      ${dayPlanHtml(problem, rc, P)}
-      <div class="proto-grid">
-        <section class="layer move" id="p-move"><div class="lyr-head"><h2><span class="lyr-dot mv"></span>Move</h2><div class="lyr-tools"><span class="sec-trust" id="trust-move"></span><button class="sec-share" data-share-sec="move" title="Share this section">🔗</button>${PHASE2 ? '<button class="sec-edit" data-edit-sec="move" title="Suggest an edit">✎ Edit</button>' : ''}</div></div>
-          <p class="lyr-sub">Strengthen the weak link; stretch the tight tissue.</p>
-          ${rc.prescription ? `<div class="rx"><b>${esc(rc.prescription.scheme)}:</b> ${esc(rc.prescription.detail)}</div>` : ''}
-          ${P.strengthen.length ? `<div class="move-sub"><h3 class="move-h strengthen">💪 Strengthen</h3>
-            ${P.strengthen.map(e => exerciseCard(e)).join('')}</div>` : ''}
-          ${P.stretch.length ? `<div class="move-sub"><h3 class="move-h stretch">🧘 Stretch / mobilise</h3>
-            ${P.stretch.map(e => exerciseCard(e)).join('')}</div>` : ''}
-          ${(!P.strengthen.length && !P.stretch.length) ? '<p class="muted">Movement isn’t the main lever for this one — the <b class="fl">Fuel</b> and <b class="st">Stack</b> below do the heavy lifting. General activity still helps.</p>' : ''}
-          ${moveScienceStrip(P)}
-          <div id="move-context" class="ctx-slot"></div>
-        </section>
-        <section class="layer stack" id="p-stack"><div class="lyr-head"><h2><span class="lyr-dot st"></span>Stack</h2><div class="lyr-tools"><span class="sec-trust" id="trust-stack"></span><button class="sec-share" data-share-sec="stack" title="Share this section">🔗</button>${PHASE2 ? '<button class="sec-edit" data-edit-sec="stack" title="Suggest an edit">✎ Edit</button>' : ''}</div></div>
-          <p class="lyr-sub">Evidence-ranked compounds. ★ = strength of human evidence.</p>
-          ${P.stack.length ? P.stack.map(stackCard).join('') : '<p class="muted">No compounds mapped.</p>'}
-          ${(() => { if ((P.stack || []).length < 2) return ''; const r = stackInteractions(P.stack); const relevant = r.flags.filter(f => f.tier === 'danger' || f.tier === 'timing'); return (relevant.length || r.synergies.length) ? `<div class="proto-ixn"><div class="proto-ixn-h">If you take these together</div>${interactionPanel(P.stack, { tiers: ['danger', 'timing'] })}</div>` : ''; })()}
-          <div id="stack-context" class="ctx-slot"></div>
-          <a class="proto-more" href="#/stack">Open Stack Builder →</a>
-        </section>
-        <section class="layer fuel" id="p-fuel"><div class="lyr-head"><h2><span class="lyr-dot fl"></span>Fuel</h2><div class="lyr-tools"><span class="sec-trust" id="trust-fuel"></span><button class="sec-share" data-share-sec="fuel" title="Share this section">🔗</button>${PHASE2 ? '<button class="sec-edit" data-edit-sec="fuel" title="Suggest an edit">✎ Edit</button>' : ''}</div></div>
-          <p class="lyr-sub">Just this protocol’s targets — log a food to fill the bars.</p>
-          <div id="fuel-tracker" data-rc="${problem.id}:${rc.id}"></div>
-          ${fuelScienceStrip(problem, rc)}
-          <div id="fuel-context" class="ctx-slot"></div>
-        </section>
-      </div>
+      <div class="proto-inside"><span class="pi-k">What's inside</span><p>This protocol has ${(P.strengthen || []).length + (P.stretch || []).length} movement${(P.strengthen || []).length + (P.stretch || []).length !== 1 ? 's' : ''} and ${P.stack.length} evidence-ranked supplement${P.stack.length !== 1 ? 's' : ''}. Tap <b>Start building my plan</b> to browse each one, learn what it does, and keep only what fits you — then you'll get your food tracker.</p></div>
       <div class="proto-after">
         ${voteFoot(problem.id, rc.id, 'protocol')}
         ${pfaq}
         <div id="goal-comments" class="page-discuss"></div>
         <p class="proto-foot muted">Educational protocol, not medical advice. Nutrient targets are general adult guidance with a stated reason. · <button class="linkbtn" id="cite-proto">Cite this protocol</button></p>
       </div>`;
-    mountFuelTracker(problem, rc);
     mountExperiment(problem, rc);
     if (clinicHandle) mountClinicHeader(clinicHandle, problem, rc);
     else mountSharedProgress(problem, rc);
-    app.querySelectorAll('.journey-rail [data-scroll]').forEach(b => b.onclick = () => {
-      const el = document.getElementById(b.dataset.scroll); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
     const startBtn = document.getElementById('start-plan');
     if (startBtn) startBtn.onclick = () => {
-      const pl = { pid: problem.id, rcid: rc.id, supps: (P.stack || []).map(c => c.id), startedAt: today(), log: {} };
+      const pl = { pid: problem.id, rcid: rc.id, built: false, step: 0, moves: [...(P.strengthen || []), ...(P.stretch || [])].map(e => e.id), supps: (P.stack || []).map(c => c.id), startedAt: today(), log: {} };
       setPlan(pl); navigate('/plan');
     };
     app.querySelectorAll('.tg-coach').forEach(b => b.onclick = async () => {
