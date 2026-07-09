@@ -468,9 +468,15 @@ function foundationsDiagram(i) {
   const d = D[i]; if (!d) return '';
   return `<figure class="learn-fig pd-fig"><svg viewBox="0 0 ${d[0]}" role="img" aria-label="${esc(d[1])}"><defs><marker id="fd-a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="${C.line}"/></marker></defs>${d[2]}</svg><figcaption class="fig-credit">${esc(d[1])}</figcaption></figure>`;
 }
+const learnScaffold = (m) => {
+  if (!m.learn) return '';
+  const t = (m.learn.takeaways || []).length ? `<div class="learn-takeaways"><div class="lt-h">✅ Key takeaways</div><ul>${m.learn.takeaways.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : '';
+  const q = (m.learn.quiz || []).length ? `<div class="learn-quiz"><div class="lq-h">🧠 Check yourself</div>${m.learn.quiz.map((x, qi) => `<details class="lq-item"><summary><span class="lq-n">Q${qi + 1}</span> ${esc(x.q)}</summary><div class="lq-a">${esc(x.a)}</div></details>`).join('')}</div>` : '';
+  return t + q;
+};
 D.modules.forEach((m, i) => {
   const route = '/learn/' + i;
-  add(route, shell({ route, title: `${m.title.replace(/^MODULE\s*\d+\s*[—-]\s*/i, '')} · RNAwiki Foundations`, desc: `Foundations: ${m.title}`, breadcrumbs: [{ name: 'Home', route: '/' }, { name: 'Foundations', route: '/learn' }], body: `<div class="article">${foundationsDiagram(i)}${m.html || ''}</div>` }));
+  add(route, shell({ route, title: `${m.title.replace(/^MODULE\s*\d+\s*[—-]\s*/i, '')} · RNAwiki Foundations`, desc: `Foundations: ${m.title}`, breadcrumbs: [{ name: 'Home', route: '/' }, { name: 'Foundations', route: '/learn' }], body: `<div class="article">${foundationsDiagram(i)}${m.html || ''}${learnScaffold(m)}</div>` }));
 });
 
 // ---- anatomy & physiology: crawlable muscle / energy-system / metabolism pages ----

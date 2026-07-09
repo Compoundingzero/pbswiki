@@ -1,4 +1,4 @@
-# doswiki — Foundations
+# RNAwiki — Foundations
 
 **The curriculum spine. This is what turns the compendium from a reference into a path to expertise.**
 
@@ -43,6 +43,10 @@ When a ligand hits a GPCR, the receptor activates a **second messenger** (often 
 - **Hormones** travel in blood to distant targets (testosterone, insulin, thyroid, GLP-1). Slow, body-wide.
 - **Neurotransmitters** cross the tiny gap between two nerve cells (dopamine, serotonin, GABA, acetylcholine, glutamate). Fast, local. Most "focus/mood/sleep" compounds tune one of these five.
 
+```learn
+{"takeaways":["Fat-soluble molecules cross the cell membrane freely; water-soluble ones need a receptor or transporter — this is why some compounds are pills and others injections.","The central dogma is DNA → (transcription) → mRNA → (translation) → protein; 'upregulate gene X' means the cell makes more of protein X.","Almost every compound acts on one of four protein targets: receptors, enzymes, transporters, or ion channels.","A ligand hitting a GPCR triggers a second messenger (cAMP) → kinases → a phosphorylation cascade that amplifies a tiny signal into a big effect."],"quiz":[{"q":"A compound is fat-soluble. Does it need a receptor to get into a cell?","a":"No — fat-soluble molecules pass straight through the lipid-bilayer membrane. That's why they can often be pills, while water-soluble ones need a transporter or an injection."},{"q":"An entry says a compound 'upregulates' a gene. What is physically happening?","a":"The cell transcribes more of that gene into mRNA, so it builds more of the protein. (Central dogma: DNA → RNA → protein.)"},{"q":"Name the four protein-target types almost every drug acts on.","a":"Receptors (GPCR or nuclear), enzymes, transporters, and ion channels."}]}
+```
+
 ---
 
 # MODULE 2 — Pharmacokinetics: what the body does to the drug
@@ -60,6 +64,10 @@ Pharmacokinetics (PK) is the journey of a compound through your body — summari
 - **Half-life** — the time for blood levels to halve. Caffeine's ~5–6 h half-life is why an afternoon coffee wrecks sleep; modafinil's 12–15 h is why it must be taken on waking. Half-life sets dosing frequency and timing.
 - **Steady state** — with repeated dosing, levels plateau after ~5 half-lives. Why beta-alanine "loads" over weeks and creatine saturates in days.
 
+```learn
+{"takeaways":["Pharmacokinetics is the ADME journey: Absorption, Distribution, Metabolism, Excretion.","Bioavailability = the fraction that reaches your blood; first-pass liver metabolism destroys much of an oral dose (why citrulline beats arginine).","Half-life sets dosing timing — caffeine's 5–6 h is why an afternoon coffee wrecks sleep; levels reach steady state after ~5 half-lives.","Most drug interactions come from CYP450 liver enzymes: one compound speeding up or blocking a CYP changes another's blood levels."],"quiz":[{"q":"Why is oral arginine weak but citrulline effective for the same 'pump' goal?","a":"Arginine is largely destroyed first-pass in the liver (low bioavailability). Citrulline converts to arginine AFTER the liver, so more reaches the blood."},{"q":"Caffeine's half-life is ~5–6 h. What does that predict about a 4pm coffee?","a":"Roughly half is still circulating at 9–10pm, disrupting sleep. Half-life sets timing."},{"q":"What does ADME stand for?","a":"Absorption, Distribution, Metabolism, Excretion — the compound's journey through the body."}]}
+```
+
 ---
 
 # MODULE 3 — Pharmacodynamics: what the drug does to the body
@@ -74,6 +82,10 @@ Pharmacodynamics (PD) is how a compound produces its effect once it reaches the 
 - **Dose-response** — more dose = more effect, up to a ceiling (or a toxicity cliff, as with DNP where the effective and lethal doses nearly overlap — the **therapeutic index**, the safety gap between "works" and "harms").
 - **Allosteric modulation** — binding a site *other* than the main one to tune the receptor up or down (L-theanine and the racetams do this).
 - **Tolerance / downregulation** — with constant stimulation, the cell removes receptors, so you need more for the same effect (caffeine, nicotine, phenibut). This is why cycling matters.
+
+```learn
+{"takeaways":["An agonist activates a receptor; an antagonist blocks it; partial/inverse agonists activate weakly or below baseline.","Affinity (how tightly it binds) ≠ efficacy (how big an effect) — SARMs bind the androgen receptor with tissue-selective efficacy.","Dose-response has a ceiling, and sometimes a toxicity cliff; the therapeutic index is the safety gap between effective and toxic dose (razor-thin for DNP).","Constant stimulation causes tolerance (receptor downregulation) — which is why stimulants need cycling."],"quiz":[{"q":"What's the difference between an agonist and an antagonist?","a":"An agonist activates a receptor (mimics the natural signal, e.g. semaglutide on GLP-1); an antagonist occupies it without activating, blocking the natural signal (e.g. caffeine on adenosine)."},{"q":"A drug binds its target very tightly but produces little effect. Which is high, which is low — affinity or efficacy?","a":"High affinity (tight binding), low efficacy (small effect). They're independent — the whole point of SARMs."},{"q":"Why do stimulants stop working as well over time?","a":"Tolerance: constant stimulation makes the cell remove receptors (downregulation), so you need more for the same effect. Hence cycling."}]}
+```
 
 ---
 
@@ -108,9 +120,13 @@ This is the module that makes you "better than a researcher who only knows their
 - **WADA/USADA:** the sport-doping banned lists — most SARMs, peptides, EPO, stimulants. Relevant if you compete.
 - **The 2026 peptide situation:** removal from FDA Category 2 (April 2026) ≠ approval; it only lifted a prohibition. Watch the July 2026 PCAC compounding decision. A literate reader holds "reclassified" and "approved" as different states.
 
+```learn
+{"takeaways":["Evidence hierarchy, weakest → strongest: in vitro → animal → observational → RCT → meta-analysis. This site caps animal-only compounds at ⭐⭐.","'Statistically significant' (p<0.05) ≠ meaningful — always ask for the effect SIZE too.","Relative risk ('cuts risk 50%') can hide a trivial absolute change (2%→1%); think in absolute terms.","'Approved', 'reclassified', 'off-label', and 'supplement' (sold as food, untested for efficacy) are different states — hold them apart."],"quiz":[{"q":"Rank by strength of evidence: a mouse study, a testimonial, a meta-analysis, an RCT.","a":"Meta-analysis > RCT > mouse study > testimonial."},{"q":"A label says a supplement 'cuts your risk by 50%'. Why might that mislead?","a":"It's a RELATIVE figure — 50% off a tiny baseline (say 2% → 1%) is a trivial absolute change. Always ask for the absolute effect."},{"q":"Why does this site cap animal-only compounds at two stars?","a":"Most animal findings don't translate to humans — animal data shows something works in a living body, not that it works in a person."}]}
+```
+
 ---
 
-# MODULE 5 — How to read a doswiki entry (and the core glossary)
+# MODULE 5 — How to read an RNAwiki entry (and the core glossary)
 
 Every entry has: **approval badge** (legal status) · **evidence stars** (human-evidence strength) · **technical mechanism** (the gene/receptor pathway) · **molecular target** (official links: [NCBI Gene] for the gene, [PubChem] for the molecule, [Mol\*/PDB] for the 3D structure) · **plain English** · **protocol/watch-out/bottom-line**.
 
@@ -146,5 +162,9 @@ Every entry has: **approval badge** (legal status) · **evidence stars** (human-
 - **Protein sequence & domains:** [UniProt](https://www.uniprot.org/) — the amino-acid chain and functional regions of any protein.
 - **Predicted structures:** [AlphaFold DB](https://alphafold.ebi.ac.uk/) — 3D predictions for proteins without experimental structures.
 - **Pathway maps:** [Reactome](https://reactome.org/) and [KEGG](https://www.genome.jp/kegg/) — the wiring diagrams for the Pathways module.
+
+```learn
+{"takeaways":["Every compound page carries: approval badge (legal status) · evidence stars (HUMAN-evidence strength) · technical mechanism (gene/receptor) · molecular target (official links) · plain English · protocol / watch-out / bottom-line.","The glossary is your key: agonist/antagonist, ligand, kinase/phosphorylation, transcription/translation, half-life, bioavailability, CYP450, therapeutic index, RCT/meta-analysis.","The visualization toolkit (PubChem, Mol*/RCSB PDB, UniProt, AlphaFold, Reactome/KEGG) lets you see the actual molecule, protein fold, and pathway — all free."],"quiz":[{"q":"On a compound page, what do the evidence stars measure — and what tag must an animal-only compound carry?","a":"The strength of HUMAN evidence. Animal-only data is capped at ⭐⭐ and must say 'animal'."},{"q":"Where would you go to see the real 3D fold of a receptor like the androgen receptor?","a":"Mol* at RCSB PDB (the Protein Data Bank's in-browser viewer). PubChem shows small-molecule structures; AlphaFold predicts proteins that lack an experimental structure."}]}
+```
 
 *Next: the Pathways module — the ~15 master cascades every compound plugs into.*

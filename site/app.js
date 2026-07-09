@@ -1097,11 +1097,20 @@
     const d = D[i]; if (!d) return '';
     return `<figure class="learn-fig pd-fig"><svg viewBox="0 0 ${d[0]}" role="img" aria-label="${esc(d[1])}"><defs><marker id="fd-a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="${C.line}"/></marker></defs>${d[2]}</svg><figcaption class="fig-credit">${esc(d[1])}</figcaption></figure>`;
   }
+  // "Learn & master" scaffold: a takeaways summary + an active-recall quiz (native <details> reveal).
+  // Content is authored in FOUNDATIONS.md ```learn blocks — no science invented here, just recall.
+  function learnScaffold(m) {
+    if (!m.learn) return '';
+    const l = m.learn;
+    const takeaways = (l.takeaways || []).length ? `<div class="learn-takeaways"><div class="lt-h">✅ Key takeaways</div><ul>${l.takeaways.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>` : '';
+    const quiz = (l.quiz || []).length ? `<div class="learn-quiz"><div class="lq-h">🧠 Check yourself</div><p class="lq-sub">Answer in your head first, then reveal — active recall is how it sticks.</p>${l.quiz.map((q, i) => `<details class="lq-item"><summary><span class="lq-n">Q${i + 1}</span> ${esc(q.q)}</summary><div class="lq-a">${esc(q.a)}</div></details>`).join('')}</div>` : '';
+    return takeaways + quiz;
+  }
   function learnModule(i) {
     i = +i; const m = D.modules[i]; if (!m) return notFound();
     const prev = i > 0 ? `<a href="#/learn/${i - 1}">← ${stripNum(D.modules[i - 1].title)}</a>` : `<a href="#/learn">← All modules</a>`;
     const next = i < D.modules.length - 1 ? `<a href="#/learn/${i + 1}">${stripNum(D.modules[i + 1].title)} →</a>` : `<a href="#/pathways">The 16 Pathways →</a>`;
-    return `<div class="article">${crumbs([{ label: 'Home', href: '#/' }, { label: 'Foundations', href: '#/learn' }, { label: 'Module ' + (i + 1) }])}${foundationsDiagram(i)}${m.html}<div class="prevnext">${prev}${next}</div></div>`;
+    return `<div class="article"><div class="learn-progress">Foundations · Module ${i + 1} of ${D.modules.length}</div>${crumbs([{ label: 'Home', href: '#/' }, { label: 'Foundations', href: '#/learn' }, { label: 'Module ' + (i + 1) }])}${foundationsDiagram(i)}${m.html}${learnScaffold(m)}<div class="prevnext">${prev}${next}</div></div>`;
   }
 
   function pathwaysIndex() {

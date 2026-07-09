@@ -1541,3 +1541,21 @@ a.dp-name:hover{color:var(--accent)}
 .plan-supps{margin:.3rem 0}
 .chip.food-only{cursor:pointer;border:1px solid var(--line);background:#fff;margin:.2rem 0 .6rem}
 .chip.food-only.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ---- Learn "learn & master" scaffold: takeaways + active-recall quiz ---- */
+.learn-progress{font-size:.75rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+.learn-takeaways{background:#f2fbf5;border:1px solid #b4e2c9;border-left:4px solid var(--accent);border-radius:12px;padding:.9rem 1.1rem;margin:1.6rem 0 1rem}
+.learn-takeaways .lt-h{font-size:.78rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:#0b6b5c;margin-bottom:.4rem}
+.learn-takeaways ul{margin:0;padding-left:1.1rem}
+.learn-takeaways li{margin:.3rem 0;font-size:.92rem;line-height:1.5}
+.learn-quiz{background:#fff;border:1px solid var(--line);border-radius:12px;padding:.9rem 1.1rem;margin:1rem 0;box-shadow:var(--shadow)}
+.learn-quiz .lq-h{font-size:1rem;font-weight:800;color:var(--ink)}
+.learn-quiz .lq-sub{font-size:.82rem;color:var(--muted);margin:.15rem 0 .6rem}
+.lq-item{border-top:1px solid var(--line);padding:.55rem 0}
+.lq-item:first-of-type{border-top:none}
+.lq-item summary{cursor:pointer;font-weight:600;font-size:.92rem;list-style:none;display:flex;gap:.5rem;align-items:baseline}
+.lq-item summary::-webkit-details-marker{display:none}
+.lq-item summary::before{content:"▸";color:var(--accent);font-size:.8rem}
+.lq-item[open] summary::before{content:"▾"}
+.lq-n{font-size:.72rem;font-weight:800;color:var(--accent);background:#e6f5f1;border-radius:6px;padding:.05rem .35rem}
+.lq-a{margin:.5rem 0 .2rem 1.1rem;padding:.55rem .8rem;background:var(--bg);border-radius:8px;font-size:.9rem;line-height:1.5;color:var(--ink)}
