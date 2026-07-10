@@ -341,11 +341,23 @@ async function sendEmail(to, subject, html) {
     return true;
   } catch (e) { console.error('[email]', e.message); return false; }
 }
+// Pure: given a plan + a done(pid,rcid,phase)->bool predicate, return the most-pressing due milestone or null.
+function computeDuePhase(plan, doneHas, today) {
+  const protos = (plan && Array.isArray(plan.protocols)) ? plan.protocols : [];
+  for (const pr of protos) {
+    if (!pr.pid || !pr.rcid || !pr.startedAt) continue;
+    const days = Math.floor((Date.parse(today + 'T00:00:00Z') - Date.parse(pr.startedAt + 'T00:00:00Z')) / 86400000);
+    if (!Number.isFinite(days)) continue;
+    if (days >= 90 && !doneHas(pr.pid, pr.rcid, 'd90')) return { pr, phase: 'd90', days };
+    if (days >= 30 && !doneHas(pr.pid, pr.rcid, 'd30')) return { pr, phase: 'd30', days };
+  }
+  return null;
+}
 // Which consented users have a milestone check-in due (d30/d90) — computed in 2 queries, then in JS.
 async function listDueCheckins() {
   if (!db.enabled) return [];
   const today = new Date().toISOString().slice(0, 10);
-  const users = (await db.query(`SELECT u.id, u.email, u.username, u.last_checkin_email, p.plan
+  const users = (await db.query(`SELECT u.id, u.email, u.username, u.last_checkin_email, u.email_nudge_hour, p.plan
     FROM users u JOIN user_consent c ON c.user_id=u.id AND c.consent_research
     JOIN user_plans p ON p.user_id=u.id WHERE u.email IS NOT NULL`)).rows;
   if (!users.length) return [];
@@ -353,16 +365,8 @@ async function listDueCheckins() {
   const doneKey = new Set(done.map(d => d.user_id + '|' + d.pid + '|' + d.rcid + '|' + d.phase));
   const out = [];
   for (const u of users) {
-    const protos = (u.plan && Array.isArray(u.plan.protocols)) ? u.plan.protocols : [];
-    for (const pr of protos) {
-      if (!pr.pid || !pr.rcid || !pr.startedAt) continue;
-      const days = Math.floor((Date.parse(today + 'T00:00:00Z') - Date.parse(pr.startedAt + 'T00:00:00Z')) / 86400000);
-      if (!Number.isFinite(days)) continue;
-      let phase = null;
-      if (days >= 90 && !doneKey.has(u.id + '|' + pr.pid + '|' + pr.rcid + '|d90')) phase = 'd90';
-      else if (days >= 30 && !doneKey.has(u.id + '|' + pr.pid + '|' + pr.rcid + '|d30')) phase = 'd30';
-      if (phase) { out.push({ user: u, pr, phase, days }); break; }   // one nudge per user
-    }
+    const due = computeDuePhase(u.plan, (pid, rcid, ph) => doneKey.has(u.id + '|' + pid + '|' + rcid + '|' + ph), today);
+    if (due) out.push({ user: u, pr: due.pr, phase: due.phase, days: due.days });
   }
   return out;
 }
@@ -379,7 +383,39 @@ async function sendCheckinEmail(d) {
   </div>`;
   return sendEmail(d.user.email, subject, html);
 }
-let EMAIL_TIMER = null;
+// ---- Daily reminder email — bundles EVERY nudge the user selected (keystone + tools), web parity of the TG daily nudge ----
+// Reads the saved plan: keystone(s) from TG_PROTO + each selected tool from TG_FUNCTIONS. Returns [] if nothing to remind.
+function buildReminderLines(plan) {
+  const protos = (plan && Array.isArray(plan.protocols)) ? plan.protocols : [];
+  const lines = [], seen = new Set();
+  for (const pr of protos) {
+    const info = TG_PROTO[(pr.pid || '') + '/' + (pr.rcid || '')];
+    if (info && info.keystone && info.keystone.one && !seen.has('k:' + pr.pid + pr.rcid)) {
+      seen.add('k:' + pr.pid + pr.rcid);
+      lines.push({ icon: '⭐', label: info.keystone.one, sub: info.keystone.why || '' });
+    }
+    const fns = Array.isArray(pr.functions) ? pr.functions : [];
+    for (const fid of fns) { const f = tgFnById(fid); if (f && !seen.has(fid)) { seen.add(fid); lines.push({ icon: f.icon, label: f.name, sub: f.how || '' }); } }
+  }
+  return lines;
+}
+function buildReminderEmail(plan, due) {
+  const lines = buildReminderLines(plan);
+  if (!lines.length && !due) return null;
+  const link = `${SITE_URL}/#/plan`;
+  const items = lines.map(l => `<li style="margin:0 0 10px;font-size:15px;line-height:1.45"><span style="font-size:17px">${l.icon}</span> <b>${tgEsc(l.label)}</b>${l.sub ? `<br><span style="color:#666;font-size:13px">${tgEsc(l.sub)}</span>` : ''}</li>`).join('');
+  const ci = due ? `<div style="margin:18px 0;padding:12px 14px;background:#f0f7f3;border-radius:10px;font-size:14px">📋 You're <b>${due.phase === 'd90' ? '90 days' : '30 days'}</b> into your ${tgEsc(PROBLEM_NAME[due.pr.pid] || 'protocol')} — a 20-second check-in is due. It's in your tracker.</div>` : '';
+  const html = `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:480px;margin:0 auto;color:#1a1a1a">
+    <h2 style="font-size:20px;margin:0 0 4px">Today's plan ⭐</h2>
+    <p style="font-size:14px;color:#666;margin:0 0 16px">Your reminders for today — tick them off in the tracker.</p>
+    <ul style="list-style:none;padding:0;margin:0">${items}</ul>
+    ${ci}
+    <p style="margin:20px 0 0"><a href="${link}" style="display:inline-block;background:#2f6f4f;color:#fff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:600;font-size:15px">Open my tracker →</a></p>
+    <p style="font-size:12px;color:#999;line-height:1.5;margin-top:18px">You turned on daily reminders. Turn them off anytime under "Your data &amp; privacy" in your account.</p>
+  </div>`;
+  return { subject: 'Your RNAwiki plan for today ⭐', html };
+}
+let EMAIL_TIMER = null, EMAIL_REMIND_TIMER = null;
 async function emailNudgeTick() {
   if (!RESEND_API_KEY || !db.enabled) return;
   try {
@@ -387,18 +423,41 @@ async function emailNudgeTick() {
     const cutoff = new Date(Date.now() - 13 * 86400000).toISOString().slice(0, 10);   // ~14-day gap between nudges
     const due = await listDueCheckins();
     for (const d of due) {
+      if (d.user.email_nudge_hour != null) continue;                                   // daily-reminder users get the check-in line there — don't double-email
       if (d.user.last_checkin_email && d.user.last_checkin_email > cutoff) continue;   // emailed recently — don't spam
       const ok = await sendCheckinEmail(d);
       if (ok) await db.query('UPDATE users SET last_checkin_email=$2 WHERE id=$1', [d.user.id, today]);
     }
   } catch (e) { console.error('[email] nudge tick:', e.message); }
 }
+// Daily reminder digest — TZ-aware 5-min tick (mirrors tgStartScheduler): fires once/day at each user's chosen local hour.
+async function emailReminderTick() {
+  if (!RESEND_API_KEY || !db.enabled) return;
+  try {
+    const now = new Date(); const nowUtcMin = now.getUTCHours() * 60 + now.getUTCMinutes(); const today = now.toISOString().slice(0, 10);
+    const rows = (await db.query(`SELECT u.id, u.email, u.email_nudge_hour, u.email_tz_offset, p.plan
+      FROM users u JOIN user_plans p ON p.user_id=u.id
+      WHERE u.email IS NOT NULL AND u.email_nudge_hour IS NOT NULL AND (u.email_last_nudge IS NULL OR u.email_last_nudge <> $1)`, [today])).rows;
+    for (const u of rows) {
+      const localMin = (((nowUtcMin + (u.email_tz_offset || 480)) % 1440) + 1440) % 1440;
+      if (Math.floor(localMin / 60) !== u.email_nudge_hour) continue;                   // not this user's hour yet
+      const done = (await db.query('SELECT pid, rcid, phase FROM outcome_checkins WHERE user_id=$1', [u.id])).rows;
+      const doneSet = new Set(done.map(d => d.pid + '|' + d.rcid + '|' + d.phase));
+      const due = computeDuePhase(u.plan, (pid, rcid, ph) => doneSet.has(pid + '|' + rcid + '|' + ph), today);
+      const mail = buildReminderEmail(u.plan, due);
+      const alsoCheckin = (due && mail) ? ', last_checkin_email=$2' : '';
+      await db.query(`UPDATE users SET email_last_nudge=$2${alsoCheckin} WHERE id=$1`, [u.id, today]);  // mark before send → never double-fire in a day
+      if (mail) await sendEmail(u.email, mail.subject, mail.html);
+    }
+  } catch (e) { console.error('[email] reminder tick:', e.message); }
+}
 function emailStartScheduler() {
   if (!db.enabled || EMAIL_TIMER) return;
   if (!RESEND_API_KEY) { console.log('[email] RESEND_API_KEY not set — nudge emails dormant (due list still visible in Control Room).'); return; }
-  EMAIL_TIMER = setInterval(emailNudgeTick, 6 * 60 * 60 * 1000);   // every 6h
+  EMAIL_TIMER = setInterval(emailNudgeTick, 6 * 60 * 60 * 1000);   // milestone check-ins — every 6h
   setTimeout(() => emailNudgeTick().catch(() => {}), 60 * 1000);   // and once shortly after boot
-  console.log('[email] nudge scheduler started (6-hour tick).');
+  EMAIL_REMIND_TIMER = setInterval(emailReminderTick, 5 * 60 * 1000);  // daily reminder digest — TZ-aware 5-min tick
+  console.log('[email] nudge (6h) + daily-reminder (5-min) schedulers started.');
 }
 // Category → problems index, for building a plan inside the chat.
 let TG_CATS = {};
@@ -1060,6 +1119,24 @@ async function api(req, res, url) {
           consented_at=CASE WHEN $2 THEN COALESCE(user_consent.consented_at, now()) ELSE user_consent.consented_at END,
           withdrawn_at=CASE WHEN $2 THEN NULL ELSE now() END`, [u.id, on, CONSENT_VERSION]);
       return json(res, 200, { ok: true, research: on });
+    }
+  }
+  // Opt-in daily reminder email (keystone + selected nudge tools) — service feature, no research consent needed
+  if (seg[0] === 'email-reminders') {
+    const u = await currentUser(req); if (!u) return json(res, 401, { error: 'Sign in' });
+    if (method === 'GET') {
+      const r = await db.query('SELECT email_nudge_hour, email_tz_offset FROM users WHERE id=$1', [u.id]);
+      const row = r.rows[0] || {};
+      return json(res, 200, { enabled: row.email_nudge_hour != null, hour: row.email_nudge_hour, tzOffset: row.email_tz_offset, hasEmail: !!u.email, emailReady: !!RESEND_API_KEY });
+    }
+    if (method === 'POST') {
+      if (!u.email) return json(res, 400, { error: 'Add an email to your account first to get reminders' });
+      const b = await readBody(req) || {}; const on = !!b.enabled;
+      const hour = on ? intOr(b.hour, 0, 23) : null;
+      if (on && hour == null) return json(res, 400, { error: 'Pick an hour (0–23)' });
+      const tz = intOr(b.tzOffset, -720, 840);
+      await db.query('UPDATE users SET email_nudge_hour=$2, email_tz_offset=COALESCE($3, email_tz_offset) WHERE id=$1', [u.id, hour, tz]);
+      return json(res, 200, { ok: true, enabled: on, hour });
     }
   }
   if (seg[0] === 'profile') {

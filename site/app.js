@@ -313,6 +313,8 @@
     getWearables() { return this.call('GET', '/api/wearable').then(d => d.wearables || []).catch(() => []); },
     exportMyData() { return this.call('GET', '/api/mydata'); },
     deleteMyData() { return this.call('DELETE', '/api/mydata'); },
+    getEmailReminders() { return this.call('GET', '/api/email-reminders').catch(() => null); },
+    setEmailReminders(b) { return this.call('POST', '/api/email-reminders', b); },
     ledger(pid, rcid) { return this.call('GET', `/api/ledger?problem=${encodeURIComponent(pid)}&rc=${encodeURIComponent(rcid)}`).catch(() => null); },
     myExperiment(pid, rcid) { return this.call('GET', `/api/experiments/mine?problem=${encodeURIComponent(pid)}&rc=${encodeURIComponent(rcid)}&voterKey=${encodeURIComponent(VOTER_KEY)}`).catch(() => ({ experiment: null, streak: 0, checkedToday: false })); },
     startExperiment(pid, rcid) { return this.call('POST', '/api/experiments/start', { problemId: pid, rootCauseId: rcid, voterKey: VOTER_KEY, ref: localStorage.getItem('rnawiki_ref') || undefined }); },
@@ -3316,14 +3318,35 @@
     });
   }
   function openDataModal() {
+    const hrs = []; for (let h = 5; h <= 22; h++) { const lbl = h === 12 ? '12 pm' : h < 12 ? h + ' am' : (h - 12) + ' pm'; hrs.push(`<option value="${h}">${lbl}</option>`); }
     const m = modal(`<button class="modal-x" data-close aria-label="Close">×</button>
       <h2>Your data & privacy</h2>
       <p class="muted">You're in control. Everything is anonymised in aggregate; here's your own copy.</p>
+      <div class="dm-remind" id="md-remind" style="display:none">
+        <label class="dm-rem-top"><input type="checkbox" id="md-rem-on"> 📧 <b>Email me my daily plan reminder</b></label>
+        <div class="dm-rem-when" id="md-rem-when" style="display:none">Send it at <select id="md-rem-hr" class="pf-in">${hrs.join('')}</select> <span class="muted">your time</span></div>
+        <p class="dm-rem-hint muted" id="md-rem-hint"></p>
+      </div>
       <div class="consent-acts" style="flex-direction:column;align-items:stretch">
         <button class="cta-ghost" id="md-export">⤓ Export my data (JSON)</button>
         <button class="cta-ghost" id="md-profile">✎ Edit my profile</button>
         <button class="cta-ghost danger" id="md-delete">🗑 Delete my research data</button>
       </div>`);
+    // daily-reminder opt-in (only shown to signed-in users with an email on file)
+    (async () => {
+      const st = await api.getEmailReminders(); if (!st) return;
+      const box = m.querySelector('#md-remind'), on = m.querySelector('#md-rem-on'), when = m.querySelector('#md-rem-when'), hr = m.querySelector('#md-rem-hr'), hint = m.querySelector('#md-rem-hint');
+      box.style.display = 'block';
+      if (!st.hasEmail) { on.disabled = true; hint.textContent = 'Add an email to your account to turn on reminders.'; return; }
+      if (!st.emailReady) hint.textContent = 'Reminders are being switched on — you can set your time now.';
+      on.checked = !!st.enabled; when.style.display = st.enabled ? 'block' : 'none'; if (st.hour != null) hr.value = st.hour;
+      const save = async () => {
+        const enabled = on.checked; when.style.display = enabled ? 'block' : 'none';
+        const tzOffset = -new Date().getTimezoneOffset();   // minutes east of UTC (SGT = +480)
+        try { await api.setEmailReminders({ enabled, hour: +hr.value, tzOffset }); hint.textContent = enabled ? `On — we'll email your plan at ${hr.options[hr.selectedIndex].text} daily.` : 'Off.'; if (typeof toast === 'function') toast('Saved ✓'); } catch (e) { hint.textContent = e.message; on.checked = !enabled; }
+      };
+      on.onchange = save; hr.onchange = () => { if (on.checked) save(); };
+    })();
     m.querySelector('[data-close]').onclick = closeModal;
     m.querySelector('#md-profile').onclick = () => { closeModal(); openProfileModal(); };
     m.querySelector('#md-export').onclick = async () => { try { const d = await api.exportMyData(); const blob = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'rnawiki-my-data.json'; a.click(); } catch (e) { alert(e.message); } };

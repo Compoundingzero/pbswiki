@@ -420,6 +420,10 @@ ALTER TABLE user_profile ADD COLUMN IF NOT EXISTS meds JSONB NOT NULL DEFAULT '[
 ALTER TABLE wearable_daily ADD COLUMN IF NOT EXISTS waist_cm NUMERIC;
 -- users: last time we emailed a check-in nudge (avoid spamming), for the email nudge engine
 ALTER TABLE users ADD COLUMN IF NOT EXISTS last_checkin_email TEXT;       -- YYYY-MM-DD of last check-in nudge email
+-- users: opt-in DAILY reminder email (keystone + selected nudge tools), TZ-aware — web parity of the Telegram daily nudge
+ALTER TABLE users ADD COLUMN IF NOT EXISTS email_nudge_hour INTEGER;      -- local hour 0-23 for the daily reminder email (null = off)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS email_tz_offset INTEGER NOT NULL DEFAULT 480; -- minutes east of UTC (480 = SGT)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS email_last_nudge TEXT;         -- YYYY-MM-DD of last daily reminder email sent
 `;
 
 async function init() {

@@ -1836,6 +1836,12 @@ a.dp-name:hover{color:var(--accent)}
 .hm-list{list-style:none;padding:0;margin:.6rem 0 0;font-size:.88rem}
 .hm-list li{padding:.3rem 0;border-bottom:1px solid var(--line);color:var(--muted)}
 .hm-list li:last-child{border-bottom:none}
+.dm-remind{border:1px solid var(--line);border-radius:12px;padding:.75rem .85rem;margin:.2rem 0 1rem;background:var(--bg)}
+.dm-rem-top{display:flex;align-items:center;gap:.5rem;font-size:.95rem;cursor:pointer}
+.dm-rem-top input{accent-color:var(--accent)}
+.dm-rem-when{margin:.6rem 0 0;font-size:.9rem}
+.dm-rem-when .pf-in{width:auto;display:inline-block;padding:.35rem .5rem}
+.dm-rem-hint{font-size:.78rem;margin:.5rem 0 0}
 .hm-trends{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem}
 .hm-trend{border:1px solid var(--line);border-radius:12px;padding:.55rem .65rem;background:var(--bg)}
 .hm-trend-h{display:flex;justify-content:space-between;align-items:baseline;font-size:.82rem;color:var(--muted);margin-bottom:.3rem}
