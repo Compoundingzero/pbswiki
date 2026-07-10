@@ -2811,7 +2811,7 @@
   }
   // The Telegram-coach CTA appears at every stage of building + tracking.
   function tgCoachRow(problem, rc) {
-    return `<div class="plan-tg"><button class="tg-coach" data-tg-pid="${problem.id}" data-tg-rc="${rc.id}">📲 Coach me on Telegram — daily nudges for this</button></div>`;
+    return `<div class="plan-tg"><button class="tg-coach" data-tg-pid="${problem.id}" data-tg-rc="${rc.id}">📲 Coach me on Telegram — daily nudges for this</button><p class="tg-sync-note">🔗 Sign in first and your keystone, food, tools &amp; progress sync both ways.</p></div>`;
   }
   function wireTgCoach() {
     app.querySelectorAll('.tg-coach').forEach(b => { if (b._tgWired) return; b._tgWired = true; b.onclick = async () => {
@@ -3425,7 +3425,6 @@
         const ntN = Object.keys(rc.nutrient_targets || {}).length;
         return `<div class="proto-summary">
           <div class="ps-cell"><span class="ps-k">🎯 Goal</span><b>${esc(problem.kind === 'want' ? 'Reach: ' + problem.name : 'Fix: ' + problem.name)}</b></div>
-          <div class="ps-cell"><span class="ps-k">Root cause</span><b>${esc((rc.plain || rc.name).replace(/\s*\([^)]*\)$/, '').slice(0, 70))}</b></div>
           ${pw ? `<div class="ps-cell"><span class="ps-k">Mechanism</span><a href="#/pathway/${pwI}">${esc(pw.shortLabel)} pathway →</a></div>` : ''}
           <div class="ps-cell"><span class="ps-k">This protocol</span><b>${moveN ? moveN + ' move' + (moveN !== 1 ? 's' : '') + ' · ' : ''}${P.stack.length} supplement${P.stack.length !== 1 ? 's' : ''}${ntN ? ' · ' + ntN + ' food target' + (ntN !== 1 ? 's' : '') : ''}</b></div>
         </div>`;
@@ -3439,7 +3438,6 @@
         <p class="ks-note">The highest-impact, lowest-effort habit for this. Nail this one thing and the rest compounds.</p>
         <button class="tg-coach" data-tg-pid="${problem.id}" data-tg-rc="${rc.id}">📲 Coach me on Telegram — a daily nudge for this</button>
       </div>` : ''}
-      <div class="proto-inside"><span class="pi-k">What's inside</span><p>This protocol has ${(P.strengthen || []).length + (P.stretch || []).length} movement${(P.strengthen || []).length + (P.stretch || []).length !== 1 ? 's' : ''} and ${P.stack.length} evidence-ranked supplement${P.stack.length !== 1 ? 's' : ''}. Tap <b>Start building my plan</b> to browse each one, learn what it does, and keep only what fits you — then you'll get your food tracker.</p></div>
       <div class="proto-after">
         ${voteFoot(problem.id, rc.id, 'protocol')}
         ${pfaq}

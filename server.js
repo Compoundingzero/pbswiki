@@ -522,13 +522,21 @@ async function tgToolInc(chatId, msgId, id) {
   const t = tgTools(row); const step = f.unit === 'steps' ? 500 : 1;
   if (f.period === 'week') t.w.c[id] = (t.w.c[id] || 0) + step; else t.d.c[id] = (t.d.c[id] || 0) + step;
   await db.query('UPDATE telegram_users SET tools=$2 WHERE chat_id=$1', [chatId, JSON.stringify(t)]);
+  const newVal = f.period === 'week' ? t.w.c[id] : t.d.c[id];
+  await tgSyncWebDay(row, (d, plan) => { if (f.period === 'week') { plan.fnWeek = plan.fnWeek || {}; const wk = tgWeekKey(); plan.fnWeek[wk] = plan.fnWeek[wk] || {}; plan.fnWeek[wk][id] = newVal; } else { d.fn[id] = newVal; } }); // mirror counter into web plan
   const v = tgToolsView(await tgGet(chatId)); return tgEdit(chatId, msgId, v.text, v.kb);
 }
 async function tgToolDone(chatId, msgId, id) {
   const row = await tgGet(chatId); const f = tgFnById(id); if (!row || !f || f.kind !== 'timer') return;
   const t = tgTools(row); t.d.done[id] = true;
   await db.query('UPDATE telegram_users SET tools=$2 WHERE chat_id=$1', [chatId, JSON.stringify(t)]);
+  await tgSyncWebDay(row, d => { d.fn[id] = true; }); // mirror timer completion into web plan
   const v = tgToolsView(await tgGet(chatId)); return tgEdit(chatId, msgId, v.text, v.kb);
+}
+// Read whether this protocol's keystone is already marked done today in the linked web plan (web → bot direction)
+async function tgWebKeystoneDone(row) {
+  if (!row || !row.user_id || !db.enabled || !row.pid) return false;
+  try { const r = (await db.query('SELECT plan FROM user_plans WHERE user_id=$1', [row.user_id])).rows[0]; const tk = new Date().toISOString().slice(0, 10); return !!(r && r.plan && r.plan.log && r.plan.log[tk] && r.plan.log[tk].keystones && r.plan.log[tk].keystones[row.pid + '/' + row.rcid]); } catch (e) { return false; }
 }
 const TG_NUT_LABEL = { protein_g: 'protein', fiber_g: 'fibre', sugar_g: 'sugar', kcal: 'calories', omega3_mg: 'omega-3', vitamin_c_mg: 'vitamin C', vitamin_d_iu: 'vitamin D', calcium_mg: 'calcium', magnesium_mg: 'magnesium', zinc_mg: 'zinc', iron_mg: 'iron', potassium_mg: 'potassium', sodium_mg: 'sodium', glycine_g: 'glycine', choline_mg: 'choline' };
 const TG_NUT_UNIT = { protein_g: 'g', fiber_g: 'g', sugar_g: 'g', kcal: 'kcal', omega3_mg: 'mg', vitamin_c_mg: 'mg', vitamin_d_iu: 'IU', calcium_mg: 'mg', magnesium_mg: 'mg', zinc_mg: 'mg', iron_mg: 'mg', potassium_mg: 'mg', sodium_mg: 'mg', glycine_g: 'g', choline_mg: 'mg' };
@@ -660,6 +668,7 @@ async function handleTgUpdate(update) {
         if (!fns || !fns.length) fns = [tgDefaultFunction(t.pid + '/' + t.rcid)];
         await db.query('UPDATE telegram_users SET user_id=$2, pid=$3, rcid=$4, functions=$5 WHERE chat_id=$1', [chatId, t.user_id, t.pid, t.rcid, JSON.stringify(fns)]);
         await db.query('DELETE FROM telegram_link_tokens WHERE token=$1', [param]);
+        if (t.user_id) await tgSend(chatId, `🔗 <b>Linked to your rnawiki.com account.</b> Your keystone, food, tools and progress now sync both ways — track here or on the site, it stays in step.`);
         return tgSendKeystone(chatId, t.pid, t.rcid);
       }
     }
@@ -729,9 +738,9 @@ async function handleTgUpdate(update) {
 }
 async function tgSendToday(chatId, row) {
   const p = TG_PROTO[(row.pid || '') + '/' + (row.rcid || '')]; const k = p && p.keystone;
-  const kDone = Array.isArray(row.keystone_days) && row.keystone_days.includes(new Date().toISOString().slice(0, 10));
+  const kDone = (Array.isArray(row.keystone_days) && row.keystone_days.includes(new Date().toISOString().slice(0, 10))) || await tgWebKeystoneDone(row); // reflect web ticks
   const prog = tgFoodProgress(row);
-  const body = `📋 <b>${tgEsc(p ? p.problem : 'Your protocol')}</b> — today\n\n⭐ <b>Keystone:</b> ${k ? tgEsc(k.one) : '—'}\n${kDone ? '✅ done today' : '▫️ not done yet — /done when you do it'}\n\n🍽️ <b>Food targets:</b>\n${prog.text}\n\nType a food (e.g. “2 eggs”) to log it toward these.`;
+  const body = `📋 <b>${tgEsc(p ? p.problem : 'Your protocol')}</b> — today\n\n⭐ <b>Keystone:</b> ${k ? tgEsc(k.one) : '—'}\n${kDone ? '✅ done today' : '▫️ not done yet — /done when you do it'}\n\n🍽️ <b>Food targets:</b>\n${prog.text}\n\nType a food (e.g. “2 eggs”) to log it toward these.${row.user_id ? '\n\n🔗 <i>Synced with your rnawiki.com account — progress shows in both places.</i>' : ''}`;
   return tgSend(chatId, body, { reply_markup: { inline_keyboard: [[{ text: kDone ? '✅ Keystone done' : '✅ Mark keystone done', callback_data: 'done' }]] } });
 }
 async function tgSetup() {
