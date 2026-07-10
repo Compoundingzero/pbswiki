@@ -217,7 +217,7 @@ function sameOrigin(req) {
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const BOT_USERNAME = process.env.BOT_USERNAME || 'rnawikibot';
 const TG_SECRET = crypto.createHmac('sha256', SECRET).update('tg-webhook').digest('hex').slice(0, 40);
-const TG_HELP = 'What I can do:\n<b>/keystone</b> — your one keystone habit\n<b>/done</b> — mark it done today (builds your streak)\n<b>type any food</b> (e.g. “2 eggs”, “chicken rice”) — I log it against your protocol’s targets\n<b>/today</b> — your keystone + food progress today\n<b>/streak</b> — your streak · <b>/reset</b> — clear today’s food\n<b>/plan</b> — your full protocol link · <b>/help</b> — this menu';
+const TG_HELP = 'What I can do:\n<b>/keystone</b> — your one keystone habit · <b>/done</b> — mark it done (builds your streak)\n<b>type any food</b> (e.g. “2 eggs”, “chicken rice”) — I log it against your protocol’s targets\n<b>/today</b> — keystone + food progress · <b>/stack</b> — your supplements + safety check\n<b>ask about any supplement by name</b> (e.g. “magnesium”) — I’ll explain + link the full page\n<b>/streak</b> · <b>/reset</b> (clear today’s food) · <b>/plan</b> · <b>/help</b>';
 let TG_PROTO = {};
 try {
   const g = require('./data/clinical_graph.json'); const ks = require('./data/keystones.json');
@@ -231,6 +231,40 @@ try {
   const ff = require('./data/foods.json'); const arr = Array.isArray(ff) ? ff : (ff.foods || []);
   TG_FOODS = arr.map(f => ({ id: f.id, name: f.name, serving: f.serving || '', sg: !!f.sg_local, hay: (f.hay || f.name || '').toLowerCase(), n: f }));
 } catch (e) { console.error('[tg] foods load failed:', e.message); }
+// Full compound catalogue + interaction engine (same as the site) — for /stack safety advice
+// and "ask about X" lookups. Loaded once, in an isolated context.
+let TG_DATA = null, TG_RXN = null;
+try {
+  const vm = require('vm');
+  const load = (file, key) => { const sb = { window: {} }; vm.runInNewContext(fs.readFileSync(path.join(DIR, file), 'utf8'), sb); return sb.window[key]; };
+  TG_DATA = load('data.js', 'RNAWIKI_DATA'); TG_RXN = load('interactions.js', 'RNAWIKI_INTERACTIONS');
+} catch (e) { console.error('[tg] data/rxn load failed:', e.message); }
+const tgSlug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+function tgResolveStack(rc) {
+  if (!TG_DATA) return [];
+  const frags = (rc.compounds || []).map(f => String(f).toLowerCase());
+  return TG_DATA.compounds.filter(c => { const nm = c.name.toLowerCase(); const words = nm.split(/[^a-z0-9]+/); return frags.some(f => nm === f || words.includes(f)); })
+    .map(c => ({ name: c.name, isRx: c.isRx, category: c.category, slug: tgSlug(c.name), stars: c.stars, plain: c.plain }));
+}
+function tgCompoundTags(c) { const s = new Set((TG_RXN && TG_RXN.catTags[c.category]) || []); const nm = (c.name || '').toLowerCase(); ((TG_RXN && TG_RXN.nameTags) || []).forEach(r => { if (nm.indexOf(r.m) >= 0) r.t.forEach(t => s.add(t)); }); return s; }
+function tgStackFlags(stack) {
+  if (!TG_RXN) return [];
+  const byTag = {}; stack.forEach(c => tgCompoundTags(c).forEach(t => (byTag[t] = byTag[t] || []).push(c.name)));
+  const flags = [];
+  (TG_RXN.rules || []).forEach(rule => { if (!rule.need.every(n => (byTag[n[0]] || []).length >= n[1])) return; const inv = {}; rule.need.forEach(n => (byTag[n[0]] || []).forEach(nm => inv[nm] = 1)); flags.push({ tier: rule.tier, title: rule.title, action: rule.action, who: Object.keys(inv) }); });
+  return flags.filter(f => f.tier === 'danger' || f.tier === 'timing');
+}
+async function tgSendStack(chatId, row) {
+  const p = TG_PROTO[(row.pid || '') + '/' + (row.rcid || '')]; const stack = (p && p.stack) || [];
+  if (!stack.length) return tgSend(chatId, `This protocol leans on food and movement — no supplements mapped. /today for your targets.`);
+  const list = stack.map(c => `• <b>${tgEsc(c.name)}</b>${c.isRx ? ' 🔵 <i>Rx — see a doctor</i>' : ''}\n  ${SITE_URL}/c/${c.slug}`).join('\n');
+  const flags = tgStackFlags(stack);
+  const warn = flags.length ? `\n\n⚠️ <b>If you combine these:</b>\n` + flags.map(f => `${f.tier === 'danger' ? '☠️' : '⏰'} <b>${tgEsc(f.title)}</b> (${f.who.map(tgEsc).join(' + ')}) — ${tgEsc(f.action)}`).join('\n') : `\n\n✅ No dangerous interactions flagged among these.`;
+  return tgSend(chatId, `💊 <b>${tgEsc(p.problem)} — supplements</b>\n${list}${warn}\n\n<i>Educational, not a prescription. Tap a link to learn about any of them.</i>`);
+}
+function tgFindCompound(q) { if (!TG_DATA) return null; const t = q.toLowerCase().trim(); return TG_DATA.compounds.find(c => { const nm = c.name.toLowerCase(); return nm === t || nm.split(/[^a-z0-9]+/).includes(t) || (t.length > 3 && nm.indexOf(t) >= 0); }); }
+// second pass: attach the resolved supplement stack to each protocol (needs TG_DATA loaded above)
+try { const gg = require('./data/clinical_graph.json'); gg.problems.forEach(p => p.root_causes.forEach(rc => { const key = p.id + '/' + rc.id; if (TG_PROTO[key]) TG_PROTO[key].stack = tgResolveStack(rc); })); } catch (e) { }
 const TG_NUT_LABEL = { protein_g: 'protein', fiber_g: 'fibre', sugar_g: 'sugar', kcal: 'calories', omega3_mg: 'omega-3', vitamin_c_mg: 'vitamin C', vitamin_d_iu: 'vitamin D', calcium_mg: 'calcium', magnesium_mg: 'magnesium', zinc_mg: 'zinc', iron_mg: 'iron', potassium_mg: 'potassium', sodium_mg: 'sodium', glycine_g: 'glycine', choline_mg: 'choline' };
 const TG_NUT_UNIT = { protein_g: 'g', fiber_g: 'g', sugar_g: 'g', kcal: 'kcal', omega3_mg: 'mg', vitamin_c_mg: 'mg', vitamin_d_iu: 'IU', calcium_mg: 'mg', magnesium_mg: 'mg', zinc_mg: 'mg', iron_mg: 'mg', potassium_mg: 'mg', sodium_mg: 'mg', glycine_g: 'g', choline_mg: 'mg' };
 function tgFindFoods(q) {
@@ -338,20 +372,28 @@ async function handleTgUpdate(update) {
     if (!row || !row.pid) return tgSend(chatId, `Link a protocol first — open ${SITE_URL}/solve and tap “📲 Coach me on Telegram”.`);
     return tgSendToday(chatId, row);
   }
+  if (cmd === 'stack' || cmd === 'supplements' || cmd === 'supps') {
+    if (!row || !row.pid) return tgSend(chatId, `Link a protocol first — ${SITE_URL}/solve → “📲 Coach me on Telegram”.`);
+    return tgSendStack(chatId, row);
+  }
   if (cmd === 'done' || cmd === 'done ✅' || cmd === '✅' || cmd === 'did it') return tgMarkDone(chatId);
   if (cmd === 'streak') return tgSend(chatId, `🔥 You're on a <b>${(row && row.streak) || 0}-day streak</b>. Keep it going — /done when you've done today's keystone.`);
   if (cmd === 'reset') { const tdy = new Date().toISOString().slice(0, 10); await db.query('UPDATE telegram_users SET food_log=$2 WHERE chat_id=$1', [chatId, JSON.stringify({ date: tdy, items: [] })]); return tgSend(chatId, `🧹 Cleared today's food log. Type a food to start again.`); }
   if (cmd === 'help' || cmd === 'start') return tgSend(chatId, TG_HELP);
-  // Any other message → log it as a food (the daily driver, personalised to this protocol's targets).
+  // Any other message → log it as a food (if a protocol's linked), or answer "what is X" with a link.
   if (text && text[0] !== '/') {
-    if (!row || !row.pid) return tgSend(chatId, `To log food against your targets, link a protocol first: ${SITE_URL}/solve → “📲 Coach me on Telegram”. (/help for more.)`);
-    const matches = tgFindFoods(text);
-    if (!matches.length) return tgSend(chatId, `Hmm, I couldn't find “${tgEsc(text)}”. Try a simpler name (e.g. “eggs”, “oats”, “salmon”, “chicken rice”), or add it on ${SITE_URL}/plan.`);
+    const matches = (row && row.pid) ? tgFindFoods(text) : [];
     if (matches.length === 1) return tgLogFood(chatId, matches[0]);
-    const kb = matches.slice(0, 5).map(f => [{ text: (f.name + (f.serving ? ' · ' + f.serving : '')).slice(0, 62), callback_data: 'food:' + f.id }]);
-    return tgSend(chatId, `Which one did you have?`, { reply_markup: { inline_keyboard: kb } });
+    if (matches.length > 1) {
+      const kb = matches.slice(0, 5).map(f => [{ text: (f.name + (f.serving ? ' · ' + f.serving : '')).slice(0, 62), callback_data: 'food:' + f.id }]);
+      return tgSend(chatId, `Which one did you have?`, { reply_markup: { inline_keyboard: kb } });
+    }
+    const cmp = tgFindCompound(text);
+    if (cmp) return tgSend(chatId, `<b>${tgEsc(cmp.name)}</b> — ${tgEsc((cmp.plain || cmp.bottom || cmp.mechanism || '').slice(0, 220))}\n\nFull page (dose, evidence, safety) → ${SITE_URL}/c/${tgSlug(cmp.name)}`);
+    if (!row || !row.pid) return tgSend(chatId, `Link a protocol to log food (${SITE_URL}/solve → “📲 Coach me on Telegram”), or ask me about any supplement by name (e.g. “magnesium”).`);
+    return tgSend(chatId, `Hmm, I couldn't find a food or supplement called “${tgEsc(text)}”. Try a simpler food name (e.g. “eggs”, “oats”, “salmon”), or ask about a supplement by name.`);
   }
-  return tgSend(chatId, `Type a food to log it, tap <b>/done</b> for your keystone, or <b>/help</b> for everything.`);
+  return tgSend(chatId, `Type a food to log it, ask about any supplement by name, tap <b>/done</b> for your keystone, or <b>/help</b>.`);
 }
 async function tgSendToday(chatId, row) {
   const p = TG_PROTO[(row.pid || '') + '/' + (row.rcid || '')]; const k = p && p.keystone;
