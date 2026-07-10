@@ -230,6 +230,9 @@ function sameOrigin(req) {
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const BOT_USERNAME = process.env.BOT_USERNAME || 'rnawikibot';
 const TG_SECRET = crypto.createHmac('sha256', SECRET).update('tg-webhook').digest('hex').slice(0, 40);
+// ---- Email nudges (Resend) — activates when RESEND_API_KEY is set; otherwise the "due" list still shows in Control Room ----
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+const EMAIL_FROM = process.env.EMAIL_FROM || 'RNAwiki <hello@rnawiki.com>';
 const TG_HELP = 'What I can do:\n<b>/build</b> — build your own plan here (pick problem + supplements)\n<b>/keystone</b> — your one keystone habit · <b>/done</b> — mark it done (builds your streak)\n<b>type any food</b> (e.g. “2 eggs”, “chicken rice”) — I log it against your protocol’s targets\n<b>/today</b> — keystone + food progress · <b>/progress</b> — your streak &amp; consistency · <b>/tools</b> — your protocol’s tools (counters, timers, reminders) · <b>/stack</b> — supplements + safety · <b>/schedule</b> — what to take when\n<b>ask about any supplement by name</b> (e.g. “magnesium”) — I’ll explain + link the full page\n<b>/nudge</b> — a daily check-in at your time · <b>/streak</b> · <b>/reset</b> (clear food) · <b>/plan</b> · <b>/help</b>';
 let TG_PROTO = {};
 try {
@@ -322,6 +325,80 @@ function tgStartScheduler() {
     } catch (e) { console.error('[tg] nudge tick:', e.message); }
   }, 5 * 60 * 1000);
   console.log('[tg] nudge scheduler started (5-min tick).');
+}
+
+// ===== Email nudge engine — milestone check-ins for users who don't use Telegram =====
+const PROBLEM_NAME = (() => { try { const g = require('./data/clinical_graph.json'); const m = {}; (g.problems || []).forEach(p => { m[p.id] = p.name; }); return m; } catch (e) { return {}; } })();
+async function sendEmail(to, subject, html) {
+  if (!RESEND_API_KEY) return false;
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: EMAIL_FROM, to, subject, html }),
+    });
+    if (!r.ok) { console.error('[email] send failed', r.status, (await r.text().catch(() => '')).slice(0, 200)); return false; }
+    return true;
+  } catch (e) { console.error('[email]', e.message); return false; }
+}
+// Which consented users have a milestone check-in due (d30/d90) — computed in 2 queries, then in JS.
+async function listDueCheckins() {
+  if (!db.enabled) return [];
+  const today = new Date().toISOString().slice(0, 10);
+  const users = (await db.query(`SELECT u.id, u.email, u.username, u.last_checkin_email, p.plan
+    FROM users u JOIN user_consent c ON c.user_id=u.id AND c.consent_research
+    JOIN user_plans p ON p.user_id=u.id WHERE u.email IS NOT NULL`)).rows;
+  if (!users.length) return [];
+  const done = (await db.query('SELECT user_id, pid, rcid, phase FROM outcome_checkins WHERE user_id = ANY($1)', [users.map(u => u.id)])).rows;
+  const doneKey = new Set(done.map(d => d.user_id + '|' + d.pid + '|' + d.rcid + '|' + d.phase));
+  const out = [];
+  for (const u of users) {
+    const protos = (u.plan && Array.isArray(u.plan.protocols)) ? u.plan.protocols : [];
+    for (const pr of protos) {
+      if (!pr.pid || !pr.rcid || !pr.startedAt) continue;
+      const days = Math.floor((Date.parse(today + 'T00:00:00Z') - Date.parse(pr.startedAt + 'T00:00:00Z')) / 86400000);
+      if (!Number.isFinite(days)) continue;
+      let phase = null;
+      if (days >= 90 && !doneKey.has(u.id + '|' + pr.pid + '|' + pr.rcid + '|d90')) phase = 'd90';
+      else if (days >= 30 && !doneKey.has(u.id + '|' + pr.pid + '|' + pr.rcid + '|d30')) phase = 'd30';
+      if (phase) { out.push({ user: u, pr, phase, days }); break; }   // one nudge per user
+    }
+  }
+  return out;
+}
+async function sendCheckinEmail(d) {
+  const name = PROBLEM_NAME[d.pr.pid] || 'your protocol';
+  const wk = d.phase === 'd90' ? '90 days' : '30 days';
+  const link = `${SITE_URL}/#/plan`;
+  const subject = `You're ${wk} into your ${name} protocol — 2-min check-in?`;
+  const html = `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:480px;margin:0 auto;color:#1a1a1a">
+    <h2 style="font-size:20px">How's it going with ${tgEsc(name)}?</h2>
+    <p style="font-size:15px;line-height:1.5">You've been at it for <b>${wk}</b>. A 20-second check-in tells you whether it's working — and helps everyone with the same problem.</p>
+    <p><a href="${link}" style="display:inline-block;background:#2f6f4f;color:#fff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:600;font-size:15px">Log my ${tgEsc(wk)} check-in →</a></p>
+    <p style="font-size:12px;color:#888;line-height:1.5">Anonymous &amp; optional. You're getting this because you consented to help RNAwiki learn what works. Manage or withdraw anytime in your account.</p>
+  </div>`;
+  return sendEmail(d.user.email, subject, html);
+}
+let EMAIL_TIMER = null;
+async function emailNudgeTick() {
+  if (!RESEND_API_KEY || !db.enabled) return;
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const cutoff = new Date(Date.now() - 13 * 86400000).toISOString().slice(0, 10);   // ~14-day gap between nudges
+    const due = await listDueCheckins();
+    for (const d of due) {
+      if (d.user.last_checkin_email && d.user.last_checkin_email > cutoff) continue;   // emailed recently — don't spam
+      const ok = await sendCheckinEmail(d);
+      if (ok) await db.query('UPDATE users SET last_checkin_email=$2 WHERE id=$1', [d.user.id, today]);
+    }
+  } catch (e) { console.error('[email] nudge tick:', e.message); }
+}
+function emailStartScheduler() {
+  if (!db.enabled || EMAIL_TIMER) return;
+  if (!RESEND_API_KEY) { console.log('[email] RESEND_API_KEY not set — nudge emails dormant (due list still visible in Control Room).'); return; }
+  EMAIL_TIMER = setInterval(emailNudgeTick, 6 * 60 * 60 * 1000);   // every 6h
+  setTimeout(() => emailNudgeTick().catch(() => {}), 60 * 1000);   // and once shortly after boot
+  console.log('[email] nudge scheduler started (6-hour tick).');
 }
 // Category → problems index, for building a plan inside the chat.
 let TG_CATS = {};
@@ -1035,6 +1112,11 @@ async function api(req, res, url) {
       return json(res, 200, { ok: true });
     }
   }
+  if (seg[0] === 'wearable' && method === 'GET') {
+    const u = await currentUser(req); if (!u) return json(res, 401, { error: 'Sign in' });
+    const r = await db.query(`SELECT to_char(day,'YYYY-MM-DD') AS day, steps, sleep_min, resting_hr, weight_kg, waist_cm FROM wearable_daily WHERE user_id=$1 ORDER BY day DESC LIMIT 120`, [u.id]);
+    return json(res, 200, { wearables: r.rows });
+  }
   if (seg[0] === 'wearable' && method === 'POST') {
     const u = await currentUser(req); if (!u) return json(res, 401, { error: 'Sign in' });
     const b = await readBody(req) || {}; const day = /^\d{4}-\d{2}-\d{2}$/.test(b.day || '') ? b.day : null; if (!day) return json(res, 400, { error: 'Bad day' });
@@ -1677,9 +1759,12 @@ async function api(req, res, url) {
       db.query(`SELECT lower(trim(m.med)) AS med, COUNT(*)::int AS n FROM user_profile p, jsonb_array_elements_text(p.meds) AS m(med) WHERE jsonb_array_length(p.meds) > 0 GROUP BY 1 ORDER BY n DESC LIMIT 15`),
       db.query(`SELECT e.k AS key, ROUND(AVG(e.v::numeric),2) AS avg, COUNT(*)::int AS n FROM outcome_checkins oc, jsonb_each_text(oc.extra) AS e(k,v) WHERE oc.extra IS NOT NULL GROUP BY e.k ORDER BY n DESC`),
     ]);
+    const due = await listDueCheckins().catch(() => []);
+    const nudgesSent = (await db.query('SELECT COUNT(*)::int n FROM users WHERE last_checkin_email IS NOT NULL')).rows[0].n;
     return json(res, 200, {
       stopReasons: stopReasons.rows, sideFx: sideFx.rows[0], sideFxSamples: sideFxSamples.rows,
       whtr: whtr.rows[0], waistN: waistN.rows[0].n, medsUsers: medsUsers.rows[0].n, topMeds: topMeds.rows, extras: extras.rows,
+      nudges: { due: due.length, emailConfigured: !!RESEND_API_KEY, sent: nudgesSent },
     });
   }
   if (seg[0] === 'admin' && seg[1] === 'overview' && method === 'GET') {
@@ -1971,4 +2056,5 @@ const server = http.createServer((req, res) => {
 db.init().catch(e => console.error('[db] init failed:', e.message)).finally(() => {
   server.listen(PORT, () => console.log('RNAwiki serving on :' + PORT + (db.enabled ? ' (accounts on)' : ' (read-only)')));
   if (db.enabled) tgSetup().catch(e => console.error('[tg] setup:', e.message));
+  if (db.enabled) emailStartScheduler();
 });

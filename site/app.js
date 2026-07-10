@@ -310,6 +310,7 @@
     getMarkers() { return this.call('GET', '/api/markers').then(d => d.markers || []).catch(() => []); },
     addMarker(b) { return this.call('POST', '/api/markers', b); },
     saveWearable(b) { return this.call('POST', '/api/wearable', b); },
+    getWearables() { return this.call('GET', '/api/wearable').then(d => d.wearables || []).catch(() => []); },
     exportMyData() { return this.call('GET', '/api/mydata'); },
     deleteMyData() { return this.call('DELETE', '/api/mydata'); },
     ledger(pid, rcid) { return this.call('GET', `/api/ledger?problem=${encodeURIComponent(pid)}&rc=${encodeURIComponent(rcid)}`).catch(() => null); },
@@ -2090,8 +2091,13 @@
       const w = S.whtr || {}; const whtrHtml = w.n ? `<b>${w.avg_whtr}</b> avg waist-to-height <span class="muted">· ${w.at_risk}/${w.n} at metabolic risk (≥0.5)</span>` : `<span class="muted">${S.waistN || 0} waist logs · need height + waist to compute risk</span>`;
       const medsHtml = (S.topMeds || []).length ? (S.topMeds).map(x => `<span class="sig-pill">${esc(x.med)} <b>${x.n}</b></span>`).join('') : '<span class="muted">No concurrent meds reported yet.</span>';
       const extraHtml = (S.extras || []).length ? (S.extras).map(x => `<li><span class="muted">${esc(EXTRA_LBL[x.key] || x.key)}:</span> avg <b>${x.avg}</b> <span class="muted">(n=${x.n})</span></li>`).join('') : '<li class="muted">No condition-specific outcomes yet.</li>';
+      const nd = S.nudges || {};
+      const nudgeHtml = `<div class="sig-card"><div class="sig-t">📬 Check-in nudges <span class="muted">(bring people back)</span></div>
+        <p><b>${nd.due || 0}</b> users have a 30/90-day check-in due now.</p>
+        <p class="muted" style="font-size:.8rem">Email: ${nd.emailConfigured ? '<b style="color:var(--accent)">on</b> · ' + (nd.sent || 0) + ' sent' : '<b>off</b> — add RESEND_API_KEY to send. In-app banner + Telegram still nudge.'}</p></div>`;
       host.innerHTML = `<h3 class="sig-h">🔬 High-value signals <span class="muted" style="font-size:.75rem;font-weight:400">— the data that makes this a moat</span></h3>
         <div class="sig-grid">
+          ${nudgeHtml}
           <div class="sig-card"><div class="sig-t">🚪 Why people stop <span class="muted">(persistence — pharma's #1 blind spot)</span></div><ul class="sig-list">${stopHtml}</ul><p class="muted" style="font-size:.74rem">${stopN} discontinuations logged.</p></div>
           <div class="sig-card"><div class="sig-t">⚠️ Side effects <span class="muted">(pharmacovigilance)</span></div><p><b>${sfx.n || 0}</b> reports from <b>${sfx.users || 0}</b> users</p><ul class="sig-list sig-scroll">${sfxSamples}</ul></div>
           <div class="sig-card"><div class="sig-t">📏 Metabolic risk <span class="muted">(waist-to-height)</span></div><p>${whtrHtml}</p></div>
@@ -3325,13 +3331,27 @@
   }
   const MARKERS = [['hba1c', 'HbA1c', '%'], ['fasting_glucose', 'Fasting glucose', 'mmol/L'], ['ldl', 'LDL cholesterol', 'mmol/L'], ['hdl', 'HDL cholesterol', 'mmol/L'], ['triglycerides', 'Triglycerides', 'mmol/L'], ['total_chol', 'Total cholesterol', 'mmol/L'], ['bp_sys', 'Blood pressure (systolic)', 'mmHg'], ['bp_dia', 'Blood pressure (diastolic)', 'mmHg'], ['testosterone', 'Testosterone', 'nmol/L'], ['shbg', 'SHBG', 'nmol/L'], ['tsh', 'TSH', 'mIU/L'], ['ft4', 'Free T4', 'pmol/L'], ['ferritin', 'Ferritin', 'µg/L'], ['crp', 'CRP', 'mg/L'], ['vit_d', 'Vitamin D', 'nmol/L']];
   const MARKER_LABEL = {}, MARKER_UNIT = {}; MARKERS.forEach(m => { MARKER_LABEL[m[0]] = m[1]; MARKER_UNIT[m[0]] = m[2]; });
+  // tiny inline SVG trend line from a numeric series (nulls skipped); returns {svg, delta, last} or null
+  function sparkline(series) {
+    const vals = series.filter(v => v != null && isFinite(v));
+    if (vals.length < 2) return null;
+    const w = 180, h = 34, min = Math.min(...vals), max = Math.max(...vals), rng = (max - min) || 1, step = w / (vals.length - 1);
+    const pts = vals.map((v, i) => `${(i * step).toFixed(1)},${(h - ((v - min) / rng) * (h - 6) - 3).toFixed(1)}`).join(' ');
+    return { svg: `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="none" class="spark"><polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`, delta: +(vals[vals.length - 1] - vals[0]).toFixed(1), last: vals[vals.length - 1] };
+  }
   async function openHealthModal() {
-    const markers = await api.getMarkers().catch(() => []);
+    const [markers, wearables] = await Promise.all([api.getMarkers().catch(() => []), api.getWearables().catch(() => [])]);
     const opts = MARKERS.map(m => `<option value="${m[0]}">${esc(m[1])} (${esc(m[2])})</option>`).join('');
     const recent = markers.slice(0, 8).map(x => `<li>${esc(MARKER_LABEL[x.marker] || x.marker)}: <b>${esc(String(x.value))}</b> ${esc(x.unit || MARKER_UNIT[x.marker] || '')} <span class="muted">${x.taken_on ? esc(String(x.taken_on).slice(0, 10)) : ''}</span></li>`).join('') || '<li class="muted">No results logged yet.</li>';
+    // your-own-trend: reward loop from the metrics you've logged
+    const chrono = wearables.slice().reverse();
+    const trend = (label, unit, series, goodDown) => { const s = sparkline(series); if (!s) return ''; const dir = s.delta === 0 ? '→' : (s.delta < 0) === goodDown ? '<span style="color:var(--accent)">▼ ' + Math.abs(s.delta) + '</span>' : '▲ ' + Math.abs(s.delta); return `<div class="hm-trend"><div class="hm-trend-h"><span>${label}</span><b>${s.last}${unit} <span class="muted">${dir}</span></b></div>${s.svg}</div>`; };
+    const trends = [trend('Weight', 'kg', chrono.map(x => x.weight_kg != null ? +x.weight_kg : null), true), trend('Waist', 'cm', chrono.map(x => x.waist_cm != null ? +x.waist_cm : null), true), trend('Resting HR', 'bpm', chrono.map(x => x.resting_hr != null ? +x.resting_hr : null), true)].filter(Boolean).join('');
+    const trendSec = trends ? `<div class="hm-sec"><b>📈 Your trend</b><div class="hm-trends">${trends}</div></div>` : '';
     const m = modal(`<button class="modal-x" data-close aria-label="Close">×</button>
       <h2>Track your health data</h2>
       <p class="muted">Optional &amp; anonymous. Blood results and weigh-ins help prove what actually works.</p>
+      ${trendSec}
       <div class="hm-sec"><b>🩸 Blood marker</b>
         <div class="hm-row"><select id="hm-marker" class="pf-in">${opts}</select><input id="hm-val" class="pf-in hm-num" type="number" step="any" placeholder="value"><input id="hm-date" class="pf-in" type="date"><button class="fn-step add" id="hm-add">Add</button></div>
         <ul class="hm-list" id="hm-list">${recent}</ul></div>
