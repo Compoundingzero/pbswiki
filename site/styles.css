@@ -570,11 +570,13 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 .expert-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.8rem .9rem}
 .expert-card .ex-verified{color:var(--fl);font-weight:700;font-size:.76rem;margin-bottom:.25rem}
 .expert-card small{display:block;color:var(--faint);margin-top:.15rem}
-.board{width:100%;border-collapse:collapse;font-size:.9rem;margin:.4rem 0}
-.board th,.board td{text-align:left;padding:.5rem .7rem;border-bottom:1px solid var(--line)}
-.board th{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.03em}
+.board{width:100%;border-collapse:collapse;font-size:.9rem;margin:.2rem 0}
+.board th,.board td{text-align:left;padding:.6rem .8rem;border-bottom:1px solid var(--line);vertical-align:middle}
+.board tr:last-child td{border-bottom:none}
+.board tbody tr:hover{background:rgba(13,148,136,.03)}
+.board th{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
 .board td{font-variant-numeric:tabular-nums}
-.admin-btn{border:1px solid var(--accent);color:var(--accent);background:#fff;border-radius:7px;padding:.25rem .7rem;cursor:pointer;font-size:.8rem}
+.admin-btn{border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:999px;padding:.3rem .8rem;cursor:pointer;font-size:.8rem;font-weight:600}
 .admin-btn:hover{background:var(--accent);color:#fff}
 
 /* ---- fuel sign-in gate, AI-interest, Google button ---- */
@@ -1027,11 +1029,14 @@ a.pd-goal:hover{text-decoration:none;filter:brightness(.97);transform:translateY
 .pf-proto2 .pf-l{font-size:.7rem;font-weight:800;padding:.2rem .4rem;border-radius:7px}
 
 /* ================= Super-admin control room + root-cause governance ================= */
-.adm-tabs{display:flex;gap:.4rem;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:1.2rem 0 1rem}
-.adm-tabs button{border:none;background:none;padding:.6rem .9rem;font:inherit;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:.4rem}
-.adm-tabs button.on{color:var(--head);border-bottom-color:var(--accent)}
-.adm-c{font-family:var(--mono);font-size:.72rem;min-width:1.1rem;text-align:center}
-.adm-c.hot{background:#e5484d;color:#fff;border-radius:20px;padding:.05rem .4rem}
+.adm-tabs{display:flex;gap:.45rem;flex-wrap:wrap;margin:.8rem 0 1rem}
+.adm-tabs button{border:1px solid var(--line);background:var(--panel);padding:.45rem .95rem;font:inherit;font-weight:600;font-size:.88rem;color:var(--muted);cursor:pointer;border-radius:999px;display:flex;align-items:center;gap:.45rem;transition:.12s}
+.adm-tabs button:hover{border-color:var(--accent);color:var(--head)}
+.adm-tabs button.on{color:#fff;background:var(--accent);border-color:var(--accent)}
+.adm-c{font-size:.72rem;min-width:1.1rem;text-align:center;opacity:.85}
+.adm-c.hot{background:#e5484d;color:#fff;border-radius:20px;padding:.05rem .42rem;font-weight:700;opacity:1}
+#adm-body{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1rem 1.2rem;overflow-x:auto}
+#adm-body>.muted:first-child{margin-top:0}
 .admin-btn.ok{border-color:var(--green);color:var(--green)}
 .admin-btn.ok:hover{background:var(--green);color:#fff}
 .rcc-act{font-weight:800;font-size:.78rem;white-space:nowrap}
