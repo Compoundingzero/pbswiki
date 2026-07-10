@@ -1690,6 +1690,18 @@ a.dp-name:hover{color:var(--accent)}
 .shared-cta{display:flex;flex-direction:column;gap:.6rem;margin-top:1.2rem}
 .shared-cta .cta-primary,.shared-cta .tg-coach{width:100%;justify-content:center}
 .shared-note{font-size:.8rem;color:var(--muted);margin:.9rem 0 0;text-align:center}
+/* ---- Consistency pulse: streak + 7-day week strip ---- */
+.plan-pulse{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:.75rem 1.1rem;margin:0 0 1rem}
+.pulse-streak{font-size:1rem;color:var(--head)}
+.pulse-streak b{font-size:1.3rem;color:var(--accent);font-variant-numeric:tabular-nums}
+.week-strip{display:flex;gap:.55rem}
+.ws-day{display:flex;flex-direction:column;align-items:center;gap:.28rem}
+.ws-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);background:transparent;transition:.15s}
+.ws-day.partial .ws-dot{background:#f5b301;border-color:#f5b301}
+.ws-day.full .ws-dot{background:var(--accent);border-color:var(--accent)}
+.ws-day.today .ws-dot{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+.ws-lbl{font-size:.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:.02em}
+.ws-day.today .ws-lbl{color:var(--accent);font-weight:700}
 /* ---- Merged-plan manage section (your protocols + add another) ---- */
 .trk-manage{margin:1.6rem 0 1rem;padding-top:1.2rem;border-top:1px solid var(--line)}
 .trk-manage h2{font-size:1.05rem;margin:0 0 .6rem}
