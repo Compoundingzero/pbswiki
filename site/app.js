@@ -1942,18 +1942,21 @@
       <p style="color:var(--muted)">Everything in one place — your outcome dataset, the founding list, what people want built, and submissions to approve.</p>
       <div id="adm-outcomes"><div class="muted" style="padding:1rem 0">Loading outcomes…</div></div>
       <h2 class="adm-ops-h">Operations</h2>
-      <div class="adm-tabs" id="adm-tabs">
-        <button data-tab="members" class="on">Founding list <span class="adm-c" id="c-members"></span></button>
-        <button data-tab="clinicians">Clinician interest <span class="adm-c" id="c-clinicians"></span></button>
-        <button data-tab="requests">Requests <span class="adm-c" id="c-requests"></span></button>
-        <button data-tab="feedback">Feedback <span class="adm-c" id="c-feedback"></span></button>
-        <button data-tab="foods">Food submissions <span class="adm-c" id="c-foods"></span></button>
-        <button data-tab="partners">Partners <span class="adm-c" id="c-partners"></span></button>
-        <button data-tab="accounts">Expert applications <span class="adm-c" id="c-accounts"></span></button>
-        ${PHASE2 ? `<button data-tab="edits">Pending edits <span class="adm-c" id="c-edits"></span></button>
-        <button data-tab="rootcauses">Root-cause changes <span class="adm-c" id="c-rootcauses"></span></button>` : ''}
-      </div>
-      <div id="adm-body"><div class="muted" style="padding:2rem">Loading…</div></div>`;
+      <p class="muted" style="margin-top:-.3rem;font-size:.85rem">Pick an area to review. Red badges = items waiting on you.</p>
+      <div class="ops-menu" id="adm-tabs">${(() => {
+        const OPS = [
+          ['members', '👥', 'Members', 'Everyone who signed up — emails, join dates & roles'],
+          ['clinicians', '🩺', 'Clinician interest', 'Physios, dietitians & doctors on the founding waitlist'],
+          ['requests', '💡', 'Requests', 'Protocols & features users asked you to build'],
+          ['feedback', '💬', 'Feedback', 'Bug reports & suggestions sent from the site'],
+          ['foods', '🥗', 'Food submissions', 'User-submitted foods awaiting your approval'],
+          ['partners', '🏪', 'Partners', 'Local businesses applying to be listed'],
+          ['accounts', '✅', 'Expert applications', 'Clinicians applying for a verified-domain badge'],
+        ];
+        if (PHASE2) OPS.push(['edits', '✎', 'Pending edits', 'Proposed edits to compound pages'], ['rootcauses', '🧬', 'Root-cause changes', 'Proposed changes to protocol root causes']);
+        return OPS.map((o, i) => `<button data-tab="${o[0]}" class="ops-item${i === 0 ? ' on' : ''}"><span class="ops-ico">${o[1]}</span><span class="ops-txt"><span class="ops-title">${esc(o[2])} <span class="adm-c" id="c-${o[0]}"></span></span><span class="ops-desc">${esc(o[3])}</span></span></button>`).join('');
+      })()}</div>
+      <div id="adm-body"><div class="muted" style="padding:2rem">Select an area above.</div></div>`;
     const tabs = app.querySelector('#adm-tabs');
     tabs.querySelectorAll('button').forEach(b => b.onclick = () => {
       tabs.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on');
@@ -3242,6 +3245,7 @@
   const AGE_OPTS = [['18-24', '18–24'], ['25-34', '25–34'], ['35-44', '35–44'], ['45-54', '45–54'], ['55-64', '55–64'], ['65+', '65+']];
   const SEX_OPTS = [['male', 'Male'], ['female', 'Female'], ['other', 'Other'], ['prefer_not', 'Prefer not to say']];
   const ETH_OPTS = [['chinese', 'Chinese'], ['malay', 'Malay'], ['indian', 'Indian'], ['other', 'Other'], ['prefer_not', 'Prefer not to say']];
+  const COND_OPTS = [['diabetes', 'Diabetes / pre-diabetes'], ['hypertension', 'High blood pressure'], ['high_cholesterol', 'High cholesterol'], ['pcos', 'PCOS'], ['thyroid', 'Thyroid condition'], ['heart', 'Heart condition'], ['autoimmune', 'Autoimmune condition'], ['none', 'None of these']];
   let CONSENT = null; // null unknown · true consented · false declined
   async function loadConsent() { if (!ME) { CONSENT = null; return; } try { const d = await api.getConsent(); CONSENT = d && d.consent ? !!d.consent.consent_research : false; } catch (e) { CONSENT = null; } }
   function consentCardHtml() {
@@ -3274,9 +3278,10 @@
         <h2>A little about you <span class="muted" style="font-size:.8rem;font-weight:400">optional</span></h2>
         <p class="muted">So we can show what works for people like you. All optional, all anonymous.</p>
         <div class="pf-grid"><label>Age ${sel('age', AGE_OPTS, p.age_band)}</label><label>Sex ${sel('sex', SEX_OPTS, p.sex)}</label><label>Ethnicity ${sel('eth', ETH_OPTS, p.ethnicity)}</label></div>
+        <div class="pf-conds"><span class="pf-conds-h">Any of these? <span class="muted" style="font-weight:400">(optional)</span></span><div class="pf-chips">${COND_OPTS.map(o => `<label class="pf-chip"><input type="checkbox" value="${o[0]}"${(p.conditions || []).includes(o[0]) ? ' checked' : ''}>${esc(o[1])}</label>`).join('')}</div></div>
         <div class="consent-acts"><button class="cta-primary" id="pf-save">Save</button><button class="cta-ghost" id="pf-skip">Skip</button></div>`);
       m.querySelector('[data-close]').onclick = closeModal; m.querySelector('#pf-skip').onclick = closeModal;
-      m.querySelector('#pf-save').onclick = async () => { try { await api.saveProfile({ age_band: m.querySelector('#pf-age').value || null, sex: m.querySelector('#pf-sex').value || null, ethnicity: m.querySelector('#pf-eth').value || null }); closeModal(); if (typeof toast === 'function') toast('Saved ✓'); } catch (e) { alert(e.message); } };
+      m.querySelector('#pf-save').onclick = async () => { const conditions = [...m.querySelectorAll('.pf-chip input:checked')].map(c => c.value); try { await api.saveProfile({ age_band: m.querySelector('#pf-age').value || null, sex: m.querySelector('#pf-sex').value || null, ethnicity: m.querySelector('#pf-eth').value || null, conditions }); closeModal(); if (typeof toast === 'function') toast('Saved ✓'); } catch (e) { alert(e.message); } };
     });
   }
   function openDataModal() {
@@ -3306,10 +3311,10 @@
         <div class="hm-row"><select id="hm-marker" class="pf-in">${opts}</select><input id="hm-val" class="pf-in hm-num" type="number" step="any" placeholder="value"><input id="hm-date" class="pf-in" type="date"><button class="fn-step add" id="hm-add">Add</button></div>
         <ul class="hm-list" id="hm-list">${recent}</ul></div>
       <div class="hm-sec"><b>⚖️ Body metrics (today)</b>
-        <div class="hm-row"><input id="hm-wt" class="pf-in hm-num" type="number" step="0.1" placeholder="weight kg"><input id="hm-rhr" class="pf-in hm-num" type="number" placeholder="resting HR"><button class="fn-step add" id="hm-save">Save</button></div></div>`);
+        <div class="hm-row"><input id="hm-wt" class="pf-in hm-num" type="number" step="0.1" placeholder="weight kg"><input id="hm-rhr" class="pf-in hm-num" type="number" placeholder="resting HR"><input id="hm-steps" class="pf-in hm-num" type="number" placeholder="steps"><input id="hm-sleep" class="pf-in hm-num" type="number" step="0.1" placeholder="sleep hrs"><button class="fn-step add" id="hm-save">Save</button></div></div>`);
     m.querySelector('[data-close]').onclick = closeModal;
     m.querySelector('#hm-add').onclick = async () => { const marker = m.querySelector('#hm-marker').value; const value = m.querySelector('#hm-val').value; const taken_on = m.querySelector('#hm-date').value || undefined; if (value === '') return; try { await api.addMarker({ marker, value: +value, unit: MARKER_UNIT[marker], taken_on }); const list = m.querySelector('#hm-list'); const li = document.createElement('li'); li.innerHTML = `${esc(MARKER_LABEL[marker])}: <b>${esc(value)}</b> ${esc(MARKER_UNIT[marker])} <span class="muted">${esc(taken_on || 'today')}</span>`; if (list.querySelector('.muted')) list.innerHTML = ''; list.insertBefore(li, list.firstChild); m.querySelector('#hm-val').value = ''; if (typeof toast === 'function') toast('Logged ✓'); } catch (e) { alert(e.message); } };
-    m.querySelector('#hm-save').onclick = async () => { const wt = m.querySelector('#hm-wt').value, rhr = m.querySelector('#hm-rhr').value; if (wt === '' && rhr === '') return; try { await api.saveWearable({ day: today(), weight_kg: wt === '' ? undefined : +wt, resting_hr: rhr === '' ? undefined : +rhr, source: 'manual' }); closeModal(); if (typeof toast === 'function') toast('Saved ✓'); } catch (e) { alert(e.message); } };
+    m.querySelector('#hm-save').onclick = async () => { const wt = m.querySelector('#hm-wt').value, rhr = m.querySelector('#hm-rhr').value, stp = m.querySelector('#hm-steps').value, slp = m.querySelector('#hm-sleep').value; if (wt === '' && rhr === '' && stp === '' && slp === '') return; try { await api.saveWearable({ day: today(), weight_kg: wt === '' ? undefined : +wt, resting_hr: rhr === '' ? undefined : +rhr, steps: stp === '' ? undefined : +stp, sleep_min: slp === '' ? undefined : Math.round(+slp * 60), source: 'manual' }); closeModal(); if (typeof toast === 'function') toast('Saved ✓'); } catch (e) { alert(e.message); } };
   }
 
   // ===== Outcome check-ins (baseline / 30d / 90d) — the feedback loop =====
@@ -3345,11 +3350,12 @@
       <label class="ci-q">Right now, how bad is it? <span class="muted">(0 none — 10 worst)</span>
         <input id="ci-sym" type="range" min="0" max="10" value="5" class="ci-range"><output id="ci-symv">5</output></label>
       ${impRow}
+      <label class="ci-q">Anything you'd add? <span class="muted" style="font-weight:400">(optional)</span><textarea id="ci-note" class="pf-in" rows="2" maxlength="500" placeholder="e.g. what helped most, side effects…"></textarea></label>
       <div class="consent-acts"><button class="cta-primary" id="ci-save">${isBaseline ? 'Save starting point' : 'Submit'}</button><button class="cta-ghost" id="ci-skip">Skip</button></div>`);
     m.querySelector('[data-close]').onclick = closeModal; m.querySelector('#ci-skip').onclick = closeModal;
     const rng = m.querySelector('#ci-sym'), out = m.querySelector('#ci-symv'); rng.oninput = () => out.textContent = rng.value;
     m.querySelector('#ci-save').onclick = async () => {
-      const body = { pid: r.pr.pid, rcid: r.pr.rcid, phase, symptom_0_10: +rng.value };
+      const body = { pid: r.pr.pid, rcid: r.pr.rcid, phase, symptom_0_10: +rng.value, note: (m.querySelector('#ci-note').value || '').trim() || null };
       if (!isBaseline) { const imp = m.querySelector('#ci-imp').value; body.improvement = imp === '' ? null : +imp; const adh = m.querySelector('#ci-adh').value; body.adherence_pct = adh === '' ? null : +adh; body.still_on = m.querySelector('#ci-on').checked; }
       try { await api.submitCheckin(body); closeModal(); if (typeof toast === 'function') toast('Thank you 🙏 logged anonymously'); const host = document.getElementById('checkin-slot'); if (host) host.innerHTML = ''; } catch (e) { alert(e.message); }
     };
