@@ -1805,6 +1805,15 @@ a.dp-name:hover{color:var(--accent)}
 .ci-q{display:flex;flex-direction:column;gap:.35rem;margin:.9rem 0;font-size:.9rem;font-weight:600;color:var(--head)}
 .ci-range{width:100%}
 .ci-q output{font-weight:700;color:var(--accent);font-size:1.1rem}
+/* ---- Control Room: outcome dashboard ---- */
+.adm-outcomes{margin:.5rem 0 1.5rem}
+.ao-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:0 0 1rem}
+.ao-stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1rem;text-align:center}
+.ao-n{display:block;font-size:1.8rem;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.ao-l{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.ao-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+.adm-ops-h{font-size:1.1rem;margin:1.6rem 0 .6rem;color:var(--head)}
+@media(max-width:560px){.ao-stats{grid-template-columns:1fr}}
 /* ---- Weekly structure: rest-day banner + training-days editor ---- */
 .rest-banner{background:linear-gradient(135deg,#eef4ff,#f6f9ff);border:1px solid #cdddf5;border-radius:12px;padding:.7rem 1rem;font-size:.9rem;color:var(--head);margin:.2rem 0 .8rem}
 .train-days{margin:.7rem 0 .1rem;font-size:.85rem}

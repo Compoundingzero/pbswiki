@@ -280,6 +280,7 @@
     adminPartners() { return this.call('GET', '/api/admin/partners').then(d => d.partners); },
     adminSetPartner(id, status) { return this.call('POST', '/api/admin/partners/' + id, { status }); },
     adminOverview() { return this.call('GET', '/api/admin/overview'); },
+    adminOutcomes() { return this.call('GET', '/api/admin/outcomes'); },
     setRequestStatus(id, status) { return this.call('POST', '/api/admin/requests/' + id, { status }); },
     rootcauseChanges(problem) { return this.call('GET', '/api/rootcause-changes' + (problem ? '?problem=' + encodeURIComponent(problem) : '')).then(d => d); },
     submitRootcauseChange(b) { return this.call('POST', '/api/rootcause-changes', b); },
@@ -1936,7 +1937,9 @@
     }
     app.innerHTML = `${crumbs([{ label: 'Home', href: '#/' }, { label: 'Control room' }])}
       <h1>Control room</h1>
-      <p style="color:var(--muted)">Everything in one place — the founding list, what people want built, feedback, and submissions to approve.</p>
+      <p style="color:var(--muted)">Everything in one place — your outcome dataset, the founding list, what people want built, and submissions to approve.</p>
+      <div id="adm-outcomes"><div class="muted" style="padding:1rem 0">Loading outcomes…</div></div>
+      <h2 class="adm-ops-h">Operations</h2>
       <div class="adm-tabs" id="adm-tabs">
         <button data-tab="members" class="on">Founding list <span class="adm-c" id="c-members"></span></button>
         <button data-tab="clinicians">Clinician interest <span class="adm-c" id="c-clinicians"></span></button>
@@ -2046,6 +2049,28 @@
         body.querySelectorAll('[data-fb]').forEach(b => b.onclick = () => act(() => api.setFeedback(b.dataset.fb, b.dataset.to)));
       }
     }
+    // Outcome dataset — the moat, aggregated (super-admin only)
+    async function loadOutcomes() {
+      const host = document.getElementById('adm-outcomes'); if (!host) return;
+      let O; try { O = await api.adminOutcomes(); } catch (e) { host.innerHTML = ''; return; }
+      const t = O.totals || {};
+      const nameOf = (pid, rcid) => { const p = GRAPH.problems.find(x => x.id === pid); const rc = p && p.root_causes.find(r => r.id === rcid); return { pn: p ? p.name : pid, rn: rc ? rc.name.split('(')[0].trim() : rcid, icon: p ? (p.icon || '') : '' }; };
+      const rows = (O.rows || []).map(r => { const nm = nameOf(r.pid, r.rcid);
+        const p30 = r.d30_n ? Math.round(r.d30_imp / r.d30_n * 100) : null, p90 = r.d90_n ? Math.round(r.d90_imp / r.d90_n * 100) : null;
+        const dlt = r.symptom_delta;
+        return `<tr><td>${nm.icon} <b>${esc(nm.pn)}</b> <span class="muted">${esc(nm.rn)}</span></td>
+          <td>${r.baseline_n}</td>
+          <td>${r.d30_n}${p30 != null ? ` · <b>${p30}%</b>↑` : ''}</td>
+          <td>${r.d90_n}${p90 != null ? ` · <b>${p90}%</b>↑` : ''}</td>
+          <td>${dlt != null ? (dlt > 0 ? '▼ ' + dlt : dlt < 0 ? '▲ ' + Math.abs(dlt) : '0') + ' pts' : '—'}</td>
+          <td>${r.avg_adh != null ? r.avg_adh + '%' : '—'}</td></tr>`;
+      }).join('') || '<tr><td colspan="6" class="muted">No outcome data yet — it accrues as consented users complete their 30- and 90-day check-ins.</td></tr>';
+      host.innerHTML = `<section class="adm-outcomes">
+        <div class="ao-stats"><div class="ao-stat"><span class="ao-n">${t.consented || 0}</span><span class="ao-l">consented users</span></div><div class="ao-stat"><span class="ao-n">${t.checkins || 0}</span><span class="ao-l">check-ins logged</span></div><div class="ao-stat"><span class="ao-n">${t.protocols || 0}</span><span class="ao-l">protocols with data</span></div></div>
+        <div class="ao-table-wrap"><table class="board"><thead><tr><th>Protocol</th><th>Baseline</th><th>30-day</th><th>90-day</th><th>Symptom Δ</th><th>Adherence</th></tr></thead><tbody>${rows}</tbody></table></div>
+        <p class="muted" style="font-size:.78rem">▼ = symptom fell (improved) · ↑ = share reporting better · anonymous aggregate.</p></section>`;
+    }
+    loadOutcomes();
     load();
   }
 

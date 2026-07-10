@@ -1568,6 +1568,34 @@ async function api(req, res, url) {
     return json(res, 200, { ok: true });
   }
   // --- consolidated super-admin control room: everything the superadmin needs in one call ---
+  // Cohort outcomes — the data moat, aggregated (super-admin only).
+  if (seg[0] === 'admin' && seg[1] === 'outcomes' && method === 'GET') {
+    const u = await currentUser(req); if (!isSuper(u)) return json(res, 403, { error: 'Super-admin only' });
+    const rows = (await db.query(`
+      SELECT pid, rcid,
+        COUNT(*) FILTER (WHERE phase='baseline') AS baseline_n,
+        COUNT(*) FILTER (WHERE phase='d30') AS d30_n,
+        COUNT(*) FILTER (WHERE phase='d90') AS d90_n,
+        COUNT(*) FILTER (WHERE phase='d30' AND improvement>=1) AS d30_imp,
+        COUNT(*) FILTER (WHERE phase='d90' AND improvement>=1) AS d90_imp,
+        ROUND(AVG(adherence_pct) FILTER (WHERE phase IN ('d30','d90'))) AS avg_adh
+      FROM outcome_checkins GROUP BY pid, rcid
+      ORDER BY d90_n DESC, d30_n DESC, baseline_n DESC`)).rows;
+    const delta = (await db.query(`
+      WITH base AS (SELECT user_id,pid,rcid,symptom_0_10 s FROM outcome_checkins WHERE phase='baseline' AND symptom_0_10 IS NOT NULL),
+           lastc AS (SELECT DISTINCT ON (user_id,pid,rcid) user_id,pid,rcid,symptom_0_10 s
+                     FROM outcome_checkins WHERE phase IN ('d30','d90') AND symptom_0_10 IS NOT NULL
+                     ORDER BY user_id,pid,rcid,(phase='d90') DESC)
+      SELECT b.pid,b.rcid, ROUND(AVG(b.s-l.s)::numeric,1) AS delta, COUNT(*) AS n
+      FROM base b JOIN lastc l USING(user_id,pid,rcid) GROUP BY b.pid,b.rcid`)).rows;
+    const dmap = {}; delta.forEach(d => { dmap[d.pid + '/' + d.rcid] = { delta: d.delta, n: d.n }; });
+    rows.forEach(r => { const d = dmap[r.pid + '/' + r.rcid]; r.symptom_delta = d ? d.delta : null; r.delta_n = d ? d.n : 0; });
+    const totals = (await db.query(`SELECT
+      (SELECT COUNT(*) FROM user_consent WHERE consent_research) AS consented,
+      (SELECT COUNT(*) FROM outcome_checkins) AS checkins,
+      (SELECT COUNT(*) FROM (SELECT DISTINCT pid,rcid FROM outcome_checkins) t) AS protocols`)).rows[0];
+    return json(res, 200, { rows, totals });
+  }
   if (seg[0] === 'admin' && seg[1] === 'overview' && method === 'GET') {
     const u = await currentUser(req); if (!isSuper(u)) return json(res, 403, { error: 'Super-admin only' });
     const [experts, partners, foods, requests, rcc, feedback, proposals, cedits, members, memberCount, clinicians] = await Promise.all([
