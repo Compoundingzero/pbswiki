@@ -154,6 +154,9 @@
     return Math.round(daysShown(plan, M, denom) / denom * 100);
   }
   function dayVolume(dl) { if (!dl || !dl.sets) return 0; let v = 0; Object.keys(dl.sets).forEach(k => (dl.sets[k] || []).forEach(s => { if (s && s.reps) v += (s.w || 0) * s.reps; })); return v; }
+  // ---- Retention hooks (deterministic) ----
+  const STREAK_MILESTONES = [3, 7, 14, 30, 60, 90, 180, 365];
+  function milestoneMsg(m) { return ({ 3: "3 days — it's becoming a habit.", 7: 'a full week! 🎉', 14: 'two weeks strong 💪', 30: '30 days — this is who you are now.', 60: '60 days. Unstoppable.', 90: '90 days — a real streak.', 180: 'half a year!', 365: 'one year. Legendary.' })[m] || m + ' days!'; }
   // tiny inline bar sparkline (values → bars scaled to max)
   function sparkline(vals) {
     const max = Math.max(1, ...vals);
@@ -3217,6 +3220,20 @@
     const M = mergedPlan(plan);
     if (!M.resolved.length) { app.innerHTML = emptyPlan(); return; }
     const dayLog = planDay(plan); const streak = planStreak(plan); const multi = M.resolved.length > 1;
+    // Milestone celebration — once ever, per milestone crossed
+    (function () { const rec = Array.isArray(plan.milestones) ? plan.milestones : []; const hit = STREAK_MILESTONES.filter(m => streak >= m && rec.indexOf(m) < 0); if (hit.length) { const pl = getPlan(); pl.milestones = Array.from(new Set(rec.concat(hit))); setPlan(pl); const top = Math.max.apply(null, hit); setTimeout(() => { if (typeof toast === 'function') toast('🔥 ' + top + '-day streak — ' + milestoneMsg(top)); }, 500); } })();
+    // Gentle non-guilt nudge if yesterday was a scheduled miss (and today's not done yet)
+    const yKey = dISO(1);
+    const beenAround = new Date(planStartDate(plan) + 'T00:00:00') <= new Date(yKey + 'T00:00:00');
+    const yShowed = planDayStats(M, (plan.log || {})[yKey], scheduledIds(M, plan, yKey)).showed;
+    const todayShowed = planDayStats(M, dayLog, scheduledIds(M, plan, today())).showed;
+    const missBanner = (beenAround && !yShowed && !todayShowed && plan.dismissedNudge !== today())
+      ? `<div class="miss-banner">🌱 You missed yesterday — no stress. Do today's keystone and you're right back on track. <button class="miss-x" id="miss-dismiss" aria-label="Dismiss">✕</button></div>` : '';
+    // Once-a-week recap of the last 7 days
+    let rShown = 0, rSessions = 0; for (let i = 1; i <= 7; i++) { const key = dISO(i); const dl = (plan.log || {})[key]; if (planDayStats(M, dl, scheduledIds(M, plan, key)).showed) rShown++; if (dl && dl.sets && Object.keys(dl.sets).some(k => (dl.sets[k] || []).some(s => s && s.reps != null))) rSessions++; }
+    const hasPriorWeek = new Date(planStartDate(plan) + 'T00:00:00') <= new Date(dISO(7) + 'T00:00:00');
+    const recapCard = (plan.recapWeek !== weekKey() && hasPriorWeek)
+      ? `<div class="recap-card">📊 <b>Last 7 days:</b> you showed up <b>${rShown}/7</b> days${rSessions ? ` and logged <b>${rSessions}</b> strength session${rSessions === 1 ? '' : 's'}` : ''}. ${rShown >= 5 ? 'Strong week — keep it rolling.' : rShown >= 3 ? "Solid — let's build on it." : 'Fresh start this week. 💪'} <button class="miss-x" id="recap-dismiss" aria-label="Dismiss">✕</button></div>` : '';
     const moveRow = e => {
       const on = dayLog.done.includes(e.id); const cue = (e.prescription || {}).cue; const sub = [rxLine(e), cue].filter(Boolean).join(' · ');
       const label = `<label class="trk-row"><input type="checkbox" class="plan-cb" data-done="${esc(e.id)}" ${on ? 'checked' : ''} aria-label="Mark ${esc(e.name)} done"><span class="trk-txt"><span class="trk-name">${e.kind === 'stretch' ? '🧘' : '💪'} ${esc(e.name)}</span>${sub ? `<span class="trk-sub">${sub}</span>` : ''}</span><a class="trk-i" href="#/exercise/${esc(e.id)}" aria-label="Details about ${esc(e.name)}">Details</a></label>`;
@@ -3255,6 +3272,8 @@
       <section class="plan-hd trk-hd"><div><div class="kicker">My Plan</div><h1>Today</h1><p class="muted">${subtitle}</p></div>
         <div class="plan-hd-actions"><a class="cta-ghost" href="#/progress">📊 Progress</a></div></section>
       <section class="plan-pulse"><div class="pulse-streak">🔥 <b>${streak}</b>-day streak</div>${weekStripHtml(plan, M)}</section>
+      ${recapCard}
+      ${missBanner}
       ${keystoneCards}
       ${danger}
       ${(totalItems || restBanner) ? `<section class="trk-today">
@@ -3277,6 +3296,9 @@
     app.querySelectorAll('[data-ks]').forEach(b => b.onclick = () => { const pl = getPlan(); const d = planDay(pl); const key = b.dataset.ks; d.keystones[key] = !d.keystones[key]; setPlan(pl); renderPlan(); });
     // training-days editor: toggle which weekdays strength is scheduled
     app.querySelectorAll('[data-td]').forEach(b => b.onclick = e => { e.preventDefault(); const pl = getPlan(); const wd = +b.dataset.td; const days = planTrainingDays(pl).slice(); const i = days.indexOf(wd); if (i >= 0) days.splice(i, 1); else days.push(wd); days.sort(); pl.trainingDays = days; setPlan(pl); renderPlan(); });
+    // dismiss retention banners
+    const md = document.getElementById('miss-dismiss'); if (md) md.onclick = () => { const pl = getPlan(); pl.dismissedNudge = today(); setPlan(pl); const b = md.closest('.miss-banner'); if (b) b.remove(); };
+    const rd = document.getElementById('recap-dismiss'); if (rd) rd.onclick = () => { const pl = getPlan(); pl.recapWeek = weekKey(); setPlan(pl); const b = rd.closest('.recap-card'); if (b) b.remove(); };
     const refreshProg = () => { const d = planDay(getPlan()); const pr = app.querySelector('.trk-prog'); if (pr) { const dn = [...M.moves, ...M.supps].filter(x => d.done.includes(x.id)).length; pr.textContent = dn + '/' + totalItems + ' done'; } };
     const refreshPulse = d => {
       const st = planDayStats(M, d, scheduledIds(M, plan, today()));

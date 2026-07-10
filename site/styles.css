@@ -1743,6 +1743,13 @@ a.dp-name:hover{color:var(--accent)}
 .ptool{padding:.5rem 0;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--muted)}
 .ptool:last-child{border-bottom:none}
 .ptool b{color:var(--head)}
+/* ---- Retention banners (recap + gentle nudge) ---- */
+.recap-card,.miss-banner{border-radius:12px;padding:.75rem 2.3rem .75rem 1rem;font-size:.9rem;color:var(--head);margin:0 0 1rem;position:relative;line-height:1.5}
+.recap-card{background:linear-gradient(135deg,#eefaf3,#f4fbf7);border:1px solid #bfe6ce}
+.miss-banner{background:linear-gradient(135deg,#fff8ec,#fefcf5);border:1px solid #f0dcae}
+.recap-card b,.miss-banner b{color:var(--head)}
+.miss-x{position:absolute;top:.5rem;right:.6rem;background:none;border:none;color:var(--faint);font-size:.9rem;cursor:pointer;line-height:1}
+.miss-x:hover{color:var(--head)}
 /* ---- Weekly structure: rest-day banner + training-days editor ---- */
 .rest-banner{background:linear-gradient(135deg,#eef4ff,#f6f9ff);border:1px solid #cdddf5;border-radius:12px;padding:.7rem 1rem;font-size:.9rem;color:var(--head);margin:.2rem 0 .8rem}
 .train-days{margin:.7rem 0 .1rem;font-size:.85rem}
