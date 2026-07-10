@@ -58,25 +58,48 @@
 
   // ---------- stack (localStorage + URL share) ----------
   // ---------- Unified plan object (the omnichannel spine: web + Telegram + sharing all read this) ----------
+  // v2 shape — ONE plan holds every protocol the user runs, merged into one daily experience:
+  //   { v:2, protocols:[{pid,rcid,moves,supps,functions,startedAt}], draft:{pid,rcid,moves,supps,functions,extra,step}|null,
+  //     log:{ [date]:{ keystones:{"pid/rcid":bool}, done:[itemId], sets:{exId:[{w,reps}]}, food:[], fn:{fid:n} } },
+  //     fnWeek:{[wk]:{fid:n}}, tools:{...} }
   const PLAN_KEY = 'rnawiki_plan';
-  function getPlan() { try { return JSON.parse(localStorage.getItem(PLAN_KEY)) || null; } catch (e) { return null; } }
+  function newPlan() { return { v: 2, protocols: [], draft: null, log: {}, fnWeek: {}, tools: {} }; }
+  // Upgrade any older single-protocol plan to v2 without losing tracking history.
+  function migratePlan(p) {
+    if (!p || p.v === 2) return p;
+    const np = newPlan();
+    np.log = p.log || {}; np.fnWeek = p.fnWeek || {}; np.tools = p.tools || {};
+    const key = p.pid ? (p.pid + '/' + p.rcid) : null;
+    if (p.pid && p.built) np.protocols.push({ pid: p.pid, rcid: p.rcid, moves: p.moves, supps: p.supps, functions: Array.isArray(p.functions) ? p.functions : [], startedAt: p.startedAt || today() });
+    else if (p.pid) np.draft = { pid: p.pid, rcid: p.rcid, moves: p.moves, supps: p.supps, functions: p.functions, extra: p.extra, step: p.step || 0 };
+    // old day log used a single keystone bool → move it under this protocol's key
+    Object.keys(np.log).forEach(d => { const dl = np.log[d]; if (!dl) return; if (typeof dl.keystone === 'boolean') { dl.keystones = dl.keystones || {}; if (key) dl.keystones[key] = dl.keystone; delete dl.keystone; } dl.keystones = dl.keystones || {}; dl.done = dl.done || []; dl.sets = dl.sets || {}; dl.food = dl.food || []; dl.fn = dl.fn || {}; });
+    return np;
+  }
+  function getPlan() { try { return migratePlan(JSON.parse(localStorage.getItem(PLAN_KEY))) || null; } catch (e) { return null; } }
   function setPlan(p) {
     if (p) localStorage.setItem(PLAN_KEY, JSON.stringify(p)); else localStorage.removeItem(PLAN_KEY);
     if (ME && p) api.savePlan(p); // signed-in: mirror to the account so Telegram/other devices stay in sync
   }
+  function planProtocols(plan) { return (plan && Array.isArray(plan.protocols)) ? plan.protocols : []; }
+  function getDraft() { const p = getPlan(); return p ? p.draft : null; }
+  function setDraft(dr) { const p = getPlan() || newPlan(); p.draft = dr; setPlan(p); }
   // On login: the account's saved plan is the source of truth; if none exists, push the local one up.
   async function syncPlanOnLogin() {
     try {
       const serverPlan = await api.getPlan();
       const local = getPlan();
-      if (serverPlan) localStorage.setItem(PLAN_KEY, JSON.stringify(serverPlan));
+      if (serverPlan) localStorage.setItem(PLAN_KEY, JSON.stringify(migratePlan(serverPlan)));
       else if (local) api.savePlan(local);
     } catch (e) {}
   }
-  function planDay(plan) { plan.log = plan.log || {}; const k = today(); plan.log[k] = plan.log[k] || { done: [], keystone: false }; return plan.log[k]; }
+  function planDay(plan) { plan.log = plan.log || {}; const k = today(); const d = plan.log[k] = plan.log[k] || {}; d.keystones = d.keystones || {}; d.done = d.done || []; d.sets = d.sets || {}; d.food = d.food || []; d.fn = d.fn || {}; return d; }
+  // Streak = consecutive days the user showed up. A day counts if ANY of their keystones was marked done.
+  // (Redefined to a fuller completion metric in the next item; kept simple + honest here.)
   function planStreak(plan) {
-    const log = (plan && plan.log) || {}; const set = new Set(Object.keys(log).filter(d => log[d] && log[d].keystone));
-    let s = 0; const d = new Date(); for (; ;) { const key = d.toISOString().slice(0, 10); if (set.has(key)) { s++; d.setDate(d.getDate() - 1); } else break; }
+    const log = (plan && plan.log) || {};
+    const showed = d => { const dl = log[d]; return dl && dl.keystones && Object.values(dl.keystones).some(Boolean); };
+    let s = 0; const d = new Date(); for (; ;) { const key = d.toISOString().slice(0, 10); if (showed(key)) { s++; d.setDate(d.getDate() - 1); } else break; }
     return s;
   }
 
@@ -2740,10 +2763,11 @@
       b.disabled = false; // always re-enable so it can be opened again
     }; });
   }
-  function keystoneCardHtml(rc, dayLog, streak) {
+  // done = is this protocol's keystone done today; key = "pid/rcid"; label = protocol name (shown only when >1 protocol)
+  function keystoneCardHtml(rc, done, streak, key, label) {
     if (!rc.keystone) return '';
-    return `<div class="keystone-card"><div class="ks-badge">⭐ Your one keystone</div><p class="ks-one">${esc(rc.keystone.one)}</p>
-      <div class="plan-streak"><button class="ks-done-btn ${dayLog.keystone ? 'done' : ''}" id="ks-done">${dayLog.keystone ? '✅ Done today' : 'Mark done today'}</button><span class="streak-badge">🔥 <b>${streak}</b>-day streak</span></div></div>`;
+    return `<div class="keystone-card"><div class="ks-badge">⭐ ${label ? esc(label) + ' — keystone' : 'Your one keystone'}</div><p class="ks-one">${esc(rc.keystone.one)}</p>
+      <div class="plan-streak"><button class="ks-done-btn ${done ? 'done' : ''}" data-ks="${esc(key)}">${done ? '✅ Done today' : 'Mark done today'}</button><span class="streak-badge">🔥 <b>${streak}</b>-day streak</span></div></div>`;
   }
   function buildSteps(P) {
     const s = [];
@@ -2814,37 +2838,41 @@
     const hit = PLAN_FUNCTIONS.find(f => f.match.some(k => hay.includes(k)));
     return (hit || fnById('hydration')).id; // hydration is the universal fallback
   }
-  function planFunctions(plan) { return Array.isArray(plan.functions) ? plan.functions : []; }
   // ISO-ish week key for weekly counters (year + week number)
   function weekKey() { const d = new Date(); const day = (d.getDay() + 6) % 7; d.setDate(d.getDate() - day); return d.toISOString().slice(0, 10); }
 
   async function renderPlan() {
     try { await ensureProtocolData(); } catch (e) { app.innerHTML = emptyPlan(); return; }
     const plan = getPlan();
-    if (!plan || !plan.pid) { app.innerHTML = emptyPlan(); return; }
-    const found = findRootCause(plan.pid, plan.rcid);
-    if (!found) { app.innerHTML = emptyPlan(); return; }
-    const { problem, rc } = found;
-    const P = generateProtocol(rc);
-    if (plan.built) return renderPlanTracking(plan, problem, rc, P);
-    return renderPlanBuilder(plan, problem, rc, P);
+    if (!plan) { app.innerHTML = emptyPlan(); return; }
+    // A protocol is being built → show the builder for the draft
+    if (plan.draft && plan.draft.pid) {
+      const found = findRootCause(plan.draft.pid, plan.draft.rcid);
+      if (!found) { plan.draft = null; setPlan(plan); return renderPlan(); }
+      const { problem, rc } = found; const P = generateProtocol(rc);
+      return renderPlanBuilder(plan, problem, rc, P);
+    }
+    // Otherwise the merged daily tracker across every protocol they run
+    if (planProtocols(plan).length) return renderPlanTracking(plan);
+    app.innerHTML = emptyPlan();
   }
 
-  // ---- Builder: browse → learn → select each category, then confirm ----
+  // ---- Builder: browse → learn → select each category, then confirm. Operates on plan.draft only. ----
   function renderPlanBuilder(plan, problem, rc, P) {
+    const dr = plan.draft;
     const steps = buildSteps(P);
     const allMoves = [...(P.strengthen || []), ...(P.stretch || [])].map(e => e.id);
     const allSupp = (P.stack || []).map(c => c.id);
     // The final wizard stage is the Functions picker (index === steps.length), even if there are no item steps.
-    if ((plan.step || 0) >= steps.length) return renderPlanFunctions(plan, problem, rc, P, steps);
-    const si = Math.max(0, Math.min(plan.step || 0, steps.length - 1));
+    if ((dr.step || 0) >= steps.length) return renderPlanFunctions(plan, problem, rc, P, steps);
+    const si = Math.max(0, Math.min(dr.step || 0, steps.length - 1));
     const step = steps[si]; const isLast = si === steps.length - 1;
-    const selMoves = () => Array.isArray(getPlan().moves) ? getPlan().moves : allMoves;
-    const selSupps = () => { const s = getPlan().supps; return s === 'none' ? [] : (Array.isArray(s) ? s : allSupp); };
+    const selMoves = () => { const d = getDraft(); return d && Array.isArray(d.moves) ? d.moves : allMoves; };
+    const selSupps = () => { const d = getDraft(); const s = d && d.supps; return s === 'none' ? [] : (Array.isArray(s) ? s : allSupp); };
     const mSel = selMoves(), sSel = selSupps();
     const bucket = step.bucket;
     // user-added items for this section (that aren't already in the default list)
-    const extraIds = (((getPlan().extra || {})[bucket]) || []).filter(id => !step.items.some(it => it.id === id));
+    const extraIds = (((dr.extra || {})[bucket]) || []).filter(id => !step.items.some(it => it.id === id));
     const extraItems = extraIds.map(id => catalogItem(bucket, id)).filter(Boolean);
     const dispItems = step.items.concat(extraItems);
     const items = dispItems.map(it => {
@@ -2854,7 +2882,7 @@
     }).join('');
     const chips = steps.map((s, i) => `<span class="bstep ${i === si ? 'on' : i < si ? 'done' : ''}">${s.icon} ${s.title}</span>`).join('<span class="bsep">›</span>') + '<span class="bsep">›</span><span class="bstep">🧩 Tools</span><span class="bsep">›</span><span class="bstep">🍽️ Fuel</span>';
     const count = dispItems.filter(it => (step.kind === 'move' ? mSel : sSel).includes(it.id)).length;
-    const foodOnly = step.kind === 'supp' ? `<button class="chip food-only ${plan.supps === 'none' ? 'on' : ''}" id="food-only">🍚 ${plan.supps === 'none' ? '✓ ' : ''}I'll go food-only — no supplements</button>` : '';
+    const foodOnly = step.kind === 'supp' ? `<button class="chip food-only ${dr.supps === 'none' ? 'on' : ''}" id="food-only">🍚 ${dr.supps === 'none' ? '✓ ' : ''}I'll go food-only — no supplements</button>` : '';
     const ixn = step.kind === 'supp' ? `<div id="build-ixn">${sSel.length > 1 ? interactionPanel((P.stack || []).filter(c => sSel.includes(c.id)), { tiers: ['danger', 'timing'] }) : ''}</div>` : '';
     const addWord = step.title.toLowerCase().replace(/s$/, '');
     app.innerHTML = `${crumbs([{ label: 'Home', href: '#/' }, { label: 'Build my plan' }])}
@@ -2882,11 +2910,11 @@
     wireItemModals('.build-list', byExId, byCId);
     // Search-to-add: pull any item from the full library into this section
     const addExtra = id => {
-      const pl = getPlan(); pl.extra = pl.extra || {}; pl.extra[bucket] = pl.extra[bucket] || [];
-      if (!pl.extra[bucket].includes(id)) pl.extra[bucket].push(id);
-      if (bucket === 'stack') { const cur = pl.supps === 'none' ? [] : (Array.isArray(pl.supps) ? pl.supps.slice() : allSupp.slice()); if (!cur.includes(id)) cur.push(id); pl.supps = cur; }
-      else { const cur = Array.isArray(pl.moves) ? pl.moves.slice() : allMoves.slice(); if (!cur.includes(id)) cur.push(id); pl.moves = cur; }
-      setPlan(pl); renderPlan();
+      const d = getDraft(); if (!d) return; d.extra = d.extra || {}; d.extra[bucket] = d.extra[bucket] || [];
+      if (!d.extra[bucket].includes(id)) d.extra[bucket].push(id);
+      if (bucket === 'stack') { const cur = d.supps === 'none' ? [] : (Array.isArray(d.supps) ? d.supps.slice() : allSupp.slice()); if (!cur.includes(id)) cur.push(id); d.supps = cur; }
+      else { const cur = Array.isArray(d.moves) ? d.moves.slice() : allMoves.slice(); if (!cur.includes(id)) cur.push(id); d.moves = cur; }
+      setDraft(d); renderPlan();
     };
     const search = document.getElementById('build-search'); const results = document.getElementById('build-results');
     if (search) search.oninput = () => {
@@ -2897,28 +2925,28 @@
     };
     const updCount = () => { const el = app.querySelector('.build-count'); if (!el) return; const n = dispItems.filter(it => (step.kind === 'move' ? selMoves() : selSupps()).includes(it.id)).length; el.innerHTML = '<b>' + n + '</b> of ' + dispItems.length + ' kept'; };
     app.querySelectorAll('[data-move]').forEach(cb => cb.onchange = () => {
-      const pl = getPlan(); const cur = Array.isArray(pl.moves) ? pl.moves.slice() : allMoves.slice(); const id = cb.dataset.move;
+      const d = getDraft(); if (!d) return; const cur = Array.isArray(d.moves) ? d.moves.slice() : allMoves.slice(); const id = cb.dataset.move;
       const i = cur.indexOf(id); if (cb.checked && i < 0) cur.push(id); else if (!cb.checked && i >= 0) cur.splice(i, 1);
-      pl.moves = cur; setPlan(pl); cb.closest('.build-item').classList.toggle('sel', cb.checked); updCount();
+      d.moves = cur; setDraft(d); cb.closest('.build-item').classList.toggle('sel', cb.checked); updCount();
     });
     app.querySelectorAll('[data-supp]').forEach(cb => cb.onchange = () => {
-      const pl = getPlan(); const cur = pl.supps === 'none' ? [] : (Array.isArray(pl.supps) ? pl.supps.slice() : allSupp.slice()); const id = cb.dataset.supp;
+      const d = getDraft(); if (!d) return; const cur = d.supps === 'none' ? [] : (Array.isArray(d.supps) ? d.supps.slice() : allSupp.slice()); const id = cb.dataset.supp;
       const i = cur.indexOf(id); if (cb.checked && i < 0) cur.push(id); else if (!cb.checked && i >= 0) cur.splice(i, 1);
-      pl.supps = cur; setPlan(pl); cb.closest('.build-item').classList.toggle('sel', cb.checked);
+      d.supps = cur; setDraft(d); cb.closest('.build-item').classList.toggle('sel', cb.checked);
       const ix = document.getElementById('build-ixn'); if (ix) ix.innerHTML = cur.length > 1 ? interactionPanel((P.stack || []).filter(c => cur.includes(c.id)), { tiers: ['danger', 'timing'] }) : '';
       updCount();
     });
-    const fo = document.getElementById('food-only'); if (fo) fo.onclick = () => { const pl = getPlan(); pl.supps = pl.supps === 'none' ? allSupp.slice() : 'none'; setPlan(pl); renderPlan(); };
-    const back = document.getElementById('build-back'); if (back) back.onclick = () => { const pl = getPlan(); pl.step = Math.max(0, (pl.step || 0) - 1); setPlan(pl); renderPlan(); };
-    const next = document.getElementById('build-next'); if (next) next.onclick = () => { const pl = getPlan(); pl.step = (pl.step || 0) + 1; setPlan(pl); renderPlan(); }; // last item step advances to the Tools picker
+    const fo = document.getElementById('food-only'); if (fo) fo.onclick = () => { const d = getDraft(); if (!d) return; d.supps = d.supps === 'none' ? allSupp.slice() : 'none'; setDraft(d); renderPlan(); };
+    const back = document.getElementById('build-back'); if (back) back.onclick = () => { const d = getDraft(); if (!d) return; d.step = Math.max(0, (d.step || 0) - 1); setDraft(d); renderPlan(); };
+    const next = document.getElementById('build-next'); if (next) next.onclick = () => { const d = getDraft(); if (!d) return; d.step = (d.step || 0) + 1; setDraft(d); renderPlan(); }; // last item step advances to the Tools picker
   }
 
   // ---- Functions picker: the final build stage — default (matched) + optional add-ons ----
   function renderPlanFunctions(plan, problem, rc, P, steps) {
     const defId = defaultFunctionFor(problem, rc);
     // auto-assign the matched default the first time we reach this step (keeps user choices on return)
-    if (!Array.isArray(getPlan().functions)) { const pl = getPlan(); pl.functions = [defId]; setPlan(pl); }
-    const sel = planFunctions(getPlan());
+    if (!Array.isArray((getDraft() || {}).functions)) { const d = getDraft(); if (d) { d.functions = [defId]; setDraft(d); } }
+    const sel = (getDraft() && getDraft().functions) || [];
     const ordered = [fnById(defId), ...PLAN_FUNCTIONS.filter(f => f.id !== defId)].filter(Boolean);
     const fnCard = f => {
       const on = sel.includes(f.id); const isDef = f.id === defId;
@@ -2942,12 +2970,21 @@
         <button class="cta-primary" id="fn-confirm">✓ Confirm — build my protocol</button>
       </div>`;
     app.querySelectorAll('[data-fn]').forEach(b => b.onclick = () => {
-      const pl = getPlan(); const cur = planFunctions(pl).slice(); const id = b.dataset.fn;
+      const d = getDraft(); if (!d) return; const cur = Array.isArray(d.functions) ? d.functions.slice() : []; const id = b.dataset.fn;
       const i = cur.indexOf(id); if (i < 0) cur.push(id); else cur.splice(i, 1);
-      pl.functions = cur; setPlan(pl); renderPlan();
+      d.functions = cur; setDraft(d); renderPlan();
     });
-    const back = document.getElementById('fn-back'); if (back) back.onclick = () => { const pl = getPlan(); if (!steps.length) { navigate('/protocol/' + problem.id + '/' + rc.id); return; } pl.step = steps.length - 1; setPlan(pl); renderPlan(); };
-    const conf = document.getElementById('fn-confirm'); if (conf) conf.onclick = () => { const pl = getPlan(); pl.built = true; pl.justBuilt = true; setPlan(pl); renderPlan(); };
+    const back = document.getElementById('fn-back'); if (back) back.onclick = () => { const d = getDraft(); if (!d) return; if (!steps.length) { const p = getPlan(); p.draft = null; setPlan(p); navigate('/protocol/' + problem.id + '/' + rc.id); return; } d.step = steps.length - 1; setDraft(d); renderPlan(); };
+    // Confirm: fold the draft into the plan's protocol list (replacing any existing copy of the same protocol) — never overwrites others
+    const conf = document.getElementById('fn-confirm'); if (conf) conf.onclick = () => {
+      const p = getPlan(); const d = p.draft; if (!d) return;
+      const fns = (Array.isArray(d.functions) && d.functions.length) ? d.functions : [defId];
+      const prev = planProtocols(p).find(x => x.pid === d.pid && x.rcid === d.rcid);
+      const entry = { pid: d.pid, rcid: d.rcid, moves: d.moves, supps: d.supps, functions: fns, startedAt: (prev && prev.startedAt) || today() };
+      p.protocols = planProtocols(p).filter(x => !(x.pid === d.pid && x.rcid === d.rcid)).concat(entry);
+      p.draft = null; p.justBuilt = { pid: d.pid, rcid: d.rcid };
+      setPlan(p); renderPlan();
+    };
   }
 
   // ---- Tracking: the finalised protocol — selected items + Fuel (revealed here only) ----
@@ -2955,9 +2992,10 @@
   async function sharePlan(problem, rc) {
     const pl = getPlan();
     let url = (location.origin || 'https://rnawiki.com') + '/protocol/' + problem.id + '/' + rc.id;
-    // If this is a built plan, mint a share code carrying the exact selections so a client gets THIS plan
-    if (pl && pl.built) {
-      try { const r = await api.sharePlan(problem.id, rc.id, { moves: pl.moves, supps: pl.supps, functions: pl.functions }); if (r && r.url) url = r.url; } catch (e) {}
+    // Share the exact built selections so a client gets THIS plan (mints a share code)
+    const entry = planProtocols(pl).find(x => x.pid === problem.id && x.rcid === rc.id);
+    if (entry) {
+      try { const r = await api.sharePlan(problem.id, rc.id, { moves: entry.moves, supps: entry.supps, functions: entry.functions }); if (r && r.url) url = r.url; } catch (e) {}
     }
     const txt = 'I built a ' + problem.name + ' protocol on RNAwiki 💪 — here it is, ready to use:';
     if (navigator.share) navigator.share({ title: 'RNAwiki', text: txt, url }).catch(() => {});
@@ -2999,8 +3037,11 @@
     wireTgCoach();
     const use = document.getElementById('use-shared');
     if (use) use.onclick = () => {
-      const pl = { pid: problem.id, rcid: rc.id, built: true, step: 0, moves: mSel, supps: foodOnly ? 'none' : sSel, functions: fns, startedAt: today(), log: {} };
-      setPlan(pl); navigate('/plan');
+      const p = getPlan() || newPlan();
+      const entry = { pid: problem.id, rcid: rc.id, moves: mSel, supps: foodOnly ? 'none' : sSel, functions: fns, startedAt: today() };
+      // add to the user's plan (merging with any existing protocols) — never wipes their other goals
+      p.protocols = planProtocols(p).filter(x => !(x.pid === problem.id && x.rcid === rc.id)).concat(entry);
+      p.draft = null; setPlan(p); navigate('/plan');
       if (!ME) setTimeout(() => { if (typeof openAuth === 'function') openAuth('signup'); }, 500); // client makes an account to keep it
     };
   }
@@ -3021,13 +3062,13 @@
   }
 
   // ---- Render the selected protocol functions as live, deterministic widgets in the tracker ----
-  function mountPlanFunctions(problem, rc) {
+  function mountPlanFunctions() {
     const host = document.getElementById('plan-functions'); if (!host) return;
     const render = () => {
-      const plan = getPlan(); const sel = planFunctions(plan); if (!sel.length) { host.innerHTML = ''; return; }
-      const wk = weekKey();
+      const plan = getPlan(); const M = mergedPlan(plan); const sel = M.functions; if (!sel.length) { host.innerHTML = ''; return; }
+      const tg = M.protos[0] || {}; const wk = weekKey();
       const widget = f => {
-        if (f.tgOnly) return `<div class="fn-w tgonly"><div class="fn-w-h"><span class="fn-ico">${f.icon}</span><b>${esc(f.name)}</b><span class="fn-tg">Telegram</span></div><p class="fn-w-sub">${esc(f.how)}</p><button class="fn-w-tg tg-coach" data-tg-pid="${problem.id}" data-tg-rc="${rc.id}">📲 Set up in Telegram</button></div>`;
+        if (f.tgOnly) return `<div class="fn-w tgonly"><div class="fn-w-h"><span class="fn-ico">${f.icon}</span><b>${esc(f.name)}</b><span class="fn-tg">Telegram</span></div><p class="fn-w-sub">${esc(f.how)}</p><button class="fn-w-tg tg-coach" data-tg-pid="${esc(tg.pid || '')}" data-tg-rc="${esc(tg.rcid || '')}">📲 Set up in Telegram</button></div>`;
         if (f.kind === 'counter') {
           const store = f.period === 'week' ? ((plan.fnWeek || {})[wk] || {}) : (planDay(plan).fn || {});
           const v = store[f.id] || 0; const pct = Math.min(100, Math.round(v / f.target * 100));
@@ -3081,50 +3122,75 @@
   }
 
   // ---- Tracking: a focused, Apple-simple daily tracker — only your selected items, nothing to browse ----
-  function renderPlanTracking(plan, problem, rc, P) {
-    const allSupp = (P.stack || []).map(c => c.id);
-    const sSel = plan.supps === 'none' ? [] : (Array.isArray(plan.supps) ? plan.supps : allSupp);
-    const selStack = (P.stack || []).filter(c => sSel.includes(c.id));
-    const allMovesArr = [...(P.strengthen || []), ...(P.stretch || [])];
-    const mSelIds = Array.isArray(plan.moves) ? plan.moves : allMovesArr.map(e => e.id);
-    const selMovesArr = allMovesArr.filter(e => mSelIds.includes(e.id));
-    const dk = today(); const dayLog = (plan.log || {})[dk] || { done: [], keystone: false }; const streak = planStreak(plan);
-    const selP = { strengthen: (P.strengthen || []).filter(e => mSelIds.includes(e.id)), stretch: (P.stretch || []).filter(e => mSelIds.includes(e.id)), stack: selStack, fuel: P.fuel };
-    // one compact, checkable row per item — a details link opens the mini-window (never navigates away)
+  // Merge every protocol the user runs into one daily view (deduped items, unioned tools, combined food targets)
+  function mergedPlan(plan) {
+    const protos = planProtocols(plan);
+    const keystones = []; const movesMap = {}; const suppsMap = {}; const fnSet = new Set(); const fuel = {}; const resolved = [];
+    protos.forEach(pr => {
+      const found = findRootCause(pr.pid, pr.rcid); if (!found) return;
+      const { problem, rc } = found; const P = generateProtocol(rc); resolved.push({ pr, problem, rc, P });
+      if (rc.keystone) keystones.push({ key: pr.pid + '/' + pr.rcid, problem, rc });
+      const allMovesArr = [...(P.strengthen || []), ...(P.stretch || [])];
+      const mSel = Array.isArray(pr.moves) ? pr.moves : allMovesArr.map(e => e.id);
+      allMovesArr.filter(e => mSel.includes(e.id)).forEach(e => { movesMap[e.id] = e; });
+      const allSupp = (P.stack || []).map(c => c.id);
+      const sSel = pr.supps === 'none' ? [] : (Array.isArray(pr.supps) ? pr.supps : allSupp);
+      (P.stack || []).filter(c => sSel.includes(c.id)).forEach(c => { suppsMap[c.id] = c; });
+      (pr.functions || []).forEach(f => fnSet.add(f));
+      const nt = rc.nutrient_targets || {}; Object.keys(nt).forEach(k => { if (!fuel[k] || (nt[k].target || 0) > (fuel[k].target || 0)) fuel[k] = nt[k]; });
+    });
+    return { protos, resolved, keystones, moves: Object.values(movesMap), supps: Object.values(suppsMap), functions: [...fnSet], fuel };
+  }
+
+  // ---- Tracking: one merged, Apple-simple daily view across every protocol the user runs ----
+  function renderPlanTracking(plan) {
+    const M = mergedPlan(plan);
+    if (!M.resolved.length) { app.innerHTML = emptyPlan(); return; }
+    const dayLog = planDay(plan); const streak = planStreak(plan); const multi = M.resolved.length > 1;
     const moveRow = e => { const on = dayLog.done.includes(e.id); const cue = (e.prescription || {}).cue; const sub = [rxLine(e), cue].filter(Boolean).join(' · ');
       return `<label class="trk-row ${on ? 'done' : ''}"><input type="checkbox" class="plan-cb" data-done="${esc(e.id)}" ${on ? 'checked' : ''} aria-label="Mark ${esc(e.name)} done"><span class="trk-txt"><span class="trk-name">${e.kind === 'stretch' ? '🧘' : '💪'} ${esc(e.name)}</span>${sub ? `<span class="trk-sub">${sub}</span>` : ''}</span><a class="trk-i" href="#/exercise/${esc(e.id)}" aria-label="Details about ${esc(e.name)}">Details</a></label>`; };
     const suppRow = c => { const on = dayLog.done.includes(c.id); const sub = mdStrip(c.protocol || c.plain || c.bottom || '').slice(0, 60);
       return `<label class="trk-row ${on ? 'done' : ''}"><input type="checkbox" class="plan-cb" data-done="${esc(c.id)}" ${on ? 'checked' : ''} aria-label="Mark ${esc(c.name)} taken"><span class="trk-txt"><span class="trk-name">💊 ${esc(c.name)}</span>${sub ? `<span class="trk-sub">${esc(sub)}</span>` : ''}</span><a class="trk-i" href="#/c/${slug(c.name)}" aria-label="Details about ${esc(c.name)}">Details</a></label>`; };
-    const rows = [...selMovesArr.map(moveRow), ...selStack.map(suppRow)].join('');
-    const totalItems = selMovesArr.length + selStack.length;
-    const doneItems = [...selMovesArr, ...selStack].filter(x => dayLog.done.includes(x.id)).length;
-    const danger = selStack.length > 1 ? interactionPanel(selStack, { tiers: ['danger'] }) : '';
+    const rows = [...M.moves.map(moveRow), ...M.supps.map(suppRow)].join('');
+    const totalItems = M.moves.length + M.supps.length;
+    const doneItems = [...M.moves, ...M.supps].filter(x => dayLog.done.includes(x.id)).length;
+    const danger = M.supps.length > 1 ? interactionPanel(M.supps, { tiers: ['danger'] }) : '';
+    const keystoneCards = M.keystones.map(k => keystoneCardHtml(k.rc, !!dayLog.keystones[k.key], streak, k.key, multi ? k.problem.name : '')).join('');
+    const subtitle = multi ? `${M.resolved.length} protocols · ${esc(M.resolved.map(r => r.problem.name).join(' · '))}` : esc(M.resolved[0].rc.name);
+    const hasFuel = Object.keys(M.fuel).length > 0; // hide Fuel entirely when no protocol has food targets
+    const firstTg = M.protos[0];
+    // Per-protocol manage list + "add another goal" — the merged plan's control centre
+    const manage = `<section class="trk-manage"><h2>Your protocols</h2>${M.resolved.map(r => `
+      <div class="tpm-row"><span class="tpm-name">${r.problem.icon || ''} ${esc(r.problem.name)} <em>${esc(r.rc.name.split('(')[0].trim())}</em></span>
+        <span class="tpm-acts"><button class="linkbtn" data-edit-proto="${r.pr.pid}/${r.pr.rcid}">Edit</button> · <button class="linkbtn" data-share-proto="${r.pr.pid}/${r.pr.rcid}">Share</button> · <button class="linkbtn danger" data-remove-proto="${r.pr.pid}/${r.pr.rcid}">Remove</button></span></div>`).join('')}
+      <a class="tpm-add" href="#/solve">＋ Add another goal</a></section>`;
     app.innerHTML = `${crumbs([{ label: 'Home', href: '#/' }, { label: 'My Plan' }])}
-      <section class="plan-hd trk-hd"><div><div class="kicker">My Plan · ${esc(problem.category)}</div><h1>${problem.icon || ''} ${esc(problem.name)}</h1><p class="muted">${esc(rc.name)}</p></div>
-        <div class="plan-hd-actions"><button class="trk-share" id="plan-share" title="Share this protocol">🔗 Share</button><button class="linkbtn" id="plan-edit">Edit</button></div></section>
-      ${keystoneCardHtml(rc, dayLog, streak)}
+      <section class="plan-hd trk-hd"><div><div class="kicker">My Plan</div><h1>Today</h1><p class="muted">${subtitle}</p></div></section>
+      ${keystoneCards}
       ${danger}
       ${totalItems ? `<section class="trk-today">
-        <div class="trk-today-head"><h2>Today</h2><span class="trk-prog">${doneItems}/${totalItems} done</span></div>
+        <div class="trk-today-head"><h2>Today's checklist</h2><span class="trk-prog">${doneItems}/${totalItems} done</span></div>
         <div class="trk-list">${rows}</div>
       </section>` : ''}
       <div id="plan-functions"></div>
-      <section class="trk-fuel"><h2>🍽️ Fuel</h2><p class="lyr-sub">Log meals to hit this protocol's targets.</p><div id="fuel-tracker" data-rc="${problem.id}:${rc.id}"></div></section>
-      ${(P.strengthen || P.stretch || P.stack) ? `<details class="trk-timing"><summary>🕐 See your day, laid out by timing</summary>${dayPlanHtml(problem, rc, selP)}</details>` : ''}
-      ${tgCoachRow(problem, rc)}`;
-    mountFuelTracker(problem, rc);
-    mountPlanFunctions(problem, rc);
+      ${hasFuel ? `<section class="trk-fuel"><h2>🍽️ Fuel</h2><p class="lyr-sub">Log meals to hit your protocols' targets.</p><div id="fuel-tracker"></div></section>` : ''}
+      ${manage}
+      ${firstTg ? tgCoachRow(M.resolved[0].problem, M.resolved[0].rc) : ''}`;
+    if (hasFuel) mountFuelTracker(null, null, M.fuel);
+    mountPlanFunctions();
     wireTgCoach();
-    const byExId = {}; allMovesArr.forEach(e => byExId[e.id] = e);
-    const byCId = {}; (P.stack || []).forEach(c => byCId[c.id] = c);
+    const byExId = {}; M.moves.forEach(e => byExId[e.id] = e);
+    const byCId = {}; M.supps.forEach(c => byCId[c.id] = c);
     wireItemModals('.trk-list', byExId, byCId);
-    const ks = document.getElementById('ks-done');
-    if (ks) ks.onclick = () => { const pl = getPlan(); const d = planDay(pl); d.keystone = !d.keystone; pl.streak = planStreak(pl); setPlan(pl); renderPlan(); };
-    app.querySelectorAll('.trk-list [data-done]').forEach(cb => cb.onchange = () => { const pl = getPlan(); const d = planDay(pl); const id = cb.dataset.done; const i = d.done.indexOf(id); if (cb.checked && i < 0) d.done.push(id); else if (!cb.checked && i >= 0) d.done.splice(i, 1); setPlan(pl); cb.closest('.trk-row').classList.toggle('done', cb.checked); const pr = app.querySelector('.trk-prog'); if (pr) { const dn = [...selMovesArr, ...selStack].filter(x => d.done.includes(x.id)).length; pr.textContent = dn + '/' + totalItems + ' done'; } });
-    const ed = document.getElementById('plan-edit'); if (ed) ed.onclick = () => { const pl = getPlan(); pl.built = false; pl.step = 0; setPlan(pl); renderPlan(); };
-    const sh = document.getElementById('plan-share'); if (sh) sh.onclick = () => sharePlan(problem, rc);
-    // The share moment — fire the celebration popup once, right after building
-    if (plan.justBuilt) { const pl = getPlan(); delete pl.justBuilt; setPlan(pl); buildCelebrateModal(problem, rc); }
+    // keystone toggles (one per protocol)
+    app.querySelectorAll('[data-ks]').forEach(b => b.onclick = () => { const pl = getPlan(); const d = planDay(pl); const key = b.dataset.ks; d.keystones[key] = !d.keystones[key]; setPlan(pl); renderPlan(); });
+    app.querySelectorAll('.trk-list [data-done]').forEach(cb => cb.onchange = () => { const pl = getPlan(); const d = planDay(pl); const id = cb.dataset.done; const i = d.done.indexOf(id); if (cb.checked && i < 0) d.done.push(id); else if (!cb.checked && i >= 0) d.done.splice(i, 1); setPlan(pl); cb.closest('.trk-row').classList.toggle('done', cb.checked); const pr = app.querySelector('.trk-prog'); if (pr) { const dn = [...M.moves, ...M.supps].filter(x => d.done.includes(x.id)).length; pr.textContent = dn + '/' + totalItems + ' done'; } });
+    // per-protocol manage actions
+    app.querySelectorAll('[data-edit-proto]').forEach(b => b.onclick = () => { const [pid, rcid] = b.dataset.editProto.split('/'); const pl = getPlan(); const pr = planProtocols(pl).find(x => x.pid === pid && x.rcid === rcid); if (!pr) return; pl.draft = { pid, rcid, moves: pr.moves, supps: pr.supps, functions: pr.functions, extra: {}, step: 0 }; setPlan(pl); renderPlan(); });
+    app.querySelectorAll('[data-share-proto]').forEach(b => b.onclick = () => { const [pid, rcid] = b.dataset.shareProto.split('/'); const found = findRootCause(pid, rcid); if (found) sharePlan(found.problem, found.rc); });
+    app.querySelectorAll('[data-remove-proto]').forEach(b => b.onclick = () => { const [pid, rcid] = b.dataset.removeProto.split('/'); const found = findRootCause(pid, rcid); const nm = found ? found.problem.name : 'this protocol'; if (!confirm('Remove ' + nm + ' from your plan? Your tracking history stays.')) return; const pl = getPlan(); pl.protocols = planProtocols(pl).filter(x => !(x.pid === pid && x.rcid === rcid)); setPlan(pl); renderPlan(); });
+    // The share moment — celebration popup, once, right after a protocol is built
+    if (plan.justBuilt && plan.justBuilt.pid) { const pl = getPlan(); const jb = pl.justBuilt; delete pl.justBuilt; setPlan(pl); const f = findRootCause(jb.pid, jb.rcid); if (f) buildCelebrateModal(f.problem, f.rc); }
   }
 
   async function renderProtocol(pid, rcid, clinicHandle) {
@@ -3203,7 +3269,12 @@
     else mountSharedProgress(problem, rc);
     const startBtn = document.getElementById('start-plan');
     if (startBtn) startBtn.onclick = () => {
-      const pl = { pid: problem.id, rcid: rc.id, built: false, step: 0, moves: [...(P.strengthen || []), ...(P.stretch || [])].map(e => e.id), supps: (P.stack || []).map(c => c.id), startedAt: today(), log: {} };
+      const pl = getPlan() || newPlan();
+      // If they already run this protocol, open it for editing; otherwise start a fresh draft with all selected.
+      const existing = planProtocols(pl).find(x => x.pid === problem.id && x.rcid === rc.id);
+      pl.draft = existing
+        ? { pid: problem.id, rcid: rc.id, moves: existing.moves, supps: existing.supps, functions: existing.functions, extra: {}, step: 0 }
+        : { pid: problem.id, rcid: rc.id, moves: [...(P.strengthen || []), ...(P.stretch || [])].map(e => e.id), supps: (P.stack || []).map(c => c.id), functions: undefined, extra: {}, step: 0 };
       // adoption is tracked by the build action (idempotent per voterKey), not a separate "experiment" button
       api.startExperiment(problem.id, rc.id).catch(() => {});
       setPlan(pl); navigate('/plan');
@@ -3502,10 +3573,10 @@
     const log = getFuelLog(); log.items.push({ food, n: 1 }); setFuelLog(log);
     if (_fuelRerender) _fuelRerender();
   }
-  function mountFuelTracker(problem, rc) {
+  function mountFuelTracker(problem, rc, targetsOverride) {
     const root = document.getElementById('fuel-tracker'); if (!root) return;
     const FO = window.RNAWIKI_FOODS;
-    const targets = rc.nutrient_targets || {};
+    const targets = targetsOverride || (rc && rc.nutrient_targets) || {};
     function totals() {
       const log = getFuelLog(); const sum = {}, missing = {};
       Object.keys(targets).forEach(k => { sum[k] = 0; missing[k] = 0; });
