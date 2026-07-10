@@ -217,7 +217,7 @@ function sameOrigin(req) {
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const BOT_USERNAME = process.env.BOT_USERNAME || 'rnawikibot';
 const TG_SECRET = crypto.createHmac('sha256', SECRET).update('tg-webhook').digest('hex').slice(0, 40);
-const TG_HELP = 'What I can do:\n<b>/build</b> — build your own plan here (pick problem + supplements)\n<b>/keystone</b> — your one keystone habit · <b>/done</b> — mark it done (builds your streak)\n<b>type any food</b> (e.g. “2 eggs”, “chicken rice”) — I log it against your protocol’s targets\n<b>/today</b> — keystone + food progress · <b>/stack</b> — your supplements + safety check\n<b>ask about any supplement by name</b> (e.g. “magnesium”) — I’ll explain + link the full page\n<b>/streak</b> · <b>/reset</b> (clear today’s food) · <b>/plan</b> · <b>/help</b>';
+const TG_HELP = 'What I can do:\n<b>/build</b> — build your own plan here (pick problem + supplements)\n<b>/keystone</b> — your one keystone habit · <b>/done</b> — mark it done (builds your streak)\n<b>type any food</b> (e.g. “2 eggs”, “chicken rice”) — I log it against your protocol’s targets\n<b>/today</b> — keystone + food progress · <b>/stack</b> — supplements + safety · <b>/schedule</b> — what to take when\n<b>ask about any supplement by name</b> (e.g. “magnesium”) — I’ll explain + link the full page\n<b>/streak</b> · <b>/reset</b> (clear today’s food) · <b>/plan</b> · <b>/help</b>';
 let TG_PROTO = {};
 try {
   const g = require('./data/clinical_graph.json'); const ks = require('./data/keystones.json');
@@ -244,7 +244,28 @@ function tgResolveStack(rc) {
   if (!TG_DATA) return [];
   const frags = (rc.compounds || []).map(f => String(f).toLowerCase());
   return TG_DATA.compounds.filter(c => { const nm = c.name.toLowerCase(); const words = nm.split(/[^a-z0-9]+/); return frags.some(f => nm === f || words.includes(f)); })
-    .map(c => ({ id: c.id, name: c.name, isRx: c.isRx, category: c.category, slug: tgSlug(c.name), stars: c.stars, plain: c.plain }));
+    .map(c => ({ id: c.id, name: c.name, isRx: c.isRx, category: c.category, slug: tgSlug(c.name), stars: c.stars, plain: c.plain, protocol: c.protocol }));
+}
+// Time-of-day bucketing — ported verbatim from the site's timingBucket (parses each
+// compound's own dosing text; no invented rules).
+function tgTimingBucket(c) {
+  const t = ((c.protocol || '') + ' ' + (c.plain || '')).toLowerCase();
+  if (/weekly|monthly|every \d+ ?days|\d+ (consecutive )?days? (a |per )?month|pulse|intermittent(ly)?|\bcycle\b|2 days monthly/.test(t)) return 'periodic';
+  if (/pre-?\s?(workout|exercise|train)|before (a |your )?(workout|exercise|train)|post-?\s?(workout|exercise|train)|after (a |your )?(workout|exercise|train)/.test(t)) return 'training';
+  if (/before bed|bedtime|at night|\bevening\b|\bnight\b|before sleep/.test(t)) return 'evening';
+  if (/\bmorning\b|on waking|empty stomach|with breakfast|\bam\b/.test(t)) return 'morning';
+  return 'meals';
+}
+async function tgSendSchedule(chatId, row) {
+  const p = TG_PROTO[(row.pid || '') + '/' + (row.rcid || '')]; if (!p) return tgSend(chatId, `Link or /build a protocol first.`);
+  let stack = p.stack || []; const sel = row.sel && row.sel.supps; if (Array.isArray(sel)) stack = stack.filter(c => sel.includes(c.id));
+  const buckets = { morning: [], training: [], meals: [], evening: [], periodic: [] };
+  stack.forEach(c => buckets[tgTimingBucket(c)].push(c.name + (c.isRx ? ' 🔵' : '')));
+  const order = [['morning', '☀️ Morning / on waking'], ['training', '🏋️ Around training'], ['meals', '🍽️ With meals / anytime'], ['evening', '🌙 Evening & bedtime'], ['periodic', '🔁 Periodic (not daily)']];
+  const parts = order.filter(([k]) => buckets[k].length).map(([k, label]) => `<b>${label}</b>\n${buckets[k].map(n => '• ' + tgEsc(n)).join('\n')}`);
+  const kline = p.keystone ? `⭐ <b>Keystone (do this daily):</b> ${tgEsc(p.keystone.one)}\n\n` : '';
+  const body = `🗓️ <b>Your ${tgEsc(p.problem)} day — what to take when</b>\n\n${kline}${parts.length ? parts.join('\n\n') : 'Food-only — no supplements to time.'}\n\n💪 Your movements (with how-to) → ${SITE_URL}/protocol/${row.pid}/${row.rcid}\n\n<i>Timing is from each supplement's own guidance — not a prescription.</i>`;
+  return tgSend(chatId, body);
 }
 // Category → problems index, for building a plan inside the chat.
 let TG_CATS = {};
@@ -453,6 +474,10 @@ async function handleTgUpdate(update) {
   if (cmd === 'stack' || cmd === 'supplements' || cmd === 'supps') {
     if (!row || !row.pid) return tgSend(chatId, `Link a protocol first — ${SITE_URL}/solve → “📲 Coach me on Telegram”.`);
     return tgSendStack(chatId, row);
+  }
+  if (cmd === 'schedule' || cmd === 'when' || cmd === 'timing' || cmd === 'day') {
+    if (!row || !row.pid) return tgSend(chatId, `/build a plan first, then I'll show your day.`);
+    return tgSendSchedule(chatId, row);
   }
   if (cmd === 'done' || cmd === 'done ✅' || cmd === '✅' || cmd === 'did it') return tgMarkDone(chatId);
   if (cmd === 'streak') return tgSend(chatId, `🔥 You're on a <b>${(row && row.streak) || 0}-day streak</b>. Keep it going — /done when you've done today's keystone.`);
