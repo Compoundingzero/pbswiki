@@ -319,7 +319,7 @@ function tgStartScheduler() {
       const now = new Date(); const nowUtcMin = now.getUTCHours() * 60 + now.getUTCMinutes(); const today = now.toISOString().slice(0, 10);
       const rows = (await db.query('SELECT * FROM telegram_users WHERE active AND nudge_hour IS NOT NULL AND pid IS NOT NULL AND (last_nudge IS NULL OR last_nudge <> $1)', [today])).rows;
       for (const r of rows) {
-        const localMin = (((nowUtcMin + (r.tz_offset || 480)) % 1440) + 1440) % 1440;
+        const localMin = (((nowUtcMin + (r.tz_offset ?? 480)) % 1440) + 1440) % 1440;  // ?? not || — a real 0 (UTC) must stay 0
         if (Math.floor(localMin / 60) === r.nudge_hour) { await db.query('UPDATE telegram_users SET last_nudge=$2 WHERE chat_id=$1', [r.chat_id, today]); await tgSendNudge(r).catch(() => { }); }
       }
     } catch (e) { console.error('[tg] nudge tick:', e.message); }
@@ -439,7 +439,7 @@ async function emailReminderTick() {
       FROM users u JOIN user_plans p ON p.user_id=u.id
       WHERE u.email IS NOT NULL AND u.email_nudge_hour IS NOT NULL AND (u.email_last_nudge IS NULL OR u.email_last_nudge <> $1)`, [today])).rows;
     for (const u of rows) {
-      const localMin = (((nowUtcMin + (u.email_tz_offset || 480)) % 1440) + 1440) % 1440;
+      const localMin = (((nowUtcMin + (u.email_tz_offset ?? 480)) % 1440) + 1440) % 1440;  // ?? not || — a real 0 (UTC) must stay 0
       if (Math.floor(localMin / 60) !== u.email_nudge_hour) continue;                   // not this user's hour yet
       const done = (await db.query('SELECT pid, rcid, phase FROM outcome_checkins WHERE user_id=$1', [u.id])).rows;
       const doneSet = new Set(done.map(d => d.pid + '|' + d.rcid + '|' + d.phase));
