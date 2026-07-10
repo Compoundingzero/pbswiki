@@ -217,7 +217,7 @@ function sameOrigin(req) {
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const BOT_USERNAME = process.env.BOT_USERNAME || 'rnawikibot';
 const TG_SECRET = crypto.createHmac('sha256', SECRET).update('tg-webhook').digest('hex').slice(0, 40);
-const TG_HELP = 'What I can do:\n<b>/build</b> — build your own plan here (pick problem + supplements)\n<b>/keystone</b> — your one keystone habit · <b>/done</b> — mark it done (builds your streak)\n<b>type any food</b> (e.g. “2 eggs”, “chicken rice”) — I log it against your protocol’s targets\n<b>/today</b> — keystone + food progress · <b>/tools</b> — your protocol’s tools (counters, timers, reminders) · <b>/stack</b> — supplements + safety · <b>/schedule</b> — what to take when\n<b>ask about any supplement by name</b> (e.g. “magnesium”) — I’ll explain + link the full page\n<b>/nudge</b> — a daily check-in at your time · <b>/streak</b> · <b>/reset</b> (clear food) · <b>/plan</b> · <b>/help</b>';
+const TG_HELP = 'What I can do:\n<b>/build</b> — build your own plan here (pick problem + supplements)\n<b>/keystone</b> — your one keystone habit · <b>/done</b> — mark it done (builds your streak)\n<b>type any food</b> (e.g. “2 eggs”, “chicken rice”) — I log it against your protocol’s targets\n<b>/today</b> — keystone + food progress · <b>/progress</b> — your streak &amp; consistency · <b>/tools</b> — your protocol’s tools (counters, timers, reminders) · <b>/stack</b> — supplements + safety · <b>/schedule</b> — what to take when\n<b>ask about any supplement by name</b> (e.g. “magnesium”) — I’ll explain + link the full page\n<b>/nudge</b> — a daily check-in at your time · <b>/streak</b> · <b>/reset</b> (clear food) · <b>/plan</b> · <b>/help</b>';
 let TG_PROTO = {};
 try {
   const g = require('./data/clinical_graph.json'); const ks = require('./data/keystones.json');
@@ -344,7 +344,7 @@ const TG_FUNCTIONS = [
   { id: 'walk', icon: '🚶', name: 'Post-meal walk timer', kind: 'timer', target: 10, unit: 'min', how: 'A 10-min walk after your biggest meal blunts the glucose spike. Tap ✓ when done.', match: ['glucose', 'insulin', 'blood sugar', 'metabolic', 'diabet', 'a1c'] },
   { id: 'breath', icon: '🌬️', name: 'Box-breathing timer', kind: 'timer', target: 4, unit: 'min', how: '4 minutes of 4-4-4-4 breathing when stress hits. Tap ✓ when done.', match: ['anx', 'stress', 'cortisol', 'panic', 'overwhelm', 'nervous'] },
   { id: 'plants', icon: '🥦', name: 'Plant-diversity counter', kind: 'counter', target: 30, unit: 'plants', period: 'week', how: '30+ different plants a week feeds a diverse microbiome. Tap + for each new plant.', match: ['gut', 'microbiome', 'fiber', 'digest', 'bloat', 'ibs', 'constipat'] },
-  { id: 'overload', icon: '🏋️', name: 'Progressive-overload log', kind: 'log', how: 'Log weight × reps for your key lift; beat last time. Send “log: 60kg x 8”.', match: ['muscle', 'strength', 'hypertrophy', 'sarcopenia', 'atroph', 'lean mass'] },
+  // progressive-overload logging now lives per-exercise in the web tracker, so it's no longer a selectable tool here
   { id: 'steps', icon: '👟', name: 'Daily step counter', kind: 'counter', target: 8000, unit: 'steps', period: 'day', how: 'Log steps toward 8,000/day. Tap + to add 500.', match: ['fat', 'weight', 'cardio', 'endur', 'sedentary', 'circulation'] },
   { id: 'hydration', icon: '💧', name: 'Hydration counter', kind: 'counter', target: 8, unit: 'glasses', period: 'day', how: 'Tap + for each glass. Target 8 a day.', match: ['energy', 'skin', 'headache', 'focus', 'fatigue', 'kidney'] },
   { id: 'wake', icon: '⏰', name: 'Fixed wake-time reminder', kind: 'reminder', how: 'A constant wake time anchors your body clock. I nudge you nightly to protect wind-down.', match: ['sleep', 'insomnia', 'circadian', 'tired', 'wake', 'jet lag'], tgOnly: true },
@@ -365,12 +365,38 @@ function tgTools(row) {
   if (!t.w || t.w.key !== wk) t.w = { key: wk, c: {} };
   return t;
 }
-async function tgMirrorFunctions(row) { // keep the linked web plan's function list in sync
+// Sync the bot's protocol (supps + functions) into the linked account's v2 web plan — creating it if needed.
+async function tgUpsertWebProtocol(row) {
+  if (!row || !row.user_id || !db.enabled || !row.pid) return;
+  try {
+    const r = (await db.query('SELECT plan FROM user_plans WHERE user_id=$1', [row.user_id])).rows[0];
+    let plan = (r && r.plan) || { v: 2, protocols: [], draft: null, log: {}, fnWeek: {}, tools: {} };
+    if (!Array.isArray(plan.protocols)) plan.protocols = []; plan.v = 2;
+    const supps = (row.sel && Array.isArray(row.sel.supps)) ? row.sel.supps : undefined;
+    let entry = plan.protocols.find(x => x.pid === row.pid && x.rcid === row.rcid);
+    if (!entry) { entry = { pid: row.pid, rcid: row.rcid, startedAt: new Date().toISOString().slice(0, 10) }; plan.protocols.push(entry); }
+    if (supps !== undefined) entry.supps = supps;
+    entry.functions = row.functions || [];
+    if (r) await db.query('UPDATE user_plans SET plan=$2, updated_at=now() WHERE user_id=$1', [row.user_id, JSON.stringify(plan)]);
+    else await db.query('INSERT INTO user_plans(user_id,plan,updated_at) VALUES($1,$2,now())', [row.user_id, JSON.stringify(plan)]);
+  } catch (e) {}
+}
+// Mutate today's entry in the linked account's v2 web plan (e.g. mark a keystone / log food) so web stays in sync.
+async function tgSyncWebDay(row, mutate) {
   if (!row || !row.user_id || !db.enabled) return;
   try {
-    const pr = (await db.query('SELECT plan FROM user_plans WHERE user_id=$1', [row.user_id])).rows[0];
-    if (pr && pr.plan) { const plan = pr.plan; plan.functions = row.functions || []; await db.query('UPDATE user_plans SET plan=$2, updated_at=now() WHERE user_id=$1', [row.user_id, JSON.stringify(plan)]); }
+    const r = (await db.query('SELECT plan FROM user_plans WHERE user_id=$1', [row.user_id])).rows[0];
+    if (!r || !r.plan) return; const plan = r.plan; const tk = new Date().toISOString().slice(0, 10);
+    plan.log = plan.log || {}; const d = plan.log[tk] = plan.log[tk] || {};
+    d.keystones = d.keystones || {}; d.done = d.done || []; d.sets = d.sets || {}; d.food = d.food || []; d.fn = d.fn || {};
+    mutate(d, plan);
+    await db.query('UPDATE user_plans SET plan=$2, updated_at=now() WHERE user_id=$1', [row.user_id, JSON.stringify(plan)]);
   } catch (e) {}
+}
+// Mint a share code for a built plan (so a bot-built protocol can be handed to clients with exact selections)
+async function tgMakeShareCode(pid, rcid, sel, userId) {
+  if (!db.enabled) return null;
+  try { const code = crypto.randomBytes(6).toString('base64url'); await db.query('INSERT INTO shared_plans(code,author_user_id,pid,rcid,plan) VALUES($1,$2,$3,$4,$5)', [code, userId || null, pid, rcid, JSON.stringify(sel)]); return code; } catch (e) { return null; }
 }
 
 // ---- Build-a-plan inside the chat (mirrors the site's builder) ----
@@ -449,12 +475,18 @@ async function tgBuildConfirm(chatId, msgId) {
   if (!flow.pid || !flow.rcid) return tgSend(chatId, `Something went off-track — /build to start again.`);
   const fns = (Array.isArray(flow.functions) && flow.functions.length) ? flow.functions : [tgDefaultFunction(flow.pid + '/' + flow.rcid)];
   await db.query('UPDATE telegram_users SET pid=$2, rcid=$3, sel=$4, functions=$5, flow=$6 WHERE chat_id=$1', [chatId, flow.pid, flow.rcid, JSON.stringify({ supps: flow.supps || [] }), JSON.stringify(fns), JSON.stringify({})]);
-  await tgMirrorFunctions(await tgGet(chatId));
+  const saved = await tgGet(chatId);
+  await tgUpsertWebProtocol(saved); // sync this protocol into the linked account's web plan (creates it if needed)
   if (msgId) await tgApi('editMessageReplyMarkup', { chat_id: chatId, message_id: msgId, reply_markup: { inline_keyboard: [] } });
-  const p = TG_PROTO[flow.pid + '/' + flow.rcid] || {}; const shareUrl = `${SITE_URL}/protocol/${flow.pid}/${flow.rcid}`;
-  await tgSend(chatId, `🎉 <b>You built your own ${tgEsc(p.problem || 'protocol')} protocol!</b>\n\nShare it — someone with the same problem is looking for exactly this:\n${shareUrl}`);
+  const p = TG_PROTO[flow.pid + '/' + flow.rcid] || {};
+  // mint a real share code so a client can open THIS exact plan (parity with the web share)
+  const code = await tgMakeShareCode(flow.pid, flow.rcid, { supps: flow.supps || [], functions: fns }, saved && saved.user_id);
+  const shareLink = code ? `${SITE_URL}/#/s/${code}` : `${SITE_URL}/protocol/${flow.pid}/${flow.rcid}`;
+  await tgSend(chatId, `🎉 <b>You built your own ${tgEsc(p.problem || 'protocol')} protocol!</b>\n\nShare it — a client or friend can open it and start with your exact plan:\n${shareLink}`);
   const toolNames = fns.map(id => { const f = tgFnById(id); return f ? f.icon + ' ' + f.name : null; }).filter(Boolean).join(', ');
   if (toolNames) await tgSend(chatId, `🧩 <b>Your tools:</b> ${toolNames}.\nOpen your dashboard anytime with <b>/tools</b>.`);
+  const hasReminder = fns.some(id => { const f = tgFnById(id); return f && f.kind === 'reminder'; });
+  if (hasReminder && saved.nudge_hour == null) await tgSend(chatId, `⏰ Your reminder tool needs a daily check-in time to work. Send <b>/nudge</b> to set it.`);
   return tgSendKeystone(chatId, flow.pid, flow.rcid);
 }
 // ---- Function dashboard (/tools) — counters, timers, reminders ----
@@ -526,12 +558,7 @@ async function tgLogFood(chatId, food) {
   if (!Array.isArray(log.items)) log.items = [];
   log.items.push({ name: food.name, serving: food.serving, n: food.n, qty: 1 });
   await db.query('UPDATE telegram_users SET food_log=$2, last_active=now() WHERE chat_id=$1', [chatId, JSON.stringify(log)]);
-  if (row.user_id && db.enabled) { // mirror into the account's plan log so the web tracker stays in sync
-    try {
-      const pr = (await db.query('SELECT plan FROM user_plans WHERE user_id=$1', [row.user_id])).rows[0];
-      if (pr && pr.plan) { const plan = pr.plan; plan.log = plan.log || {}; plan.log[today] = plan.log[today] || { done: [], keystone: false, food: [] }; plan.log[today].food = (plan.log[today].food || []).concat({ id: food.id, n: 1 }); await db.query('UPDATE user_plans SET plan=$2, updated_at=now() WHERE user_id=$1', [row.user_id, JSON.stringify(plan)]); }
-    } catch (e) {}
-  }
+  await tgSyncWebDay(row, d => { d.food.push({ id: food.id, n: 1 }); }); // mirror food into the v2 web plan
   const prog = tgFoodProgress({ ...row, food_log: log });
   return tgSend(chatId, `✅ Logged <b>${tgEsc(food.name)}</b>${food.serving ? ' <i>(' + tgEsc(food.serving) + ')</i>' : ''}.\n\n🍽️ <b>Today, toward your ${tgEsc((TG_PROTO[(row.pid || '') + '/' + (row.rcid || '')] || {}).problem || 'protocol')} targets:</b>\n${prog.text}\n\nType another food to keep going, or /today to review.`);
 }
@@ -567,8 +594,20 @@ async function tgMarkDone(chatId) {
   days = days.concat(today).slice(-120);
   const streak = tgComputeStreak(days);
   await db.query('UPDATE telegram_users SET keystone_days=$2, streak=$3, last_active=now() WHERE chat_id=$1', [chatId, JSON.stringify(days), streak]);
+  if (row.pid) await tgSyncWebDay(row, d => { d.keystones[row.pid + '/' + row.rcid] = true; }); // mirror the tick into the web plan
   const cheer = ['Nice.', 'That\'s the one thing.', 'Consistency wins.', 'This is how it compounds.', 'Love it.'][streak % 5];
   return tgSend(chatId, `✅ Logged! ${cheer} 🔥 <b>${streak}-day streak</b>.`);
+}
+async function tgSendProgress(chatId, row) {
+  if (!row || !row.pid) return tgSend(chatId, `/build a plan first, then I can show your progress.`);
+  const days = Array.isArray(row.keystone_days) ? row.keystone_days : []; const set = new Set(days);
+  const streak = tgComputeStreak(days);
+  const grid = []; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); grid.push(set.has(d.toISOString().slice(0, 10)) ? '🟩' : '⬜'); }
+  let last30 = 0; for (let i = 0; i < 30; i++) { const d = new Date(); d.setDate(d.getDate() - i); if (set.has(d.toISOString().slice(0, 10))) last30++; }
+  const t = tgTools(row); const fns = Array.isArray(row.functions) ? row.functions : [];
+  const toolLines = fns.map(id => { const f = tgFnById(id); if (!f || f.kind !== 'counter') return null; const v = (f.period === 'week' ? t.w.c : t.d.c)[id] || 0; return `${f.icon} ${f.name}: ${v}/${f.target} ${f.unit}${f.period === 'week' ? ' this week' : ' today'}`; }).filter(Boolean);
+  const body = `📊 <b>Your progress</b>\n\n🔥 <b>${streak}-day streak</b>\n${grid.join('')}  <i>last 7 days</i>\n✅ ${last30}/30 days this month${toolLines.length ? '\n\n' + toolLines.join('\n') : ''}\n\nKeep it going — <b>/done</b> when you've done today's keystone.`;
+  return tgSend(chatId, body);
 }
 async function handleTgUpdate(update) {
   if (update.callback_query) {
@@ -615,9 +654,9 @@ async function handleTgUpdate(update) {
     if (param && param.indexOf('s_') !== 0) {
       const t = (await db.query('SELECT * FROM telegram_link_tokens WHERE token=$1', [param])).rows[0];
       if (t) {
-        // pull the web plan's chosen functions (if any) so the bot mirrors them; else assign the matched default
+        // pull the web plan's chosen functions for THIS protocol (v2 per-protocol) so the bot mirrors them
         let fns = null;
-        try { const pr = t.user_id ? (await db.query('SELECT plan FROM user_plans WHERE user_id=$1', [t.user_id])).rows[0] : null; if (pr && pr.plan && Array.isArray(pr.plan.functions)) fns = pr.plan.functions; } catch (e) {}
+        try { const pr = t.user_id ? (await db.query('SELECT plan FROM user_plans WHERE user_id=$1', [t.user_id])).rows[0] : null; if (pr && pr.plan) { const pl = pr.plan; if (Array.isArray(pl.protocols)) { const e = pl.protocols.find(x => x.pid === t.pid && x.rcid === t.rcid); if (e && Array.isArray(e.functions)) fns = e.functions; } else if (Array.isArray(pl.functions)) fns = pl.functions; } } catch (e) {}
         if (!fns || !fns.length) fns = [tgDefaultFunction(t.pid + '/' + t.rcid)];
         await db.query('UPDATE telegram_users SET user_id=$2, pid=$3, rcid=$4, functions=$5 WHERE chat_id=$1', [chatId, t.user_id, t.pid, t.rcid, JSON.stringify(fns)]);
         await db.query('DELETE FROM telegram_link_tokens WHERE token=$1', [param]);
@@ -633,9 +672,13 @@ async function handleTgUpdate(update) {
     if (!row || !row.pid) return tgSend(chatId, `You haven't linked a protocol yet. Open ${SITE_URL}/solve and tap “📲 Coach me on Telegram”.`);
     return tgSendKeystone(chatId, row.pid, row.rcid);
   }
-  if (cmd === 'today' || cmd === 'fuel' || cmd === 'progress') {
+  if (cmd === 'today' || cmd === 'fuel') {
     if (!row || !row.pid) return tgSend(chatId, `Link a protocol first — open ${SITE_URL}/solve and tap “📲 Coach me on Telegram”.`);
     return tgSendToday(chatId, row);
+  }
+  if (cmd === 'progress' || cmd === 'stats') {
+    if (!row || !row.pid) return tgSend(chatId, `/build a plan first, then I can show your progress.`);
+    return tgSendProgress(chatId, row);
   }
   if (cmd === 'stack' || cmd === 'supplements' || cmd === 'supps') {
     if (!row || !row.pid) return tgSend(chatId, `Link a protocol first — ${SITE_URL}/solve → “📲 Coach me on Telegram”.`);
