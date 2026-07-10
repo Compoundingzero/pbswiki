@@ -217,7 +217,7 @@ function sameOrigin(req) {
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const BOT_USERNAME = process.env.BOT_USERNAME || 'rnawikibot';
 const TG_SECRET = crypto.createHmac('sha256', SECRET).update('tg-webhook').digest('hex').slice(0, 40);
-const TG_HELP = 'What I can do:\n<b>/build</b> — build your own plan here (pick problem + supplements)\n<b>/keystone</b> — your one keystone habit · <b>/done</b> — mark it done (builds your streak)\n<b>type any food</b> (e.g. “2 eggs”, “chicken rice”) — I log it against your protocol’s targets\n<b>/today</b> — keystone + food progress · <b>/stack</b> — supplements + safety · <b>/schedule</b> — what to take when\n<b>ask about any supplement by name</b> (e.g. “magnesium”) — I’ll explain + link the full page\n<b>/streak</b> · <b>/reset</b> (clear today’s food) · <b>/plan</b> · <b>/help</b>';
+const TG_HELP = 'What I can do:\n<b>/build</b> — build your own plan here (pick problem + supplements)\n<b>/keystone</b> — your one keystone habit · <b>/done</b> — mark it done (builds your streak)\n<b>type any food</b> (e.g. “2 eggs”, “chicken rice”) — I log it against your protocol’s targets\n<b>/today</b> — keystone + food progress · <b>/stack</b> — supplements + safety · <b>/schedule</b> — what to take when\n<b>ask about any supplement by name</b> (e.g. “magnesium”) — I’ll explain + link the full page\n<b>/nudge</b> — a daily check-in at your time · <b>/streak</b> · <b>/reset</b> (clear food) · <b>/plan</b> · <b>/help</b>';
 let TG_PROTO = {};
 try {
   const g = require('./data/clinical_graph.json'); const ks = require('./data/keystones.json');
@@ -266,6 +266,46 @@ async function tgSendSchedule(chatId, row) {
   const kline = p.keystone ? `⭐ <b>Keystone (do this daily):</b> ${tgEsc(p.keystone.one)}\n\n` : '';
   const body = `🗓️ <b>Your ${tgEsc(p.problem)} day — what to take when</b>\n\n${kline}${parts.length ? parts.join('\n\n') : 'Food-only — no supplements to time.'}\n\n💪 Your movements (with how-to) → ${SITE_URL}/protocol/${row.pid}/${row.rcid}\n\n<i>Timing is from each supplement's own guidance — not a prescription.</i>`;
   return tgSend(chatId, body);
+}
+// ---- Opt-in daily nudges (each user's own time + timezone) ----
+function tgHourLabel(h) { return (h % 12 || 12) + (h < 12 ? 'am' : 'pm'); }
+function tgParseTime(s) {
+  const m = String(s).toLowerCase().replace(/\s+/g, '').match(/^(\d{1,2})(?::(\d{2}))?(am|pm)?$/); if (!m) return null;
+  let h = +m[1]; const min = m[2] ? +m[2] : 0; const ap = m[3];
+  if (ap === 'pm' && h < 12) h += 12; if (ap === 'am' && h === 12) h = 0;
+  if (h > 23 || min > 59) return null; return h * 60 + min;
+}
+async function tgNudgeStart(chatId) {
+  const row = await tgGet(chatId); if (!row || !row.pid) return tgSend(chatId, `Build a plan first (/build), then I can nudge you daily.`);
+  const times = [['7 AM', 7], ['8 AM', 8], ['9 AM', 9], ['12 PM', 12], ['6 PM', 18], ['9 PM', 21]]; const kb = [];
+  for (let i = 0; i < times.length; i += 2) kb.push(times.slice(i, i + 2).map(([l, h]) => ({ text: l, callback_data: 'nh:' + h })));
+  kb.push([{ text: '🔕 Turn nudges off', callback_data: 'noff' }]);
+  return tgSend(chatId, `⏰ <b>Daily check-in</b> — when should I nudge you (your local time)?`, { reply_markup: { inline_keyboard: kb } });
+}
+async function tgSendNudge(r) {
+  const p = TG_PROTO[(r.pid || '') + '/' + (r.rcid || '')]; const k = p && p.keystone;
+  const today = new Date().toISOString().slice(0, 10); const done = Array.isArray(r.keystone_days) && r.keystone_days.includes(today);
+  const body = done
+    ? `👋 Keystone already done today ✅ — nice. Log your meals as you eat (just type them). 🔥 ${r.streak || 0}-day streak.`
+    : `👋 <b>Daily check-in.</b>\n⭐ Today's keystone: ${k ? tgEsc(k.one) : '—'}\n\nTap ✅ when you've done it, and log your meals by typing them (e.g. “2 eggs”). /today for progress.`;
+  const res = await tgSend(r.chat_id, body, { reply_markup: { inline_keyboard: [[{ text: done ? '✅ Done' : '✅ Mark keystone done', callback_data: 'done' }]] } });
+  if (res && res.ok === false && res.error_code === 403) await db.query('UPDATE telegram_users SET active=false WHERE chat_id=$1', [r.chat_id]).catch(() => { });
+  return res;
+}
+let TG_NUDGE_TIMER = null;
+function tgStartScheduler() {
+  if (!BOT_TOKEN || !db.enabled || TG_NUDGE_TIMER) return;
+  TG_NUDGE_TIMER = setInterval(async () => {
+    try {
+      const now = new Date(); const nowUtcMin = now.getUTCHours() * 60 + now.getUTCMinutes(); const today = now.toISOString().slice(0, 10);
+      const rows = (await db.query('SELECT * FROM telegram_users WHERE active AND nudge_hour IS NOT NULL AND pid IS NOT NULL AND (last_nudge IS NULL OR last_nudge <> $1)', [today])).rows;
+      for (const r of rows) {
+        const localMin = (((nowUtcMin + (r.tz_offset || 480)) % 1440) + 1440) % 1440;
+        if (Math.floor(localMin / 60) === r.nudge_hour) { await db.query('UPDATE telegram_users SET last_nudge=$2 WHERE chat_id=$1', [r.chat_id, today]); await tgSendNudge(r).catch(() => { }); }
+      }
+    } catch (e) { console.error('[tg] nudge tick:', e.message); }
+  }, 5 * 60 * 1000);
+  console.log('[tg] nudge scheduler started (5-min tick).');
 }
 // Category → problems index, for building a plan inside the chat.
 let TG_CATS = {};
@@ -441,6 +481,8 @@ async function handleTgUpdate(update) {
     if (d.indexOf('bs:') === 0 && chatId) return tgBuildToggle(chatId, msgId, d.slice(3));
     if (d === 'bfood' && chatId) return tgBuildFoodOnly(chatId, msgId);
     if (d === 'bdone' && chatId) return tgBuildConfirm(chatId, msgId);
+    if (d.indexOf('nh:') === 0 && chatId) { const h = +d.slice(3); const r = await tgGet(chatId); const flow = (r && r.flow) || {}; flow.stage = 'nudge_tz'; flow.nudge_hour = h; await db.query('UPDATE telegram_users SET flow=$2 WHERE chat_id=$1', [chatId, JSON.stringify(flow)]); return tgEdit(chatId, msgId, `Great — I'll check in around <b>${tgHourLabel(h)}</b>. Last thing so I get your timezone right: what's the time where you are <b>right now</b>? Reply like <b>14:30</b> or <b>2:30pm</b>.`); }
+    if (d === 'noff' && chatId) { await db.query('UPDATE telegram_users SET nudge_hour=NULL, flow=$2 WHERE chat_id=$1', [chatId, JSON.stringify({})]); return tgEdit(chatId, msgId, `🔕 Daily nudges are off. /nudge to turn them back on.`); }
     return;
   }
   const msg = update.message; if (!msg || !msg.chat) return;
@@ -479,6 +521,17 @@ async function handleTgUpdate(update) {
     if (!row || !row.pid) return tgSend(chatId, `/build a plan first, then I'll show your day.`);
     return tgSendSchedule(chatId, row);
   }
+  if (cmd === 'nudge' || cmd === 'nudges' || cmd === 'remind' || cmd === 'reminders') return tgNudgeStart(chatId);
+  // capturing their local time to set the nudge timezone
+  if (row && row.flow && row.flow.stage === 'nudge_tz' && text && text[0] !== '/') {
+    const localMin = tgParseTime(text);
+    if (localMin == null) return tgSend(chatId, `Hmm, I didn't get that time. Reply like <b>14:30</b> or <b>2:30pm</b>.`);
+    const now = new Date(); const nowUtcMin = now.getUTCHours() * 60 + now.getUTCMinutes();
+    let off = localMin - nowUtcMin; off = (((off % 1440) + 1440) % 1440); if (off > 720) off -= 1440;
+    const h = row.flow.nudge_hour;
+    await db.query('UPDATE telegram_users SET nudge_hour=$2, tz_offset=$3, flow=$4 WHERE chat_id=$1', [chatId, h, off, JSON.stringify({})]);
+    return tgSend(chatId, `✅ All set — I'll check in each day around <b>${tgHourLabel(h)}</b> your time. /nudge to change it anytime.`);
+  }
   if (cmd === 'done' || cmd === 'done ✅' || cmd === '✅' || cmd === 'did it') return tgMarkDone(chatId);
   if (cmd === 'streak') return tgSend(chatId, `🔥 You're on a <b>${(row && row.streak) || 0}-day streak</b>. Keep it going — /done when you've done today's keystone.`);
   if (cmd === 'reset') { const tdy = new Date().toISOString().slice(0, 10); await db.query('UPDATE telegram_users SET food_log=$2 WHERE chat_id=$1', [chatId, JSON.stringify({ date: tdy, items: [] })]); return tgSend(chatId, `🧹 Cleared today's food log. Type a food to start again.`); }
@@ -507,6 +560,7 @@ async function tgSendToday(chatId, row) {
 }
 async function tgSetup() {
   if (!BOT_TOKEN) { console.log('[tg] BOT_TOKEN not set — bot dormant.'); return; }
+  tgStartScheduler();
   const r = await tgApi('setWebhook', { url: `${SITE_URL}/api/telegram/webhook`, secret_token: TG_SECRET, allowed_updates: ['message', 'callback_query'] });
   console.log('[tg] setWebhook:', r && r.ok ? 'ok → ' + SITE_URL + '/api/telegram/webhook' : JSON.stringify(r));
 }
