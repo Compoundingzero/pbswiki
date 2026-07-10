@@ -1707,6 +1707,9 @@ a.dp-name:hover{color:var(--accent)}
 .sleep-inputs .slp-in:focus{outline:none;border-color:var(--accent)}
 .fn-w-sub.sleep-rec{color:var(--head)}
 .fn-w-sub.sleep-rec b{color:var(--accent)}
+/* eating-window */
+.win-btns{display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0}
+.fn-w-sub.over{color:#a11}
 /* one-tap scale (symptom / readiness) */
 .scl-btns{display:flex;gap:.4rem;margin:.5rem 0}
 .scl-btn{flex:1;padding:.45rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);cursor:pointer;font-size:1.1rem;display:flex;flex-direction:column;align-items:center;gap:.15rem}

@@ -2907,6 +2907,10 @@
       desc: 'Easy conversational cardio builds the aerobic base — the strongest evidence-backed longevity lever.',
       how: 'Log easy-pace minutes (you can still hold a conversation). Aim for 150 a week.',
       match: ['endur', 'longevity', 'healthspan', 'vo2', 'vascular', 'stamina', 'aerobic'], tg: true },
+    { id: 'eatwin', icon: '⏳', name: 'Eating-window (close the kitchen)', kind: 'window', target: 10,
+      desc: 'Time-restricted eating lowers fasting insulin and trims visceral fat — the win is closing the kitchen, not counting calories.',
+      how: 'Tap when you take your first bite and when you close the kitchen. Aim to keep eating inside a 10-hour window.',
+      match: ['insulin', 'glucose', 'visceral', 'belly', 'fat', 'metabolic', 'fasting', 'blood sugar'] },
     { id: 'symptom', icon: '📈', name: 'Symptom check', kind: 'scale', trend: true,
       scale: [{ v: 1, e: '😣' }, { v: 2, e: '😕' }, { v: 3, e: '😐' }, { v: 4, e: '🙂' }, { v: 5, e: '😄' }],
       desc: 'A 5-second daily read so you can actually see what moves your symptoms.',
@@ -2940,6 +2944,7 @@
   function weekKey() { const d = new Date(); const day = (d.getDay() + 6) % 7; d.setDate(d.getDate() - day); return d.toISOString().slice(0, 10); }
   // ---- Sleep-window (CBT-I sleep restriction) helpers ----
   function slpToMin(t) { if (!t || !/^\d{1,2}:\d{2}$/.test(t)) return null; const [h, m] = t.split(':').map(Number); return h * 60 + m; }
+  function nowHM() { const d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
   // From in-bed / asleep / woke clock times (spanning midnight) → time in bed, time asleep, sleep efficiency %
   function computeSleep(s) {
     const ib = slpToMin(s.inBed), as = slpToMin(s.asleep), wk = slpToMin(s.woke);
@@ -3207,6 +3212,14 @@
             <p class="fn-w-sub">${last ? 'Last: <b>' + esc(last.text) + '</b> · ' + esc(last.date) : esc(f.how)}</p>
             <div class="fn-log-row"><input class="fn-log-in" data-fn-log="${f.id}" placeholder="e.g. 60kg × 8" autocomplete="off"><button class="fn-step add" data-log-save="${f.id}">Log</button></div></div>`;
         }
+        if (f.kind === 'window') {
+          const e = planDay(plan).eat || {}; let status = '';
+          if (e.first && e.last) { let dur = slpToMin(e.last) - slpToMin(e.first); if (dur < 0) dur += 1440; const h = Math.floor(dur / 60), m = dur % 60; const within = dur <= f.target * 60; status = `<p class="fn-w-sub ${within ? '' : 'over'}">Eating window: <b>${h}h${m ? m + 'm' : ''}</b> (target ${f.target}h) — ${within ? '✓ nice, inside your window' : '⚠️ over — close it earlier tomorrow'}</p>`; }
+          else if (e.first) status = `<p class="fn-w-sub">🍽️ Kitchen open since <b>${esc(e.first)}</b> — aim to close by ${f.target}h later.</p>`;
+          return `<div class="fn-w"><div class="fn-w-h"><span class="fn-ico">${f.icon}</span><b>${esc(f.name)}</b></div>
+            <p class="fn-w-sub">${esc(f.how)}</p>
+            <div class="win-btns"><button class="fn-step ${e.first ? 'add' : ''}" data-eat="first">🍽️ First bite${e.first ? ' · ' + esc(e.first) : ''}</button><button class="fn-step ${e.last ? 'add' : ''}" data-eat="last">🌙 Kitchen closed${e.last ? ' · ' + esc(e.last) : ''}</button></div>${status}</div>`;
+        }
         if (f.kind === 'scale') {
           const v = (planDay(plan).fn || {})[f.id]; const opt = (f.scale || []).find(o => o.v === v);
           const btns = (f.scale || []).map(o => `<button class="scl-btn ${v === o.v ? 'on' : ''}" data-scl="${f.id}" data-sclv="${o.v}">${o.e}${o.label ? `<span>${esc(o.label)}</span>` : ''}</button>`).join('');
@@ -3253,6 +3266,8 @@
       host.querySelectorAll('[data-tri]').forEach(b => b.onclick = () => { const pl = getPlan(); const d = planDay(pl); d.fn = d.fn || {}; d.fn[b.dataset.tri] = b.dataset.triv; setPlan(pl); render(); });
       // scale (symptom / readiness): one tap → store numeric value
       host.querySelectorAll('[data-scl]').forEach(b => b.onclick = () => { const pl = getPlan(); const d = planDay(pl); d.fn = d.fn || {}; d.fn[b.dataset.scl] = +b.dataset.sclv; setPlan(pl); render(); });
+      // eating-window: stamp the current local time for first bite / kitchen closed
+      host.querySelectorAll('[data-eat]').forEach(b => b.onclick = () => { const pl = getPlan(); const d = planDay(pl); d.eat = d.eat || {}; d.eat[b.dataset.eat] = nowHM(); setPlan(pl); render(); });
       // sleep-window time inputs → recompute efficiency and re-render the recommendation
       host.querySelectorAll('.slp-in').forEach(inp => inp.onchange = () => {
         const pl = getPlan(); const d = planDay(pl); d.sleep = d.sleep || {}; d.sleep[inp.dataset.slp] = inp.value || '';
