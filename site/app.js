@@ -223,6 +223,10 @@
 
   // ---------- accounts + API ----------
   let ME = null;
+  // Super-admin (Control Room) access — robust: is_super from the server OR the owner's own email
+  // (both come from /api/me). The email fallback guarantees the button can never silently vanish.
+  const SUPER_EMAIL = 'felix360506@gmail.com';
+  function canAdmin() { return !!(ME && (ME.is_super || (ME.email || '').toLowerCase() === SUPER_EMAIL)); }
   let CFG = { googleClientId: null };
   const api = {
     async call(method, url, body) {
@@ -330,7 +334,7 @@
   }
   function renderAccount() {
     const slot = document.getElementById('account-slot'); if (!slot) return;
-    if (ME) slot.innerHTML = `<span class="acct"><span class="acct-name">👤 ${esc(ME.username)}</span>${ME.is_super ? ' <a class="acct-btn super" href="#/admin" title="Super-admin control room">⚙ Control room</a>' : ''} <button class="acct-btn" id="logout-btn">Sign out</button></span>`;
+    if (ME) slot.innerHTML = `<span class="acct"><span class="acct-name">👤 ${esc(ME.username)}</span>${canAdmin() ? ' <a class="acct-btn super" href="#/admin" title="Super-admin control room">⚙ Control room</a>' : ''} <button class="acct-btn" id="logout-btn">Sign out</button></span>`;
     else slot.innerHTML = `<button class="acct-btn primary" id="signin-btn">Sign in</button>`;
     const lo = document.getElementById('logout-btn'); if (lo) lo.onclick = async () => { await api.logout(); ME = null; renderAccount(); route(); };
     const si = document.getElementById('signin-btn'); if (si) si.onclick = () => openAuth('login');
@@ -1915,7 +1919,7 @@
   // The consolidated super-admin control room — every admin power in one place.
   // Gated to the single super-admin account (Felix); the server enforces this too.
   async function renderAdmin() {
-    if (!ME || !ME.is_super) {
+    if (!canAdmin()) {
       app.innerHTML = `${crumbs([{ label: 'Home', href: '#/' }, { label: 'Admin' }])}<div class="empty"><h1>Super-admin only</h1><p class="muted">This control room is restricted to the site owner’s account.</p></div>`;
       return;
     }

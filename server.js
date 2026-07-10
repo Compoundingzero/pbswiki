@@ -849,11 +849,11 @@ async function api(req, res, url) {
     if (!/^[a-zA-Z0-9_.-]{3,24}$/.test(username)) return json(res, 400, { error: 'Username: 3–24 letters, numbers, _ . -' });
     if (password.length < 8) return json(res, 400, { error: 'Password must be at least 8 characters' });
     try {
-      const r = await db.query('INSERT INTO users(username,email,pass) VALUES($1,$2,$3) RETURNING id,username,role', [username, email || null, hashPassword(password)]);
+      const r = await db.query('INSERT INTO users(username,email,pass) VALUES($1,$2,$3) RETURNING id,username,role,email', [username, email || null, hashPassword(password)]);
       const u = r.rows[0]; const token = crypto.randomBytes(24).toString('hex');
       await db.query('INSERT INTO sessions(token,user_id,expires_at) VALUES($1,$2, now()+interval \'30 days\')', [token, u.id]);
       setSessionCookie(res, token);
-      return json(res, 200, { user: { id: u.id, username: u.username, role: u.role, is_super: isSuper(u) } });
+      return json(res, 200, { user: { id: u.id, username: u.username, role: u.role, email: u.email, is_super: isSuper(u) } });
     } catch (e) {
       if (e.code === '23505') return json(res, 409, { error: 'That username is taken' });
       console.error(e); return json(res, 500, { error: 'Server error' });
@@ -868,7 +868,7 @@ async function api(req, res, url) {
     const token = crypto.randomBytes(24).toString('hex');
     await db.query('INSERT INTO sessions(token,user_id,expires_at) VALUES($1,$2, now()+interval \'30 days\')', [token, u.id]);
     setSessionCookie(res, token);
-    return json(res, 200, { user: { id: u.id, username: u.username, role: u.role, domain: u.domain, credential: u.credential, domain_verified: u.domain_verified, is_super: isSuper(u) } });
+    return json(res, 200, { user: { id: u.id, username: u.username, role: u.role, email: u.email, domain: u.domain, credential: u.credential, domain_verified: u.domain_verified, is_super: isSuper(u) } });
   }
   if (seg[0] === 'logout' && method === 'POST') {
     const sid = parseCookies(req).sid; if (sid) await db.query('DELETE FROM sessions WHERE token=$1', [sid]);

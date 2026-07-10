@@ -351,6 +351,63 @@ CREATE TABLE IF NOT EXISTS shared_plans (
   clicks INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- ===== Outcome-data moat (PDPA: explicit opt-in, purpose-limited, user-deletable) =====
+-- Research consent, versioned. No data below is used for research unless consent_research = true.
+CREATE TABLE IF NOT EXISTS user_consent (
+  user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  consent_research BOOLEAN NOT NULL DEFAULT false,
+  version TEXT,                       -- consent-notice version the user agreed to
+  consented_at TIMESTAMPTZ,
+  withdrawn_at TIMESTAMPTZ
+);
+-- Self-declared demographics — all optional, stored as coarse bands (no birthdate, no NRIC).
+CREATE TABLE IF NOT EXISTS user_profile (
+  user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  age_band TEXT,                      -- e.g. '18-24','25-34',... ,'65+'
+  sex TEXT,                           -- 'male','female','other','prefer_not'
+  ethnicity TEXT,                     -- 'chinese','malay','indian','other','prefer_not'
+  conditions JSONB NOT NULL DEFAULT '[]',
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+-- Structured outcome check-ins at baseline / 30d / 90d — the feedback loop.
+CREATE TABLE IF NOT EXISTS outcome_checkins (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  pid TEXT NOT NULL,
+  rcid TEXT NOT NULL,
+  phase TEXT NOT NULL,                -- 'baseline' | 'd30' | 'd90'
+  symptom_0_10 INTEGER,              -- 0 = none, 10 = worst
+  improvement INTEGER,               -- global rating -3..+3 (much worse .. much better)
+  adherence_pct INTEGER,
+  still_on BOOLEAN,
+  note TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (user_id, pid, rcid, phase)
+);
+CREATE INDEX IF NOT EXISTS idx_outcome_proto ON outcome_checkins(pid, rcid, phase);
+-- Optional blood markers, self-entered.
+CREATE TABLE IF NOT EXISTS blood_markers (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  marker TEXT NOT NULL,              -- 'hba1c','ldl','hdl','testosterone','tsh','ferritin','crp','vit_d','bp_sys','bp_dia',...
+  value NUMERIC,
+  unit TEXT,
+  taken_on DATE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_blood_user ON blood_markers(user_id, marker, taken_on);
+-- Wearable / daily body metrics (manual for v1; API sync later).
+CREATE TABLE IF NOT EXISTS wearable_daily (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  day DATE NOT NULL,
+  steps INTEGER,
+  sleep_min INTEGER,
+  resting_hr INTEGER,
+  weight_kg NUMERIC,
+  source TEXT,
+  PRIMARY KEY (user_id, day)
+);
 `;
 
 async function init() {
