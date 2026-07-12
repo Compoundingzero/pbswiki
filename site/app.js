@@ -5144,6 +5144,20 @@
         </div>
       </section>
 
+      <section class="gpj" id="gpj">
+        <div class="gpj-head"><div class="gp-eyebrow">How it works — from your chair</div><h2>You already have the expertise.<br>Here's how it <span class="lead">compounds</span>.</h2></div>
+        <div class="gpj-track">
+          <div class="gpj-line"><div class="gpj-fill" id="gpj-fill"></div></div>
+          <div class="gpj-steps">
+            <div class="gpj-step"><div class="gpj-node">✍️</div><div class="gpj-body"><h4>You share what you know</h4><p>Review and sharpen the clinical information in your field — a few minutes when you have them. Your name and clinic ride on every trusted contribution.</p></div></div>
+            <div class="gpj-step"><div class="gpj-node">⭐</div><div class="gpj-body"><h4>Trust compounds</h4><p>Every patient your expertise helps adds to your clinic's standing. Credibility you build once keeps working for you.</p></div></div>
+            <div class="gpj-step"><div class="gpj-node">📍</div><div class="gpj-body"><h4>Your clinic gets featured</h4><p>You rise on “Top trusted clinics near you.” The people in your neighbourhood discover you first — for credibility, not price.</p></div></div>
+            <div class="gpj-step"><div class="gpj-node">🧬</div><div class="gpj-body"><h4>You build the programs</h4><p>Turn the reliable protocols you maintain into programs patients enrol in — your name, your care, your standards.</p></div></div>
+            <div class="gpj-step"><div class="gpj-node">🔁</div><div class="gpj-body"><h4>Patients stay — and buy through you</h4><p>Supplements and prescriptions flow through your clinic, month after month. A recurring relationship that compounds — all of it free to you.</p></div></div>
+          </div>
+        </div>
+      </section>
+
       <section class="gp-aspire reveal">
         <h2>Imagine being the clinic your neighbourhood <span class="lead">names first</span>.</h2>
         <p>Not the cheapest. Not the closest. The one they <b>trust</b> — with patients who stay, and the respect you earned the day you qualified.</p>
@@ -5160,26 +5174,25 @@
         </div>
       </section>
 
-      <section class="gp-found reveal">
-        <h2>Be one of the <span class="lead">founding clinics</span>.</h2>
-        <p>We're hand-picking the first Singapore GPs to shape this network — and to be featured first when patients start searching. Register your interest and we'll reach out personally.</p>
-        <a class="cta-primary gp-cta" href="#gp-apply">Register your clinic's interest →</a>
-      </section>
-
-      <section class="gp-apply" id="gp-apply">
-        <div class="gp-form-card">
-          <h2>Register your interest</h2>
-          <p class="muted">No cost, no obligation — just tell us about your clinic and we'll be in touch.</p>
-          <form id="gp-form" class="gp-form">
-            <div class="gp-2col"><label>Your name<input name="name" required placeholder="Dr …"></label><label>Clinic name<input name="clinic" placeholder="e.g. Tan Family Clinic"></label></div>
-            <div class="gp-2col"><label>Email<input name="email" type="email" required placeholder="you@clinic.sg"></label><label>Phone <span class="opt">(optional)</span><input name="phone" placeholder="+65 …"></label></div>
-            <div class="gp-2col"><label>Area / region<input name="area" placeholder="e.g. Tampines"></label><label>MCR no. <span class="opt">(optional)</span><input name="mcr" placeholder="M…"></label></div>
-            <label>Anything you'd like us to know? <span class="opt">(optional)</span><textarea name="message" rows="2" placeholder="What would make this worth your time?"></textarea></label>
-            <div class="auth-err" id="gp-err" hidden></div>
-            <button type="submit" class="cta-primary lg" id="gp-submit">Register my interest</button>
-            <p class="gp-fineprint">Singapore-registered GPs &amp; clinics only. Your details are used solely to contact you about the founding network.</p>
-          </form>
-          <div class="gp-done" id="gp-done" hidden><div class="gp-done-ic">🎉</div><h3>You're on the founding list.</h3><p>Thank you — we'll reach out personally. Watch your inbox.</p></div>
+      <section class="gp-join" id="gp-apply">
+        <div class="gp-join-inner">
+          <div class="gp-join-head">
+            <div class="gp-eyebrow">Founding clinics · Singapore</div>
+            <h2>Be one of the <span class="lead">first clinics we feature</span>.</h2>
+            <p>We're hand-picking the founding GPs to shape this network — and to be featured first when patients start searching. It's free, with no obligation. Tell us about your clinic and we'll reach out personally.</p>
+          </div>
+          <div class="gp-form-card">
+            <form id="gp-form" class="gp-form">
+              <div class="gp-2col"><label>Your name<input name="name" required placeholder="Dr …"></label><label>Clinic name<input name="clinic" placeholder="e.g. Tan Family Clinic"></label></div>
+              <div class="gp-2col"><label>Email<input name="email" type="email" required placeholder="you@clinic.sg"></label><label>Phone <span class="opt">optional</span><input name="phone" placeholder="+65 …"></label></div>
+              <div class="gp-2col"><label>Area / region<input name="area" placeholder="e.g. Tampines"></label><label>MCR no. <span class="opt">optional</span><input name="mcr" placeholder="M…"></label></div>
+              <label>Anything you'd like us to know? <span class="opt">optional</span><textarea name="message" rows="2" placeholder="What would make this worth your time?"></textarea></label>
+              <div class="auth-err" id="gp-err" hidden></div>
+              <button type="submit" class="cta-primary lg" id="gp-submit">Register my interest →</button>
+              <p class="gp-fineprint">🔒 Singapore-registered GPs &amp; clinics only. Your details are used solely to contact you about the founding network — never sold or shared.</p>
+            </form>
+            <div class="gp-done" id="gp-done" hidden><div class="gp-done-ic">🎉</div><h3>You're on the founding list.</h3><p>Thank you — we'll reach out personally. Watch your inbox.</p></div>
+          </div>
         </div>
       </section>`;
     bindGpLanding();
@@ -5203,9 +5216,25 @@
     };
     window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll); onScroll();
   }
+  // Different mechanism: a journey line that fills as you scroll, lighting each waypoint in sequence.
+  function initGpJourney(id) {
+    const sec = document.getElementById(id); if (!sec) return;
+    const fill = sec.querySelector('.gpj-fill'), track = sec.querySelector('.gpj-line');
+    const steps = [...sec.querySelectorAll('.gpj-step')]; if (!steps.length) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { steps.forEach(s => s.classList.add('on')); if (fill) fill.style.height = '100%'; return; }
+    const onScroll = () => {
+      if (!document.body.contains(sec)) { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); return; }
+      const line = window.innerHeight * 0.58;   // activation line, 58% down the viewport
+      const tr = track.getBoundingClientRect();
+      if (fill) fill.style.height = Math.min(tr.height, Math.max(0, line - tr.top)) + 'px';
+      steps.forEach(s => { const n = s.querySelector('.gpj-node').getBoundingClientRect(); s.classList.toggle('on', (n.top + n.height / 2) < line); });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll); onScroll();
+  }
   function bindGpLanding() {
     revealOnScroll();
-    initGpScroll('gpx-1'); initGpScroll('gpx-2'); initGpScroll('gpx-3');
+    initGpScroll('gpx-1'); initGpScroll('gpx-2'); initGpScroll('gpx-3'); initGpJourney('gpj');
     const form = document.getElementById('gp-form'); if (!form) return;
     const err = document.getElementById('gp-err'), btn = document.getElementById('gp-submit');
     form.onsubmit = async (e) => {
