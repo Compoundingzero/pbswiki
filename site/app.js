@@ -5022,59 +5022,53 @@
         <div class="gp-scrollhint">Scroll to see how ↓</div>
       </section>
 
-      <section class="scrolly gp-mod" id="gp-mod-1">
-        <div class="scrolly-track">
-          <div class="scrolly-copy">
-            <div class="gp-mod-tag">01 · The price war</div>
-            <div class="sy-step on" data-step="0"><h3>Another clinic just opened down the road.</h3><p>There's a GP on nearly every street. You can't out-advertise them, so it comes down to price — a race to the bottom nobody wins. You're invisible in the crowd.</p></div>
-            <div class="sy-step" data-step="1"><h3>Now patients seek <span class="lead">you</span> out.</h3><p>Contribute reliable clinical information here and your clinic rises on <b>“Top trusted clinics near you.”</b> The people in your neighbourhood find <b>you</b> first — chosen for credibility, not the cheapest price.</p></div>
+      <section class="gpm reveal">
+        <div class="gpm-tag">01 · The price war</div>
+        <div class="gpm-flow">
+          <div class="gpm-side gpm-pain">
+            <div class="gpm-viz gpm-viz-war"><div class="gpm-pins">${'<span>🏥</span>'.repeat(7)}</div></div>
+            <h3>Another clinic just opened down the road.</h3>
+            <p>A GP on nearly every street. You can't out-advertise them, so it comes down to price — a race to the bottom nobody wins. You're invisible in the crowd.</p>
           </div>
-          <div class="scrolly-stage gp-stage">
-            <div class="sy-frame on gp-scene" data-frame="0">
-              <div class="gp-viz gp-viz-war"><div class="gp-map">${'<span class="gp-pin">🏥</span>'.repeat(7)}</div><div class="gp-viz-cap">Every clinic competing on price. You're one grey pin among many.</div></div>
-            </div>
-            <div class="sy-frame gp-scene" data-frame="1">
-              <div class="gp-viz gp-viz-featured"><div class="gp-viz-h">🏅 Top trusted clinics · Tampines</div><div class="gp-rank gp-rank-1"><b>🥇 Dr Tan Family Clinic</b><small>0.4 km · verified GP</small></div><div class="gp-rank"><b>🥈 Clinic B</b><small>1.1 km</small></div><div class="gp-rank"><b>🥉 Clinic C</b><small>1.8 km</small></div><div class="gp-viz-cap">Patients nearby find <b>you</b> first.</div></div>
-            </div>
-            <div class="sy-dots"><i data-dot="0" class="on"></i><i data-dot="1"></i></div>
+          <div class="gpm-vs"><span class="gpm-vs-lbl">on RNAwiki</span><span class="gpm-vs-arr">➜</span></div>
+          <div class="gpm-side gpm-fix">
+            <div class="gpm-viz gpm-viz-good"><div class="gpm-viz-h">🏅 Top trusted clinics · Tampines</div><div class="gpm-rank gpm-rank-1"><span>🥇 Dr Tan Family Clinic</span><small>0.4 km · verified GP</small></div><div class="gpm-rank"><span>🥈 Clinic B</span><small>1.1 km</small></div><div class="gpm-rank"><span>🥉 Clinic C</span><small>1.8 km</small></div></div>
+            <h3>Now patients seek <span class="lead">you</span> out.</h3>
+            <p>Contribute reliable clinical information and your clinic rises on <b>“Top trusted clinics near you.”</b> The people in your neighbourhood find <b>you</b> first — chosen for credibility, not the cheapest price.</p>
           </div>
         </div>
       </section>
 
-      <section class="scrolly gp-mod" id="gp-mod-2">
-        <div class="scrolly-track">
-          <div class="scrolly-copy">
-            <div class="gp-mod-tag">02 · One-and-done</div>
-            <div class="sy-step on" data-step="0"><h3>Consult. Prescribe. Gone.</h3><p>A patient walks in, you write a script, they walk out — and you may never see them again. No continuity, no relationship, nothing that compounds. Every day starts back at zero.</p></div>
-            <div class="sy-step" data-step="1"><h3>They join <span class="lead">your</span> program — and stay.</h3><p>From the reliable protocols you maintain, you build <b>programs patients enrol in</b> — and buy their supplements &amp; prescriptions through your clinic. A recurring relationship, month after month.</p></div>
+      <section class="gpm reveal">
+        <div class="gpm-tag">02 · One-and-done</div>
+        <div class="gpm-flow">
+          <div class="gpm-side gpm-pain">
+            <div class="gpm-viz gpm-viz-war"><div class="gpm-flowline"><span>🧑</span><span class="gpm-ar">→</span><span>💊</span><span class="gpm-ar">→</span><span class="gpm-gone">👋</span></div><div class="gpm-viz-sub">consult · prescribe · gone</div></div>
+            <h3>Consult. Prescribe. Gone.</h3>
+            <p>A patient walks in, you write a script, they walk out — and you may never see them again. No continuity, nothing that compounds. Every day starts back at zero.</p>
           </div>
-          <div class="scrolly-stage gp-stage">
-            <div class="sy-frame on gp-scene" data-frame="0">
-              <div class="gp-viz gp-viz-oneoff"><div class="gp-flow"><span>🧑 Patient</span><span class="gp-arrow">→</span><span>💊 Prescribe</span><span class="gp-arrow">→</span><span class="gp-gone">👋 Gone</span></div><div class="gp-viz-cap">No continuity. No compounding. Back to zero tomorrow.</div></div>
-            </div>
-            <div class="sy-frame gp-scene" data-frame="1">
-              <div class="gp-viz gp-viz-loop"><div class="gp-prog"><b>“Reverse My Pre-Diabetes”</b><small>Sarah · week 3 of 12 · your program</small></div><div class="gp-loopline"><span>🔁 returns</span><span>💊 refills via you</span><span>🩺 reviews</span></div><div class="gp-viz-cap">A recurring relationship — bought through <b>your</b> clinic.</div></div>
-            </div>
-            <div class="sy-dots"><i data-dot="0" class="on"></i><i data-dot="1"></i></div>
+          <div class="gpm-vs"><span class="gpm-vs-lbl">on RNAwiki</span><span class="gpm-vs-arr">➜</span></div>
+          <div class="gpm-side gpm-fix">
+            <div class="gpm-viz gpm-viz-good"><div class="gpm-prog"><span>“Reverse My Pre-Diabetes”</span><small>Sarah · week 3 of 12 · your program</small></div><div class="gpm-loopline"><span>🔁 returns</span><span>💊 refills via you</span><span>🩺 reviews</span></div></div>
+            <h3>They join <span class="lead">your</span> program — and stay.</h3>
+            <p>From the protocols you maintain, you build <b>programs patients enrol in</b> — and buy their supplements &amp; prescriptions through your clinic. A recurring relationship, month after month.</p>
           </div>
         </div>
       </section>
 
-      <section class="scrolly gp-mod" id="gp-mod-3">
-        <div class="scrolly-track">
-          <div class="scrolly-copy">
-            <div class="gp-mod-tag">03 · Thin margins</div>
-            <div class="sy-step on" data-step="0"><h3>Drug costs eat the profit.</h3><p>You became a doctor to change lives — but the business turns you into a dispensary, and the margin on every box keeps shrinking.</p></div>
-            <div class="sy-step" data-step="1"><h3>A network that <span class="lead">lifts every clinic</span>.</h3><p>As the alliance grows we <b>buy together</b> — bulk pricing drops your cost of goods, and <b>consignment between clinics</b> cuts waste. Your margin rises. And it's <b>completely free</b> — we only grow when you do.</p></div>
+      <section class="gpm reveal">
+        <div class="gpm-tag">03 · Thin margins</div>
+        <div class="gpm-flow">
+          <div class="gpm-side gpm-pain">
+            <div class="gpm-viz gpm-viz-war"><div class="gpm-viz-sub">Your margin on a box of medicine</div><div class="gpm-bar"><i class="gpm-bar-cost" style="width:82%"></i><i class="gpm-bar-keep" style="width:18%"></i></div><div class="gpm-bar-key"><span class="gpm-k-cost">■ drug cost</span><span class="gpm-k-keep">■ you keep</span></div></div>
+            <h3>Drug costs eat the profit.</h3>
+            <p>You became a doctor to change lives — but the business turns you into a dispensary, and the margin on every box keeps shrinking.</p>
           </div>
-          <div class="scrolly-stage gp-stage">
-            <div class="sy-frame on gp-scene" data-frame="0">
-              <div class="gp-viz gp-viz-margin"><div class="gp-margin-lbl">Your margin on a box of medicine</div><div class="gp-bar"><i class="gp-bar-cost" style="width:82%"></i><i class="gp-bar-yours" style="width:18%"></i></div><div class="gp-bar-key"><span class="gp-k-cost">■ drug cost</span><span class="gp-k-yours">■ you keep</span></div><div class="gp-viz-cap">Squeezed to the bone.</div></div>
-            </div>
-            <div class="sy-frame gp-scene" data-frame="1">
-              <div class="gp-viz gp-viz-alliance"><div class="gp-nodes">${'<span>🏥</span>'.repeat(6)}</div><div class="gp-alliance-stat">Buy together → <b>cost ↓</b> · <b>margin ↑</b> · <b>free</b></div><div class="gp-bar"><i class="gp-bar-cost" style="width:60%"></i><i class="gp-bar-yours" style="width:40%"></i></div><div class="gp-viz-cap">A network that lifts every clinic.</div></div>
-            </div>
-            <div class="sy-dots"><i data-dot="0" class="on"></i><i data-dot="1"></i></div>
+          <div class="gpm-vs"><span class="gpm-vs-lbl">on RNAwiki</span><span class="gpm-vs-arr">➜</span></div>
+          <div class="gpm-side gpm-fix">
+            <div class="gpm-viz gpm-viz-good"><div class="gpm-nodes">${'<span>🏥</span>'.repeat(6)}</div><div class="gpm-viz-sub">buy together → cost ↓ · margin ↑ · <b>free</b></div><div class="gpm-bar"><i class="gpm-bar-cost" style="width:58%"></i><i class="gpm-bar-keep" style="width:42%"></i></div></div>
+            <h3>A network that <span class="lead">lifts every clinic</span>.</h3>
+            <p>As the alliance grows we <b>buy together</b> — bulk pricing drops your cost of goods, and <b>consignment between clinics</b> cuts waste. Your margin rises. And it's <b>completely free</b>.</p>
           </div>
         </div>
       </section>
@@ -5105,7 +5099,6 @@
   }
   function bindGpLanding() {
     revealOnScroll();
-    initScrolly('gp-mod-1'); initScrolly('gp-mod-2'); initScrolly('gp-mod-3');
     const form = document.getElementById('gp-form'); if (!form) return;
     const err = document.getElementById('gp-err'), btn = document.getElementById('gp-submit');
     form.onsubmit = async (e) => {
