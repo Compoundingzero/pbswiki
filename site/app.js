@@ -812,7 +812,7 @@
     <section class="trust reveal">
       <div class="section-title center">Open, and honest</div>
       <h2 class="wr-head">Not a wiki of opinions.<br>An <span class="lead">open, evidence-ranked</span> engine.</h2>
-      <p class="trust-lead">Every protocol here is ranked by the strength of real human evidence — hype earns nothing, and it’s free to read and use today. Each protocol is owned and kept accurate by a verified expert: a GP for the clinical side, a nutritionist for the food.</p>
+      <p class="trust-lead">Every protocol here is ranked by the strength of real human evidence — hype earns nothing, and it’s free to read and use today. The information is overseen by verified Singapore GPs who stand behind its accuracy and credibility.</p>
       <div class="trust-row">
         <div class="trust-pill"><b>${cc.compounds}</b> compounds, evidence-ranked</div>
         <div class="trust-pill"><b>${GRAPH.problems.length}</b> problems, mapped to root causes</div>
@@ -1973,9 +1973,8 @@
         const p30 = r.d30_n ? Math.round(r.d30_imp / r.d30_n * 100) : null, p90 = r.d90_n ? Math.round(r.d90_imp / r.d90_n * 100) : null; const dlt = r.symptom_delta;
         return `<tr><td>${nm.icon} <b>${esc(nm.pn)}</b> <span class="muted">${esc(nm.rn)}</span></td><td>${r.baseline_n}</td><td>${r.d30_n}${p30 != null ? ` · <b>${p30}%</b>↑` : ''}</td><td>${r.d90_n}${p90 != null ? ` · <b>${p90}%</b>↑` : ''}</td><td>${dlt != null ? (dlt > 0 ? '▼ ' + dlt : dlt < 0 ? '▲ ' + Math.abs(dlt) : '0') + ' pts' : '—'}</td><td>${r.avg_adh != null ? r.avg_adh + '%' : '—'}</td></tr>`;
       }).join('') || '<tr><td colspan="6" class="muted">No outcome data yet — it accrues as consented users complete their 30- and 90-day check-ins.</td></tr>';
-      view.innerHTML = `<div class="cr-sec-h"><h2>Outcome dataset</h2><p class="muted">Anonymous aggregate, one row per protocol. ▼ = symptom fell (improved) · ↑ = share reporting better.</p></div>
-        <div class="ao-table-wrap"><table class="board"><thead><tr><th>Protocol</th><th>Baseline</th><th>30-day</th><th>90-day</th><th>Symptom Δ</th><th>Adherence</th></tr></thead><tbody>${rows}</tbody></table></div>
-        <div class="cr-export"><span class="cr-export-l">Extract raw data (CSV):</span><a class="admin-btn ok" href="/api/admin/export?type=checkins" download>⤓ Check-ins + demographics</a><a class="admin-btn ok" href="/api/admin/export?type=markers" download>⤓ Blood markers</a><a class="admin-btn ok" href="/api/admin/export?type=wearables" download>⤓ Wearables</a></div>`;
+      view.innerHTML = `<div class="cr-sec-h"><h2>Outcome dataset</h2></div>
+        <div class="ao-table-wrap"><table class="board"><thead><tr><th>Protocol</th><th>Baseline</th><th>30-day</th><th>90-day</th><th>Symptom Δ</th><th>Adherence</th></tr></thead><tbody>${rows}</tbody></table></div>`;
     }
     // ---- Insights view: high-value signals + research cuts ----
     function renderInsights() { app.querySelector('#cr-view').innerHTML = `<div id="adm-datasets"><div class="muted" style="padding:1rem 0">Loading datasets…</div></div>`; loadDatasets(); }
@@ -2118,30 +2117,44 @@
       const statExtra = () => (S.extras || []).length ? `<ul class="ds-list">${(S.extras).map(x => `<li>${esc(EXTRA_LBL[x.key] || x.key)}: avg <b>${x.avg}</b> <span class="muted">(n=${x.n})</span></li>`).join('')}</ul>` : none('Fills as users answer the per-condition item at check-in.');
       const neg = (R.negativeResults || []).filter(x => x.didnt_work > 0 || x.no_improve > 0);
       const statNeg = () => neg.length ? `<ul class="ds-list">${neg.slice(0, 6).map(x => { const o = nm(x.pid, x.rcid); return `<li>${o.icon} ${esc(o.pn)} <span class="muted">— ${x.didnt_work} quit, ${x.no_improve} no gain (n=${x.n})</span></li>`; }).join('')}</ul>` : none('Fills as follow-ups come in — the failures matter as much as the wins.');
+      const EXP_LBL = { checkins: 'Check-ins + demographics', markers: 'Blood markers', wearables: 'Wearables' };
+      const extractBtn = exp => `<a class="admin-btn ok" href="/api/admin/export?type=${exp}" download>⤓ Extract ${EXP_LBL[exp]} (CSV)</a>`;
       const DATASETS = [
-        { icon: '📉', title: 'Persistence — why people quit', who: 'Pharma & digital-health retention teams', why: 'The #1 thing the health system never sees: why people abandon a treatment.', how: 'One tap in the check-in when a user marks they’ve stopped.', stat: statStop },
-        { icon: '⚠️', title: 'Adverse events by compound', who: 'Drug-safety / HSA · supplement brands', why: 'Real-world side-effects — including compounds with zero official monitoring (peptides, longevity drugs).', how: 'One-tap “I had side effects” at check-in, linked to the user’s stack.', stat: statAdverse },
-        { icon: '🩸', title: 'Biomarker before → after', who: 'Pharma real-world-evidence · longevity clinics', why: 'Within-person proof an intervention actually moved a lab value — what buyers pay most for.', how: 'Blood markers over time + a re-lab prompt in the health tracker.', stat: statBio },
-        { icon: '🧑‍🤝‍🧑', title: 'Who responds (phenotypes)', who: 'Pharma precision-medicine teams', why: '“Which kind of person responds to what” — medicine’s single most valuable question.', how: 'Age/sex/ethnicity/condition (from sign-up) × outcome check-ins.', stat: statPheno },
-        { icon: '📏', title: 'Metabolic risk', who: 'Insurers · Healthier SG · weight-loss cos', why: 'Waist-to-height is the cheapest, best at-home predictor of diabetes & heart risk.', how: 'Waist + height in the health tracker.', stat: statWhtr },
-        { icon: '💊', title: 'Concurrent treatments', who: 'Pharma (interactions) · HSA', why: 'What else people take — incl. GLP-1s & TRT — for interaction & real-world combination data.', how: '“Anything else you take regularly?” in the profile.', stat: statMeds },
-        { icon: '📊', title: 'Condition-specific outcomes', who: 'Condition-focused brands & researchers', why: 'A standardized symptom signal per condition, comparable across users.', how: 'One quick self-report item at check-in, matched to the protocol.', stat: statExtra },
-        { icon: '🚫', title: 'What’s NOT working', who: 'Everyone — saves wasted spend', why: 'Failures are invisible in published research; knowing what to skip is rare.', how: 'Outcome check-ins flagging no improvement / “didn’t work”.', stat: statNeg },
+        { icon: '📉', title: 'Persistence — why people quit', who: 'Pharma & digital-health retention teams', why: 'The #1 thing the health system never sees: why people abandon a treatment.', how: 'One tap in the check-in when a user marks they’ve stopped.', stat: statStop, exp: 'checkins' },
+        { icon: '⚠️', title: 'Adverse events by compound', who: 'Drug-safety / HSA · supplement brands', why: 'Real-world side-effects — including compounds with zero official monitoring (peptides, longevity drugs).', how: 'One-tap “I had side effects” at check-in, linked to the user’s stack.', stat: statAdverse, exp: 'checkins' },
+        { icon: '🩸', title: 'Biomarker before → after', who: 'Pharma real-world-evidence · longevity clinics', why: 'Within-person proof an intervention actually moved a lab value — what buyers pay most for.', how: 'Blood markers over time + a re-lab prompt in the health tracker.', stat: statBio, exp: 'markers' },
+        { icon: '🧑‍🤝‍🧑', title: 'Who responds (phenotypes)', who: 'Pharma precision-medicine teams', why: '“Which kind of person responds to what” — medicine’s single most valuable question.', how: 'Age/sex/ethnicity/condition (from sign-up) × outcome check-ins.', stat: statPheno, exp: 'checkins' },
+        { icon: '📏', title: 'Metabolic risk', who: 'Insurers · Healthier SG · weight-loss cos', why: 'Waist-to-height is the cheapest, best at-home predictor of diabetes & heart risk.', how: 'Waist + height in the health tracker.', stat: statWhtr, exp: 'wearables' },
+        { icon: '💊', title: 'Concurrent treatments', who: 'Pharma (interactions) · HSA', why: 'What else people take — incl. GLP-1s & TRT — for interaction & real-world combination data.', how: '“Anything else you take regularly?” in the profile.', stat: statMeds, exp: 'checkins' },
+        { icon: '📊', title: 'Condition-specific outcomes', who: 'Condition-focused brands & researchers', why: 'A standardized symptom signal per condition, comparable across users.', how: 'One quick self-report item at check-in, matched to the protocol.', stat: statExtra, exp: 'checkins' },
+        { icon: '🚫', title: 'What’s NOT working', who: 'Everyone — saves wasted spend', why: 'Failures are invisible in published research; knowing what to skip is rare.', how: 'Outcome check-ins flagging no improvement / “didn’t work”.', stat: statNeg, exp: 'checkins' },
       ];
       const nd = S.nudges || {};
       const nudgeLine = `<p class="ds-nudge">📬 <b>${nd.due || 0}</b> check-ins due now · nudge email ${nd.emailConfigured ? `<b style="color:var(--accent)">on</b> (${nd.sent || 0} sent)` : '<b>off</b>'}.</p>`;
-      host.innerHTML = `<div class="cr-sec-h"><h2>Your data assets</h2><p class="muted">Each card is one dataset you’re building — <b>what</b> it is, <b>who</b> it’s for, <b>why</b> it’s valuable, <b>how</b> it’s collected. Numbers are live.</p></div>
+      host.innerHTML = `<div class="cr-sec-h"><h2>Your data assets</h2><p class="muted">Each card is one dataset — <b>what</b> it is, <b>who</b> it’s for, <b>why</b> it’s valuable, <b>how</b> it’s collected. Tap a card to open it full-screen and extract the raw data.</p></div>
         ${nudgeLine}
-        <div class="ds-grid">${DATASETS.map(d => `
-          <div class="ds-card">
-            <div class="ds-head"><span class="ds-ico">${d.icon}</span><h4>${esc(d.title)}</h4></div>
+        <div class="ds-grid">${DATASETS.map((d, i) => `
+          <button class="ds-card" data-ds="${i}">
+            <div class="ds-head"><span class="ds-ico">${d.icon}</span><h4>${esc(d.title)}</h4><span class="ds-expand">⤢</span></div>
             <div class="ds-stat">${d.stat()}</div>
             <dl class="ds-meta">
               <div><dt>For</dt><dd>${esc(d.who)}</dd></div>
               <div><dt>Why</dt><dd>${esc(d.why)}</dd></div>
               <div><dt>How</dt><dd>${esc(d.how)}</dd></div>
             </dl>
-          </div>`).join('')}</div>`;
+          </button>`).join('')}</div>`;
+      host.querySelectorAll('[data-ds]').forEach(b => b.onclick = () => {
+        const d = DATASETS[+b.dataset.ds];
+        modal(`<button class="modal-x" data-close aria-label="Close">✕</button>
+          <div class="dsm-head"><span class="dsm-ico">${d.icon}</span><h2>${esc(d.title)}</h2></div>
+          <div class="dsm-stat">${d.stat()}</div>
+          <dl class="dsm-meta">
+            <div><dt>Who it's for</dt><dd>${esc(d.who)}</dd></div>
+            <div><dt>Why it's valuable</dt><dd>${esc(d.why)}</dd></div>
+            <div><dt>How it's collected</dt><dd>${esc(d.how)}</dd></div>
+          </dl>
+          <div class="dsm-actions">${extractBtn(d.exp)}</div>`).querySelector('[data-close]').onclick = closeModal;
+      });
     }
     loadMetrics();
     showView('dataset');
@@ -3320,13 +3333,10 @@
   const SEX_OPTS = [['male', 'Male'], ['female', 'Female'], ['other', 'Other'], ['prefer_not', 'Prefer not to say']];
   const ETH_OPTS = [['chinese', 'Chinese'], ['malay', 'Malay'], ['indian', 'Indian'], ['other', 'Other'], ['prefer_not', 'Prefer not to say']];
   const COND_OPTS = [['diabetes', 'Diabetes / pre-diabetes'], ['hypertension', 'High blood pressure'], ['high_cholesterol', 'High cholesterol'], ['pcos', 'PCOS'], ['thyroid', 'Thyroid condition'], ['heart', 'Heart condition'], ['autoimmune', 'Autoimmune condition'], ['none', 'None of these']];
-  let CONSENT = null; // null unknown · true consented · false declined
-  async function loadConsent() { if (!ME) { CONSENT = null; return; } try { const d = await api.getConsent(); CONSENT = d && d.consent ? !!d.consent.consent_research : false; } catch (e) { CONSENT = null; } }
-  function consentCardHtml() {
-    if (!ME || CONSENT !== false || localStorage.getItem('rnawiki_consent_dismiss')) return '';
-    return `<div class="consent-card"><div class="consent-txt"><b>🔬 Help RNAwiki learn what actually works.</b><p>Share your progress anonymously so we can prove real outcomes — like "68% improved in 8 weeks" — and keep sharpening the protocols. Withdraw or delete anytime.</p></div>
-      <div class="consent-acts"><button class="cta-primary" id="consent-open">Share anonymously</button><button class="linkbtn" id="consent-skip">Not now</button></div></div>`;
-  }
+  let CONSENT = null; // null unknown · true tracked (default) · false explicitly withdrawn
+  // Tracking is ON by default (users can withdraw/delete anytime via "Your data"). Only an explicit withdrawal turns it off.
+  async function loadConsent() { if (!ME) { CONSENT = null; return; } try { const d = await api.getConsent(); CONSENT = (d && d.consent && d.consent.consent_research === false) ? false : true; } catch (e) { CONSENT = true; } }
+  function consentCardHtml() { return ''; }   // no opt-in card — capture by default; withdrawal lives in "Your data"
   function wireConsentCard() {
     const a = document.getElementById('consent-open'); if (a) a.onclick = openConsentModal;
     const b = document.getElementById('consent-skip'); if (b) b.onclick = () => { localStorage.setItem('rnawiki_consent_dismiss', '1'); const c = document.querySelector('.consent-card'); if (c) c.remove(); };
@@ -3763,26 +3773,28 @@
       <div class="tpm-row"><span class="tpm-name">${r.problem.icon || ''} ${esc(r.problem.name)} <em>${esc(r.rc.name.split('(')[0].trim())}</em></span>
         <span class="tpm-acts"><button class="linkbtn" data-edit-proto="${r.pr.pid}/${r.pr.rcid}">Edit</button> · <button class="linkbtn" data-share-proto="${r.pr.pid}/${r.pr.rcid}">Share</button> · <button class="linkbtn danger" data-remove-proto="${r.pr.pid}/${r.pr.rcid}">Remove</button></span></div>`).join('')}
       <a class="tpm-add" href="#/solve">＋ Add another goal</a>${ME && CONSENT ? ' · <button class="linkbtn" id="health-link">🩸 Track health data</button> · <button class="linkbtn" id="mydata-link">🔒 Your data</button>' : ''}</section>`;
+    // Tabbed layout — one focused panel at a time (Apple: reduce what's on screen; progressive disclosure).
+    const todayPanel = `${recapCard}${missBanner}
+      <div id="checkin-slot"></div>
+      ${keystoneCards}
+      ${danger}
+      ${totalItems ? `<div class="trk-sec-h"><h3>Today's checklist</h3><span class="trk-prog">${doneItems}/${totalItems}</span></div>` : ''}
+      ${restBanner}
+      ${totalItems ? `<div class="trk-list">${rows}</div>` : ''}
+      ${daysEditor}`;
+    const fuelPanel = hasFuel ? `<p class="pt-sub">Log what you eat — your protocol's targets fill as you go.</p><div id="fuel-tracker"></div>` : '';
+    const toolsPanel = `<div id="plan-functions"></div>`;
+    const planPanel = `${manage}${firstTg ? tgCoachRow(M.resolved[0].problem, M.resolved[0].rc) : ''}`;
+    const T = [['today', '☀️ Today', todayPanel]];
+    if (hasFuel) T.push(['fuel', '🍽️ Fuel', fuelPanel]);
+    if (M.functions.length) T.push(['tools', '🧩 Tools', toolsPanel]);
+    T.push(['plan', '⚙️ Plan', planPanel]);
     app.innerHTML = `${crumbs([{ label: 'Home', href: '#/' }, { label: 'My Plan' }])}
       <section class="plan-hd trk-hd"><div><div class="kicker">My Plan</div><h1>Today</h1><p class="muted">${subtitle}</p></div>
         <div class="plan-hd-actions"><a class="cta-ghost" href="#/progress">📊 Progress</a></div></section>
       <section class="plan-pulse"><div class="pulse-streak">🔥 <b>${streak}</b>-day streak</div>${weekStripHtml(plan, M)}</section>
-      ${recapCard}
-      ${missBanner}
-      ${consentCardHtml()}
-      <div id="checkin-slot"></div>
-      ${keystoneCards}
-      ${danger}
-      ${(totalItems || restBanner) ? `<section class="trk-sec trk-today">
-        <div class="trk-sec-h"><h2>Today's actions</h2>${totalItems ? `<span class="trk-prog">${doneItems}/${totalItems}</span>` : ''}</div>
-        ${restBanner}
-        ${totalItems ? `<div class="trk-list">${rows}</div>` : ''}
-        ${daysEditor}
-      </section>` : ''}
-      ${M.functions.length ? `<section class="trk-sec"><div class="trk-sec-h"><h2>Tools</h2></div><div id="plan-functions"></div></section>` : '<div id="plan-functions" hidden></div>'}
-      ${hasFuel ? `<section class="trk-sec trk-fuel"><div class="trk-sec-h"><h2>Fuel</h2><span class="trk-sec-sub">log meals vs your targets</span></div><div id="fuel-tracker"></div></section>` : ''}
-      ${manage}
-      ${firstTg ? tgCoachRow(M.resolved[0].problem, M.resolved[0].rc) : ''}`;
+      <div class="pt-seg" id="pt-seg">${T.map((t, i) => `<button data-pt="${t[0]}"${i === 0 ? ' class="on"' : ''}>${t[1]}</button>`).join('')}</div>
+      ${T.map((t, i) => `<div class="pt-panel" data-panel="${t[0]}"${i === 0 ? '' : ' hidden'}>${t[2]}</div>`).join('')}`;
     if (hasFuel) mountFuelTracker(null, null, M.fuel);
     mountPlanFunctions();
     wireTgCoach();
@@ -3790,6 +3802,12 @@
     const mdl = document.getElementById('mydata-link'); if (mdl) mdl.onclick = openDataModal;
     const hl = document.getElementById('health-link'); if (hl) hl.onclick = openHealthModal;
     mountCheckins(M, dayLog);
+    // tab switching — panels stay in the DOM (all wiring below keeps working), we just show one
+    const ptseg = app.querySelector('#pt-seg');
+    if (ptseg) ptseg.querySelectorAll('button').forEach(b => b.onclick = () => {
+      ptseg.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on');
+      app.querySelectorAll('.pt-panel').forEach(p => { p.hidden = p.dataset.panel !== b.dataset.pt; });
+    });
     const byExId = {}; M.moves.forEach(e => byExId[e.id] = e);
     const byCId = {}; M.supps.forEach(c => byCId[c.id] = c);
     wireItemModals('.trk-list', byExId, byCId);

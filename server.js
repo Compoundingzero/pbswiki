@@ -1090,6 +1090,8 @@ async function api(req, res, url) {
       const r = await db.query('INSERT INTO users(username,email,pass) VALUES($1,$2,$3) RETURNING id,username,role,email', [username, email || null, hashPassword(password)]);
       const u = r.rows[0]; const token = crypto.randomBytes(24).toString('hex');
       await db.query('INSERT INTO sessions(token,user_id,expires_at) VALUES($1,$2, now()+interval \'30 days\')', [token, u.id]);
+      // tracking on by default (withdrawable anytime under "Your data")
+      await db.query(`INSERT INTO user_consent(user_id,consent_research,version,consented_at) VALUES($1,true,$2,now()) ON CONFLICT(user_id) DO NOTHING`, [u.id, CONSENT_VERSION]).catch(() => {});
       setSessionCookie(res, token);
       return json(res, 200, { user: { id: u.id, username: u.username, role: u.role, email: u.email, is_super: isSuper(u) } });
     } catch (e) {
@@ -1212,8 +1214,9 @@ async function api(req, res, url) {
       return json(res, 200, { done: r.rows.map(x => x.phase) });
     }
     if (method === 'POST') {
+      // Tracking is on by default — only an explicit withdrawal blocks it.
       const cr = await db.query('SELECT consent_research FROM user_consent WHERE user_id=$1', [u.id]);
-      if (!cr.rows[0] || !cr.rows[0].consent_research) return json(res, 403, { error: 'Research consent required' });
+      if (cr.rows[0] && cr.rows[0].consent_research === false) return json(res, 403, { error: 'Tracking withdrawn' });
       const b = await readBody(req) || {};
       const pid = clean(b.pid, 64), rcid = clean(b.rcid, 64), phase = inList(b.phase, CHECKIN_PHASES);
       if (!pid || !rcid || !phase) return json(res, 400, { error: 'Missing pid/rcid/phase' });
