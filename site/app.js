@@ -5024,18 +5024,46 @@
 
       <section class="gpx" id="gpx-1">
         <div class="gpx-sticky">
-          <div class="gpx-scene">
-            <div class="gpx-layer gpx-pain">
-              <div class="gpx-name gpx-name-pain">Lost in the crowd</div>
-              <div class="gpx-viz gpx-crowd">${'<span>🏥</span>'.repeat(15)}</div>
+          <div class="gpx-art">
+            <svg class="gpx-svg" viewBox="0 0 400 210" role="img" aria-label="Your clinic rising above the crowd">
+              <defs>
+                <radialGradient id="glow1" cx="50%" cy="45%" r="55%"><stop offset="0%" stop-color="#fbbf24" stop-opacity=".6"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
+                <linearGradient id="beam1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fde68a" stop-opacity="0"/><stop offset="100%" stop-color="#fde68a" stop-opacity=".4"/></linearGradient>
+              </defs>
+              <line x1="0" y1="182" x2="400" y2="182" stroke="var(--line)" stroke-width="2"/>
+              <ellipse class="gpx-glow" cx="200" cy="140" rx="130" ry="78" fill="url(#glow1)"/>
+              <path class="gpx-beam" d="M200 0 L146 182 L254 182 Z" fill="url(#beam1)"/>
+              <g class="gpx-others" fill="#94a3b8">
+                <g transform="translate(24,124)"><rect width="46" height="58" rx="4"/><path d="M-5 0 L23 -18 L51 0 Z" fill="#cbd5e1"/><rect x="18" y="16" width="10" height="10" fill="#f1f5f9"/></g>
+                <g transform="translate(88,134)"><rect width="40" height="48" rx="4"/><path d="M-5 0 L20 -15 L45 0 Z" fill="#cbd5e1"/><rect x="15" y="14" width="9" height="9" fill="#f1f5f9"/></g>
+                <g transform="translate(270,132)"><rect width="42" height="50" rx="4"/><path d="M-5 0 L21 -16 L47 0 Z" fill="#cbd5e1"/><rect x="16" y="14" width="9" height="9" fill="#f1f5f9"/></g>
+                <g transform="translate(330,126)"><rect width="46" height="56" rx="4"/><path d="M-5 0 L23 -18 L51 0 Z" fill="#cbd5e1"/><rect x="18" y="15" width="10" height="10" fill="#f1f5f9"/></g>
+              </g>
+              <g class="gpx-you">
+                <rect x="166" y="94" width="68" height="88" rx="5" fill="#cbd5e1"/>
+                <rect class="gpx-you-gold" x="166" y="94" width="68" height="88" rx="5" fill="#f59e0b"/>
+                <path d="M160 94 L200 66 L240 94 Z" fill="#cbd5e1"/>
+                <path class="gpx-you-gold" d="M160 94 L200 66 L240 94 Z" fill="#d97706"/>
+                <rect x="193" y="112" width="14" height="14" rx="2" fill="#fff"/>
+                <path d="M200 114 v10 M195 119 h10" stroke="#ef4444" stroke-width="2.6"/>
+                <rect x="176" y="140" width="15" height="15" rx="2" fill="#fff" opacity=".7"/><rect x="209" y="140" width="15" height="15" rx="2" fill="#fff" opacity=".7"/>
+              </g>
+              <g class="gpx-badge" transform="translate(200,60)"><circle r="17" fill="#f59e0b"/><path d="M0 -9 l2.6 5.3 5.8 .8 -4.2 4.1 1 5.8 -5.2 -2.7 -5.2 2.7 1 -5.8 -4.2 -4.1 5.8 -.8 z" fill="#fff"/></g>
+              <g class="gpx-cd-wrap" fill="#64748b">
+                <circle class="gpx-cd" style="--x:-165" cx="200" cy="198" r="5"/><circle class="gpx-cd" style="--x:-110" cx="200" cy="204" r="5"/><circle class="gpx-cd" style="--x:150" cx="200" cy="198" r="5"/><circle class="gpx-cd" style="--x:95" cx="200" cy="204" r="5"/><circle class="gpx-cd" style="--x:-55" cx="200" cy="200" r="5"/><circle class="gpx-cd" style="--x:55" cx="200" cy="200" r="5"/>
+              </g>
+            </svg>
+          </div>
+          <div class="gpx-cap">
+            <div class="gpx-cap-l gpx-cap-pain">
+              <span class="gpx-name gpx-name-pain">Lost in the crowd</span>
               <h3>You're one clinic among dozens.</h3>
-              <p>Patients scroll straight past. There's nothing to pick you for but price — a race to the bottom you can't win. You did the training. You have the skill. And still, you're invisible.</p>
+              <p>Patients scroll straight past. There's nothing to pick you for but price. You did the training, you have the skill — and still, you're invisible.</p>
             </div>
-            <div class="gpx-layer gpx-fix">
-              <div class="gpx-name gpx-name-fix">The name they trust</div>
-              <div class="gpx-viz gpx-viz-good"><div class="gpx-viz-h">🏅 Top trusted clinics · Tampines</div><div class="gpm-rank gpm-rank-1"><span>🥇 Dr Tan Family Clinic</span><small>0.4 km</small></div><div class="gpm-rank"><span>🥈 Clinic B</span></div><div class="gpm-rank"><span>🥉 Clinic C</span></div></div>
+            <div class="gpx-cap-l gpx-cap-fix">
+              <span class="gpx-name gpx-name-fix">The name they trust</span>
               <h3>Now you're the name they <span class="lead">seek out</span>.</h3>
-              <p>Your reliable contributions lift your clinic to the top of what patients see nearby. They choose you for credibility — not the lowest price.</p>
+              <p>Your reliable contributions lift your clinic to the top of what patients see nearby. They choose you for credibility — not the cheapest price.</p>
             </div>
           </div>
           <div class="gpx-cue">keep scrolling ↓</div>
@@ -5044,18 +5072,33 @@
 
       <section class="gpx" id="gpx-2">
         <div class="gpx-sticky">
-          <div class="gpx-scene">
-            <div class="gpx-layer gpx-pain">
-              <div class="gpx-name gpx-name-pain">Here today, gone forever</div>
-              <div class="gpx-viz gpx-flowbig"><span>🧑</span><span class="gpx-ar">→</span><span>💊</span><span class="gpx-ar">→</span><span class="gpx-gone">👋</span></div>
+          <div class="gpx-art">
+            <svg class="gpx-svg" viewBox="0 0 400 210" role="img" aria-label="One-off patients versus a returning program">
+              <g class="gpx-s2pain">
+                <line x1="16" y1="105" x2="384" y2="105" stroke="var(--line)" stroke-width="2" stroke-dasharray="3 7"/>
+                <path d="M368 98 l12 7 -12 7" fill="none" stroke="var(--faint)" stroke-width="2"/>
+                <g fill="#64748b"><circle cx="70" cy="105" r="10"/><circle cx="170" cy="105" r="10" opacity=".8"/><circle cx="280" cy="105" r="10" opacity=".45"/><circle cx="360" cy="105" r="10" opacity=".12"/></g>
+                <text x="200" y="165" text-anchor="middle" class="gpx-lbl">consult → prescribe → gone</text>
+              </g>
+              <g class="gpx-s2fix">
+                <circle cx="200" cy="100" r="62" fill="none" stroke="var(--line)" stroke-width="3"/>
+                <circle class="gpx-arc" cx="200" cy="100" r="62" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" transform="rotate(-90 200 100)"/>
+                <g transform="translate(182,82)"><rect width="36" height="34" rx="4" fill="#16a34a"/><rect x="13" y="8" width="10" height="10" rx="2" fill="#fff"/><path d="M18 10 v6 M15 13 h6" stroke="#16a34a" stroke-width="2.2"/></g>
+                <g class="gpx-orbit"><circle cx="200" cy="38" r="8" fill="#16a34a"/><circle cx="200" cy="38" r="8" fill="#16a34a" transform="rotate(120 200 100)"/><circle cx="200" cy="38" r="8" fill="#16a34a" transform="rotate(240 200 100)"/></g>
+                <text x="200" y="190" text-anchor="middle" class="gpx-lbl gpx-lbl-good">week 3 of 12 · your program</text>
+              </g>
+            </svg>
+          </div>
+          <div class="gpx-cap">
+            <div class="gpx-cap-l gpx-cap-pain">
+              <span class="gpx-name gpx-name-pain">Here today, gone forever</span>
               <h3>Consult. Prescribe. Gone.</h3>
-              <p>Every patient is a one-time transaction. They walk out and you may never see them again — no relationship, nothing that builds. Tomorrow you start back at zero. Again.</p>
+              <p>Every patient is a one-time transaction. They walk out and you may never see them again. Tomorrow you start back at zero. Again.</p>
             </div>
-            <div class="gpx-layer gpx-fix">
-              <div class="gpx-name gpx-name-fix">Patients who stay</div>
-              <div class="gpx-viz gpx-viz-good"><div class="gpm-prog"><span>“Reverse My Pre-Diabetes”</span><small>Sarah · week 3 of 12 · your program</small></div><div class="gpm-loopline"><span>🔁 returns</span><span>💊 refills via you</span><span>🩺 reviews</span></div></div>
+            <div class="gpx-cap-l gpx-cap-fix">
+              <span class="gpx-name gpx-name-fix">Patients who stay</span>
               <h3>They join <span class="lead">your</span> program — and stay.</h3>
-              <p>From the protocols you maintain, patients enrol in programs you built — buying supplements and prescriptions through your clinic, month after month. A relationship that compounds.</p>
+              <p>From the protocols you maintain, patients enrol in programs you built — buying supplements and prescriptions through your clinic, month after month.</p>
             </div>
           </div>
           <div class="gpx-cue">keep scrolling ↓</div>
@@ -5064,18 +5107,37 @@
 
       <section class="gpx" id="gpx-3">
         <div class="gpx-sticky">
-          <div class="gpx-scene">
-            <div class="gpx-layer gpx-pain">
-              <div class="gpx-name gpx-name-pain">The margin trap</div>
-              <div class="gpx-viz"><div class="gpm-viz-sub">Your margin on a box of medicine</div><div class="gpm-bar gpx-bar"><i class="gpm-bar-cost" style="width:84%"></i><i class="gpm-bar-keep" style="width:16%"></i></div><div class="gpm-bar-key"><span class="gpm-k-cost">■ drug cost</span><span class="gpm-k-keep">■ you keep</span></div></div>
+          <div class="gpx-art">
+            <svg class="gpx-svg" viewBox="0 0 400 210" role="img" aria-label="A squeezed margin lifted by an alliance">
+              <g class="gpx-lines" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-linecap="round">
+                <line class="gpx-ln" x1="200" y1="72" x2="86" y2="34" pathLength="100"/><line class="gpx-ln" x1="200" y1="72" x2="330" y2="40" pathLength="100"/><line class="gpx-ln" x1="200" y1="72" x2="60" y2="96" pathLength="100"/><line class="gpx-ln" x1="200" y1="72" x2="346" y2="100" pathLength="100"/><line class="gpx-ln" x1="200" y1="72" x2="130" y2="122" pathLength="100"/><line class="gpx-ln" x1="200" y1="72" x2="280" y2="124" pathLength="100"/>
+              </g>
+              <g class="gpx-sats" fill="#16a34a">
+                <g transform="translate(86,34)" class="gpx-sat"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
+                <g transform="translate(330,40)" class="gpx-sat"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
+                <g transform="translate(60,96)" class="gpx-sat"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
+                <g transform="translate(346,100)" class="gpx-sat"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
+                <g transform="translate(130,122)" class="gpx-sat"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
+                <g transform="translate(280,124)" class="gpx-sat"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
+              </g>
+              <g transform="translate(200,72)"><circle r="26" class="gpx-center-halo" fill="#22c55e" opacity="0"/><circle r="21" fill="#16a34a"/><rect x="-9" y="-9" width="18" height="18" rx="3" fill="#fff"/><path d="M0 -6 v12 M-6 0 h12" stroke="#16a34a" stroke-width="3"/></g>
+              <text x="200" y="168" text-anchor="middle" class="gpx-lbl">Your margin on a box of medicine</text>
+              <g transform="translate(70,178)">
+                <rect x="0" y="0" width="260" height="20" rx="6" fill="#fecaca"/>
+                <rect class="gpx-keep" x="0" y="0" width="260" height="20" rx="6" fill="#22c55e"/>
+              </g>
+            </svg>
+          </div>
+          <div class="gpx-cap">
+            <div class="gpx-cap-l gpx-cap-pain">
+              <span class="gpx-name gpx-name-pain">The margin trap</span>
               <h3>The medicine sells. You barely keep a cent.</h3>
               <p>Drug costs devour the margin on every box. You became a doctor to change lives — and the business turned you into a dispensary running on fumes.</p>
             </div>
-            <div class="gpx-layer gpx-fix">
-              <div class="gpx-name gpx-name-fix">Stronger together</div>
-              <div class="gpx-viz gpx-viz-good"><div class="gpx-nodesbig">${'<span>🏥</span>'.repeat(6)}</div><div class="gpm-viz-sub">buy together → cost ↓ · margin ↑ · <b>free</b></div><div class="gpm-bar gpx-bar"><i class="gpm-bar-cost" style="width:56%"></i><i class="gpm-bar-keep" style="width:44%"></i></div></div>
+            <div class="gpx-cap-l gpx-cap-fix">
+              <span class="gpx-name gpx-name-fix">Stronger together</span>
               <h3>A network that <span class="lead">lifts every clinic</span>.</h3>
-              <p>The network buys in bulk, so your cost of goods drops — and clinics share stock through consignment. Your margin grows. And it costs you nothing.</p>
+              <p>The alliance buys in bulk, so your cost of goods drops — and clinics share stock through consignment. Your margin grows. And it costs you nothing.</p>
             </div>
           </div>
           <div class="gpx-cue">keep scrolling ↓</div>
@@ -5106,21 +5168,22 @@
       </section>`;
     bindGpLanding();
   }
-  // Scroll-driven crossfade: as each module scrolls through, the pain scene morphs into the fix scene.
+  // Scroll-driven: --t (0→1) morphs the SVG scene; the caption text crossfades pain→fix a beat later.
   function initGpScroll(id) {
     const sec = document.getElementById(id); if (!sec) return;
-    const pain = sec.querySelector('.gpx-pain'), fix = sec.querySelector('.gpx-fix'), cue = sec.querySelector('.gpx-cue');
-    if (!pain || !fix) return;
+    const cp = sec.querySelector('.gpx-cap-pain'), cf = sec.querySelector('.gpx-cap-fix'), cue = sec.querySelector('.gpx-cue');
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) { pain.style.opacity = 1; fix.style.opacity = 1; return; }   // CSS stacks them statically
+    if (reduce) { sec.style.setProperty('--t', 1); if (cp) cp.style.opacity = 0; if (cf) cf.style.opacity = 1; return; }
     const onScroll = () => {
       if (!document.body.contains(sec)) { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); return; }
       const rect = sec.getBoundingClientRect(); const total = sec.offsetHeight - window.innerHeight;
       const progress = total > 0 ? Math.min(Math.max(-rect.top / total, 0), 1) : 0;
-      const t = Math.min(1, Math.max(0, (progress - 0.32) / 0.36));   // crossfade window
-      pain.style.opacity = 1 - t; pain.style.transform = `translateY(${-t * 26}px) scale(${1 - t * 0.06})`;
-      fix.style.opacity = t; fix.style.transform = `translateY(${(1 - t) * 30}px) scale(${0.94 + t * 0.06})`;
-      if (cue) cue.style.opacity = progress > 0.75 ? 0 : (1 - t) * 0.9;
+      const t = Math.min(1, Math.max(0, (progress - 0.14) / 0.6));    // scene morph — starts early, eases across the pin
+      sec.style.setProperty('--t', t.toFixed(3));
+      const tc = Math.min(1, Math.max(0, (progress - 0.42) / 0.22));  // text swap — a beat after the scene
+      if (cp) cp.style.opacity = 1 - tc;
+      if (cf) cf.style.opacity = tc;
+      if (cue) cue.style.opacity = progress > 0.72 ? 0 : (1 - tc) * 0.85;
     };
     window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll); onScroll();
   }
