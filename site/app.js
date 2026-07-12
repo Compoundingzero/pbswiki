@@ -5016,70 +5016,73 @@
       <section class="gp-hero">
         <div class="gp-eyebrow">For Singapore GPs &amp; clinics</div>
         <h1 class="gp-h1">You trained for years to <span class="lead">heal people</span>.<br>Not to fight for the next one-off sale.</h1>
-        <p class="gp-sub">A clinic on every corner. Patients who consult once and vanish. Margins squeezed to the bone on every box of medicine. RNAwiki turns your expertise into a <b>brand patients seek out</b> — and recurring programs they stay in. Free, for founding clinics.</p>
-        <div class="gp-hero-cta"><a class="cta-primary lg" href="#gp-apply">Register your clinic's interest →</a><span class="gp-hero-note">Takes 60 seconds · no cost · no obligation</span></div>
+        <p class="gp-sub">A clinic on every corner. Patients who consult once and vanish. Margins squeezed on every box of medicine. RNAwiki turns your expertise into a <b>brand patients seek out</b> — and programs they stay in. Free, for founding clinics.</p>
+        <a class="cta-primary gp-cta" href="#gp-apply">Register your clinic's interest →</a>
+        <div class="gp-hero-note">Takes 60 seconds · no cost · no obligation</div>
+        <div class="gp-scrollhint">Scroll to see how ↓</div>
       </section>
 
-      <section class="gp-band reveal">
-        <div class="section-title center">The quiet truth of running a clinic here</div>
-        <div class="gp-pains">
-          <div class="gp-pain reveal"><span class="gp-pain-ic">🥊</span><h3>Brutal competition</h3><p>A GP clinic on nearly every street. The only lever left is price — a race to the bottom that nobody wins.</p></div>
-          <div class="gp-pain reveal"><span class="gp-pain-ic">🔁</span><h3>One-and-done</h3><p>A patient walks in, you prescribe, they walk out — and you may never see them again. No continuity. No relationship. No compounding.</p></div>
-          <div class="gp-pain reveal"><span class="gp-pain-ic">📉</span><h3>Thin, thankless margins</h3><p>Drug costs eat the profit. You became a doctor to change lives, but the business turns you into a dispensary.</p></div>
-        </div>
-      </section>
-
-      <section class="gp-turn reveal">
-        <h2 class="gp-turn-h">What if every patient became a <span class="lead">lasting relationship</span> — and your name became the reason they chose you?</h2>
-      </section>
-
-      <section class="scrolly" id="scrolly-gp">
+      <section class="scrolly gp-mod" id="gp-mod-1">
         <div class="scrolly-track">
           <div class="scrolly-copy">
-            <div class="section-title">How it works — from your chair</div>
-            <div class="sy-step on" data-step="0"><span class="s3-tag mv">Step 1 · Contribute</span><h3>Share what you know</h3><p>Review and sharpen the clinical information on RNAwiki. Your name and clinic are attached to every trusted contribution — real, visible credibility.</p></div>
-            <div class="sy-step" data-step="1"><span class="s3-tag st">Step 2 · Rise</span><h3>Your clinic gets featured</h3><p>The more people your expertise helps, the higher your clinic climbs on <b>“Top trusted clinics near you.”</b> Patients in your neighbourhood discover you first.</p></div>
-            <div class="sy-step" data-step="2"><span class="s3-tag fl">Step 3 · Retain</span><h3>Patients come — and stay</h3><p>They join the <b>programs you built</b> from the reliable protocols you maintain, and buy supplements &amp; prescriptions through your clinic. A recurring relationship — not a one-off consult.</p></div>
+            <div class="gp-mod-tag">01 · The price war</div>
+            <div class="sy-step on" data-step="0"><h3>Another clinic just opened down the road.</h3><p>There's a GP on nearly every street. You can't out-advertise them, so it comes down to price — a race to the bottom nobody wins. You're invisible in the crowd.</p></div>
+            <div class="sy-step" data-step="1"><h3>Now patients seek <span class="lead">you</span> out.</h3><p>Contribute reliable clinical information here and your clinic rises on <b>“Top trusted clinics near you.”</b> The people in your neighbourhood find <b>you</b> first — chosen for credibility, not the cheapest price.</p></div>
           </div>
-          <div class="scrolly-stage">
-            <div class="phone"><div class="phone-notch"></div><div class="phone-screen">
-              <div class="pf-eg">Preview</div>
-              <div class="sy-frame on" data-frame="0">
-                <div class="pf-bar"><span>✎</span> You reviewed a protocol</div>
-                <div class="pf-proto"><span class="pf-l st">✓ Reviewed</span><b>Metformin for pre-diabetes</b><small>Dr Tan · GP · MCR verified</small></div>
-                <div class="pf-root">👍 <b>128 patients</b> found this helpful → +128 credibility</div>
-              </div>
-              <div class="sy-frame" data-frame="1">
-                <div class="pf-track-h">🏅 Top trusted clinics · Tampines</div>
-                <div class="pf-proto pf-hi"><span class="pf-l mv">🥇</span><b>Dr Tan Family Clinic</b><small>0.4 km · 4 programs · verified GP</small><span class="pf-pick">Featured</span></div>
-                <div class="pf-proto"><span class="pf-l">🥈</span><b>Another clinic</b><small>1.1 km</small></div>
-                <div class="pf-cap">Patients nearby see you first</div>
-              </div>
-              <div class="sy-frame" data-frame="2">
-                <div class="pf-bar"><span>🎉</span> New patient in your program</div>
-                <div class="pf-proto"><span class="pf-l fl">Sarah, 41</span><b>“Reverse My Pre-Diabetes”</b><small>your 12-week program</small></div>
-                <div class="pf-nut"><span>Supplements</span><div class="sy-bar"><i style="--w:100%"></i></div><em>via you</em></div>
-                <div class="pf-nut"><span>Review visit</span><div class="sy-bar"><i style="--w:100%"></i></div><em>booked</em></div>
-                <div class="pf-cap">Recurring care, bought through your clinic</div>
-              </div>
-            </div></div>
-            <div class="sy-dots"><i data-dot="0" class="on"></i><i data-dot="1"></i><i data-dot="2"></i></div>
+          <div class="scrolly-stage gp-stage">
+            <div class="sy-frame on gp-scene" data-frame="0">
+              <div class="gp-viz gp-viz-war"><div class="gp-map">${'<span class="gp-pin">🏥</span>'.repeat(7)}</div><div class="gp-viz-cap">Every clinic competing on price. You're one grey pin among many.</div></div>
+            </div>
+            <div class="sy-frame gp-scene" data-frame="1">
+              <div class="gp-viz gp-viz-featured"><div class="gp-viz-h">🏅 Top trusted clinics · Tampines</div><div class="gp-rank gp-rank-1"><b>🥇 Dr Tan Family Clinic</b><small>0.4 km · verified GP</small></div><div class="gp-rank"><b>🥈 Clinic B</b><small>1.1 km</small></div><div class="gp-rank"><b>🥉 Clinic C</b><small>1.8 km</small></div><div class="gp-viz-cap">Patients nearby find <b>you</b> first.</div></div>
+            </div>
+            <div class="sy-dots"><i data-dot="0" class="on"></i><i data-dot="1"></i></div>
           </div>
         </div>
       </section>
 
-      <section class="gp-band reveal">
-        <div class="section-title center">And a network that lifts every clinic</div>
-        <div class="gp-pains">
-          <div class="gp-pain reveal"><span class="gp-pain-ic">🤝</span><h3>Buy together, pay less</h3><p>As the alliance grows, we negotiate bulk pricing on medications — your cost of goods drops, your margin rises.</p></div>
-          <div class="gp-pain reveal"><span class="gp-pain-ic">🔄</span><h3>Share stock, cut waste</h3><p>Consignment between clinics in the network means less expiring inventory and healthier margins across the board.</p></div>
-          <div class="gp-pain reveal"><span class="gp-pain-ic">🆓</span><h3>Completely free</h3><p>No fees. No lock-in. We only grow when your clinic grows — so everything above costs you nothing.</p></div>
+      <section class="scrolly gp-mod" id="gp-mod-2">
+        <div class="scrolly-track">
+          <div class="scrolly-copy">
+            <div class="gp-mod-tag">02 · One-and-done</div>
+            <div class="sy-step on" data-step="0"><h3>Consult. Prescribe. Gone.</h3><p>A patient walks in, you write a script, they walk out — and you may never see them again. No continuity, no relationship, nothing that compounds. Every day starts back at zero.</p></div>
+            <div class="sy-step" data-step="1"><h3>They join <span class="lead">your</span> program — and stay.</h3><p>From the reliable protocols you maintain, you build <b>programs patients enrol in</b> — and buy their supplements &amp; prescriptions through your clinic. A recurring relationship, month after month.</p></div>
+          </div>
+          <div class="scrolly-stage gp-stage">
+            <div class="sy-frame on gp-scene" data-frame="0">
+              <div class="gp-viz gp-viz-oneoff"><div class="gp-flow"><span>🧑 Patient</span><span class="gp-arrow">→</span><span>💊 Prescribe</span><span class="gp-arrow">→</span><span class="gp-gone">👋 Gone</span></div><div class="gp-viz-cap">No continuity. No compounding. Back to zero tomorrow.</div></div>
+            </div>
+            <div class="sy-frame gp-scene" data-frame="1">
+              <div class="gp-viz gp-viz-loop"><div class="gp-prog"><b>“Reverse My Pre-Diabetes”</b><small>Sarah · week 3 of 12 · your program</small></div><div class="gp-loopline"><span>🔁 returns</span><span>💊 refills via you</span><span>🩺 reviews</span></div><div class="gp-viz-cap">A recurring relationship — bought through <b>your</b> clinic.</div></div>
+            </div>
+            <div class="sy-dots"><i data-dot="0" class="on"></i><i data-dot="1"></i></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scrolly gp-mod" id="gp-mod-3">
+        <div class="scrolly-track">
+          <div class="scrolly-copy">
+            <div class="gp-mod-tag">03 · Thin margins</div>
+            <div class="sy-step on" data-step="0"><h3>Drug costs eat the profit.</h3><p>You became a doctor to change lives — but the business turns you into a dispensary, and the margin on every box keeps shrinking.</p></div>
+            <div class="sy-step" data-step="1"><h3>A network that <span class="lead">lifts every clinic</span>.</h3><p>As the alliance grows we <b>buy together</b> — bulk pricing drops your cost of goods, and <b>consignment between clinics</b> cuts waste. Your margin rises. And it's <b>completely free</b> — we only grow when you do.</p></div>
+          </div>
+          <div class="scrolly-stage gp-stage">
+            <div class="sy-frame on gp-scene" data-frame="0">
+              <div class="gp-viz gp-viz-margin"><div class="gp-margin-lbl">Your margin on a box of medicine</div><div class="gp-bar"><i class="gp-bar-cost" style="width:82%"></i><i class="gp-bar-yours" style="width:18%"></i></div><div class="gp-bar-key"><span class="gp-k-cost">■ drug cost</span><span class="gp-k-yours">■ you keep</span></div><div class="gp-viz-cap">Squeezed to the bone.</div></div>
+            </div>
+            <div class="sy-frame gp-scene" data-frame="1">
+              <div class="gp-viz gp-viz-alliance"><div class="gp-nodes">${'<span>🏥</span>'.repeat(6)}</div><div class="gp-alliance-stat">Buy together → <b>cost ↓</b> · <b>margin ↑</b> · <b>free</b></div><div class="gp-bar"><i class="gp-bar-cost" style="width:60%"></i><i class="gp-bar-yours" style="width:40%"></i></div><div class="gp-viz-cap">A network that lifts every clinic.</div></div>
+            </div>
+            <div class="sy-dots"><i data-dot="0" class="on"></i><i data-dot="1"></i></div>
+          </div>
         </div>
       </section>
 
       <section class="gp-found reveal">
         <h2>Be one of the <span class="lead">founding clinics</span>.</h2>
         <p>We're hand-picking the first Singapore GPs to shape this network — and to be featured first when patients start searching. Register your interest and we'll reach out personally.</p>
+        <a class="cta-primary gp-cta" href="#gp-apply">Register your clinic's interest →</a>
       </section>
 
       <section class="gp-apply" id="gp-apply">
@@ -5102,7 +5105,7 @@
   }
   function bindGpLanding() {
     revealOnScroll();
-    initScrolly('scrolly-gp');
+    initScrolly('gp-mod-1'); initScrolly('gp-mod-2'); initScrolly('gp-mod-3');
     const form = document.getElementById('gp-form'); if (!form) return;
     const err = document.getElementById('gp-err'), btn = document.getElementById('gp-submit');
     form.onsubmit = async (e) => {
