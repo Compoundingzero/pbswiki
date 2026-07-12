@@ -1985,7 +1985,13 @@
     // ---- Insights view: high-value signals + research cuts ----
     function renderInsights() { app.querySelector('#cr-view').innerHTML = `<div id="adm-datasets"><div class="muted" style="padding:1rem 0">Loading datasets…</div></div>`; loadDatasets(); }
     function opsMenuHtml() {
-      const OPS = [['members', '👥', 'Members', 'Everyone who signed up — emails, join dates & roles'], ['clinicians', '🩺', 'Clinician interest', 'Physios, dietitians & doctors on the founding waitlist'], ['requests', '💡', 'Requests', 'Protocols & features users asked you to build'], ['feedback', '💬', 'Feedback', 'Bug reports & suggestions sent from the site'], ['foods', '🥗', 'Food submissions', 'User-submitted foods awaiting your approval'], ['partners', '🏪', 'Partners', 'Local businesses applying to be listed'], ['accounts', '✅', 'Expert applications', 'Clinicians applying for a verified-domain badge']];
+      // GP-only model: all provider queues merged into GP/Clinics; feedback + requests merged.
+      const OPS = [
+        ['members', '👥', 'Members', 'Everyone who signed up — emails, join dates & roles'],
+        ['gps', '🩺', 'GP & clinic applications', 'Singapore GPs registering interest + clinics to feature'],
+        ['feedback', '💬', 'Feedback & requests', 'Ideas, bug reports and features users asked for'],
+        ['foods', '🥗', 'Food submissions', 'User-submitted foods awaiting your approval'],
+      ];
       if (PHASE2) OPS.push(['edits', '✎', 'Pending edits', 'Proposed edits to compound pages'], ['rootcauses', '🧬', 'Root-cause changes', 'Proposed changes to protocol root causes']);
       return OPS.map((o, i) => `<button data-tab="${o[0]}" class="ops-item${i === 0 ? ' on' : ''}"><span class="ops-ico">${o[1]}</span><span class="ops-txt"><span class="ops-title">${esc(o[2])} <span class="adm-c" id="c-${o[0]}"></span></span><span class="ops-desc">${esc(o[3])}</span></span></button>`).join('');
     }
@@ -2004,17 +2010,30 @@
     segEl.querySelectorAll('button').forEach(b => b.onclick = () => { segEl.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on'); showView(b.dataset.v); });
     let OV = null;
     const load = async () => { const bodyEl = app.querySelector('#adm-body'); try { OV = await api.adminOverview(); } catch (e) { if (bodyEl) bodyEl.innerHTML = `<div class="empty"><h1>${esc(e.message)}</h1></div>`; return; }
-      // pending counts on the tab chips
-      const pend = { accounts: OV.experts.filter(e => e.application_status === 'pending').length, edits: (OV.proposals || []).length, rootcauses: OV.rootcauseChanges.filter(c => c.status === 'pending').length, requests: OV.requests.filter(r => r.status === 'open').length, partners: OV.partners.filter(p => p.status === 'pending').length, foods: OV.foods.length, feedback: (OV.feedback || []).length };
+      // pending counts on the tab chips (GP-only: gps = clinician interest + expert apps + partners; feedback = feedback + open requests)
+      const gpPending = (OV.experts.filter(e => e.application_status === 'pending').length) + (OV.partners.filter(p => p.status === 'pending').length) + ((OV.clinicians || []).length);
+      const pend = { gps: gpPending, feedback: ((OV.feedback || []).length) + (OV.requests.filter(r => r.status === 'open').length), edits: (OV.proposals || []).length, rootcauses: OV.rootcauseChanges.filter(c => c.status === 'pending').length, foods: OV.foods.length };
       for (const k in pend) { const el = document.getElementById('c-' + k); if (el) el.textContent = pend[k] || ''; if (el) el.classList.toggle('hot', pend[k] > 0); }
       const cm = document.getElementById('c-members'); if (cm) cm.textContent = OV.memberCount || (OV.members || []).length || '';
-      const cc = document.getElementById('c-clinicians'); if (cc) cc.textContent = (OV.clinicians || []).length || '';
       const active = app.querySelector('#adm-tabs button.on'); if (active) paintAdmin(active.dataset.tab);
     };
     const act = async (fn) => { try { await fn(); await load(); } catch (e) { alert(e.message); } };
     function paintAdmin(tab) {
       const body = app.querySelector('#adm-body'); if (!OV) return;
-      if (tab === 'accounts') {
+      if (tab === 'gps') {   // GP-only: interest (from /gp) + verified-badge applications + clinics to feature
+        const ci = OV.clinicians || [];
+        const ciRows = ci.length ? ci.map(c => `<tr><td>${esc(c.name)}</td><td>${esc(c.email)}</td><td>${esc(c.note || c.discipline || '—')}</td><td>${c.created_at ? esc(String(c.created_at).slice(0, 10)) : '—'}</td></tr>`).join('') : '<tr><td colspan="4" class="muted">No GP interest yet — share the <a href="#/gp">/gp</a> landing page.</td></tr>';
+        const ex = OV.experts || [];
+        const exRows = ex.length ? ex.map(e => { const status = e.domain_verified ? '✓ verified' : (e.application_status || 'none'); const actions = e.domain_verified ? `<button class="admin-btn" data-verify="${esc(e.username)}" data-to="0">Revoke</button>` : `<button class="admin-btn ok" data-verify="${esc(e.username)}" data-to="1">Approve</button> <button class="admin-btn" data-verify="${esc(e.username)}" data-to="0">Reject</button>`; return `<tr><td>@${esc(e.username)}</td><td>${esc(e.credential || '—')}${e.role_backlink ? ` · <a href="${esc(e.role_backlink)}" target="_blank" rel="noopener nofollow">backlink↗</a>` : ''}</td><td>${esc(status)}</td><td>${actions}</td></tr>`; }).join('') : '<tr><td colspan="4" class="muted">No badge applications.</td></tr>';
+        const pt = OV.partners || [];
+        const ptRows = pt.length ? pt.map(p => `<tr><td>${esc(p.name)}</td><td>${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">site</a>` : '—'}${p.backlink_url ? ` · <a href="${esc(p.backlink_url)}" target="_blank" rel="noopener">backlink↗</a>` : ''}</td><td>${esc(p.status)}</td><td>${p.status !== 'active' ? `<button class="admin-btn ok" data-partner="${p.id}" data-to="active">Approve</button> ` : ''}${p.status !== 'rejected' ? `<button class="admin-btn" data-partner="${p.id}" data-to="rejected">Reject</button>` : ''}</td></tr>`).join('') : '<tr><td colspan="4" class="muted">No clinics listed yet.</td></tr>';
+        body.innerHTML = `<p class="muted">Singapore GPs &amp; clinics only. <a class="admin-btn ok" href="/api/admin/export?type=clinicians" download>⤓ Export GP interest (CSV)</a></p>
+          <h3 class="adm-sub-h">🩺 GP interest — from the /gp page</h3><div class="ao-table-wrap"><table class="board"><thead><tr><th>Name</th><th>Email</th><th>Clinic / note</th><th>When</th></tr></thead><tbody>${ciRows}</tbody></table></div>
+          <h3 class="adm-sub-h">✅ Verified-badge applications</h3><div class="ao-table-wrap"><table class="board"><thead><tr><th>User</th><th>Credential</th><th>Status</th><th></th></tr></thead><tbody>${exRows}</tbody></table></div>
+          <h3 class="adm-sub-h">🏥 Clinics to feature</h3><div class="ao-table-wrap"><table class="board"><thead><tr><th>Clinic</th><th>Links</th><th>Status</th><th></th></tr></thead><tbody>${ptRows}</tbody></table></div>`;
+        body.querySelectorAll('[data-verify]').forEach(b => b.onclick = () => act(() => api.adminVerify(b.dataset.verify, b.dataset.to === '1')));
+        body.querySelectorAll('[data-partner]').forEach(b => b.onclick = () => act(() => api.adminSetPartner(b.dataset.partner, b.dataset.to)));
+      } else if (tab === 'accounts') {
         const rows = OV.experts.length ? OV.experts.map(e => {
           const dom = e.domain || e.requested_domain; const label = (GRAPH.domains[dom] || {}).label || dom || '—';
           const status = e.domain_verified ? '✓ verified' : (e.application_status || 'none');
@@ -2085,12 +2104,14 @@
         body.innerHTML = `<p class="muted">Crowd-submitted foods awaiting a nutrition check. Dietitians can also clear these from their dashboard.</p>
           <table class="board"><thead><tr><th>Food</th><th>By</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
         body.querySelectorAll('[data-food]').forEach(b => b.onclick = () => act(() => api.verifyFood(b.dataset.food, b.dataset.to)));
-      } else if (tab === 'feedback') {
+      } else if (tab === 'feedback') {   // merged: feature/protocol requests + all feedback types
         const fb = OV.feedback || [];
         const ico = { idea: '💡', wrong: '⚠️', other: '💬' }; const klbl = { idea: 'Idea / suggestion', wrong: 'Something wrong', other: 'Something else' };
         const rows = fb.length ? fb.map(f => `<tr><td><span class="fb-type">${ico[f.kind] || '💬'} ${esc(klbl[f.kind] || 'Feedback')}</span></td><td><div>${esc(f.body)}</div>${f.page ? `<small class="muted">on ${esc(f.page)}</small>` : ''}${f.contact ? `<small class="muted"> · ${esc(f.contact)}</small>` : ''}</td><td>${f.by_user ? '@' + esc(f.by_user) : 'guest'}</td><td><button class="admin-btn ok" data-fb="${f.id}" data-to="done">Done</button> <button class="admin-btn" data-fb="${f.id}" data-to="archived">Archive</button></td></tr>`).join('') : '<tr><td colspan="4" class="muted">No open feedback. 🎉</td></tr>';
-        body.innerHTML = `<p class="muted">All feedback types in one place — the label shows which kind. Mark items done or archive them.</p>
-          <table class="board"><thead><tr><th>Type</th><th>Feedback</th><th>By</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+        const reqRows = OV.requests.length ? OV.requests.map(r => `<tr><td><b>${esc(r.request)}</b>${r.detail ? `<div class="muted" style="font-size:.82rem">${esc(r.detail)}</div>` : ''}</td><td>▲ ${r.votes}</td><td>${esc(r.status)}</td><td>${['open', 'building', 'done', 'declined'].filter(s => s !== r.status).map(s => `<button class="admin-btn${s === 'building' ? ' ok' : ''}" data-req="${r.id}" data-to="${s}">${s}</button>`).join(' ')}</td></tr>`).join('') : '<tr><td colspan="4" class="muted">No requests yet.</td></tr>';
+        body.innerHTML = `<h3 class="adm-sub-h">💡 Requests — what people want built (ranked by upvotes)</h3><div class="ao-table-wrap"><table class="board"><thead><tr><th>Request</th><th>Votes</th><th>Status</th><th>Set</th></tr></thead><tbody>${reqRows}</tbody></table></div>
+          <h3 class="adm-sub-h">💬 Feedback — ideas, bug reports &amp; other</h3><div class="ao-table-wrap"><table class="board"><thead><tr><th>Type</th><th>Feedback</th><th>By</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+        body.querySelectorAll('[data-req]').forEach(b => b.onclick = () => act(() => api.setRequestStatus(b.dataset.req, b.dataset.to)));
         body.querySelectorAll('[data-fb]').forEach(b => b.onclick = () => act(() => api.setFeedback(b.dataset.fb, b.dataset.to)));
       }
     }
@@ -3787,14 +3808,17 @@
         <span class="tpm-acts"><button class="linkbtn" data-edit-proto="${r.pr.pid}/${r.pr.rcid}">Edit</button> · <button class="linkbtn" data-share-proto="${r.pr.pid}/${r.pr.rcid}">Share</button> · <button class="linkbtn danger" data-remove-proto="${r.pr.pid}/${r.pr.rcid}">Remove</button></span></div>`).join('')}
       <a class="tpm-add" href="#/solve">＋ Add another goal</a>${ME && CONSENT ? ' · <button class="linkbtn" id="health-link">🩸 Track health data</button> · <button class="linkbtn" id="mydata-link">🔒 Your data</button>' : ''}</section>`;
     // Tabbed layout — one focused panel at a time (Apple: reduce what's on screen; progressive disclosure).
-    const todayPanel = `${recapCard}${missBanner}
-      <div id="checkin-slot"></div>
-      ${keystoneCards}
-      ${danger}
+    // interaction/safety check is reference info — collapse it so it doesn't crowd the primary action
+    const ixWrap = danger ? `<details class="trk-fold"><summary><span class="trk-fold-t">🔬 Interaction &amp; safety check</span><span class="trk-fold-hint">tap to view</span></summary><div class="trk-fold-body">${danger}</div></details>` : '';
+    // Priority order: the keystone (the ONE action) is the hero, then the checklist; check-in prompt + interaction check sit below.
+    const todayPanel = `${keystoneCards}
       ${totalItems ? `<div class="trk-sec-h"><h3>Today's checklist</h3><span class="trk-prog">${doneItems}/${totalItems}</span></div>` : ''}
       ${restBanner}
       ${totalItems ? `<div class="trk-list">${rows}</div>` : ''}
-      ${daysEditor}`;
+      ${daysEditor}
+      <div id="checkin-slot"></div>
+      ${ixWrap}
+      ${recapCard}${missBanner}`;
     const fuelPanel = hasFuel ? `<p class="pt-sub">Log what you eat — your protocol's targets fill as you go.</p><div id="fuel-tracker"></div>` : '';
     const toolsPanel = `<div id="plan-functions"></div>`;
     const planPanel = `${manage}${firstTg ? tgCoachRow(M.resolved[0].problem, M.resolved[0].rc) : ''}`;
@@ -3806,7 +3830,7 @@
       <section class="plan-hd trk-hd"><div><div class="kicker">My Plan</div><h1>Today</h1><p class="muted">${subtitle}</p></div>
         <div class="plan-hd-actions"><a class="cta-ghost" href="#/progress">📊 Progress</a></div></section>
       <section class="plan-pulse"><div class="pulse-streak">🔥 <b>${streak}</b>-day streak</div>${weekStripHtml(plan, M)}</section>
-      <div class="pt-seg" id="pt-seg">${T.map((t, i) => `<button data-pt="${t[0]}"${i === 0 ? ' class="on"' : ''}>${t[1]}</button>`).join('')}</div>
+      <div class="pt-seg" id="pt-seg">${T.map((t, i) => `<button data-pt="${t[0]}" class="pt-${t[0]}${i === 0 ? ' on' : ''}">${t[1]}</button>`).join('')}</div>
       ${T.map((t, i) => `<div class="pt-panel" data-panel="${t[0]}"${i === 0 ? '' : ' hidden'}>${t[2]}</div>`).join('')}`;
     if (hasFuel) mountFuelTracker(null, null, M.fuel);
     mountPlanFunctions();
@@ -4370,7 +4394,10 @@
         ${glHtml}
         <div class="fuel-bars">${bars || '<p class="muted">No targets for this protocol.</p>'}</div>
         <div id="ai-interest-note" class="ai-interest" hidden></div>
-        ${ME ? `<div class="fuel-foot">${log.items.length ? `<button id="fuel-share" class="linkbtn share">🔗 Share my progress${hitGoals.length ? ' · ' + hitGoals.length + ' target' + (hitGoals.length > 1 ? 's' : '') + ' hit' : ''}</button> · ` : ''}<button id="fuel-reset" class="linkbtn">Reset today</button> · saved on this device</div>` : ''}`;
+        ${ME && log.items.length ? `<div class="fuel-foot">
+          <button id="fuel-share" class="fuel-share-btn">📸 Share ${hitGoals.length ? `— ${hitGoals.length} target${hitGoals.length > 1 ? 's' : ''} hit today 🎯` : 'my day'}</button>
+          <button id="fuel-reset" class="fuel-clear-btn" title="Remove everything you logged today and start over">Clear today's log</button>
+        </div>` : ''}`;
       wire();
       if (celebrate) {
         const fresh = hitGoals.find(k => !wasCelebrated(problem.id + ':' + rc.id + ':' + k));
@@ -4410,7 +4437,7 @@
       root.querySelectorAll('[data-inc]').forEach(b => b.onclick = () => { const log = getFuelLog(); log.items[+b.dataset.inc].n++; setFuelLog(log); render(true); });
       root.querySelectorAll('[data-dec]').forEach(b => b.onclick = () => { const log = getFuelLog(); const it = log.items[+b.dataset.dec]; it.n--; if (it.n <= 0) log.items.splice(+b.dataset.dec, 1); setFuelLog(log); render(); });
       root.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { const log = getFuelLog(); log.items.splice(+b.dataset.rm, 1); setFuelLog(log); render(); });
-      const rs = document.getElementById('fuel-reset'); if (rs) rs.onclick = () => { setFuelLog({ date: today(), items: [] }); render(); };
+      const rs = document.getElementById('fuel-reset'); if (rs) rs.onclick = () => { if (!confirm("Clear everything you logged today? This can't be undone.")) return; setFuelLog({ date: today(), items: [] }); render(); };
       const sb = document.getElementById('scan-barcode'); if (sb) sb.onclick = () => openBarcodeScanner();
       const reload = () => { window.__userFoodsLoaded = false; loadUserFoods().then(() => render()); };
       const af = document.getElementById('add-food'); if (af) af.onclick = () => openAddFoodModal(reload);
