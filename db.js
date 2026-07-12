@@ -330,6 +330,9 @@ CREATE TABLE IF NOT EXISTS telegram_link_tokens (
   rcid TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+-- chat_id is set for the reverse direction: the bot mints a token, the user opens ?tgsync=<token>
+-- on the site while signed in, and /api/telegram/attach binds that chat to their account.
+ALTER TABLE telegram_link_tokens ADD COLUMN IF NOT EXISTS chat_id BIGINT;
 
 -- The unified plan object (the omnichannel spine): one active plan per account, shared by the
 -- website, the Telegram bot, sharing cards and (later) the earn layer. Anonymous users keep it

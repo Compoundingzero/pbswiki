@@ -242,6 +242,7 @@
     savePlan(plan) { return this.call('POST', '/api/plan', { plan }).catch(() => null); },
     config() { return this.call('GET', '/api/config').catch(() => ({ googleClientId: null })); },
     googleAuth(credential) { return this.call('POST', '/api/auth/google', { credential }); },
+    telegramAttach(token) { return this.call('POST', '/api/telegram/attach', { token }); },
     register(b) { return this.call('POST', '/api/register', b); },
     login(b) { return this.call('POST', '/api/login', b); },
     logout() { return this.call('POST', '/api/logout'); },
@@ -410,7 +411,7 @@
         ME = (await api.me()) || d.user;
         // seed demographics captured at sign-up (fire-and-forget; session cookie is already set)
         if (mode !== 'login' && (b.age_band || b.sex)) api.saveProfile({ age_band: b.age_band || null, sex: b.sex || null }).catch(() => {});
-        closeModal(); renderAccount(); route(); syncPlanOnLogin(); loadConsent();
+        closeModal(); renderAccount(); route(); syncPlanOnLogin(); loadConsent(); tgSyncConsume();
       } catch (ex) { err.textContent = ex.message; err.hidden = false; btn.disabled = false; btn.textContent = mode === 'login' ? 'Sign in' : 'Create account'; }
     };
     if (CFG.googleClientId) mountGoogleButton(m.querySelector('#gbtn'), err);
@@ -434,13 +435,24 @@
       callback: async (resp) => {
         try {
           const d = await api.googleAuth(resp.credential);
-          ME = (await api.me()) || d.user; closeModal(); renderAccount(); route(); syncPlanOnLogin(); loadConsent();
+          ME = (await api.me()) || d.user; closeModal(); renderAccount(); route(); syncPlanOnLogin(); loadConsent(); tgSyncConsume();
         } catch (ex) { if (errEl) { errEl.textContent = ex.message; errEl.hidden = false; } }
       },
     });
     window.google.accounts.id.renderButton(container, { theme: 'outline', size: 'large', width: 320, text: 'continue_with' });
   }
   function requireAuth(then) { if (ME) return then(); openAuth('login'); }
+  // Finish a Telegram → account sync: the user opened ?tgsync=<token> from the bot. If signed in, bind the
+  // chat to this account; if not, stash the token and prompt sign-in, then complete right after login.
+  async function tgSyncConsume() {
+    const m = location.search.match(/[?&]tgsync=([\w-]+)/);
+    const token = m ? m[1] : sessionStorage.getItem('tgsync');
+    if (!token) return;
+    if (m) history.replaceState(null, '', location.pathname + (location.hash || '')); // clean the URL either way
+    if (!ME) { sessionStorage.setItem('tgsync', token); toast('Sign in to connect your Telegram plan'); openAuth('login'); return; }
+    try { await api.telegramAttach(token); sessionStorage.removeItem('tgsync'); toast('✅ Telegram connected — your plan syncs both ways'); }
+    catch (e) { sessionStorage.removeItem('tgsync'); toast(e.message || 'That sync link expired — try again from the bot'); }
+  }
 
   // ---------- comments ----------
   function commentItem(c) {
@@ -5443,7 +5455,7 @@
   document.getElementById('foot-stats').textContent = `${cc.compounds} compounds · ${cc.targets} targets · ${cc.pathways} pathways · ${cc.geneLinks} gene links`;
   updateStackBadge();
   route();
-  api.me().then(u => { ME = u; renderAccount(); if (u) { syncPlanOnLogin(); loadConsent().then(() => { if (location.hash.startsWith('#/plan')) renderPlan(); }); } }).catch(() => renderAccount());
+  api.me().then(u => { ME = u; renderAccount(); if (u) { syncPlanOnLogin(); loadConsent().then(() => { if (location.hash.startsWith('#/plan')) renderPlan(); }); } tgSyncConsume(); }).catch(() => { renderAccount(); tgSyncConsume(); });
   api.config().then(c => { if (c) CFG = c; });
   api.rootcauseOverlay().then(ov => { if (applyRcOverlay(ov)) route(); }).catch(() => {});
   // Always-available feedback button, bottom-right.
