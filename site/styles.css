@@ -2371,3 +2371,10 @@ a.dp-name:hover{color:var(--accent)}
 .related-fold{margin:1rem 0}
 .related-fold>summary{cursor:pointer;color:var(--muted);font-size:.9rem;padding:.3rem 0}
 .related-fold .related{margin-top:.6rem}
+
+/* Depth reveal flash + journey connection */
+.depth-new{animation:depthReveal 1.5s ease}
+@keyframes depthReveal{0%{box-shadow:0 0 0 3px var(--accent),0 0 0 9px color-mix(in srgb,var(--accent) 18%,transparent)}100%{box-shadow:0 0 0 0 transparent}}
+.j-connect{font-size:.92rem;line-height:1.55;color:var(--ink);margin:.1rem 0 .8rem;padding:.65rem .85rem;border-radius:10px;background:var(--panel)}
+.j-apply{font-size:.85rem;color:var(--muted);margin-top:.7rem}
+.j-apply a{font-weight:600}

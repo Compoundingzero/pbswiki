@@ -519,11 +519,24 @@
   // Wire all the learning-first interactions on a compound page (depth toggle, 3D, glossary, learned, PubChem specs, ToC)
   function wireCompoundLearning(c) {
     const root = document.getElementById('cpd-detail'); if (!root) return;
-    // Depth toggle — show sections whose data-lvl ≤ chosen depth, and tell the reader what each level is
-    const DEPTH_DESC = { 1: 'The essentials — what it is, what it does for you, and how to remember it.', 2: 'How & why — mechanism, timing, evidence, and how to actually use it.', 3: 'Full molecular pharmacology — targets & binding, ADME, genetics, dose-response. How a scientist reads it.' };
-    const applyDepth = d => { root.setAttribute('data-depth', d); root.querySelectorAll('[data-lvl]').forEach(el => { el.style.display = (+el.getAttribute('data-lvl') <= d) ? '' : 'none'; }); const desc = document.getElementById('depth-desc'); if (desc) desc.textContent = DEPTH_DESC[d] || ''; };
-    root.querySelectorAll('.depth-btn').forEach(b => b.onclick = () => { root.querySelectorAll('.depth-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); applyDepth(+b.dataset.depth); });
-    applyDepth(2);
+    // Depth control — the ONE tab row. Switching reveals/hides content AND scrolls to + flashes the new
+    // sections, so it's unmistakable that the level changed.
+    const DEPTH_DESC = { 1: 'The essentials — what it is and what it does for you.', 2: '+ how it works, timing, evidence and how to use it.', 3: '+ molecular targets & binding, ADME, genetics, dose–response and trials — the biotech deep-dive.' };
+    let prevDepth = 2;
+    const applyDepth = (d, animate) => {
+      const newlyShown = [];
+      root.querySelectorAll('[data-lvl]').forEach(el => { const show = +el.getAttribute('data-lvl') <= d; const wasHidden = el.style.display === 'none'; el.style.display = show ? '' : 'none'; if (show && wasHidden && animate) newlyShown.push(el); });
+      root.setAttribute('data-depth', d);
+      const desc = document.getElementById('depth-desc'); if (desc) desc.textContent = DEPTH_DESC[d] || '';
+      if (animate && d > prevDepth && newlyShown.length) {
+        newlyShown.forEach(el => { el.classList.add('depth-new'); setTimeout(() => el.classList.remove('depth-new'), 1400); });
+        const first = newlyShown.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
+        if (first) setTimeout(() => first.scrollIntoView({ behavior: 'smooth', block: 'center' }), 60);
+      }
+      prevDepth = d;
+    };
+    root.querySelectorAll('.depth-btn').forEach(b => b.onclick = () => { root.querySelectorAll('.depth-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); applyDepth(+b.dataset.depth, true); });
+    applyDepth(2, false);
     // Glossary hover-defs across the readable body (skips links/headings; first mention only)
     root.querySelectorAll('.field-val, .takeaways, .cpd-fact .cf-t, .evg-body, .mc-body p, .pk-note, .analogy p, .biotech .bt-sb, .biotech .bt-tg-role, .biotech .bt-adme-row div').forEach(applyGlossary);
     // Self-test — reveal answers (active recall)
@@ -1250,17 +1263,25 @@
   function journeyCard(c) {
     const j = journeyState(c); if (!j) return '';
     const learned = getLearned(); const doneCount = j.track.filter(x => learned.includes(x.id)).length;
-    let nextBlock;
+    const pw = j.kind === 'pathway' ? D.pathways[j.anchorId] : null;
+    let connect, nextBlock;
     if (j.next) {
-      const hook = j.next.analogy ? j.next.analogy : faqSnip(j.next.plain || j.next.bottom || '', 96);
+      const hook = j.next.analogy ? j.next.analogy : faqSnip(j.next.plain || j.next.bottom || '', 110);
+      connect = pw
+        ? `<div class="j-connect"><b>Why this next →</b> <b>${esc(c.name)}</b> and <b>${esc(j.next.name)}</b> both act on the <b>${esc(j.label)}</b> pathway${pw.oneLine ? ` — ${mdInline(pw.oneLine)}` : '.'} You're building the whole picture of that one system, compound by compound — then it all clicks together at the end.</div>`
+        : `<div class="j-connect"><b>Why this next →</b> another compound people reach for to ${esc(j.label.toLowerCase())} — seeing them back-to-back is how you learn to judge which fits when.</div>`;
       nextBlock = `<a class="j-next" href="#/c/${slug(j.next.name)}"><div class="jn-l"><div class="jn-lbl">Next in this journey</div><div class="jn-name">${esc(j.next.name)}</div>${hook ? `<div class="jn-hook">${esc(hook)}</div>` : ''}</div><span class="jn-go">Continue →</span></a>`;
     } else {
-      nextBlock = `<a class="j-next capstone" href="${j.hubHref}"><div class="jn-l"><div class="jn-lbl">You've explored the compounds — now see how they connect</div><div class="jn-name">${esc(j.label)} — the whole pathway</div></div><span class="jn-go">See it →</span></a>`;
+      connect = pw
+        ? `<div class="j-connect"><b>You've now met all ${j.track.length} compounds that pull the ${esc(j.label)} lever.</b> Time to zoom out: the pathway itself shows how they cascade, where they overlap, and how this system connects to the rest of your biology — the thread that ties everything you just learned together.</div>`
+        : `<div class="j-connect"><b>You've explored the key compounds for ${esc(j.label.toLowerCase())}.</b> Next, see the bigger picture of how they work together.</div>`;
+      nextBlock = `<a class="j-next capstone" href="${j.hubHref}"><div class="jn-l"><div class="jn-lbl">The capstone — where it all connects</div><div class="jn-name">The ${esc(j.label)} pathway</div></div><span class="jn-go">See it →</span></a>`;
     }
     const dots = j.track.map(x => `<span class="j-dot${x.id === c.id ? ' cur' : ''}${learned.includes(x.id) ? ' done' : ''}" title="${esc(x.name)}"></span>`).join('');
     return `<div class="journey-card" id="journey" data-lvl="1" data-jtype="${j.kind}" data-jid="${esc(String(j.anchorId))}">
       <div class="j-head"><span class="j-ico">${j.icon}</span><div><div class="j-title">Your ${esc(j.label)} journey</div><div class="j-sub">Step ${j.idx + 1} of ${j.track.length}${doneCount ? ` · ${doneCount} learned` : ''}</div></div></div>
       <div class="j-track">${dots}</div>
+      ${connect}
       ${nextBlock}
     </div>`;
   }
@@ -1342,7 +1363,6 @@
       </div>
       ${specStrip(c)}
       ${depthBar()}
-      ${compoundToc(c)}
       ${journeyRibbon(c)}
       <div id="edit-meta" class="edit-meta"></div>
       ${takeawaysBox(c)}
@@ -1543,15 +1563,37 @@
       <p style="color:var(--muted)">Almost every compound works by turning one of these systems up or down. Learn the 16, and the whole wiki gets a lot simpler.</p>
       <div class="learn-grid" style="margin-top:1.4rem">${cards}</div></div>`;
   }
+  // The pathway that shares the most compounds with pathway i — the strongest bridge onward.
+  function pathwayBridge(i) {
+    const mine = new Set((compoundsByPathway[i] || []).map(c => c.id)); if (!mine.size) return null;
+    let best = -1, bestN = 0;
+    D.pathways.forEach((p, j) => { if (j === i) return; const n = (compoundsByPathway[j] || []).filter(c => mine.has(c.id)).length; if (n > bestN) { bestN = n; best = j; } });
+    return best >= 0 && bestN > 0 ? { j: best, shared: bestN } : null;
+  }
+  // Continue the ONE journey from a finished pathway → the most-connected next pathway (+ an 'apply it' protocol).
+  function pathwayJourneyCard(i) {
+    const b = pathwayBridge(i); if (!b) return '';
+    const p = D.pathways[b.j];
+    let proto = null;
+    for (const cc of (compoundsByPathway[i] || []).slice().sort((a, b) => b.stars - a.stars).slice(0, 6)) { const ps = protocolsForCompound(cc); if (ps && ps.length) { proto = ps[0]; break; } }
+    const applyLink = proto ? `<div class="j-apply">Or <b>apply it</b>: <a href="#/protocol/${proto.p.id}/${proto.rc.id}">build the ${esc(proto.p.name)} protocol</a> that puts these compounds to work.</div>` : '';
+    return `<div class="journey-card" id="journey" data-jtype="pathway" data-jid="${b.j}">
+      <div class="j-head"><span class="j-ico">🧬</span><div><div class="j-title">Keep going — it's all connected</div><div class="j-sub">You just finished the ${esc(D.pathways[i].shortLabel)} pathway</div></div></div>
+      <div class="j-connect"><b>Why this next →</b> the <b>${esc(p.shortLabel)}</b> pathway shares <b>${b.shared} compound${b.shared > 1 ? 's' : ''}</b> with the one you just learned — the two systems overlap, so many molecules pull both levers at once. Follow the thread and you'll gradually map how your whole biology interconnects, one system at a time.</div>
+      <a class="j-next" href="#/pathway/${b.j}"><div class="jn-l"><div class="jn-lbl">Next pathway in your journey</div><div class="jn-name">${esc(p.shortLabel)}</div>${p.oneLine ? `<div class="jn-hook">${esc(faqStrip(p.oneLine).slice(0, 120))}</div>` : ''}</div><span class="jn-go">Continue →</span></a>
+      ${applyLink}
+    </div>`;
+  }
   function pathwayPage(i) {
     i = +i; const p = D.pathways[i]; if (!p) return notFound();
+    setTimeout(() => { try { setJourney({ type: 'pathway', id: i }); } catch (e) {} }, 0); // this pathway is now the active journey thread
     const prev = i > 0 ? `<a href="#/pathway/${i - 1}">← ${D.pathways[i - 1].shortLabel}</a>` : `<a href="#/pathways">← All pathways</a>`;
     const next = i < D.pathways.length - 1 ? `<a href="#/pathway/${i + 1}">${D.pathways[i + 1].shortLabel} →</a>` : `<a href="#/pathways">All pathways →</a>`;
     const cpds = (compoundsByPathway[i] || []).slice().sort((a, b) => b.stars - a.stars);
     const cpdSection = cpds.length ? `<div class="section-title">Compounds that pull this pathway (${cpds.length})</div><div class="card-grid">${cpds.map(cpdCard).join('')}</div>` : '';
     const pwFact = (window.RNAWIKI_FACTS || []).find(x => x.href === '/pathway/' + i);
     const pwFactHtml = pwFact ? `<div class="cpd-fact"><span class="cf-k">💡 Did you know?</span> <span class="cf-t">${pwFact.t}</span></div>` : '';
-    return `<div class="article">${crumbs([{ label: 'Home', href: '#/' }, { label: 'Pathways', href: '#/pathways' }, { label: p.shortLabel }])}<h1>${p.shortLabel}</h1>${pwFactHtml}${pathwayDiagram(p.diagram, p.shortLabel)}${p.html}<div class="suggest-row"><button class="linkbtn" data-suggest="simplify" data-ref="${esc(p.shortLabel)} pathway">✨ Too technical? Suggest a simpler version</button></div>${cpdSection}${solveCta('Build a protocol that uses this pathway →')}<div id="goal-comments" class="page-discuss"></div><div class="prevnext">${prev}${next}</div></div>`;
+    return `<div class="article">${crumbs([{ label: 'Home', href: '#/' }, { label: 'Pathways', href: '#/pathways' }, { label: p.shortLabel }])}<h1>${p.shortLabel}</h1>${pwFactHtml}${pathwayDiagram(p.diagram, p.shortLabel)}${p.html}<div class="suggest-row"><button class="linkbtn" data-suggest="simplify" data-ref="${esc(p.shortLabel)} pathway">✨ Too technical? Suggest a simpler version</button></div>${cpdSection}${pathwayJourneyCard(i)}<div id="goal-comments" class="page-discuss"></div><div class="prevnext">${prev}${next}</div></div>`;
   }
 
   // ---------- Anatomy & physiology reference pages ----------
