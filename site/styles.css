@@ -2310,3 +2310,36 @@ a.dp-name:hover{color:var(--accent)}
 .pos-bar i{display:block;height:100%;background:var(--line)}
 .pos-row.me .pos-bar i{background:var(--accent)}
 .pos-stars{flex:0 0 auto;font-size:.72rem;color:#f5a623;letter-spacing:.5px}
+
+/* ---- Depth descriptor + compare cards + biotech deep-dive ---- */
+.depth-wrap{margin:.7rem 0}
+.depth-desc{font-size:.82rem;color:var(--muted);margin-top:.4rem;padding-left:.1rem}
+/* Compare cards (replaces run-together links) */
+.cmp-grid{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.3rem}
+.cmp-card{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--panel);text-decoration:none;color:var(--ink)}
+.cmp-card:hover{border-color:var(--accent)}
+.cmp-vs{font-size:.7rem;font-weight:700;color:var(--faint);text-transform:uppercase}
+.cmp-name{font-weight:600;font-size:.9rem}
+.cmp-stars{font-size:.72rem;color:#f5a623;letter-spacing:.5px}
+.cmp-stars .cmp-dim{color:var(--line)}
+/* Biotech deep-dive */
+.biotech{margin:1.3rem 0;padding:1.1rem 1.2rem;border-radius:16px;border:1px solid color-mix(in srgb,#7c3aed 32%,var(--line));background:color-mix(in srgb,#7c3aed 5%,transparent)}
+.bt-head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin-bottom:.4rem}
+.bt-badge{font-weight:800;font-size:1.02rem}
+.bt-sub{font-size:.8rem;color:var(--muted)}
+.bt-sec{padding:.8rem 0;border-top:1px solid color-mix(in srgb,#7c3aed 15%,var(--line))}
+.bt-sec:first-of-type{border-top:none}
+.bt-st{font-weight:700;font-size:.92rem;margin-bottom:.35rem}
+.bt-sb{font-size:.93rem;line-height:1.6;color:var(--ink)}
+.bt-targets{display:flex;flex-direction:column;gap:.55rem}
+.bt-tg{padding:.55rem .7rem;border-radius:10px;background:var(--panel)}
+.bt-tg-h{font-weight:600;font-size:.9rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:baseline}
+.bt-tg-act{font-weight:400;font-size:.8rem;color:#7c3aed}
+.bt-tg-aff{font-size:.85rem;color:var(--ink);margin-top:.15rem;font-variant-numeric:tabular-nums}
+.bt-tg-role{font-size:.82rem;color:var(--muted);margin-top:.1rem}
+.bt-adme{display:flex;flex-direction:column;gap:.5rem}
+.bt-adme-row{display:flex;gap:.7rem;align-items:flex-start;font-size:.9rem;line-height:1.55}
+.bt-adme-k{flex:0 0 auto;width:26px;height:26px;border-radius:8px;background:#7c3aed;color:#fff;font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center;margin-top:.1rem}
+.bt-trials{margin:.2rem 0 0;padding-left:1.1rem}
+.bt-trials li{margin:.3rem 0;font-size:.9rem;line-height:1.55}
+.bt-ref{color:var(--faint);font-size:.82rem}

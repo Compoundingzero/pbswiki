@@ -1,5 +1,5 @@
 {
- "_schema": "Learning-layer data merged onto compounds by build/parse.js (keyed by compound slug). Every field optional; the page renders only what's present. Keep it accurate — this is authored pharmacology, never generated. analogy=one-line mental model · mechSteps=numbered plain-English cascade (tag links a target, fx shows the net effect) · pk=pharmacokinetics for the timeline · selfTest=active-recall Q&A.",
+ "_schema": "Learning-layer data merged onto compounds by build/parse.js (keyed by compound slug). Every field optional; the page renders only what's present. Keep it accurate — authored pharmacology, never generated. analogy=one-line mental model · mechSteps=numbered plain-English cascade (tag links a target, fx=net effect) · pk=pharmacokinetics for the timeline · selfTest=active-recall Q&A · tech=the biotech deep-dive shown at Technical depth (chem · targets[{sym,url,action,affinity,role}] · signaling · adme{absorb,distribute,metabolise,excrete} · pgx · dose · tolerance · trials[{finding,ref}]).",
  "caffeine": {
   "analogy": "Caffeine is a doorstop jammed into your brain's tiredness sensor. It doesn't add energy — it blocks the signal that says “wind down.”",
   "mechSteps": [
@@ -18,7 +18,31 @@
   "selfTest": [
    { "q": "What molecule does caffeine impersonate — and what does blocking it do?", "a": "Adenosine. Blocking its receptors lifts the “drowsiness” brake your brain builds through the day, so you feel alert." },
    { "q": "Caffeine's half-life is ~5–6 hours. Why can an afternoon coffee still wreck your sleep?", "a": "After ~10–12 h a quarter of the dose is still circulating, keeping adenosine's sleep signal blocked right when you're trying to fall asleep." },
-   { "q": "Name one way caffeine boosts physical performance beyond feeling more awake.", "a": "It lowers perceived effort and sensitises calcium release in muscle for more force (and it mobilises fat for fuel)." }
-  ]
+   { "q": "Two people take the same dose; one gets a performance boost, one gets jittery and slower. What single gene most likely explains it?", "a": "CYP1A2. Fast metabolisers (AA at −163C>A) tend to benefit; slow metabolisers (C-carriers) clear it slowly and can see blunted or negative effects." }
+  ],
+  "tech": {
+   "chem": "1,3,7-trimethylxanthine — a purine alkaloid and methylxanthine, structurally analogous to adenosine (and a cousin of theophylline and theobromine). The three methyl groups are the whole trick: they let it occupy adenosine receptors yet resist the enzymes that normally clear adenosine. Lipophilic, so it crosses the blood–brain barrier and placenta freely and distributes into total body water.",
+   "targets": [
+    { "sym": "ADORA1 / ADORA2A", "url": "https://www.ncbi.nlm.nih.gov/gene/135", "action": "non-selective competitive antagonist", "affinity": "Ki ≈ 2–20 µM — and plasma reaches ~20–50 µM after 2–3 cups, so this is the target actually hit at dietary doses", "role": "the mechanism that matters in real life" },
+    { "sym": "Phosphodiesterases (PDE)", "action": "non-selective inhibitor → raises cAMP", "affinity": "only at ≳500 µM (10–20× a normal dose)", "role": "the textbook 'raises cAMP' story is essentially a myth at human doses" },
+    { "sym": "RYR1 (ryanodine receptor)", "action": "sensitiser → more Ca²⁺ release", "affinity": "high concentration", "role": "part of the direct ergogenic effect in skeletal muscle" },
+    { "sym": "GABA-A", "action": "weak negative allosteric modulator", "affinity": "high concentration", "role": "minor contributor to jitter/anxiety at high intake" }
+   ],
+   "signaling": "The key node is the striatal A2A–D2 heteromer: A2A receptors sit physically coupled to dopamine D2 receptors on medium spiny neurons, and A2A activation normally suppresses D2. Antagonising A2A therefore disinhibits dopamine signalling — the molecular reason caffeine feels dopaminergic without being a dopamine drug. Meanwhile A1 blockade across cortex and basal forebrain lifts tonic inhibition of cholinergic and monoaminergic neurons → global cortical arousal.",
+   "adme": {
+    "absorb": "~99% oral bioavailability; absorbed along the whole GI tract. Food delays the peak but doesn't reduce total absorption.",
+    "distribute": "Vd ≈ 0.5–0.6 L/kg; ~36% plasma-protein bound; crosses BBB, placenta and into breast milk.",
+    "metabolise": "~95% hepatic via CYP1A2 → paraxanthine (the major, active metabolite that drives lipolysis), plus theobromine and theophylline. This single-enzyme dependence is why CYP1A2 status dominates the response.",
+    "excrete": "<3% excreted unchanged in urine; the rest as demethylated/oxidised metabolites."
+   },
+   "pgx": "CYP1A2 activity varies up to ~40-fold between people. The CYP1A2*1F (−163C>A, rs762551) allele defines fast vs slow metabolisers: 'fast' (AA) clear it quickly and tend to get the ergogenic and cardiovascular-neutral profile; 'slow' (C-carriers) show blunted or even negative performance effects and a higher heart-attack signal at high intake. ADORA2A variants (rs5751876) predict caffeine-induced anxiety and sleep disruption. CYP1A2 is induced by smoking and cruciferous vegetables (faster clearance) and inhibited by oral contraceptives and pregnancy (half-life can roughly double).",
+   "dose": "Ergogenic window 3–6 mg/kg (~200–400 mg) taken 45–60 min pre-effort; cognitive benefit plateaus by ~200 mg. Above ~9 mg/kg there's no extra benefit — only rising tachycardia and jitter. Acute toxicity climbs past ~1.2 g and lethal doses cluster near 10–14 g, a risk driven almost entirely by anhydrous powder (a teaspoon can be a lethal dose).",
+   "tolerance": "Chronic exposure upregulates adenosine A1/A2A receptor density as compensation, so the net alerting effect fades over ~1–4 weeks and abrupt cessation unmasks the surplus receptors → withdrawal headache and fatigue. A 10–14-day taper every ~2 months restores sensitivity — the pharmacological basis of 'cycling'.",
+   "trials": [
+    { "finding": "Umbrella review of meta-analyses: consistent small-to-moderate benefit for muscular endurance, strength, power and aerobic endurance — one of the most reproducibly ergogenic legal compounds.", "ref": "Grgic et al., 2020 (Br J Sports Med / ISSN position stand)" },
+    { "finding": "Endurance time-to-exhaustion improved on the order of ~10–12% vs placebo across trials.", "ref": "Doherty & Smith, 2005 meta-analysis" },
+    { "finding": "Performance benefit tracks CYP1A2 genotype — present in fast metabolisers, absent or reversed in slow metabolisers.", "ref": "Guest et al., 2018 (Med Sci Sports Exerc)" }
+   ]
+  }
  }
 }

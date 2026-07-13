@@ -519,12 +519,13 @@
   // Wire all the learning-first interactions on a compound page (depth toggle, 3D, glossary, learned, PubChem specs, ToC)
   function wireCompoundLearning(c) {
     const root = document.getElementById('cpd-detail'); if (!root) return;
-    // Depth toggle — show sections whose data-lvl ≤ chosen depth
-    const applyDepth = d => { root.setAttribute('data-depth', d); root.querySelectorAll('[data-lvl]').forEach(el => { el.style.display = (+el.getAttribute('data-lvl') <= d) ? '' : 'none'; }); };
+    // Depth toggle — show sections whose data-lvl ≤ chosen depth, and tell the reader what each level is
+    const DEPTH_DESC = { 1: 'The essentials — what it is, what it does for you, and how to remember it.', 2: 'How & why — mechanism, timing, evidence, and how to actually use it.', 3: 'Full molecular pharmacology — targets & binding, ADME, genetics, dose-response. How a scientist reads it.' };
+    const applyDepth = d => { root.setAttribute('data-depth', d); root.querySelectorAll('[data-lvl]').forEach(el => { el.style.display = (+el.getAttribute('data-lvl') <= d) ? '' : 'none'; }); const desc = document.getElementById('depth-desc'); if (desc) desc.textContent = DEPTH_DESC[d] || ''; };
     root.querySelectorAll('.depth-btn').forEach(b => b.onclick = () => { root.querySelectorAll('.depth-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); applyDepth(+b.dataset.depth); });
     applyDepth(2);
     // Glossary hover-defs across the readable body (skips links/headings; first mention only)
-    root.querySelectorAll('.field-val, .takeaways, .cpd-fact .cf-t, .evg-body, .mc-body p, .pk-note, .analogy p').forEach(applyGlossary);
+    root.querySelectorAll('.field-val, .takeaways, .cpd-fact .cf-t, .evg-body, .mc-body p, .pk-note, .analogy p, .biotech .bt-sb, .biotech .bt-tg-role, .biotech .bt-adme-row div').forEach(applyGlossary);
     // Self-test — reveal answers (active recall)
     root.querySelectorAll('.st-reveal').forEach(b => b.onclick = () => { const card = b.closest('.st-card'); const a = card && card.querySelector('.st-a'); if (a) { a.hidden = false; b.remove(); } });
     root.querySelectorAll('.gloss').forEach(g => { g.onclick = e => { e.stopPropagation(); document.querySelectorAll('.gloss.open').forEach(o => o !== g && o.classList.remove('open')); g.classList.toggle('open'); }; });
@@ -1190,11 +1191,14 @@
     return `<div class="takeaways" data-lvl="1"><div class="tk-h">⚡ The 30-second version</div><ul>${pts.slice(0, 3).map(p => `<li>${mdInline(p)}</li>`).join('')}</ul></div>`;
   }
   function depthBar() {
-    return `<div class="depth-bar" role="tablist" aria-label="Reading depth">
-      <span class="depth-lbl">Explain like I'm:</span>
-      <button class="depth-btn" data-depth="1">🌱 New to this</button>
-      <button class="depth-btn active" data-depth="2">📘 Informed</button>
-      <button class="depth-btn" data-depth="3">🔬 Technical</button>
+    return `<div class="depth-wrap">
+      <div class="depth-bar" role="tablist" aria-label="Reading depth">
+        <span class="depth-lbl">Explain like I'm:</span>
+        <button class="depth-btn" data-depth="1">🌱 New to this</button>
+        <button class="depth-btn active" data-depth="2">📘 Informed</button>
+        <button class="depth-btn" data-depth="3">🔬 Technical</button>
+      </div>
+      <div class="depth-desc" id="depth-desc"></div>
     </div>`;
   }
   function compoundToc(c) {
@@ -1238,6 +1242,28 @@
     const rank = peers.findIndex(x => x.id === c.id) + 1;
     return `<div class="positioning" data-lvl="2"><div class="section-title">📊 How it ranks on evidence <span class="pos-sub">in ${esc(c.category.split('/')[0].trim().toLowerCase())} · ${rank} of ${peers.length}</span></div><div class="pos-list">${rows}</div></div>`;
   }
+  // The Technical layer: an exhaustive, structured pharmacology write-up (only rendered at 🔬 depth).
+  function biotechDeepDive(c) {
+    const t = c.tech; if (!t) return '';
+    const sec = (icon, title, body) => body ? `<div class="bt-sec"><div class="bt-st">${icon} ${title}</div><div class="bt-sb">${body}</div></div>` : '';
+    let targets = '';
+    if (Array.isArray(t.targets) && t.targets.length) targets = `<div class="bt-sec"><div class="bt-st">🎯 Molecular targets &amp; binding</div><div class="bt-targets">${t.targets.map(x => `<div class="bt-tg"><div class="bt-tg-h">${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.sym)}</a>` : esc(x.sym)}${x.action ? ` <span class="bt-tg-act">${esc(x.action)}</span>` : ''}</div>${x.affinity ? `<div class="bt-tg-aff">${mdInline(x.affinity)}</div>` : ''}${x.role ? `<div class="bt-tg-role">${mdInline(x.role)}</div>` : ''}</div>`).join('')}</div></div>`;
+    let adme = '';
+    if (t.adme) { const a = t.adme; const rows = [['A', 'Absorption', a.absorb], ['D', 'Distribution', a.distribute], ['M', 'Metabolism', a.metabolise], ['E', 'Excretion', a.excrete]].filter(r => r[2]); adme = rows.length ? `<div class="bt-sec"><div class="bt-st">🧬 ADME — what your body does to it</div><div class="bt-adme">${rows.map(([k, l, v]) => `<div class="bt-adme-row"><span class="bt-adme-k">${k}</span><div><b>${l}</b> ${mdInline(v)}</div></div>`).join('')}</div></div>` : ''; }
+    let trials = '';
+    if (Array.isArray(t.trials) && t.trials.length) trials = `<div class="bt-sec"><div class="bt-st">📚 Key human trials</div><ul class="bt-trials">${t.trials.map(x => `<li>${mdInline(x.finding)}${x.ref ? ` <span class="bt-ref">— ${esc(x.ref)}</span>` : ''}</li>`).join('')}</ul></div>`;
+    return `<div class="biotech" data-lvl="3" id="sec-biotech">
+      <div class="bt-head"><span class="bt-badge">🔬 The biotech deep-dive</span><span class="bt-sub">how a pharmacologist reads this molecule</span></div>
+      ${sec('🧪', 'Chemistry &amp; structure', t.chem ? mdInline(t.chem) : '')}
+      ${targets}
+      ${sec('🔀', 'Signal transduction', t.signaling ? mdInline(t.signaling) : '')}
+      ${adme}
+      ${sec('🧬', 'Pharmacogenomics — why response differs', t.pgx ? mdInline(t.pgx) : '')}
+      ${sec('📐', 'Dose–response &amp; window', t.dose ? mdInline(t.dose) : '')}
+      ${sec('🔁', 'Tolerance &amp; withdrawal', t.tolerance ? mdInline(t.tolerance) : '')}
+      ${trials}
+    </div>`;
+  }
 
   function detail(s) {
     const c = bySlug[s]; if (!c) return notFound();
@@ -1268,12 +1294,13 @@
       ${analogyBox(c)}
       ${moleculeViewer(c)}
       <div class="mech-chain-wrap" data-lvl="2">${explodedDiagram(c)}</div>
-      <div class="toolbar" style="margin-top:1rem" data-lvl="1">${goalTags}</div>
+      ${!explodedDiagram(c) && goalTags ? `<div class="toolbar" style="margin-top:1rem" data-lvl="1">${goalTags}</div>` : ''}
       ${(() => { const f = (window.RNAWIKI_FACTS || []).find(x => x.href === '/c/' + s); return f ? `<div class="cpd-fact" data-lvl="2"><span class="cf-k">💡 Did you know?</span> <span class="cf-t">${f.t}</span></div>` : ''; })()}
       ${callout('plain', 'In plain English — start here', c.plain, '', 1)}
       ${c.mechSteps ? mechanismCascade(c) : callout('mechanism', 'How it works — the science', c.mechanism, '', 2)}
       ${c.mechSteps && c.mechanism ? callout('mechanism-full', 'The full mechanism — technical detail', c.mechanism, '', 3) : ''}
       ${callout('target', 'Molecular / gene target', c.target, '', 3)}
+      ${biotechDeepDive(c)}
       ${callout('protocol', 'How to take it', c.protocol, '', 2)}
       ${pkTimeline(c)}
       ${callout('watch', 'Watch out', c.watch, 'warn', 2)}
@@ -1291,7 +1318,7 @@
       })()}</div>
       ${(() => {
         const rel3 = related.slice(0, 3);
-        const cmpChips = rel3.map(o => `<a class="cmp-chip" href="#/compare/${slug(c.name)}-vs-${slug(o.name)}">${esc(c.name.split(/[\s(]/)[0])} vs ${esc(o.name.split('(')[0].trim())}</a>`).join('');
+        const cmpCards = rel3.map(o => `<a class="cmp-card" href="#/compare/${slug(c.name)}-vs-${slug(o.name)}"><span class="cmp-vs">vs</span><span class="cmp-name">${esc(o.name.split('(')[0].trim())}</span><span class="cmp-stars">${'★'.repeat(o.stars)}<span class="cmp-dim">${'★'.repeat(5 - o.stars)}</span></span></a>`).join('');
         const myStack = getStack().map(id => byId[id]).filter(Boolean);
         let chk = '';
         if (myStack.length) {
@@ -1299,7 +1326,7 @@
           const pan = interactionPanel(withThis, { tiers: ['danger', 'timing'] });
           chk = pan ? `<div class="section-title">⚠️ With your current stack (${myStack.length})</div>${pan}` : `<div class="stack-ok">✅ No dangerous interactions flagged between ${esc(c.name)} and your ${myStack.length}-item stack.</div>`;
         }
-        return (cmpChips || chk) ? `<div class="cpd-explore" data-lvl="2">${cmpChips ? `<div class="section-title">⚖️ Compare with alternatives</div><div class="cmp-row">${cmpChips}</div>` : ''}${chk}</div>` : '';
+        return (cmpCards || chk) ? `<div class="cpd-explore" data-lvl="2">${cmpCards ? `<div class="section-title">⚖️ Compare with alternatives</div><div class="cmp-grid">${cmpCards}</div>` : ''}${chk}</div>` : '';
       })()}
       ${c.brief && !c.mechanism ? `<div class="body" data-lvl="1">${c.bodyHtml}</div>` : ''}
       <div data-lvl="3">${goDeeper(c)}</div>
