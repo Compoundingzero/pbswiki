@@ -2405,3 +2405,136 @@ a.dp-name:hover{color:var(--accent)}
 .evd-sec:first-child{border-top:none;padding-top:.2rem}
 .evd-t{font-weight:700;font-size:.96rem;margin-bottom:.3rem}
 .evd-b{font-size:.94rem;line-height:1.62;color:var(--ink)}
+
+/* ================= Pedagogy components + mastery stepper ================= */
+/* Numbered mastery spine */
+.ch-steps{display:flex;gap:.4rem;flex-wrap:wrap;margin:.4rem 0 1.2rem;position:sticky;top:0;background:var(--bg);z-index:6;padding:.6rem 0 .7rem;border-bottom:1px solid var(--line)}
+.ch-step{display:flex;align-items:center;gap:.45rem;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:.32rem .8rem .32rem .35rem;cursor:pointer;color:var(--muted);transition:.15s}
+.ch-step:hover{border-color:var(--accent)}
+.cs-num{width:22px;height:22px;border-radius:50%;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.76rem;flex:0 0 auto;color:var(--muted)}
+.ch-step.done .cs-num{background:var(--accent);color:#fff}
+.cs-label{font-size:.82rem;font-weight:600;white-space:nowrap}
+.ch-step.active{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.ch-step.active .cs-label{color:var(--ink)}
+.ch-steps.mastered{border-color:var(--accent)}
+@media(max-width:640px){.ch-steps{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}}
+/* Curiosity hook */
+.hook{margin:.3rem 0 1rem;padding:1rem 1.2rem;border-radius:16px;border:1px dashed color-mix(in srgb,#d97706 45%,var(--line));background:color-mix(in srgb,#d97706 6%,transparent)}
+.hook-h{font-weight:700;margin-bottom:.5rem}
+.hook-qs{margin:0;padding-left:1.2rem}
+.hook-qs li{margin:.35rem 0;font-size:.98rem;line-height:1.5;font-weight:500}
+.hook-sub{margin:.6rem 0 0;font-size:.86rem;color:var(--muted)}
+.stakes{font-size:.9rem;color:var(--muted);margin:.2rem 0 .6rem}
+/* Big idea */
+.bigidea{margin:1rem 0;padding:1rem 1.2rem;border-radius:16px;background:var(--accent);color:#fff}
+.bi-tag{font-size:.66rem;font-weight:800;letter-spacing:.08em;opacity:.85}
+.bigidea p{margin:.25rem 0 0;font-size:1.12rem;font-weight:600;line-height:1.5}
+.bigidea .gloss{border-bottom-color:rgba(255,255,255,.6)}
+/* Predict-then-reveal */
+.mc-hint{font-size:.82rem;color:var(--muted);margin:.2rem 0 .8rem;font-style:italic}
+.mc-predict{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between}
+.mc-p-q{font-weight:600;font-size:.95rem;flex:1 1 60%}
+.mc-reveal{border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:999px;padding:.3rem .8rem;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.mc-reveal:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.mc-answer{animation:chFade .3s ease;margin-top:.4rem}
+/* Chapter micro-check */
+.ch-check{margin:1.2rem 0 0;padding:.8rem 1rem;border-radius:12px;background:color-mix(in srgb,var(--accent) 6%,transparent);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent)}
+.cc-q{font-weight:600;font-size:.92rem;margin-bottom:.4rem}
+.cc-reveal{border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:999px;padding:.25rem .75rem;font-size:.8rem;cursor:pointer}
+.cc-a{margin-top:.5rem;font-size:.9rem;line-height:1.55;color:var(--ink)}
+/* Expert framework */
+.framework{margin:1rem 0;padding:1.1rem 1.2rem;border-radius:16px;border:1px solid color-mix(in srgb,#7c3aed 30%,var(--line));background:color-mix(in srgb,#7c3aed 5%,transparent)}
+.fw-badge{font-weight:800;font-size:1.02rem}
+.fw-lead{font-size:.92rem;line-height:1.55;color:var(--ink);margin:.4rem 0 .8rem}
+.fw-list{list-style:none;margin:0;padding:0}
+.fw-q{padding:.6rem 0;border-top:1px solid color-mix(in srgb,#7c3aed 15%,var(--line))}
+.fw-q:first-child{border-top:none}
+.fw-qh{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.95rem}
+.fw-n{width:22px;height:22px;border-radius:50%;background:#7c3aed;color:#fff;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.fw-tag{font-size:.72rem;color:#7c3aed;font-weight:600}
+.fw-a{font-size:.9rem;line-height:1.55;color:var(--muted);margin-top:.25rem;padding-left:1.9rem}
+/* Myths */
+.myths{margin:1rem 0;padding:.9rem 1.1rem;border-radius:14px;border:1px solid color-mix(in srgb,#dc2626 25%,var(--line));background:color-mix(in srgb,#dc2626 4%,transparent)}
+.myths-h{font-weight:700;margin-bottom:.5rem}
+.myth{padding:.5rem 0;border-top:1px solid color-mix(in srgb,#dc2626 12%,var(--line))}
+.myth:first-of-type{border-top:none}
+.myth-x{font-weight:600;color:#dc2626;font-size:.92rem}
+.myth-t{font-size:.9rem;line-height:1.55;margin-top:.2rem}
+/* Contrasts */
+.contrasts{margin:1rem 0}
+.contrast{padding:.9rem 1.1rem;border-radius:14px;background:var(--panel);border:1px solid var(--line);margin-bottom:.8rem}
+.ct-h{font-weight:700;margin-bottom:.5rem}
+.ct-structs{display:flex;align-items:center;justify-content:center;gap:1rem;margin:.4rem 0 .7rem}
+.ct-structs figure{margin:0;text-align:center}
+.ct-structs img{width:130px;height:130px;object-fit:contain;background:#fff;border-radius:10px;padding:.3rem}
+.ct-structs figcaption{font-size:.78rem;color:var(--muted);margin-top:.2rem}
+.ct-vs{font-weight:800;color:var(--faint)}
+.contrast p{margin:0;font-size:.93rem;line-height:1.6}
+/* When to use */
+.whenuse{margin:1rem 0;padding:.9rem 1.1rem;border-radius:14px;background:color-mix(in srgb,var(--accent) 6%,transparent);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent)}
+.wu-h{font-weight:700;margin-bottom:.3rem}
+.wu-intro{font-size:.9rem;color:var(--muted);margin:.2rem 0 .5rem}
+.wu-list{margin:0;padding-left:1.2rem}
+.wu-list li{margin:.35rem 0;font-size:.92rem;line-height:1.55}
+/* Molecule journey */
+.mjourney{margin:1rem 0;padding:1rem 1.1rem;border-radius:16px;border:1px solid var(--line);background:var(--panel)}
+.mj-h{font-weight:700;margin-bottom:.7rem}
+.mj-track{display:flex;flex-direction:column;gap:0}
+.mj-stage{display:flex;gap:.8rem;position:relative;padding-bottom:1rem}
+.mj-stage:not(:last-child)::before{content:"";position:absolute;left:15px;top:34px;bottom:0;width:2px;background:var(--line)}
+.mj-num{flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:1}
+.mj-stage-t{font-weight:700;font-size:.98rem}
+.mj-stage-d{font-size:.92rem;line-height:1.55;color:var(--muted);margin-top:.1rem}
+/* Feynman */
+.feynman{margin:1.4rem 0;padding:1rem 1.1rem;border-radius:16px;border:1px dashed color-mix(in srgb,#2563eb 40%,var(--line));background:color-mix(in srgb,#2563eb 4%,transparent)}
+.fy-h{font-weight:700;margin-bottom:.3rem}
+.fy-sub{font-size:.88rem;color:var(--muted);margin:.2rem 0 .6rem;line-height:1.5}
+.fy-input{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;padding:.6rem .7rem;font:inherit;font-size:.92rem;resize:vertical;background:var(--panel);color:var(--ink)}
+.fy-check{margin-top:.6rem;border:1px solid #2563eb;background:transparent;color:#2563eb;border-radius:999px;padding:.4rem .9rem;font-size:.85rem;cursor:pointer}
+.fy-check:disabled{opacity:.6;cursor:default}
+.fy-model{margin-top:.7rem;font-size:.92rem;line-height:1.6;background:var(--panel2);padding:.6rem .8rem;border-radius:10px}
+/* Graduation */
+.graduation{margin:1.4rem 0}
+.hook-payoff{padding:1rem 1.2rem;border-radius:16px;background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);margin-bottom:.8rem}
+.hp-h{font-weight:800;margin-bottom:.3rem}
+.hook-payoff p{margin:0;font-size:.94rem;line-height:1.6}
+.grad-can{padding:1rem 1.2rem;border-radius:16px;background:var(--panel);border:1px solid var(--line)}
+.gc-h{font-weight:800;color:var(--accent);margin-bottom:.4rem}
+.grad-can ul{margin:0;padding-left:1.3rem}
+.grad-can li{margin:.3rem 0;font-size:.94rem;line-height:1.5}
+/* Dose simulator */
+.dosesim{margin:1.1rem 0;padding:1.1rem 1.2rem;border-radius:16px;border:1px solid var(--line);background:var(--panel)}
+.ds-h{font-weight:800;font-size:1rem}
+.ds-sub{font-size:.86rem;color:var(--muted);margin:.2rem 0 .8rem}
+.ds-controls{display:flex;flex-direction:column;gap:.7rem;margin-bottom:.7rem}
+.ds-controls label{display:flex;flex-direction:column;gap:.25rem;font-size:.84rem;color:var(--muted)}
+.ds-controls label b{color:var(--ink)}
+.ds-controls input[type=range]{width:100%;accent-color:var(--accent)}
+.ds-readout{font-size:.95rem;line-height:1.6;padding:.7rem .9rem;border-radius:10px;background:var(--panel2);margin-bottom:.7rem}
+.ds-good{color:#16a34a}.ds-under{color:#d97706}.ds-over{color:#dc2626}
+.ds-chart{width:100%;height:auto;background:var(--panel2);border-radius:10px}
+.ds-legend{font-size:.76rem;color:var(--muted);margin-top:.4rem;display:flex;gap:.7rem;flex-wrap:wrap;align-items:center}
+.ds-swatch{display:inline-block;width:20px;height:4px;border-radius:2px;background:var(--accent);vertical-align:middle}
+.ds-note{font-size:.78rem;color:var(--faint);margin:.6rem 0 0;line-height:1.5}
+/* Header demote — utility buttons recede so the lesson leads */
+.detail-actions .stack-btn-lg{background:transparent;color:var(--accent);border:1px solid var(--accent);font-weight:600}
+.detail-actions .stack-btn-lg.in{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+
+/* ---- Mastery map + journey footer + gentle motion ---- */
+.j-foot{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-top:.8rem;padding-top:.7rem;border-top:1px solid color-mix(in srgb,var(--accent) 20%,var(--line));font-size:.82rem;color:var(--muted)}
+.j-foot b{color:var(--ink)}
+.j-map-btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:999px;padding:.3rem .75rem;font-size:.8rem;cursor:pointer}
+.j-map-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mmap{display:flex;flex-direction:column;gap:.7rem;margin-top:.6rem;max-height:60vh;overflow-y:auto}
+.mmap-row{}
+.mmap-sec{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:.3rem;display:flex;justify-content:space-between}
+.mmap-count{color:var(--faint);font-weight:500}
+.mmap-dots{display:flex;flex-wrap:wrap;gap:5px}
+.mmap-dot{width:12px;height:12px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);display:block}
+.mmap-dot.done{background:var(--accent);border-color:var(--accent)}
+.mmap-dot:hover{transform:scale(1.4);border-color:var(--accent)}
+.mol-2d img{animation:molBreathe 7s ease-in-out infinite}
+@keyframes molBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@media(prefers-reduced-motion:reduce){.mol-2d img{animation:none}.chapter.active{animation:none}}
+/* Reading rhythm */
+.chapter{line-height:1.62}

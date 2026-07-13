@@ -519,17 +519,36 @@
   // Wire all the learning-first interactions on a compound page (depth toggle, 3D, glossary, learned, PubChem specs, ToC)
   function wireCompoundLearning(c) {
     const root = document.getElementById('cpd-detail'); if (!root) return;
-    // Chapter tabs — each click SWAPS the whole reading area (a step-by-step course inside the page)
+    // Chapter mastery spine — each click SWAPS the whole reading area; steps check off as you visit them,
+    // and visiting all of them auto-marks the compound mastered (the reward for finishing the course).
     const chapters = document.getElementById('cpd-chapters');
+    const allSteps = [...root.querySelectorAll('.ch-step')];
+    const visited = new Set();
+    const markComplete = () => {
+      if (visited.size >= allSteps.length && allSteps.length && !isLearned(c.id)) {
+        toggleLearned(c.id); const lb2 = document.getElementById('learned-btn'); if (lb2) { lb2.classList.add('on'); lb2.textContent = '✓ Learned'; }
+        root.querySelector('.ch-steps') && root.querySelector('.ch-steps').classList.add('mastered');
+        if (typeof toast === 'function') toast('🎓 ' + c.name + ' — mastered! Added to your knowledge map.');
+      }
+    };
     const showChapter = (n, scroll) => {
       root.querySelectorAll('.chapter').forEach(sec => sec.classList.toggle('active', sec.getAttribute('data-chapter') === String(n)));
-      root.querySelectorAll('.ch-tab').forEach(t => t.classList.toggle('active', t.dataset.ch === String(n)));
+      allSteps.forEach(t => { const on = t.dataset.ch === String(n); t.classList.toggle('active', on); if (on) { t.classList.add('done'); visited.add(n); } });
+      markComplete();
       if (scroll && chapters) chapters.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
-    root.querySelectorAll('.ch-tab').forEach(t => t.onclick = () => showChapter(t.dataset.ch, true));
+    allSteps.forEach(t => t.onclick = () => showChapter(t.dataset.ch, true));
+    if (allSteps[0]) { allSteps[0].classList.add('done'); visited.add(allSteps[0].dataset.ch); }
     root.querySelectorAll('[data-chgo]').forEach(b => b.onclick = () => { if (b.dataset.chgo === 'journey') { const j = document.getElementById('journey'); if (j) j.scrollIntoView({ behavior: 'smooth', block: 'center' }); } else showChapter(b.dataset.chgo, true); });
+    // Predict-then-reveal (mechanism) + before-you-go checks — active recall
+    root.querySelectorAll('.mc-reveal').forEach(b => b.onclick = () => { const a = b.closest('.mc-body') && b.closest('.mc-body').querySelector('.mc-answer'); if (a) { a.hidden = false; b.closest('.mc-predict').classList.add('revealed'); b.remove(); } });
+    root.querySelectorAll('.cc-reveal').forEach(b => b.onclick = () => { const a = b.closest('.ch-check') && b.closest('.ch-check').querySelector('.cc-a'); if (a) { a.hidden = false; b.remove(); } });
+    // Feynman "explain it back" — reveal the model answer
+    const fyBtn = document.getElementById('fy-check'); if (fyBtn) fyBtn.onclick = () => { const m = document.getElementById('fy-model'); if (m) m.hidden = false; fyBtn.textContent = 'Model answer shown ↓'; fyBtn.disabled = true; };
+    // Dose & clearance simulator
+    if (c.sim && document.getElementById('dosesim')) wireDoseSim(c.sim);
     // Glossary hover-defs across the readable body (skips links/headings; first mention only)
-    root.querySelectorAll('.field-val, .takeaways, .cpd-fact .cf-t, .evg-body, .mc-body p, .pk-note, .analogy p, .biotech .bt-sb, .biotech .bt-lead, .biotech .bt-tg-role, .biotech .bt-adme-row div, .evidence-deep .evd-b, .deeper-one').forEach(applyGlossary);
+    root.querySelectorAll('.field-val, .takeaways, .cpd-fact .cf-t, .evg-body, .mc-body p, .pk-note, .analogy p, .biotech .bt-sb, .biotech .bt-lead, .biotech .bt-tg-role, .biotech .bt-adme-row div, .evidence-deep .evd-b, .deeper-one, .framework .fw-a, .myth-t, .contrast p, .whenuse li, .mj-stage-d, .hook-payoff p, .bigidea p').forEach(applyGlossary);
     // Self-test — reveal answers (active recall)
     root.querySelectorAll('.st-reveal').forEach(b => b.onclick = () => { const card = b.closest('.st-card'); const a = card && card.querySelector('.st-a'); if (a) { a.hidden = false; b.remove(); } });
     root.querySelectorAll('.gloss').forEach(g => { g.onclick = e => { e.stopPropagation(); document.querySelectorAll('.gloss.open').forEach(o => o !== g && o.classList.remove('open')); g.classList.toggle('open'); }; });
@@ -553,9 +572,31 @@
       if (p.MolecularFormula) { const mf = document.getElementById('mol-formula'); if (mf) mf.innerHTML = 'Formula <b>' + esc(p.MolecularFormula) + '</b>'; setChip('spec-formula', 'spec-formula-v', p.MolecularFormula); }
       if (p.MolecularWeight) setChip('spec-mw', 'spec-mw-v', Math.round(+p.MolecularWeight) + ' g/mol');
     }).catch(() => {});
-    // ToC active-section highlight on scroll
-    const toc = document.getElementById('cpd-toc');
-    if (toc) { const links = [...toc.querySelectorAll('[data-toc]')]; const secs = links.map(l => document.getElementById(l.dataset.toc)).filter(Boolean); const spy = () => { let cur = secs[0]; for (const s of secs) { if (s.getBoundingClientRect().top < 140) cur = s; } links.forEach(l => l.classList.toggle('active', cur && l.dataset.toc === cur.id)); }; window.addEventListener('scroll', spy, { passive: true }); spy(); }
+  }
+  // Interactive dose & clearance simulator — the clearance curve is real (exponential decay at the drug's
+  // half-life); the ergogenic window and jitter framing are the established teaching shapes.
+  function wireDoseSim(s) {
+    const doseEl = document.getElementById('ds-dose'), bwEl = document.getElementById('ds-bw'), timeEl = document.getElementById('ds-time');
+    const chart = document.getElementById('ds-chart'), readout = document.getElementById('ds-readout');
+    if (!doseEl || !chart || !readout) return;
+    const fmtHr = h => (h % 12 || 12) + (h < 12 ? 'am' : 'pm');
+    const draw = () => {
+      const dose = +doseEl.value, bw = +bwEl.value, dt = +timeEl.value;
+      document.getElementById('ds-dose-v').textContent = dose;
+      document.getElementById('ds-bw-v').textContent = bw;
+      document.getElementById('ds-time-v').textContent = fmtHr(dt);
+      const perKg = bw ? dose / bw : 0;
+      const W = 320, H = 150, pad = 10, hrs = 18; let path = '';
+      for (let t = 0; t <= hrs; t += 0.5) { const rem = dose * Math.pow(0.5, t / s.halfLifeH); const x = pad + (t / hrs) * (W - 2 * pad); const y = H - pad - (rem / s.maxDose) * (H - 2 * pad); path += (t === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1); }
+      let bedH = 23 - dt; if (bedH < 0) bedH += 24;
+      const pctBed = dose ? Math.round(Math.pow(0.5, bedH / s.halfLifeH) * 100) : 0;
+      const bedX = pad + (Math.min(bedH, hrs) / hrs) * (W - 2 * pad);
+      chart.innerHTML = `<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/><line x1="${bedX}" y1="8" x2="${bedX}" y2="${H - 8}" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3 3"/><text x="${bedX}" y="16" font-size="12" text-anchor="middle">🌙</text>`;
+      const zone = perKg < s.ergoLow ? `<b class="ds-under">below the effective window</b> — likely too little for a real performance boost` : perKg <= s.ergoHigh ? `<b class="ds-good">right in the ergogenic sweet spot</b> — the well-proven zone` : perKg < 9 ? `<b class="ds-over">above the sweet spot</b> — no extra benefit, just more jitter` : `<b class="ds-over">very high</b> — risk territory, zero added upside`;
+      const sleep = pctBed >= 25 ? `<b class="ds-over">${pctBed}% is still in you at 11pm</b> — this will likely hurt your sleep` : pctBed >= 10 ? `about ${pctBed}% lingers at bedtime — may lightly disturb sleep` : `only ~${pctBed}% remains by bedtime — sleep should be fine`;
+      readout.innerHTML = `That's <b>${perKg.toFixed(1)} mg/kg</b> — ${zone}.<br>${sleep}.`;
+    };
+    [doseEl, bwEl, timeEl].forEach(el => el.oninput = draw); draw();
   }
   function baseField(c, k) { return k === 'target' ? c.target : c[k]; }
   function openEditor(c, currentFields) {
@@ -1251,16 +1292,28 @@
     if (p === 'pathway' && n === 'pathway') return `<b>Why this next →</b> a connected mechanism — molecules often pull both at once.`;
     return `<b>Why this next →</b> the next step in mastering how your biology works.`;
   }
+  // Your living mastery map — a modal showing the whole 198-step web, learned lessons filled in.
+  function masteryMapModal() {
+    const M = buildMasterJourney(); const learned = new Set(getLearned());
+    const groups = []; const seen = {}; M.forEach(n => { if (!(n.section in seen)) { seen[n.section] = groups.length; groups.push([n.section, []]); } groups[seen[n.section]][1].push(n); });
+    const compounds = M.filter(n => n.type === 'compound'); const doneC = compounds.filter(n => learned.has(n.id)).length;
+    const html = `<button class="modal-x" id="modal-close">✕</button><h2>🗺️ Your mastery map</h2>
+      <p class="modal-sub"><b>${doneC}</b> of ${compounds.length} compounds mastered. Finish a lesson (read all its tabs) and its dot fills in. Tap any dot to jump there.</p>
+      <div class="mmap">${groups.map(([sec, nodes]) => { const d = nodes.filter(n => learned.has(n.id)).length; return `<div class="mmap-row"><div class="mmap-sec">${esc(sec)}<span class="mmap-count">${d}/${nodes.length}</span></div><div class="mmap-dots">${nodes.map(n => `<a class="mmap-dot${learned.has(n.id) ? ' done' : ''}" href="${n.href}" title="${esc(n.title)}"></a>`).join('')}</div></div>`; }).join('')}</div>`;
+    const m = modal(html); const x = m.querySelector('#modal-close'); if (x) x.onclick = closeModal;
+    m.querySelectorAll('.mmap-dot').forEach(a => a.addEventListener('click', () => closeModal()));
+  }
   // The one journey card — works on ANY educational page (compound, pathway, module, energy, physiology).
   function journeyBlock(type, id) {
     const s = masterState(type, id); if (!s || !s.next) return '';
     const next = s.next; const meta = T_META[next.type] || ['📘', '']; const hook = nextHook(next);
-    const pct = Math.max(1, Math.round((s.idx + 1) / s.total * 100));
+    const pct = Math.max(1, Math.round((s.idx + 1) / s.total * 100)); const learnedN = getLearned().length;
     return `<div class="journey-card" id="journey" data-jnode="${type}:${esc(String(id))}">
       <div class="j-head"><span class="j-ico">🧭</span><div><div class="j-title">Your learning journey</div><div class="j-sub">${esc(s.node.section)} · step ${s.idx + 1} of ${s.total}</div></div></div>
       <div class="jr-bar big"><i style="width:${pct}%"></i></div>
       <div class="j-connect">${masterConnect(s.node, next)}</div>
       <a class="j-next" href="${next.href}"><div class="jn-l"><div class="jn-lbl">Next · ${meta[1]}</div><div class="jn-name">${meta[0]} ${esc(next.title)}</div>${hook ? `<div class="jn-hook">${esc(hook)}</div>` : ''}</div><span class="jn-go">Continue →</span></a>
+      <div class="j-foot"><span>🎓 <b>${learnedN}</b> mastered</span><button class="j-map-btn" data-mastery-map>🗺️ Your mastery map</button></div>
     </div>`;
   }
   function journeyRibbon(type, id) {
@@ -1272,12 +1325,15 @@
   function analogyBox(c) { if (!c.analogy) return ''; return `<div class="analogy" data-lvl="1"><span class="an-ico">💡</span><div><div class="an-h">The one-line mental model</div><p>${mdInline(c.analogy)}</p></div></div>`; }
   function mechanismCascade(c) {
     if (!Array.isArray(c.mechSteps) || !c.mechSteps.length) return '';
+    const anyPredict = c.mechSteps.some(s => s.predict);
     const steps = c.mechSteps.map(s => {
       const link = s.tag ? ` <a class="mc-tag" href="#/target/${tkey(s.tag)}">${esc(s.tag)}</a>` : '';
       const fx = s.fx ? `<span class="mc-fx ${/▲/.test(s.fx) ? 'up' : /▼/.test(s.fx) ? 'down' : ''}">${esc(s.fx)}</span>` : '';
-      return `<li class="mc-step"><span class="mc-n">${s.n}</span><div class="mc-body"><div class="mc-t">${esc(s.t)}${link} ${fx}</div><p>${mdInline(s.d)}</p></div></li>`;
+      const answer = `<div class="mc-t">${esc(s.t)}${link} ${fx}</div><p>${mdInline(s.d)}</p>`;
+      if (s.predict) return `<li class="mc-step predictable"><span class="mc-n">${s.n}</span><div class="mc-body"><div class="mc-predict"><span class="mc-p-q">🤔 ${esc(s.predict)}</span><button class="mc-reveal">Reveal the answer →</button></div><div class="mc-answer" hidden>${answer}</div></div></li>`;
+      return `<li class="mc-step"><span class="mc-n">${s.n}</span><div class="mc-body">${answer}</div></li>`;
     }).join('');
-    return `<div class="callout mcascade" id="sec-mechanism" data-lvl="2"><span class="k">How it works — step by step</span><ol class="mc-list">${steps}</ol></div>`;
+    return `<div class="callout mcascade" id="sec-mechanism"><span class="k">How it works — step by step</span>${anyPredict ? `<p class="mc-hint">Try to answer each question <i>before</i> you reveal it — guessing first is what makes it stick.</p>` : ''}<ol class="mc-list">${steps}</ol></div>`;
   }
   function pkTimeline(c) {
     const p = c.pk; if (!p) return '';
@@ -1318,6 +1374,45 @@
       ${sec('🧬', 'Pharmacogenomics — why response differs', t.pgx ? mdInline(t.pgx) : '')}
       ${sec('📐', 'Dose–response &amp; window', t.dose ? mdInline(t.dose) : '')}
       ${sec('🔁', 'Tolerance &amp; withdrawal', t.tolerance ? mdInline(t.tolerance) : '')}
+    </div>`;
+  }
+  // ---- Pedagogy components (render only when authored; each teaches, not just informs) ----
+  function hookBox(c) { const h = c.hook; if (!h || !Array.isArray(h.questions) || !h.questions.length) return ''; return `<div class="hook"><div class="hook-h">First — could you answer these?</div><ol class="hook-qs">${h.questions.map(q => `<li>${esc(q)}</li>`).join('')}</ol><p class="hook-sub">Probably not yet. By the end of this page you'll answer all three without thinking — that's the whole point.</p></div>`; }
+  function hookPayoff(c) { const h = c.hook; if (!h || !h.payoff) return ''; return `<div class="hook-payoff"><div class="hp-h">🎯 Remember those three questions?</div><p>${mdInline(h.payoff)}</p></div>`; }
+  function bigIdeaBanner(c) { if (!c.bigIdea) return ''; return `<div class="bigidea"><span class="bi-tag">THE ONE IDEA TO REMEMBER</span><p>${mdInline(c.bigIdea)}</p></div>`; }
+  function stakesLine(c) { return c.stakes ? `<p class="stakes">🌍 ${mdInline(c.stakes)}</p>` : ''; }
+  function expertFramework(c) {
+    const f = c.framework; if (!f) return '';
+    const rows = [['What does it grab?', 'the target', f.target], ['Does a real dose reach it?', 'affinity vs concentration', f.affinity], ['What does your body do to it?', 'ADME', f.adme], ['Why do people differ?', 'genetics', f.genetics], ['How good is the proof?', 'evidence', f.evidence]].filter(r => r[2]);
+    if (!rows.length) return '';
+    return `<div class="framework"><div class="fw-head"><span class="fw-badge">🧠 How a pharmacologist reads any molecule</span></div>
+      <p class="fw-lead">Here's the real secret of expertise: you don't memorise compounds — you ask the <b>same five questions</b> of every one. Learn the questions and you can size up anything. Here they are for ${esc(c.name)}:</p>
+      <ol class="fw-list">${rows.map(([q, tag, a], i) => `<li class="fw-q"><div class="fw-qh"><span class="fw-n">${i + 1}</span><b>${esc(q)}</b> <span class="fw-tag">${esc(tag)}</span></div><div class="fw-a">${mdInline(a)}</div></li>`).join('')}</ol></div>`;
+  }
+  function mythsBox(c) { if (!Array.isArray(c.myths) || !c.myths.length) return ''; return `<div class="myths"><div class="myths-h">🚫 Myths to unlearn</div>${c.myths.map(m => `<div class="myth"><div class="myth-x">✗ “${esc(m.myth)}”</div><div class="myth-t"><b>Actually →</b> ${mdInline(m.truth)}</div></div>`).join('')}</div>`; }
+  function contrastBlock(c) {
+    if (!Array.isArray(c.contrasts) || !c.contrasts.length) return '';
+    return `<div class="contrasts">${c.contrasts.map(ct => { const structs = (ct.cidA && ct.cidB) ? `<div class="ct-structs"><figure><img loading="lazy" alt="" src="https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${ct.cidA}/PNG">${ct.capA ? `<figcaption>${esc(ct.capA)}</figcaption>` : ''}</figure><span class="ct-vs">vs</span><figure><img loading="lazy" alt="" src="https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${ct.cidB}/PNG">${ct.capB ? `<figcaption>${esc(ct.capB)}</figcaption>` : ''}</figure></div>` : ''; return `<div class="contrast"><div class="ct-h">⚖️ ${esc(ct.title)}</div>${structs}<p>${mdInline(ct.point)}</p></div>`; }).join('')}</div>`;
+  }
+  function whenToUseBox(c) { const w = c.whenToUse; if (!w || !Array.isArray(w.items) || !w.items.length) return ''; return `<div class="whenuse"><div class="wu-h">🎯 When should <i>you</i> take it?</div>${w.intro ? `<p class="wu-intro">${mdInline(w.intro)}</p>` : ''}<ul class="wu-list">${w.items.map(i => `<li>${mdInline(i)}</li>`).join('')}</ul></div>`; }
+  function moleculeJourney(c) { if (!Array.isArray(c.journey) || !c.journey.length) return ''; return `<div class="mjourney"><div class="mj-h">🧭 Follow one molecule — from mug to memory</div><div class="mj-track">${c.journey.map((s, i) => `<div class="mj-stage"><div class="mj-num">${i + 1}</div><div class="mj-body"><div class="mj-stage-t">${esc(s.stage)}</div><div class="mj-stage-d">${mdInline(s.d)}</div></div></div>`).join('')}</div></div>`; }
+  function feynmanBox(c) { return `<div class="feynman"><div class="fy-h">🧑‍🏫 The real test — explain it back</div><p class="fy-sub">In a sentence or two, explain to an imaginary friend what ${esc(c.name)} does and how. Writing it yourself is the single best way to find out whether it actually stuck.</p><textarea class="fy-input" id="fy-input" rows="3" placeholder="e.g. It blocks the tiredness signal in my brain, so…"></textarea><button class="fy-check" id="fy-check">Compare with the expert answer</button><div class="fy-model" id="fy-model" hidden><b>A clean expert answer:</b> ${mdInline(c.bigIdea || c.analogy || '')}</div></div>`; }
+  function graduationBlock(c) { const canEx = Array.isArray(c.canExplain) && c.canExplain.length ? `<div class="grad-can"><div class="gc-h">✓ You can now explain</div><ul>${c.canExplain.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''; const payoff = hookPayoff(c); if (!canEx && !payoff) return ''; return `<div class="graduation">${payoff}${canEx}</div>`; }
+  function chapterCheck(c, key) { const ch = c.checks && c.checks[key]; if (!ch) return ''; return `<div class="ch-check"><div class="cc-q">🔎 Before you go on — ${esc(ch.q)}</div><button class="cc-reveal">Show answer</button><div class="cc-a" hidden>${mdInline(ch.a)}</div></div>`; }
+  function doseSimulator(c) {
+    const s = c.sim; if (!s) return '';
+    return `<div class="dosesim" id="dosesim">
+      <div class="ds-h">🎛️ Try it yourself — the dose &amp; clearance simulator</div>
+      <p class="ds-sub">Drag the sliders. Watch the dose land in the effective window (or overshoot), and see how much is still in you at bedtime.</p>
+      <div class="ds-controls">
+        <label>Your dose <b><span id="ds-dose-v">${s.defaultDose}</span> mg</b><input type="range" id="ds-dose" min="0" max="${s.maxDose}" step="10" value="${s.defaultDose}"></label>
+        <label>Your bodyweight <b><span id="ds-bw-v">${s.bodyweightKg}</span> kg</b><input type="range" id="ds-bw" min="40" max="120" step="1" value="${s.bodyweightKg}"></label>
+        <label>Time you drink it <b><span id="ds-time-v">8am</span></b><input type="range" id="ds-time" min="5" max="20" step="1" value="8"></label>
+      </div>
+      <div class="ds-readout" id="ds-readout"></div>
+      <svg class="ds-chart" id="ds-chart" viewBox="0 0 320 150"></svg>
+      <div class="ds-legend"><span class="ds-swatch"></span> caffeine in your system through the day · <span class="ds-bed">🌙 = bedtime 11pm</span></div>
+      <p class="ds-note">${mdInline(s.note)}</p>
     </div>`;
   }
   // Rich, contextual evidence chapter (renders when the authored `evi` block exists; teaches HOW to read it).
@@ -1361,18 +1456,19 @@
       if (myStack.length) { const withThis = myStack.some(x => x.id === c.id) ? myStack : myStack.concat([c]); const pan = interactionPanel(withThis, { tiers: ['danger', 'timing'] }); chk = pan ? `<div class="section-title">⚠️ With your current stack (${myStack.length})</div>${pan}` : `<div class="stack-ok">✅ No dangerous interactions flagged between ${esc(c.name)} and your ${myStack.length}-item stack.</div>`; }
       return (cmpCards || chk) ? `<div class="cpd-explore">${cmpCards ? `<div class="section-title">⚖️ Compare with alternatives</div><div class="cmp-grid">${cmpCards}</div>` : ''}${chk}</div>` : '';
     })();
-    const ch1 = analogyBox(c) + takeawaysBox(c) + callout('plain', 'In plain English — start here', c.plain) + moleculeViewer(c) + didYouKnow + (!chainHtml && goalTags ? `<div class="toolbar" style="margin-top:1rem">${goalTags}</div>` : '') + (c.brief && !c.mechanism ? `<div class="body">${c.bodyHtml}</div>` : '');
-    const ch2 = (c.mechSteps ? mechanismCascade(c) : callout('mechanism', 'How it works — the science', c.mechanism)) + (chainHtml ? `<div class="mech-chain-wrap">${chainHtml}</div>` : '') + goDeeper(c);
-    const ch3 = callout('protocol', 'How to take it', c.protocol) + pkTimeline(c) + callout('watch', 'Watch out', c.watch, 'warn') + stacksBlock + usedIn;
+    const ch1 = hookBox(c) + stakesLine(c) + bigIdeaBanner(c) + analogyBox(c) + takeawaysBox(c) + callout('plain', 'In plain English — start here', c.plain) + moleculeViewer(c) + mythsBox(c) + didYouKnow + (!chainHtml && goalTags ? `<div class="toolbar" style="margin-top:1rem">${goalTags}</div>` : '') + (c.brief && !c.mechanism ? `<div class="body">${c.bodyHtml}</div>` : '');
+    const ch2 = moleculeJourney(c) + (c.mechSteps ? mechanismCascade(c) : callout('mechanism', 'How it works — the science', c.mechanism)) + contrastBlock(c) + (chainHtml ? `<div class="mech-chain-wrap">${chainHtml}</div>` : '') + goDeeper(c);
+    const ch3 = callout('protocol', 'How to take it', c.protocol) + pkTimeline(c) + doseSimulator(c) + whenToUseBox(c) + callout('watch', 'Watch out', c.watch, 'warn') + stacksBlock + usedIn;
     const ch4 = evidenceBlock + positioningPlot(c) + exploreBlock + callout('bottom', 'Bottom line', c.bottom);
-    const ch5 = callout('target', 'Molecular / gene target', c.target) + (c.mechSteps && c.mechanism ? callout('mechanism-full', 'The full mechanism — the original technical write-up', c.mechanism) : '') + biotechDeepDive(c);
+    const ch5 = expertFramework(c) + callout('target', 'Molecular / gene target', c.target) + (c.mechSteps && c.mechanism ? callout('mechanism-full', 'The full mechanism — the original technical write-up', c.mechanism) : '') + biotechDeepDive(c);
     const chapterDefs = [
-      { n: 1, icon: '🌱', label: 'Start here', html: ch1 }, { n: 2, icon: '⚙️', label: 'How it works', html: ch2 },
-      { n: 3, icon: '💊', label: 'How to use it', html: ch3 }, { n: 4, icon: '📊', label: 'The evidence', html: ch4 },
+      { n: 1, icon: '🌱', label: 'Start here', html: ch1, check: 'start' }, { n: 2, icon: '⚙️', label: 'How it works', html: ch2, check: 'how' },
+      { n: 3, icon: '💊', label: 'How to use it', html: ch3, check: 'use' }, { n: 4, icon: '📊', label: 'The evidence', html: ch4, check: 'evidence' },
       { n: 5, icon: '🔬', label: 'Deep dive', html: ch5 },
     ].filter(ch => ch.html && ch.html.trim());
-    const tabs = `<div class="ch-tabs" role="tablist">${chapterDefs.map((ch, i) => `<button class="ch-tab${i === 0 ? ' active' : ''}" data-ch="${ch.n}">${ch.icon} ${ch.label}</button>`).join('')}</div>`;
-    const sections = `<div class="chapters" id="cpd-chapters">${chapterDefs.map((ch, i) => { const nx = chapterDefs[i + 1]; const nav = nx ? `<button class="ch-next-btn" data-chgo="${nx.n}">Next: ${nx.icon} ${esc(nx.label)} →</button>` : `<p class="ch-done">🎓 That's the full lesson on ${esc(c.name)} — from newbie to expert. Your one next step is just below ↓</p>`; return `<section class="chapter${i === 0 ? ' active' : ''}" data-chapter="${ch.n}">${ch.html}<div class="ch-nav">${nav}</div></section>`; }).join('')}</div>`;
+    // Numbered mastery spine — a course stepper that checks off as you read
+    const tabs = `<div class="ch-steps" role="tablist">${chapterDefs.map((ch, i) => `<button class="ch-step${i === 0 ? ' active' : ''}" data-ch="${ch.n}"><span class="cs-num">${i + 1}</span><span class="cs-label">${ch.icon} ${esc(ch.label)}</span></button>`).join('')}</div>`;
+    const sections = `<div class="chapters" id="cpd-chapters">${chapterDefs.map((ch, i) => { const nx = chapterDefs[i + 1]; const nav = nx ? `<button class="ch-next-btn" data-chgo="${nx.n}">Next: ${nx.icon} ${esc(nx.label)} →</button>` : `<p class="ch-done">🎓 That's the full lesson on ${esc(c.name)} — from newbie to expert. Your one next step is just below ↓</p>`; return `<section class="chapter${i === 0 ? ' active' : ''}" data-chapter="${ch.n}">${ch.html}${ch.check ? chapterCheck(c, ch.check) : ''}<div class="ch-nav">${nav}</div></section>`; }).join('')}</div>`;
     const faq = faqRender([
       (c.bottom || c.plain) ? { q: `Does ${c.name} actually work?`, a: `Human-evidence rating: ${c.stars} of 5. ${faqSnip(c.bottom || c.plain, 240)}` } : null,
       c.protocol ? { q: `How do you take ${c.name}?`, a: faqSnip(c.protocol, 300) } : null,
@@ -1396,6 +1492,8 @@
       <div id="edit-meta" class="edit-meta"></div>
       ${sections}
       ${selfTestBox(c)}
+      ${feynmanBox(c)}
+      ${graduationBlock(c)}
       <div class="cpd-faq-wrap" hidden>${faq}</div>
       ${journeyBlock('compound', c.id)}
       ${related.length ? `<details class="related-fold"><summary>Or branch off — related compounds</summary><div class="related">${related.map(cpdCard).join('')}</div></details>` : ''}
@@ -5800,4 +5898,5 @@
   document.body.appendChild(fbBtn);
   bindEntityPopovers();
   document.addEventListener('click', e => { const b = e.target.closest('[data-suggest]'); if (b) { e.preventDefault(); openSuggestModal(b.dataset.suggest, b.dataset.ref); } });
+  document.addEventListener('click', e => { if (e.target.closest('[data-mastery-map]')) { e.preventDefault(); masteryMapModal(); } });
 })();

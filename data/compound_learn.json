@@ -1,13 +1,30 @@
 {
- "_schema": "Learning-layer data merged onto compounds by build/parse.js (keyed by compound slug). Every field optional; the page renders only what's present. Keep it accurate — authored pharmacology, never generated. analogy=one-line mental model · mechSteps=numbered plain-English cascade (tag links a target, fx=net effect) · pk=pharmacokinetics for the timeline · selfTest=active-recall Q&A · evi=the contextual evidence chapter (howStrong · whatItShows · effect · whoBenefits · caveats · trials[{finding,ref}]) · tech=the biotech deep-dive (chem · targets[{sym,url,action,affinity,role}] · signaling · adme{absorb,distribute,metabolise,excrete} · pgx · dose · tolerance).",
+ "_schema": "Learning-layer data merged onto compounds by build/parse.js (keyed by compound slug). Every field optional; the page renders only what's present. Authored pharmacology, never generated. Fields: hook{questions[],payoff} · bigIdea · stakes · analogy · mechSteps[{n,t,d,predict,tag,fx}] · framework{target,affinity,adme,genetics,evidence} · pk{onset,peak,halfLife,duration,note} · sim{halfLifeH,defaultDose,maxDose,bodyweightKg,ergoLow,ergoHigh,note} · journey[{stage,d}] · myths[{myth,truth}] · contrasts[{title,point,cidA,cidB}] · whenToUse{intro,items[]} · checks{start,how,use,evidence:{q,a}} · canExplain[] · selfTest[{q,a}] · evi{howStrong,whatItShows,effect,whoBenefits,caveats,trials[{finding,ref}]} · tech{chem,targets[{sym,url,action,affinity,role}],signaling,adme{absorb,distribute,metabolise,excrete},pgx,dose,tolerance}.",
  "caffeine": {
+  "hook": {
+   "questions": [
+    "Why does your morning coffee stop working after a couple of weeks?",
+    "Why does the same cup make you sharp but your friend jittery and anxious?",
+    "Why does a 4pm coffee wreck your sleep when an 8am one doesn't?"
+   ],
+   "payoff": "You can now answer all three. (1) Tolerance: your brain grows extra adenosine receptors to compensate, so the block does less. (2) You and your friend clear caffeine at different speeds (CYP1A2 genes) and feel it differently (ADORA2A genes). (3) The ~5–6 h half-life means a 4pm dose is still blocking adenosine at midnight — an 8am one is long gone."
+  },
+  "bigIdea": "Caffeine doesn't give you energy — it blocks the signal that tells you you're tired. Hold onto that one sentence and everything else on this page follows from it.",
+  "stakes": "It's the most widely used psychoactive drug on Earth — around 80% of adults take it every day, mostly without a second thought about what it's doing.",
   "analogy": "Caffeine is a doorstop jammed into your brain's tiredness sensor. It doesn't add energy — it blocks the signal that says “wind down.”",
   "mechSteps": [
-   { "n": 1, "t": "It impersonates adenosine", "d": "Caffeine's shape closely mimics adenosine — the molecule that piles up while you're awake and tells your brain “time to rest.” That resemblance lets it slot into the very same receptors.", "tag": "ADORA2A" },
-   { "n": 2, "t": "It blocks the “slow down” brake", "d": "By occupying adenosine's A1 and A2A receptors, caffeine stops adenosine from docking — so the drowsiness signal your brain has been building all day never lands.", "fx": "▼ drowsiness" },
-   { "n": 3, "t": "Excitatory signalling climbs", "d": "With the brake released, dopamine and noradrenaline activity rise. You feel sharper and more motivated, and a given effort feels easier.", "fx": "▲ alertness & focus" },
-   { "n": 4, "t": "Body-wide knock-on effects", "d": "It also mobilises fat for fuel and mildly lifts heart rate and metabolism (and may sensitise calcium release in muscle) — why it aids endurance and power.", "fx": "▲ performance" }
+   { "n": 1, "t": "It impersonates adenosine", "predict": "Caffeine's shape is almost identical to one molecule your brain makes all day. Which one — and why would looking like it be useful?", "d": "Caffeine's ring closely mimics adenosine — the molecule that piles up while you're awake and tells your brain “time to rest.” That resemblance lets it slot into the very same receptors.", "tag": "ADORA2A" },
+   { "n": 2, "t": "It blocks the “slow down” brake", "predict": "If caffeine takes adenosine's parking spot but can't switch the receptor on, what happens to the drowsiness signal?", "d": "By occupying adenosine's A1 and A2A receptors, caffeine stops adenosine from docking — so the drowsiness signal your brain has been building all day never lands.", "fx": "▼ drowsiness" },
+   { "n": 3, "t": "Excitatory signalling climbs", "predict": "With the brake released, which way does brain arousal go — and what do you feel?", "d": "With the brake released, dopamine and noradrenaline activity rise. You feel sharper and more motivated, and a given effort feels easier.", "fx": "▲ alertness & focus" },
+   { "n": 4, "t": "Body-wide knock-on effects", "predict": "Beyond your head — name one way this could help physical performance.", "d": "It also mobilises fat for fuel and mildly lifts heart rate and metabolism (and may sensitise calcium release in muscle) — why it aids endurance and power.", "fx": "▲ performance" }
   ],
+  "framework": {
+   "target": "Adenosine A1 & A2A receptors — it <b>blocks</b> them (a competitive antagonist), rather than activating anything.",
+   "affinity": "Ki ≈ 2–20 µM — and 2–3 cups push your blood to ~10–40 µM, so a real cup actually reaches the level that engages the target. (Most 'targets' are only hit at doses no one would ever take — always check this.)",
+   "adme": "~99% absorbed, crosses freely into the brain, and cleared almost entirely by a single liver enzyme, CYP1A2. Half-life ~5–6 h.",
+   "genetics": "That single-enzyme dependence is exactly why CYP1A2 fast/slow status swings clearance ~40-fold — the deepest reason two people react so differently.",
+   "evidence": "Strong — dozens of RCTs pooled into multiple meta-analyses show a reliable small-to-moderate ergogenic effect."
+  },
   "pk": {
    "onset": "15–45 min",
    "peak": "30–75 min",
@@ -15,6 +32,54 @@
    "duration": "3–5 h",
    "note": "That half-life is why timing matters: a 4pm dose still leaves roughly a third circulating at midnight, blocking the very adenosine you need to fall asleep. It stretches to 9 h+ in slow metabolisers and pregnancy, and shortens in smokers."
   },
+  "sim": {
+   "halfLifeH": 5.5,
+   "defaultDose": 200,
+   "maxDose": 600,
+   "bodyweightKg": 70,
+   "ergoLow": 3,
+   "ergoHigh": 6,
+   "note": "The clearance curve is real maths — an exponential decay with caffeine's ~5.5 h half-life. The benefit and jitter curves are teaching shapes (the well-established plateau and rising side-effects), not exact per-person measurements."
+  },
+  "journey": [
+   { "stage": "☕ The mug", "d": "You drink it. Within minutes it's absorbed across your whole gut — about 99% of the dose gets in." },
+   { "stage": "🩸 The blood", "d": "It dissolves into your bloodstream and rides everywhere. Being small and fat-loving, it crosses into your brain (and the placenta) without resistance." },
+   { "stage": "🧠 The brain", "d": "It reaches your neurons and slots into adenosine's receptors, blocking the tiredness signal. Peak effect lands ~30–75 min after your first sip." },
+   { "stage": "🔬 The liver", "d": "Your liver's CYP1A2 enzyme chops it up (mostly into paraxanthine). How fast that enzyme runs is set by your genes — your personal 'engine size'." },
+   { "stage": "🕗 The fade", "d": "Half is gone in ~5–6 h, but the tail lingers for hours — which is why a late-afternoon cup still shadows your sleep." }
+  ],
+  "myths": [
+   { "myth": "Caffeine gives you energy.", "truth": "It gives you none of its own. It blocks the tiredness signal so the energy you already have feels available — which is exactly why the fatigue rebounds when it wears off." },
+   { "myth": "More caffeine = more benefit.", "truth": "There's a ceiling around 3–6 mg/kg. Past ~9 mg/kg you get no extra performance — only more jitter, a faster heart, and worse sleep." },
+   { "myth": "Caffeine dehydrates you.", "truth": "At habitual doses the mild diuretic effect is offset by the fluid in the drink. Your regular coffee or tea counts toward hydration." }
+  ],
+  "contrasts": [
+   { "title": "Caffeine vs adenosine — the decoy", "cidA": 2519, "capA": "caffeine", "cidB": 60961, "capB": "adenosine", "point": "Look at the two structures: near-twins, both built on the same purine ring. That mimicry <i>is</i> the trick — caffeine is shaped enough like adenosine to sit in its receptor, but not enough to switch it on. It occupies the seat without doing the job. A decoy." },
+   { "title": "Caffeine vs amphetamine — brake vs accelerator", "point": "Same felt result (alert, driven), opposite mechanism. Caffeine <b>releases a brake</b> — it blocks the adenosine that slows you down. Amphetamine <b>floors the accelerator</b> — it forces dopamine and noradrenaline out. That single difference is why amphetamine is far more powerful, and far more addictive." }
+  ],
+  "whenToUse": {
+   "intro": "Put it all together — here's how to actually use it:",
+   "items": [
+    "**Pre-workout or competition:** 3–6 mg/kg, 45–60 min before. This is the biggest, best-proven win.",
+    "**Focus for a hard task:** ~100–200 mg is plenty; more just adds jitter without adding sharpness.",
+    "**Paired with L-theanine (~1:2):** smooths the edge without dulling the focus — a popular, evidence-backed combo.",
+    "**Hard cut-off:** stop 8–10 h before bed (early afternoon for most people). The half-life is what does the sleep damage.",
+    "**Cycle it:** if the lift has faded, a 10–14-day taper resets your adenosine receptors and restores the effect."
+   ]
+  },
+  "checks": {
+   "start": { "q": "In one line: does caffeine actually give you energy?", "a": "No — it blocks the tiredness signal (adenosine). The energy was already there; caffeine just hides the fatigue." },
+   "how": { "q": "What does caffeine physically block, and what's the immediate result?", "a": "Adenosine's A1/A2A receptors — so the 'slow down' signal never lands, and alertness climbs." },
+   "use": { "q": "Why does the timing of your last coffee matter so much?", "a": "The ~5–6 h half-life means an afternoon dose is still blocking adenosine at bedtime — sabotaging the sleep signal." },
+   "evidence": { "q": "Is the performance effect large or small — and does it work for everyone?", "a": "Small-to-moderate but well-proven. Strongest in non-users and fast CYP1A2 metabolisers; blunted or even negative in slow metabolisers." }
+  },
+  "canExplain": [
+   "Why caffeine makes you alert without adding any energy",
+   "The exact receptor it blocks — and why the dose in a real cup actually reaches it",
+   "Why it wrecks late-day sleep, and when to stop drinking it",
+   "Why two people can react completely differently to the same cup",
+   "How strong the evidence really is, and who benefits most"
+  ],
   "selfTest": [
    { "q": "What molecule does caffeine impersonate — and what does blocking it do?", "a": "Adenosine. Blocking its receptors lifts the “drowsiness” brake your brain builds through the day, so you feel alert." },
    { "q": "Caffeine's half-life is ~5–6 hours. Why can an afternoon coffee still wreck your sleep?", "a": "After ~10–12 h a quarter of the dose is still circulating, keeping adenosine's sleep signal blocked right when you're trying to fall asleep." },
