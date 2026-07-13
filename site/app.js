@@ -1251,6 +1251,18 @@
           <div class="section-title">🌐 Availability &amp; where to buy</div>
           <div class="sg-buy ${sg.cls}"><b>${esc(sg.tag)}.</b> ${sg.body}${c.cost ? `<div class="sg-cost">💲 ${mdInline(c.cost)}</div>` : ''}</div>`;
       })()}</div>
+      ${(() => {
+        const rel3 = related.slice(0, 3);
+        const cmpChips = rel3.map(o => `<a class="cmp-chip" href="#/compare/${slug(c.name)}-vs-${slug(o.name)}">${esc(c.name.split(/[\s(]/)[0])} vs ${esc(o.name.split('(')[0].trim())}</a>`).join('');
+        const myStack = getStack().map(id => byId[id]).filter(Boolean);
+        let chk = '';
+        if (myStack.length) {
+          const withThis = myStack.some(x => x.id === c.id) ? myStack : myStack.concat([c]);
+          const pan = interactionPanel(withThis, { tiers: ['danger', 'timing'] });
+          chk = pan ? `<div class="section-title">⚠️ With your current stack (${myStack.length})</div>${pan}` : `<div class="stack-ok">✅ No dangerous interactions flagged between ${esc(c.name)} and your ${myStack.length}-item stack.</div>`;
+        }
+        return (cmpChips || chk) ? `<div class="cpd-explore" data-lvl="2">${cmpChips ? `<div class="section-title">⚖️ Compare with alternatives</div><div class="cmp-row">${cmpChips}</div>` : ''}${chk}</div>` : '';
+      })()}
       ${c.brief && !c.mechanism ? `<div class="body" data-lvl="1">${c.bodyHtml}</div>` : ''}
       <div data-lvl="3">${goDeeper(c)}</div>
       ${(() => { const ps = protocolsForCompound(c); return ps.length ? `<div class="cpd-sec" data-lvl="1"><div class="section-title">🧭 Used in these protocols</div><p style="color:var(--muted);margin-top:-.4rem">Where ${esc(c.name)} is part of a full Move · Fuel · Stack plan.</p><div class="solve-grid">${ps.slice(0, 6).map(x => protoLink(x.p, x.rc)).join('')}</div></div>` : ''; })()}
