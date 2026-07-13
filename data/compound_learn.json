@@ -6,14 +6,14 @@
    { "n": 1, "t": "It impersonates adenosine", "d": "Caffeine's shape closely mimics adenosine — the molecule that piles up while you're awake and tells your brain “time to rest.” That resemblance lets it slot into the very same receptors.", "tag": "ADORA2A" },
    { "n": 2, "t": "It blocks the “slow down” brake", "d": "By occupying adenosine's A1 and A2A receptors, caffeine stops adenosine from docking — so the drowsiness signal your brain has been building all day never lands.", "fx": "▼ drowsiness" },
    { "n": 3, "t": "Excitatory signalling climbs", "d": "With the brake released, dopamine and noradrenaline activity rise. You feel sharper and more motivated, and a given effort feels easier.", "fx": "▲ alertness & focus" },
-   { "n": 4, "t": "Body-wide knock-on effects", "d": "It also sensitises calcium release in muscle (more force), mobilises fat for fuel, and mildly lifts heart rate and metabolism — why it aids both power and endurance.", "fx": "▲ performance" }
+   { "n": 4, "t": "Body-wide knock-on effects", "d": "It also mobilises fat for fuel and mildly lifts heart rate and metabolism (and may sensitise calcium release in muscle) — why it aids endurance and power.", "fx": "▲ performance" }
   ],
   "pk": {
    "onset": "15–45 min",
    "peak": "30–75 min",
    "halfLife": "5–6 h",
    "duration": "3–5 h",
-   "note": "That half-life is why timing matters: a 4pm dose still has about a quarter circulating at midnight, blocking the very adenosine you need to fall asleep. It stretches to 9 h+ in slow metabolisers and pregnancy, and shortens in smokers."
+   "note": "That half-life is why timing matters: a 4pm dose still leaves roughly a third circulating at midnight, blocking the very adenosine you need to fall asleep. It stretches to 9 h+ in slow metabolisers and pregnancy, and shortens in smokers."
   },
   "selfTest": [
    { "q": "What molecule does caffeine impersonate — and what does blocking it do?", "a": "Adenosine. Blocking its receptors lifts the “drowsiness” brake your brain builds through the day, so you feel alert." },
@@ -21,12 +21,11 @@
    { "q": "Two people take the same dose; one gets a performance boost, one gets jittery and slower. What single gene most likely explains it?", "a": "CYP1A2. Fast metabolisers (AA at −163C>A) tend to benefit; slow metabolisers (C-carriers) clear it slowly and can see blunted or negative effects." }
   ],
   "tech": {
-   "chem": "1,3,7-trimethylxanthine — a purine alkaloid and methylxanthine, structurally analogous to adenosine (and a cousin of theophylline and theobromine). The three methyl groups are the whole trick: they let it occupy adenosine receptors yet resist the enzymes that normally clear adenosine. Lipophilic, so it crosses the blood–brain barrier and placenta freely and distributes into total body water.",
+   "chem": "1,3,7-trimethylxanthine — a purine alkaloid and methylxanthine (a close cousin of theophylline and theobromine). Its ring closely resembles adenosine, which is what lets it dock into adenosine receptors; unlike adenosine, it's cleared by liver enzymes (chiefly CYP1A2) rather than the adenosine-recycling machinery. Lipophilic, so it crosses the blood–brain barrier and placenta freely and distributes into total body water.",
    "targets": [
-    { "sym": "ADORA1 / ADORA2A", "url": "https://www.ncbi.nlm.nih.gov/gene/135", "action": "non-selective competitive antagonist", "affinity": "Ki ≈ 2–20 µM — and plasma reaches ~20–50 µM after 2–3 cups, so this is the target actually hit at dietary doses", "role": "the mechanism that matters in real life" },
-    { "sym": "Phosphodiesterases (PDE)", "action": "non-selective inhibitor → raises cAMP", "affinity": "only at ≳500 µM (10–20× a normal dose)", "role": "the textbook 'raises cAMP' story is essentially a myth at human doses" },
-    { "sym": "RYR1 (ryanodine receptor)", "action": "sensitiser → more Ca²⁺ release", "affinity": "high concentration", "role": "part of the direct ergogenic effect in skeletal muscle" },
-    { "sym": "GABA-A", "action": "weak negative allosteric modulator", "affinity": "high concentration", "role": "minor contributor to jitter/anxiety at high intake" }
+    { "sym": "Adenosine A1 & A2A receptors", "url": "https://www.ncbi.nlm.nih.gov/gene/135", "action": "non-selective competitive antagonist", "affinity": "Ki ≈ 2–20 µM; ordinary intake pushes plasma into roughly the same ~10–40 µM range — so this is the target actually engaged at dietary doses", "role": "the mechanism that matters in real life" },
+    { "sym": "Phosphodiesterases (PDE)", "action": "non-selective inhibitor → raises cAMP", "affinity": "only at ≳500 µM, far above any dietary dose", "role": "the textbook 'caffeine raises cAMP' story doesn't apply at the doses people actually take" },
+    { "sym": "RYR1 (ryanodine receptor)", "action": "sensitiser → more Ca²⁺ release (the classic experimental RyR agonist)", "affinity": "mainly at concentrations above those reached in the body", "role": "may add a small direct muscle effect, but caffeine's ergogenic benefit is mostly central (adenosine antagonism)" }
    ],
    "signaling": "The key node is the striatal A2A–D2 heteromer: A2A receptors sit physically coupled to dopamine D2 receptors on medium spiny neurons, and A2A activation normally suppresses D2. Antagonising A2A therefore disinhibits dopamine signalling — the molecular reason caffeine feels dopaminergic without being a dopamine drug. Meanwhile A1 blockade across cortex and basal forebrain lifts tonic inhibition of cholinergic and monoaminergic neurons → global cortical arousal.",
    "adme": {
@@ -39,8 +38,8 @@
    "dose": "Ergogenic window 3–6 mg/kg (~200–400 mg) taken 45–60 min pre-effort; cognitive benefit plateaus by ~200 mg. Above ~9 mg/kg there's no extra benefit — only rising tachycardia and jitter. Acute toxicity climbs past ~1.2 g and lethal doses cluster near 10–14 g, a risk driven almost entirely by anhydrous powder (a teaspoon can be a lethal dose).",
    "tolerance": "Chronic exposure upregulates adenosine A1/A2A receptor density as compensation, so the net alerting effect fades over ~1–4 weeks and abrupt cessation unmasks the surplus receptors → withdrawal headache and fatigue. A 10–14-day taper every ~2 months restores sensitivity — the pharmacological basis of 'cycling'.",
    "trials": [
-    { "finding": "Umbrella review of meta-analyses: consistent small-to-moderate benefit for muscular endurance, strength, power and aerobic endurance — one of the most reproducibly ergogenic legal compounds.", "ref": "Grgic et al., 2020 (Br J Sports Med / ISSN position stand)" },
-    { "finding": "Endurance time-to-exhaustion improved on the order of ~10–12% vs placebo across trials.", "ref": "Doherty & Smith, 2005 meta-analysis" },
+    { "finding": "Umbrella review of 21 meta-analyses: consistent small-to-moderate benefit for muscular endurance, strength, power and aerobic endurance.", "ref": "Grgic et al., 2020, Br J Sports Med" },
+    { "finding": "Endurance time-to-exhaustion improved on the order of ~11% vs placebo across trials.", "ref": "Doherty & Smith, 2005 meta-analysis" },
     { "finding": "Performance benefit tracks CYP1A2 genotype — present in fast metabolisers, absent or reversed in slow metabolisers.", "ref": "Guest et al., 2018 (Med Sci Sports Exerc)" }
    ]
   }

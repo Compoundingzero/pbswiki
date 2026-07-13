@@ -1114,9 +1114,8 @@
     rct: 'Randomised controlled trial — the gold standard for proving a human effect.',
     'meta-analysis': 'A study that pools many trials for the strongest overall answer.',
     'placebo': 'An inert dummy treatment used to see if an effect is real.',
-    receptor_downregulation: 'The cell removing receptors after overstimulation — the basis of tolerance.',
     tolerance: 'Needing more over time for the same effect, as the body adapts.',
-    agonism: 'The act of switching a receptor on.', selectivity: 'How specifically a molecule hits its intended target and not others.',
+    selectivity: 'How specifically a molecule hits its intended target and not others.',
     affinity: 'How tightly a molecule binds its target.', 'gpcr': 'G-protein-coupled receptor — the biggest receptor family; many drugs act here.',
     mtor: 'A master growth switch — on = build (muscle), off = repair/cleanup (autophagy).',
     ampk: 'A cellular “low-fuel” sensor that boosts fat-burning and mitochondria.',
@@ -1317,8 +1316,10 @@
           <div class="sg-buy ${sg.cls}"><b>${esc(sg.tag)}.</b> ${sg.body}${c.cost ? `<div class="sg-cost">💲 ${mdInline(c.cost)}</div>` : ''}</div>`;
       })()}</div>
       ${(() => {
-        const rel3 = related.slice(0, 3);
-        const cmpCards = rel3.map(o => `<a class="cmp-card" href="#/compare/${slug(c.name)}-vs-${slug(o.name)}"><span class="cmp-vs">vs</span><span class="cmp-name">${esc(o.name.split('(')[0].trim())}</span><span class="cmp-stars">${'★'.repeat(o.stars)}<span class="cmp-dim">${'★'.repeat(5 - o.stars)}</span></span></a>`).join('');
+        // real alternatives = compounds that share a GOAL (so the comparison is meaningful), best-matched first
+        const cmpPeers = D.compounds.filter(x => x.id !== c.id && !x.isNote && Array.isArray(x.goalIds) && x.goalIds.some(g => c.goalIds.includes(g)))
+          .map(x => ({ x, n: x.goalIds.filter(g => c.goalIds.includes(g)).length })).sort((a, b) => b.n - a.n || b.x.stars - a.x.stars).slice(0, 3).map(o => o.x);
+        const cmpCards = cmpPeers.map(o => `<a class="cmp-card" href="#/compare/${slug(c.name)}-vs-${slug(o.name)}"><span class="cmp-vs">vs</span><span class="cmp-name">${esc(o.name.split('(')[0].trim())}</span><span class="cmp-stars">${'★'.repeat(o.stars)}<span class="cmp-dim">${'★'.repeat(5 - o.stars)}</span></span></a>`).join('');
         const myStack = getStack().map(id => byId[id]).filter(Boolean);
         let chk = '';
         if (myStack.length) {
