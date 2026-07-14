@@ -2586,3 +2586,10 @@ a.dp-name:hover{color:var(--accent)}
 .ftp-replybox{margin:.55rem 0 0;display:flex;flex-direction:column;gap:.45rem}
 .ftp-replybox textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:.5rem .6rem;font:inherit;font-size:.9rem;resize:vertical;background:var(--bg,#fff);color:inherit}
 .ftp-replybox button{align-self:flex-start;background:#2563eb;color:#fff;border:none;border-radius:8px;padding:.38rem .85rem;font-size:.82rem;font-weight:600;cursor:pointer}
+
+/* ---- Tier-aware safety states (RESEARCH/DANGER compounds) ---- */
+.danger-chip{background:color-mix(in srgb,#dc2626 12%,transparent)!important;color:#dc2626!important;border:1px solid color-mix(in srgb,#dc2626 40%,var(--line))!important;cursor:not-allowed;display:inline-flex;align-items:center;font-weight:600}
+.whenuse.danger{background:color-mix(in srgb,#dc2626 6%,transparent);border-color:color-mix(in srgb,#dc2626 35%,var(--line))}
+.whenuse.danger .wu-h{color:#dc2626}
+.whenuse.caution{background:color-mix(in srgb,#d97706 5%,transparent);border-color:color-mix(in srgb,#d97706 28%,var(--line))}
+.whenuse.caution .wu-h{color:#b45309}

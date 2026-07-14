@@ -1295,6 +1295,25 @@
     if (items.length < 3) return '';
     return `<nav class="cpd-toc" id="cpd-toc">${items.map(([id, l]) => `<a href="#${id}" data-toc="${id}">${l}</a>`).join('')}</nav>`;
   }
+  // Safety/framing tier — mirrors the authoring manifest. Drives tab labels, the protocol heading,
+  // the "when to use" header and the add-to-stack control so the page never invites use of a
+  // prescription, controlled/non-approved, or outright lethal compound.
+  function compoundTier(c) {
+    if (c.brief) return 'brief';
+    const L = (c.approvalLabels || []).join(',');
+    if (/death|fatal|lethal|deadly|do not use/i.test((c.watch || '') + (c.bottom || ''))) return 'DANGER';
+    if (/Not Approved|Controlled/.test(L)) return 'RESEARCH';
+    if (c.isRx || /Prescription|Off-Label/.test(L)) return 'RX';
+    return 'OTC';
+  }
+  const TIER_UI = {
+    OTC: { icon: '💊', label: 'How to use it', protoH: 'How to take it', wuH: '🎯 When should <i>you</i> take it?' },
+    RX: { icon: '💊', label: "How it's used", protoH: "How it’s prescribed & used", wuH: '🩺 How it’s used clinically' },
+    RESEARCH: { icon: '⚠️', label: 'Use & risks', protoH: 'What people do — and the risks (not an endorsement)', wuH: '⚠️ Why people use it — and what it costs' },
+    DANGER: { icon: '☠️', label: 'The danger', protoH: 'Why the dose is a death-trap', wuH: '☠️ Why it’s so dangerous' },
+    brief: { icon: '💊', label: 'How to use it', protoH: 'How to take it', wuH: '🎯 When should <i>you</i> take it?' },
+  };
+  function tierUI(c) { return TIER_UI[compoundTier(c)] || TIER_UI.OTC; }
   function learnedBtn(c) { const done = isLearned(c.id); return `<button id="learned-btn" class="learned-btn ${done ? 'on' : ''}">${done ? '✓ Learned' : '＋ Mark learned'}</button>`; }
   function getLearned() { try { return JSON.parse(localStorage.getItem('rnawiki_learned') || '[]'); } catch (e) { return []; } }
   function isLearned(id) { return getLearned().includes(id); }
@@ -1443,7 +1462,7 @@
     if (!Array.isArray(c.contrasts) || !c.contrasts.length) return '';
     return `<div class="contrasts">${c.contrasts.map(ct => { const structs = (ct.cidA && ct.cidB) ? `<div class="ct-structs"><figure><img loading="lazy" alt="" src="https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${ct.cidA}/PNG">${ct.capA ? `<figcaption>${esc(ct.capA)}</figcaption>` : ''}</figure><span class="ct-vs">vs</span><figure><img loading="lazy" alt="" src="https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${ct.cidB}/PNG">${ct.capB ? `<figcaption>${esc(ct.capB)}</figcaption>` : ''}</figure></div>` : ''; return `<div class="contrast"><div class="ct-h">⚖️ ${esc(ct.title)}</div>${structs}<p>${mdInline(ct.point)}</p></div>`; }).join('')}</div>`;
   }
-  function whenToUseBox(c) { const w = c.whenToUse; if (!w || !Array.isArray(w.items) || !w.items.length) return ''; return `<div class="whenuse"><div class="wu-h">🎯 When should <i>you</i> take it?</div>${w.intro ? `<p class="wu-intro">${mdInline(w.intro)}</p>` : ''}<ul class="wu-list">${w.items.map(i => `<li>${mdInline(i)}</li>`).join('')}</ul></div>`; }
+  function whenToUseBox(c) { const w = c.whenToUse; if (!w || !Array.isArray(w.items) || !w.items.length) return ''; const t = compoundTier(c); const ui = TIER_UI[t] || TIER_UI.OTC; return `<div class="whenuse${t === 'DANGER' ? ' danger' : (t === 'RESEARCH' ? ' caution' : '')}"><div class="wu-h">${ui.wuH}</div>${w.intro ? `<p class="wu-intro">${mdInline(w.intro)}</p>` : ''}<ul class="wu-list">${w.items.map(i => `<li>${mdInline(i)}</li>`).join('')}</ul></div>`; }
   function moleculeJourney(c) { if (!Array.isArray(c.journey) || !c.journey.length) return ''; return `<div class="mjourney"><div class="mj-h">🧭 Follow one molecule — from mug to memory</div><div class="mj-track">${c.journey.map((s, i) => `<div class="mj-stage"><div class="mj-num">${i + 1}</div><div class="mj-body"><div class="mj-stage-t">${esc(s.stage)}</div><div class="mj-stage-d">${mdInline(s.d)}</div></div></div>`).join('')}</div></div>`; }
   function feynmanBox(c) { return `<div class="feynman" data-slug="${esc(slug(c.name))}"><div class="fy-h">🧑‍🏫 The real test — explain it back</div><p class="fy-sub">In a sentence or two, explain to an imaginary friend what ${esc(c.name)} does and how. Writing it in your own words is the single best way to find out whether it actually stuck — then compare with the expert answer and see how others put it.</p><textarea class="fy-input" id="fy-input" rows="3" placeholder="e.g. It blocks the tiredness signal in my brain, so…"></textarea><button class="fy-check" id="fy-check">Compare with the expert answer</button><div class="fy-model" id="fy-model" hidden><b>A clean expert answer:</b> ${mdInline(c.bigIdea || c.analogy || '')}</div><div class="fy-note" id="fy-note" hidden></div><div class="fy-thread" id="fy-thread" hidden></div></div>`; }
   function graduationBlock(c) { const canEx = Array.isArray(c.canExplain) && c.canExplain.length ? `<div class="grad-can"><div class="gc-h">✓ You can now explain</div><ul>${c.canExplain.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''; const payoff = hookPayoff(c); if (!canEx && !payoff) return ''; return `<div class="graduation">${payoff}${canEx}</div>`; }
@@ -1507,13 +1526,14 @@
     })();
     const ch1 = hookBox(c) + stakesLine(c) + bigIdeaBanner(c) + analogyBox(c) + takeawaysBox(c) + callout('plain', 'In plain English — start here', c.plain) + moleculeViewer(c) + mythsBox(c) + didYouKnow + (!chainHtml && goalTags ? `<div class="toolbar" style="margin-top:1rem">${goalTags}</div>` : '') + (c.brief && !c.mechanism ? `<div class="body">${c.bodyHtml}</div>` : '');
     const ch2 = moleculeJourney(c) + (c.mechSteps ? mechanismCascade(c) : callout('mechanism', 'How it works — the science', c.mechanism)) + contrastBlock(c) + (chainHtml ? `<div class="mech-chain-wrap">${chainHtml}</div>` : '') + goDeeper(c);
-    const ch3 = callout('protocol', 'How to take it', c.protocol) + pkTimeline(c) + doseSimulator(c) + whenToUseBox(c) + callout('watch', 'Watch out', c.watch, 'warn') + stacksBlock + usedIn;
+    const _tui = tierUI(c);
+    const ch3 = callout('protocol', _tui.protoH, c.protocol) + pkTimeline(c) + doseSimulator(c) + whenToUseBox(c) + callout('watch', 'Watch out', c.watch, 'warn') + stacksBlock + usedIn;
     const ch4 = evidenceBlock + positioningPlot(c) + exploreBlock + callout('bottom', 'Bottom line', c.bottom);
     const ch5 = expertFramework(c) + callout('target', 'Molecular / gene target', c.target) + (c.mechSteps && c.mechanism ? callout('mechanism-full', 'The full mechanism — the original technical write-up', c.mechanism) : '') + biotechDeepDive(c);
     const ch6 = selfTestBox(c) + feynmanBox(c) + graduationBlock(c) + journeyBlock('compound', c.id);
     const chapterDefs = [
       { n: 1, icon: '🌱', label: 'Start here', html: ch1, check: 'start' }, { n: 2, icon: '⚙️', label: 'How it works', html: ch2, check: 'how' },
-      { n: 3, icon: '💊', label: 'How to use it', html: ch3, check: 'use' }, { n: 4, icon: '📊', label: 'The evidence', html: ch4, check: 'evidence' },
+      { n: 3, icon: _tui.icon, label: _tui.label, html: ch3, check: 'use' }, { n: 4, icon: '📊', label: 'The evidence', html: ch4, check: 'evidence' },
       { n: 5, icon: '🔬', label: 'Deep dive', html: ch5 }, { n: 6, icon: '🎓', label: 'Prove it', html: ch6 },
     ].filter(ch => ch.html && ch.html.trim());
     // Numbered mastery spine — a course stepper that checks off as you read
@@ -1532,7 +1552,7 @@
         <div class="detail-actions">
           ${learnedBtn(c)}
           ${PHASE2 ? '<button id="edit-btn" class="edit-btn" title="Improve this page">✎ Edit page</button>' : ''}
-          <button id="stack-btn" class="stack-btn-lg ${added ? 'in' : ''}">${added ? '✓ In your stack' : '+ Add to stack'}</button>
+          ${compoundTier(c) === 'DANGER' ? '<span class="stack-btn-lg danger-chip" title="Not for human use">⚠️ Not for use</span>' : `<button id="stack-btn" class="stack-btn-lg ${added ? 'in' : ''}">${added ? '✓ In your stack' : '+ Add to stack'}</button>`}
         </div>
       </div>
       ${specStrip(c)}

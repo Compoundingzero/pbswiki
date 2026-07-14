@@ -420,5 +420,605 @@
    "dose": "Maintenance 3–5 g/day of creatine monohydrate, indefinitely. Optional loading: 20 g/day split into 4 doses for 5–7 days reaches saturation faster with no better end result. No cycling needed. Higher doses don't help once muscle is saturated and can cause GI upset.",
    "tolerance": "None in the receptor sense — there is no down-regulation, so the effect doesn't fade and there's nothing to cycle off. The only ceiling is muscle saturation: once your stores are full, additional creatine simply passes through as creatinine."
   }
+ },
+ "semaglutide-ozempic-wegovy-rybelsus": {
+  "hook": {
+   "questions": [
+    "Why does a weight-loss drug get injected only once a week, when most hormones are gone from your blood in minutes?",
+    "Why do people on it describe the \"food noise\" in their head going quiet — not just feeling physically full?",
+    "Why does the weight pile back on the moment they stop — and why do doctors insist on lifting weights and eating protein while taking it?"
+   ],
+   "payoff": "You can now answer all three. (1) Semaglutide is glued to blood albumin (>99% bound) and re-engineered to resist the enzymes that shred natural GLP-1, stretching its half-life to about a week — so one shot lasts seven days. (2) It doesn't just slow your stomach; it activates GLP-1 receptors in the hypothalamus and reward circuits, which is why appetite AND intrusive food-thoughts fade. (3) It treats the appetite signal, it doesn't reset it — stop the drug and hunger returns, so weight comes back (STEP 1 extension); and because a large share of the weight lost is lean mass, resistance training plus protein is what protects your muscle."
+  },
+  "bigIdea": "Semaglutide doesn't burn fat — it's a long-lasting copy of a gut hormone that tells your brain \"I'm full,\" so you eat less without fighting hunger. Hold onto that one sentence and everything else on this page follows from it.",
+  "analogy": "Semaglutide is a forgery of your gut's \"I'm satisfied\" hormone — but a forgery your body can't quickly shred, and one that clings to a blood protein like a life-raft. So instead of the real hormone's few-minute flicker, the fullness signal stays switched on for a week per shot.",
+  "stakes": "It is a prescription medicine, not a supplement — and the most effective weight-loss drug ever brought to market, driving ~15% average bodyweight loss where earlier drugs managed 5–10%. That power is exactly why it needs a doctor's supervision, not a self-experiment.",
+  "mechSteps": [
+   {
+    "n": 1,
+    "t": "It impersonates GLP-1, a gut hormone",
+    "predict": "Your gut releases a hormone after a meal that tells your body \"food has arrived, wind down eating.\" Semaglutide copies it. What is it — and why copy a hormone that natural enzymes destroy in minutes?",
+    "d": "Semaglutide is a re-engineered copy of GLP-1 (glucagon-like peptide-1), the incretin hormone your gut releases after eating. A single amino-acid swap (Aib at position 8) makes it resist the enzyme (DPP-4) that normally shreds natural GLP-1 in minutes.",
+    "tag": "GLP1R"
+   },
+   {
+    "n": 2,
+    "t": "It switches the GLP-1 receptor ON",
+    "predict": "Caffeine works by blocking a receptor. Semaglutide does the opposite. If it activates the GLP-1 receptor, what happens in the pancreas when your blood sugar is high?",
+    "d": "Unlike a blocker, semaglutide is an agonist — it docks into the GLP-1 receptor and switches it on. In the pancreas this stimulates insulin and suppresses glucagon, but only when glucose is high, which is why it rarely causes low blood sugar on its own.",
+    "fx": "▲ glucose control"
+   },
+   {
+    "n": 3,
+    "t": "It quiets the brain's hunger and \"food noise\"",
+    "predict": "GLP-1 receptors sit in the hypothalamus and reward circuits, not just the gut. What would activating those do to appetite and cravings?",
+    "d": "Activating GLP-1 receptors in the hypothalamic appetite centres and reward pathways dampens hunger and the constant, intrusive food-thoughts people call \"food noise.\" You eat less without white-knuckle willpower.",
+    "fx": "▼ hunger & cravings"
+   },
+   {
+    "n": 4,
+    "t": "It slows your stomach's exit",
+    "predict": "If food leaves your stomach more slowly, how does that change how full you feel — and why does nausea show up early on?",
+    "d": "It also slows gastric emptying, so a meal sits longer and fullness lasts. That same slowing is behind the classic early side effect — nausea — which is why the dose is titrated up gradually.",
+    "fx": "▼ appetite"
+   },
+   {
+    "n": 5,
+    "t": "Albumin makes it last a week",
+    "predict": "A fatty-acid chain was bolted onto the molecule on purpose. What does clinging to a blood protein buy you in dosing frequency?",
+    "d": "A fatty-diacid chain lets semaglutide grip blood albumin (>99% bound), hiding it from clearance and creating a slow-release depot. That's how a hormone that normally lasts minutes becomes a once-weekly injection.",
+    "tag": "albumin"
+   }
+  ],
+  "framework": {
+   "target": "The GLP-1 receptor (GLP1R) — a Gs-coupled GPCR in the pancreas, hypothalamic appetite centres, and vagal afferents. Note the contrast with caffeine: semaglutide <b>activates</b> its target (an agonist), it doesn't block it.",
+   "affinity": "Genuinely high-affinity: Kd ≈ 0.38 nM at GLP1R (Lau et al., 2015) — sub-nanomolar, far tighter than caffeine's micromolar grip on its receptor. The clever second target is <b>albumin</b>: it also binds blood albumin tightly, which is the whole trick behind its week-long duration, not its potency.",
+   "adme": "Injected subcutaneously (or oral Rybelsus with an absorption enhancer, ~1% bioavailability). >99% albumin-bound, small volume of distribution. Cleared not by the liver's CYP enzymes but by proteolytic cleavage of the peptide and beta-oxidation of its fatty-acid tail. Half-life ~1 week.",
+   "genetics": "No caffeine-style single-gene switch (no CYP1A2 equivalent) drives the response. Real-world response varies widely person to person, but there is no clinically actionable pharmacogenetic test — so honest answer: it's not a one-gene story.",
+   "evidence": "About as strong as drug evidence gets: large phase-3 RCTs (the STEP and SUSTAIN programmes) plus a cardiovascular-outcomes trial (SELECT) in tens of thousands of people. 5/5."
+  },
+  "pk": {
+   "onset": "appetite effects within days; full effect builds over weeks",
+   "peak": "blood level peaks 1–3 days after a dose (tmax)",
+   "halfLife": "~1 week (~155–165 h)",
+   "duration": "steady weekly dosing; ~5 weeks to clear fully after stopping",
+   "note": "Semaglutide breaks the usual timing rules: the effect isn't chased by a daily blood peak. The ~1-week half-life is precisely why it's dosed once weekly and why it reaches steady state only after 4–5 weeks — and why appetite, and weight, drift back over the weeks after the last shot rather than snapping back overnight."
+  },
+  "journey": [
+   {
+    "stage": "💉 The injection",
+    "d": "A once-weekly shot goes into the fat under your skin, forming a small depot that trickles into the blood over days."
+   },
+   {
+    "stage": "🩸 The bloodstream",
+    "d": "It immediately grips blood albumin — over 99% rides along bound to it. That shield hides it from clearance and is why one dose lasts a week."
+   },
+   {
+    "stage": "🧠 The brain",
+    "d": "It reaches the hypothalamic appetite centres and reward circuits and switches on GLP-1 receptors there. Hunger and intrusive food-thoughts fade — the core of the effect."
+   },
+   {
+    "stage": "🍽️ The gut & pancreas",
+    "d": "It slows the stomach's emptying so meals feel filling for longer, and it prompts glucose-dependent insulin while damping glucagon in the pancreas."
+   },
+   {
+    "stage": "🔬 The breakdown",
+    "d": "There's no single liver enzyme to blame. The peptide is slowly snipped apart by proteases and its fatty tail burned off by beta-oxidation, with fragments leaving in urine and stool."
+   },
+   {
+    "stage": "🔁 The fade (if stopped)",
+    "d": "Stop dosing and levels decline over ~5 weeks. As the fullness signal lifts, appetite returns — and, without new habits, so does the weight."
+   }
+  ],
+  "myths": [
+   {
+    "myth": "Ozempic/Wegovy burns fat directly.",
+    "truth": "It doesn't touch a fat-burning switch. It lowers how much you eat by acting on appetite and fullness signals — the fat loss is the downstream result of a sustained calorie deficit, not a metabolic bonfire."
+   },
+   {
+    "myth": "You take it, lose the weight, then stop.",
+    "truth": "It manages the appetite signal, it doesn't reset it. In the STEP 1 extension, people regained roughly two-thirds of their lost weight within a year of stopping. For most, it's a chronic medication, like a blood-pressure drug — not a course you finish."
+   },
+   {
+    "myth": "The weight you lose is all fat.",
+    "truth": "In the STEP 1 DEXA substudy, roughly 40% of the weight lost was lean mass, not fat. That's why resistance training and 1.6–2 g/kg of protein aren't optional extras — they're what protect your muscle while you lose."
+   },
+   {
+    "myth": "It's only a diabetes drug.",
+    "truth": "Same molecule, different approvals: Ozempic and Rybelsus are approved for type 2 diabetes, Wegovy for chronic weight management. The higher-dose weight indication is a genuine, separately-trialled use, not off-label improvisation."
+   }
+  ],
+  "whenToUse": {
+   "intro": "How it's used clinically — this is prescription-only, and needs a doctor to prescribe, titrate and monitor it. This is not a self-administration protocol:",
+   "items": [
+    "**Type 2 diabetes (Ozempic, Rybelsus):** to improve blood-sugar control, with the bonus of weight loss and, in some patients, cardiovascular risk reduction.",
+    "**Chronic weight management (Wegovy):** prescribed for obesity (BMI ≥30), or BMI ≥27 with a weight-related condition, alongside diet and activity — not for cosmetic or mild weight loss.",
+    "**Cardiovascular protection:** in people with established heart disease and overweight/obesity, it's now used to cut the risk of heart attack and stroke (SELECT).",
+    "**Contraindications a doctor screens for:** a personal or family history of medullary thyroid carcinoma or MEN2 (a black-box warning), prior pancreatitis, and pregnancy — it should be stopped before a planned pregnancy.",
+    "**Monitoring while on it:** the dose is titrated slowly (0.25 mg upward) to limit nausea; muscle-preserving resistance training and adequate protein are considered essential, not optional."
+   ]
+  },
+  "checks": {
+   "start": {
+    "q": "In one line: does semaglutide burn fat, or make you eat less?",
+    "a": "It makes you eat less. It copies a fullness hormone so hunger and food-thoughts fade; the fat loss follows from eating less, not from a fat-burning effect."
+   },
+   "how": {
+    "q": "Semaglutide activates the same receptor GLP-1 does — name two things that switching it on accomplishes.",
+    "a": "It quiets hunger in the brain's appetite centres and slows the stomach's emptying (and, in the pancreas, prompts glucose-dependent insulin while suppressing glucagon)."
+   },
+   "use": {
+    "q": "Why is it injected only once a week when natural GLP-1 lasts minutes?",
+    "a": "It's engineered to resist the DPP-4 enzyme and to cling to blood albumin (>99% bound), stretching its half-life to about a week."
+   },
+   "evidence": {
+    "q": "How strong is the evidence, and what's the single biggest catch to manage?",
+    "a": "Very strong — large RCTs (STEP, SUSTAIN) and a cardiovascular-outcomes trial (SELECT). The main catch: a large share of the weight lost is lean mass, so protein and resistance training are non-negotiable, and weight returns if you stop."
+   }
+  },
+  "canExplain": [
+   "Why semaglutide makes you eat less without burning fat directly",
+   "The exact receptor it activates (GLP1R) — and why it's an agonist, the opposite of a blocker like caffeine",
+   "Why one injection lasts a week, thanks to DPP-4 resistance and albumin binding",
+   "Why the weight comes back when you stop, and why muscle loss makes protein and lifting essential",
+   "Who it's actually prescribed for, and how strong the human evidence really is"
+  ],
+  "selfTest": [
+   {
+    "q": "Natural GLP-1 is destroyed within minutes and would need constant infusion. What two engineering changes let semaglutide be dosed once a week instead?",
+    "a": "An Aib8 substitution in the peptide backbone that resists the DPP-4 enzyme, plus a fatty-diacid chain that binds it tightly to blood albumin (>99%), creating a slow-release depot with a ~1-week half-life."
+   },
+   {
+    "q": "A patient loses impressive weight but looks weaker and their strength drops. What likely happened, and what should have been in place?",
+    "a": "A meaningful share of the weight lost on semaglutide (roughly 40% in STEP 1 DEXA data) can be lean mass. Resistance training plus 1.6–2 g/kg protein should have been in place to preserve muscle during the loss."
+   },
+   {
+    "q": "Semaglutide boosts insulin, yet rarely causes dangerous hypoglycaemia on its own. Why?",
+    "a": "Its insulin-stimulating effect is glucose-dependent — it only drives insulin when blood glucose is elevated, so it eases off as glucose normalises."
+   }
+  ],
+  "evi": {
+   "howStrong": "Semaglutide sits near the top of the drug evidence pyramid: multiple large, randomised, placebo-controlled phase-3 trials (the STEP programme for weight, SUSTAIN for diabetes) plus a dedicated cardiovascular-outcomes trial (SELECT) in over 17,000 people. This is regulatory-grade evidence in tens of thousands of participants — not a handful of small studies. The honest limits: most pivotal weight trials run about 1–2 years, so the very-long-term (decade-plus) picture and the consequences of lifelong use are still being filled in.",
+   "whatItShows": "Consistently, and by a wide margin over older drugs, semaglutide produces clinically meaningful weight loss and better glucose control — and, in people with established heart disease, fewer cardiovascular events. The effect is large for a weight drug, but it's an adjunct to diet and activity, not a replacement for them.",
+   "effect": "In plain numbers: STEP 1 showed ~14.9% average bodyweight loss over 68 weeks versus ~2.4% on placebo. SELECT showed a 20% reduction in major cardiovascular events (heart attack, stroke, cardiovascular death) in people with overweight/obesity and prior heart disease. The trade-off: gastrointestinal side effects (nausea, occasionally vomiting) are common early, and a meaningful share of the weight lost is lean mass.",
+   "whoBenefits": "Adults with type 2 diabetes, and adults with obesity (or overweight plus a weight-related condition) — with the clearest added benefit in those who also have established cardiovascular disease. It is not for cosmetic weight loss in otherwise healthy-weight people, and is contraindicated in those with a history of medullary thyroid cancer or MEN2.",
+   "caveats": "Effects depend on staying on the drug — weight largely returns after stopping. Trials skew to 1–2 years, muscle loss is real without resistance training and protein, and rare risks (pancreatitis, gallbladder disease, and the thyroid C-cell black-box warning based on rodent data) mean it belongs under medical supervision, not self-experimentation.",
+   "trials": [
+    {
+     "finding": "STEP 1: once-weekly semaglutide 2.4 mg produced −14.9% bodyweight at 68 weeks vs −2.4% with placebo (n=1,961).",
+     "ref": "Wilding et al., 2021, N Engl J Med"
+    },
+    {
+     "finding": "SELECT: in patients with prior cardiovascular disease and overweight/obesity but no diabetes, semaglutide cut major adverse cardiovascular events by 20% vs placebo (HR 0.80).",
+     "ref": "Lincoff et al., 2023, N Engl J Med"
+    },
+    {
+     "finding": "STEP 1 extension: one year after stopping semaglutide, participants regained roughly two-thirds of the weight they had lost, showing the effect depends on continued use.",
+     "ref": "Wilding et al., 2022, Diabetes Obes Metab"
+    }
+   ]
+  },
+  "tech": {
+   "chem": "A 31-amino-acid peptide analogue of human GLP-1 (7-37), engineered for protraction. Two backbone substitutions — Aib at position 8 (blocking DPP-4 cleavage) and Arg at 34 (enabling site-specific acylation) — plus acylation at Lys26 with a C18 fatty-diacid via a γGlu-2×OEG linker. That fatty-diacid is the albumin anchor: it grips serum albumin tightly, hiding the peptide from clearance and turning a minutes-long hormone into a once-weekly drug.",
+   "targets": [
+    {
+     "sym": "GLP1R",
+     "url": "https://www.ncbi.nlm.nih.gov/gene/2740",
+     "action": "agonist — activates the receptor (a class-B Gs-coupled GPCR)",
+     "affinity": "Kd ≈ 0.38 nM (Lau et al., 2015) — sub-nanomolar, high-affinity",
+     "role": "the entire mechanism: pancreatic insulin/glucagon regulation, hypothalamic appetite suppression, slowed gastric emptying"
+    },
+    {
+     "sym": "Serum albumin",
+     "action": "tight non-covalent binding via the C18 fatty-diacid side chain",
+     "affinity": ">99% bound in plasma",
+     "role": "not a therapeutic target but the pharmacokinetic engine — the depot that gives the ~1-week half-life"
+    }
+   ],
+   "signaling": "GLP1R is Gs-coupled: activation raises cAMP and activates PKA. In pancreatic beta cells this amplifies glucose-dependent insulin secretion (and suppresses alpha-cell glucagon). In the hypothalamus, GLP1R signalling activates anorexigenic POMC/CART neurons and inhibits orexigenic AgRP/NPY neurons, reducing appetite; vagal afferent and hindbrain signalling reinforces satiety and slows gastric emptying.",
+   "adme": {
+    "absorb": "Subcutaneous injection for Ozempic/Wegovy. Oral Rybelsus is co-formulated with the absorption enhancer SNAC to survive the stomach, but oral bioavailability is very low (~1%).",
+    "distribute": "Small volume of distribution (~12.5 L); >99% bound to plasma albumin, which underlies its long circulation.",
+    "metabolise": "Not a CYP substrate. Cleared by proteolytic cleavage of the peptide backbone and beta-oxidation of the fatty-acid side chain; DPP-4 resistant due to the Aib8 substitution.",
+    "excrete": "Metabolite fragments eliminated in both urine and faeces; a small fraction of intact drug appears in urine. Elimination half-life ~1 week."
+   },
+   "pgx": "No established, clinically actionable pharmacogenetic determinant of response — there is no CYP1A2-style single-gene switch here. GLP1R polymorphisms have been studied in relation to incretin response but are not used to guide prescribing. Renal or hepatic impairment does not require major dose adjustment given the non-CYP, non-renal clearance route.",
+   "dose": "Prescription-only, titrated under medical supervision to limit nausea: subcutaneous 0.25 mg weekly escalated over weeks to 1.0–2.0 mg (Ozempic, diabetes) or up to 2.4 mg (Wegovy, weight); oral Rybelsus 3 → 7 → 14 mg once daily on an empty stomach. Not to be self-dosed outside clinical care.",
+   "tolerance": "No classic receptor down-regulation that erodes efficacy. Gastrointestinal side effects (nausea, vomiting) typically wane as the dose is titrated and the body adapts. Weight loss plateaus as intake and expenditure re-balance; discontinuation leads to appetite and weight rebound rather than a withdrawal syndrome."
+  },
+  "contrasts": [
+   {
+    "title": "Semaglutide vs tirzepatide — one key vs two",
+    "point": "Same felt result (appetite falls, weight drops), but tirzepatide is a <b>dual agonist</b> — it hits both the GLP-1 receptor and the GIP receptor, a second incretin. Semaglutide pulls one lever; tirzepatide pulls two, which is the leading explanation for its somewhat larger average weight loss in head-to-head data. That's the frontier the curated 'most powerful until tirzepatide/retatrutide' note points at."
+   },
+   {
+    "title": "Semaglutide vs caffeine — agonist vs antagonist",
+    "point": "A clean lesson in reading a molecule. Caffeine <b>blocks</b> its receptor (an antagonist — it releases a brake). Semaglutide <b>activates</b> its receptor (an agonist — it presses a signal). Both change behaviour by touching a GPCR, but in opposite directions: one removes a 'slow down' signal, the other adds an 'I'm full' one."
+   }
+  ]
+ },
+ "2-4-dinitrophenol-dnp": {
+  "hook": {
+   "questions": [
+    "How can a single small molecule make you lose fat faster than almost anything else known — and kill you by the same mechanism?",
+    "Why is there no antidote, and why does aggressive hospital cooling so often fail?",
+    "Why do people die at doses that are barely higher than the ones they took safely last week?"
+   ],
+   "payoff": "You can now answer all three. (1) DNP short-circuits the mitochondria so fuel burns furiously but makes almost no ATP — the wasted energy leaves as heat, which is both why fat melts and why you can cook from the inside. (2) There's no receptor to block and no drug to reverse it; once heat production outruns your ability to shed it (\"runaway uncoupling\"), cooling alone can't win, and death follows within hours. (3) DNP clears slowly and heat accumulates, so today's dose stacks on the last one — and the lowest reported lethal dose (~4.3 mg/kg) sits right inside the range people take for weight loss (historically ~3-5 mg/kg/day). The dose that slims and the dose that kills overlap."
+  },
+  "bigIdea": "DNP makes your cells burn fuel furiously while producing almost no usable energy — all of it comes out as heat — and the dose that melts fat is perilously close to the dose that cooks you to death. Do not use it.",
+  "stakes": "This is not a strong supplement — it is a metabolic poison sold as a diet drug. It has killed people every year it has circulated, from more than 100,000 users in the 1930s to a steady stream of internet-sourced deaths today, and there is still no antidote.",
+  "analogy": "DNP is like drilling holes in the base of a hydroelectric dam. The water that used to spin the turbine now pours straight through, doing no useful work — just churning and heating. The power station burns fuel ever harder to keep the lights on, and the whole building overheats. And there is no valve to plug the holes back up.",
+  "mechSteps": [
+   {
+    "n": 1,
+    "t": "It pokes chemical holes in the battery",
+    "predict": "Your mitochondria store energy as a proton gradient across a membrane — a charged battery. What happens if a molecule can quietly ferry those protons back across, bypassing the machinery?",
+    "d": "DNP is a lipophilic weak acid (a \"protonophore\"). It dissolves into the inner mitochondrial membrane, grabs a proton on one side and releases it on the other — shuttling protons straight across and collapsing the gradient the cell worked to build.",
+    "tag": "protonophore"
+   },
+   {
+    "n": 2,
+    "t": "The ATP factory stops, the furnace runs flat out",
+    "predict": "ATP synthase runs on that proton gradient like a water wheel. If the gradient is drained, what does the electron transport chain do — slow down, or speed up?",
+    "d": "With the gradient shorted, ATP synthase has nothing to drive it, so ATP production craters. The electron transport chain senses the drop and runs faster than ever, burning fuel and oxygen at full tilt to try to rebuild a gradient that keeps leaking away.",
+    "tag": "ATP synthase"
+   },
+   {
+    "n": 3,
+    "t": "All that energy leaves as heat",
+    "predict": "Normally that burned fuel would be captured as ATP. If it can't be, where does the energy go — and what does the body do to compensate?",
+    "d": "Energy that can't be stored as ATP escapes as heat. Metabolism ramps up to cover the shortfall (roughly +17% expenditure in animal studies), so you burn fat fast — but you also generate heat continuously, everywhere in the body at once.",
+    "fx": "▲ heat + metabolism"
+   },
+   {
+    "n": 4,
+    "t": "Runaway hyperthermia — no off switch",
+    "predict": "Your body sheds heat through sweat and blood flow, which have a ceiling. What happens when heat production climbs past that ceiling and there's no way to stop the drug acting?",
+    "d": "Once heat generation outpaces your ability to dump it, core temperature spirals — a state clinicians call \"runaway uncoupling.\" Core temperatures as high as 43 °C have been recorded. There is no antidote to switch the drug off, and cooling frequently can't keep up; death can arrive within hours.",
+    "fx": "☠ fatal hyperthermia"
+   }
+  ],
+  "framework": {
+   "target": "There is <b>no receptor</b>. DNP's target is the inner mitochondrial membrane itself — it acts as a protonophore that physically shorts the proton-motive force. Nothing to block, nothing to switch on; it works by dissolving into a membrane and carrying charge across it.",
+   "affinity": "There's no binding constant to quote, because there's no binding site. What governs its potency is chemistry: a pKa near 4 and high lipophilicity let it pick up a proton outside the membrane and drop it inside. The frightening consequence is that there is <b>no saturating ceiling</b> — unlike a receptor drug that maxes out when the receptors are full, more DNP simply means more uncoupling, more heat, in a straight line toward death.",
+   "adme": "Well absorbed orally and lipophilic, so it distributes widely — including into the brain and the lens of the eye (the cause of the historic cataract epidemic). Elimination is slow and persistent: there is <b>no reliable human half-life</b>, and its uncoupling effect lingers for days after a dose. That slow clearance means doses stack — today's sits on top of yesterday's.",
+   "genetics": "No established pharmacogenetic modifier — there is no known genotype that makes DNP safe for you. Species and individual clearance vary, but nothing rescues you from the mechanism.",
+   "evidence": "Split and honest: the evidence that it causes weight loss is old, uncontrolled 1930s data plus modern self-reports (2/5 human stars). The evidence that it kills is unambiguous — decades of documented fatalities with no antidote."
+  },
+  "journey": [
+   {
+    "stage": "💊 The capsule",
+    "d": "You swallow it — often a crude powder measured by eye. It's well absorbed across the gut into the bloodstream, with no way to know the true dose you took."
+   },
+   {
+    "stage": "🩸 The blood",
+    "d": "Being lipophilic, it rides everywhere and crosses into places it shouldn't — the brain, the placenta, and the lens of the eye, where it drove an epidemic of blindness in the 1930s."
+   },
+   {
+    "stage": "🔋 The mitochondria",
+    "d": "Inside every cell, it slips into the inner mitochondrial membrane and starts shuttling protons across, collapsing the gradient your cells use to make ATP."
+   },
+   {
+    "stage": "🔥 The furnace",
+    "d": "The electron chain burns fuel and oxygen at full tilt for almost no ATP. The wasted energy pours out as heat, and core temperature begins to climb."
+   },
+   {
+    "stage": "☠️ The runaway",
+    "d": "If heat outpaces cooling, temperature spirals past what the body can survive. There is no antidote — treatment is only aggressive cooling, and it often fails. Death can come within hours."
+   },
+   {
+    "stage": "🕰️ The long tail",
+    "d": "In survivors, the drug clears slowly over several days, and the heat load accumulates with each dose — which is why a dose \"tolerated\" last week can be fatal this week."
+   }
+  ],
+  "myths": [
+   {
+    "myth": "It's just a very strong fat burner — dose it carefully and it's fine.",
+    "truth": "The fat loss and the dying are the <i>same</i> mechanism, not a side effect you can dose around. Turning up the fat-burning is turning up the heat; there is no setting that gives you one without the other."
+   },
+   {
+    "myth": "There's a safe low dose if you're careful.",
+    "truth": "The doses people take for weight loss (historically ~3-5 mg/kg/day) run right into the lethal range — the lowest reported human lethal dose is about 4.3 mg/kg, below the top of that band. The margin for error is essentially zero, heat accumulates over days, and you can't feel the point of no return until it's too late."
+   },
+   {
+    "myth": "If I overheat I can just cool down, or a hospital can reverse it.",
+    "truth": "There is no antidote. Once runaway uncoupling starts, the drug keeps generating heat from inside every cell, and even aggressive hospital cooling often can't keep pace. Many victims die within hours of reaching care."
+   }
+  ],
+  "whenToUse": {
+   "intro": "Why it's so dangerous — and why it should never be used:",
+   "items": [
+    "**The lethal dose overlaps the weight-loss dose.** Doses taken for fat loss run ~3-5 mg/kg/day; the lowest reported human lethal dose is ~4.3 mg/kg — inside that band. There is no margin for a measuring error, and street powder is rarely measured accurately.",
+    "**There is no antidote.** Nothing switches the drug off. Once it's in your cells it keeps making heat until it slowly clears — treatment is only cooling, and cooling frequently loses.",
+    "**The heat accumulates.** DNP clears slowly and its uncoupling effect persists for days, so each dose stacks on the last. A dose you tolerated days ago can tip you into fatal hyperthermia now — especially in hot weather or with exertion.",
+    "**\"Runaway uncoupling\" kills fast.** When heat production passes what your body can shed, core temperature can spiral to 43 °C or beyond and death can follow within hours.",
+    "**Bottom line: do not use it.** It is illegal for human consumption, it has killed people every year it has circulated, and it is documented here only so the danger is unmistakable."
+   ]
+  },
+  "checks": {
+   "start": {
+    "q": "In one line: does DNP work through a receptor?",
+    "a": "No. It's a protonophore — it dissolves into the inner mitochondrial membrane and shorts the proton gradient. There's no receptor to block and no antidote to reverse it."
+   },
+   "how": {
+    "q": "When DNP burns all that fuel, where does the energy go?",
+    "a": "Out as heat, instead of into ATP. That heat is both why fat melts and why the body can overheat to a fatal degree."
+   },
+   "use": {
+    "q": "Why is there no safe dose?",
+    "a": "The doses people take for weight loss overlap the lethal dose, the drug accumulates over days, and once runaway hyperthermia starts there is no antidote to stop it."
+   },
+   "evidence": {
+    "q": "What is actually well proven about DNP?",
+    "a": "That it kills — decades of documented fatalities with no antidote. The weight-loss data, by contrast, is old, uncontrolled, and weak."
+   }
+  },
+  "canExplain": [
+   "Why DNP causes fat loss and fatal overheating through the exact same mechanism",
+   "What a protonophore is, and why DNP has no receptor and no binding constant to quote",
+   "Why there is no saturating ceiling — so more drug simply means more heat, in a straight line toward death",
+   "Why there is no antidote and why hospital cooling so often fails",
+   "Why a dose tolerated last week can kill this week — slow clearance and accumulating heat"
+  ],
+  "selfTest": [
+   {
+    "q": "A receptor drug maxes out its effect once the receptors are full. Why does DNP have no such ceiling — and why does that make it uniquely dangerous?",
+    "a": "DNP doesn't bind a receptor; it physically ferries protons across the mitochondrial membrane. Adding more molecules just adds more shuttling and more heat with no plateau, so there's no self-limiting point — the dose-response runs straight toward lethal hyperthermia."
+   },
+   {
+    "q": "Someone took the same amount of DNP for a week with only mild symptoms, then collapsed with a 42 °C fever on day eight. What explains the sudden turn?",
+    "a": "DNP clears slowly and its effect is heat, which accumulates. Each dose stacked on the residue of the last until heat production crossed what the body could shed — \"runaway uncoupling\" — a threshold that gives almost no warning."
+   },
+   {
+    "q": "A friend argues DNP is safe if you \"just dose it low, like the old diet clinics.\" Give the two-part rebuttal.",
+    "a": "First, even the \"low\" clinic doses (~3-5 mg/kg/day) reach up to the lowest reported human lethal dose (~4.3 mg/kg) — there's no margin. Second, the old clinics also produced an epidemic of blindness from cataracts and multiple deaths, which is why it was pulled from the market in 1938; \"low and careful\" was never actually safe."
+   }
+  ],
+  "evi": {
+   "howStrong": "The two halves of the evidence point in opposite directions, and it's important to hold both. The claim that DNP causes weight loss rests on old, uncontrolled data from 1930s diet clinics plus modern online self-reports — weak by any standard (hence 2/5 human stars). The claim that DNP kills, by contrast, is about as solid as toxicology gets: a large, consistent record of fatalities across nearly a century, summarized in peer-reviewed reviews, with a mechanism that is fully understood and no antidote.",
+   "whatItShows": "It shows a drug that does exactly what its mechanism predicts: it raises metabolism and causes rapid fat loss, and by the same route it causes dose-dependent, sometimes fatal, hyperthermia. The historic record adds a second irreversible harm — cataracts and blindness — that has nothing to do with dieting and everything to do with the drug reaching the eye.",
+   "effect": "On weight, the historic reports describe real but poorly quantified loss. On harm, the numbers are stark: core temperatures recorded up to 43 °C, the lowest reported human lethal dose around 4.3 mg/kg, and death frequently within hours once runaway uncoupling begins. There is no effect size that makes the risk worth it.",
+   "whoBenefits": "No one, safely. The mechanism offers no subgroup a protective genotype, and the margin between the weight-loss dose and the lethal dose is too small to manage. The people most likely to die are exactly the people who use it — those chasing fast fat loss, often with inaccurately measured street powder.",
+   "caveats": "Human pharmacokinetics are poorly characterized — there is no reliable published human elimination half-life — which itself is a danger, because it means no one can predict how doses accumulate in a given person. The weight-loss evidence is too old and uncontrolled to trust, while the lethality evidence, though not from randomized trials (which would be unethical), is overwhelming from case series and poisoning registries.",
+   "trials": [
+    {
+     "finding": "Comprehensive review documenting DNP's uncoupling mechanism, its history as a 1930s diet drug, and 62 published deaths from acute toxicity at the time of writing, concluding it carries a significant risk of death with no specific antidote.",
+     "ref": "Grundlingh et al., 2011, Journal of Medical Toxicology 7(3):205"
+    },
+    {
+     "finding": "Analysis of online self-reports of DNP use found frequent sub-lethal toxic symptoms — most commonly fatigue, elevated body temperature, and paresthesias — underscoring that harm is common even at sub-fatal doses (the most commonly reported dose was ~300 mg/day).",
+     "ref": "Abdelati, Burns & Chary, 2023, PLOS ONE 18(9):e0290630"
+    }
+   ]
+  },
+  "tech": {
+   "chem": "2,4-Dinitrophenol — a phenol ring bearing two nitro groups, a yellow crystalline solid and a lipophilic weak acid with a pKa near 4. This weak-acid character is the whole story: at physiological pH a fraction is protonated and neutral (membrane-permeant) while the rest is the anion, letting a single molecule cycle across a membrane carrying protons — the definition of a chemical uncoupler. It is also an industrial chemical (dyes, wood preservatives, explosives precursors), not a purpose-built drug.",
+   "targets": [
+    {
+     "sym": "Inner mitochondrial membrane (proton-motive force)",
+     "action": "protonophore / uncoupler — shuttles H⁺ across the membrane, dissipating the electrochemical gradient",
+     "affinity": "no receptor and no Ki; potency is set by pKa (~4) and lipophilicity, and crucially has no saturating ceiling",
+     "role": "the entire mechanism — it decouples the electron transport chain from ATP synthase, so substrate oxidation continues but yields heat instead of ATP",
+     "url": "https://pubchem.ncbi.nlm.nih.gov/compound/1493"
+    },
+    {
+     "sym": "UCP1 (thermogenin, brown fat) — natural analogue",
+     "action": "DNP chemically mimics what UCP1 does biologically, but without any regulation",
+     "role": "context, not a binding target: brown adipose tissue uncouples deliberately and under tight control; DNP does the same thing everywhere, unregulated"
+    }
+   ],
+   "signaling": "There is no receptor cascade — the action is biophysical, not signalling. DNP collapses the proton gradient (Δp); the electron transport chain accelerates and oxygen consumption rises while ATP output falls; the free energy of substrate oxidation is released as heat. Falling ATP and rising AMP secondarily activate stress pathways such as AMPK, but the lethal event is simply thermodynamic — heat generated faster than it can be dissipated.",
+   "adme": {
+    "absorb": "Well absorbed after oral ingestion; effects can begin within hours.",
+    "distribute": "Lipophilic and widely distributed, including into the brain, the placenta, and the lens of the eye (the basis of the historic cataract/blindness epidemic).",
+    "metabolise": "Partly reduced in the liver to aminonitrophenol metabolites (e.g., 2-amino-4-nitrophenol); metabolism does not neutralize the acute uncoupling hazard.",
+    "excrete": "Renal excretion of parent drug and metabolites, but slow and persistent — no reliable human elimination half-life is established, and the drug's uncoupling effect persists for days after ingestion."
+   },
+   "pgx": "No established pharmacogenetic modifier of DNP toxicity; there is no known genotype that confers safety. The absence of characterized human pharmacokinetics compounds the danger, because dose accumulation cannot be predicted for an individual.",
+   "dose": "There is no safe dose. The lowest reported human lethal oral dose is about 4.3 mg/kg, the estimated lethal range is roughly 20-50 mg/kg, and the doses people take for weight loss (~3-5 mg/kg/day) reach the lowest reported lethal dose, leaving no margin. Removed from the US market as unfit for human consumption after the Federal Food, Drug, and Cosmetic Act of 1938. Do not use.",
+   "tolerance": "No protective tolerance develops. The opposite is true: because clearance is slow and the effect is heat, repeated dosing causes heat load to accumulate, so a previously \"tolerated\" dose can become fatal — a risk sharply amplified by hot weather, exertion, or dehydration."
+  }
+ },
+ "ostarine-mk-2866-enobosarm": {
+  "hook": {
+   "questions": [
+    "If it's \"selective\" for muscle, why does it still crash your own testosterone like a steroid does?",
+    "Why did the most-studied SARM sail through muscle-building trials and still get rejected by the FDA?",
+    "Why does one capsule build muscle for weeks off a dose measured in single-digit milligrams?"
+   ],
+   "payoff": "You can now answer all three. (1) \"Selective\" is relative, not absolute — enobosarm barely touches your prostate and skin, but your brain still reads the androgen signal and shuts down the LH/FSH loop that makes your own testosterone. (2) In the Phase 3 POWER trials it did add lean mass — but it failed the co-primary physical-function endpoint (stair-climb power), so more muscle on the scan didn't translate into people climbing stairs better, and the FDA declined it. (3) It binds the androgen receptor with high affinity (Ki ≈ 3–4 nM — low-nanomolar, a few-fold weaker than testosterone but the same order of magnitude) and works by switching genes on — so a few milligrams fully engages the target, and the muscle grows over weeks of transcription, not minutes."
+  },
+  "bigIdea": "Ostarine is a non-steroidal key cut to fit the androgen receptor's muscle-and-bone locks while barely turning its prostate-and-skin locks — but \"selective\" means milder, not clean: it still switches off your own testosterone.",
+  "analogy": "A steroid is a master key that opens every androgen lock in your body — muscle, prostate, skin, scalp, all of it. Ostarine is a key filed down to turn the muscle-and-bone locks hard while barely catching the others. Milder side profile, same core machinery — and the same alarm still trips: your brain sees the key in the lock and stops making its own.",
+  "mechSteps": [
+   {
+    "n": 1,
+    "t": "It's a key shaped for one receptor",
+    "predict": "Steroids are big fatty ring molecules. Ostarine isn't a steroid at all — so how does it fool the same receptor?",
+    "d": "Enobosarm is a non-steroidal molecule that still docks into the androgen receptor with high affinity (Ki ≈ 3–4 nM) — low-nanomolar, a few-fold weaker than testosterone but in the same order of magnitude. Same target as a steroid, completely different scaffold.",
+    "tag": "AR"
+   },
+   {
+    "n": 2,
+    "t": "The trick is the shape it forces the receptor into",
+    "predict": "If it hits the same receptor as testosterone, why doesn't it wreck the prostate and scalp the way steroids do?",
+    "d": "Because it's non-steroidal, it bends the androgen receptor into a slightly different shape than testosterone does. That shape recruits a different mix of coactivator and corepressor proteins — and muscle and bone carry a different mix than prostate and skin. So the same receptor gets switched strongly ON in muscle and bone, and left nearly silent elsewhere.",
+    "fx": "tissue selectivity"
+   },
+   {
+    "n": 3,
+    "t": "Inside the muscle, it turns genes on",
+    "predict": "The receptor isn't a channel or a brake — it's a switch that does what, exactly?",
+    "d": "The activated androgen receptor travels into the cell nucleus and binds DNA, turning up the genes for muscle protein synthesis. This is transcription, not a fast on/off — which is why the effect builds over weeks of dosing rather than minutes, and why lean mass is what actually rises.",
+    "fx": "▲ lean mass"
+   },
+   {
+    "n": 4,
+    "t": "Your brain reads the signal and pulls back",
+    "predict": "Your body constantly measures its own androgen level. What does it do when a drug spikes that signal?",
+    "d": "The hypothalamus and pituitary sense an androgen present and dial down GnRH, LH and FSH — the hormones that tell your testes to make testosterone. So even a \"muscle-selective\" drug suppresses your own natural production. That's HPTA suppression, and it's the headline cost.",
+    "tag": "LH / FSH"
+   }
+  ],
+  "framework": {
+   "target": "The androgen receptor (AR) — a nuclear hormone receptor that acts as a gene switch. Enobosarm is a tissue-selective <b>agonist</b>: it turns AR on (strongly in muscle and bone), rather than blocking it.",
+   "affinity": "Ki ≈ 3–4 nM — genuinely high (low-nanomolar), a few-fold weaker than testosterone or DHT but in the same ballpark; a moderate-potency AR agonist. Contrast this with caffeine, where you have to ask whether a realistic dose even reaches the target: here it clearly does. That affinity is exactly why single-digit-milligram doses fully engage AR — and why suppression is unavoidable, not a fluke of overdosing.",
+   "adme": "Orally active with useful bioavailability, cleared by the liver, elimination half-life ≈ 24 h — long enough that once-daily dosing keeps it in the blood continuously. But note: the felt effect is not set by the blood curve, it's set by weeks of gene transcription.",
+   "genetics": "No validated SARM-specific pharmacogenetic switch exists. In principle AR sensitivity varies with the AR gene's CAG-repeat length (a general androgen determinant), but this has not been characterised for enobosarm specifically — so treat individual response as unpredictable.",
+   "evidence": "Moderate and honest: real randomised Phase 2 trials show it adds lean mass, but the Phase 3 POWER program met the lean-mass endpoint and <b>failed</b> the physical-function endpoint, so no regulator has ever approved it. There is essentially no long-term safety data in healthy people using it to build muscle."
+  },
+  "pk": {
+   "onset": "days to weeks — the anabolic effect is gene transcription, not an acute hit",
+   "halfLife": "≈ 24 h (oral)",
+   "note": "The ~24 h half-life supports once-daily dosing and keeps blood levels steady, but don't read it like a stimulant's stopwatch — lean mass accrues over weeks of continuous AR activation, and HPTA suppression builds over the same timescale rather than clearing overnight."
+  },
+  "journey": [
+   {
+    "stage": "💊 The capsule",
+    "d": "You swallow it. Real caution here: gray-market SARM products are frequently mislabeled or contaminated — analyses have found the wrong dose, the wrong compound, or an actual banned steroid inside \"ostarine\" capsules. It's absorbed across the gut into the blood."
+   },
+   {
+    "stage": "🩸 The blood",
+    "d": "It circulates and distributes to tissues, seeking out androgen receptors. Its ~24 h half-life means a daily dose accumulates to a steady level rather than spiking and vanishing."
+   },
+   {
+    "stage": "💪 The muscle & bone",
+    "d": "It binds the androgen receptor and drives it into the nucleus, turning up muscle-protein-synthesis genes. Over weeks this is where lean mass and bone density slowly rise — the effect people are chasing."
+   },
+   {
+    "stage": "🧠 The brain",
+    "d": "The hypothalamus and pituitary detect the androgen signal and throttle back LH and FSH — so your own testosterone production winds down. This is the suppression that outlasts the last dose."
+   },
+   {
+    "stage": "🔬 The liver",
+    "d": "The liver metabolises it. In trials and case reports this is where the damage shows: lowered HDL cholesterol, and documented cases of drug-induced liver injury (elevated enzymes, cholestatic jaundice) from ostarine-containing products."
+   },
+   {
+    "stage": "🚽 The exit & the test",
+    "d": "Metabolites leave in urine — and this is why athletes get caught. WADA bans SARMs in and out of competition, and ostarine and its metabolites are detectable for weeks, producing a long trail of positive doping tests."
+   }
+  ],
+  "myths": [
+   {
+    "myth": "SARMs aren't steroids, so they're basically side-effect-free.",
+    "truth": "They act on the exact same androgen receptor. Enobosarm reliably suppresses your own testosterone, lowers HDL cholesterol, and has caused documented liver injury. \"Not a steroid\" describes its chemistry, not its safety."
+   },
+   {
+    "myth": "\"Selective\" means it only touches muscle.",
+    "truth": "Selectivity is relative and dose-dependent — it favours muscle and bone over prostate and skin, but the whole-body androgen signal (and therefore HPTA shutdown) is fully intact. The higher the dose, the less selective it behaves."
+   },
+   {
+    "myth": "It's legal and basically a supplement.",
+    "truth": "No regulator has approved it for any use. It's sold as a \"research chemical,\" it's banned by WADA and most sports bodies, and the FDA has warned against SARMs in fitness products. Bottle contents are routinely not what the label claims."
+   },
+   {
+    "myth": "It passed its muscle trials, so it clearly works as advertised.",
+    "truth": "It added lean body mass in trials — but the Phase 3 POWER program failed its physical-function co-primary endpoint (stair-climb power). More mass on a DXA scan did not reliably translate into people functioning better, which is why it was never approved."
+   }
+  ],
+  "whenToUse": {
+   "intro": "Why people use it — and what it costs:",
+   "items": [
+    "**Why people reach for it:** the pitch is \"steroid-like lean-mass gains with fewer steroid side effects, and a pill instead of an injection.\" The lean-mass part has genuine trial support; the \"fewer side effects\" part is real but oversold.",
+    "**The hormonal cost:** it suppresses your own testosterone (HPTA suppression) and lowers HDL cholesterol. Recovery of natural production after stopping is variable and not well characterised.",
+    "**The liver cost:** there are published case reports of drug-induced liver injury — elevated enzymes and cholestatic jaundice — traced to ostarine-containing products.",
+    "**The legal and testing cost:** not approved for any use anywhere; a WADA-banned substance detectable for weeks. If you're a tested athlete, this ends seasons and careers.",
+    "**The product-quality cost:** independent analyses repeatedly find gray-market SARMs mislabeled, underdosed, overdosed, or spiked with actual anabolic steroids — so you often don't know what you're taking.",
+    "**The honest evidence picture:** the human data is Phase 2 lean-mass gains plus a Phase 3 that failed on function — there is essentially no long-term safety data for healthy people using it to build muscle. This page exists to explain the pharmacology, not to help you run a cycle."
+   ]
+  },
+  "checks": {
+   "start": {
+    "q": "In one line: what does \"selective\" actually mean for a SARM like ostarine?",
+    "a": "It favours the muscle and bone locks over the prostate and skin locks — milder, not clean. It still hits the same androgen receptor and still suppresses your own testosterone."
+   },
+   "how": {
+    "q": "Ostarine and a steroid hit the same receptor — so what physically makes ostarine more tissue-selective?",
+    "a": "Being non-steroidal, it bends the androgen receptor into a different shape, which recruits a different mix of coactivator/corepressor proteins — and muscle/bone carry a different mix than prostate/skin, so it switches AR strongly on in muscle and stays quiet elsewhere."
+   },
+   "use": {
+    "q": "Why is HPTA suppression unavoidable even at low doses?",
+    "a": "Its affinity for AR is high (Ki ≈ 3–4 nM), so even a few milligrams fully engages the receptor — and your hypothalamus/pituitary read that androgen signal and shut down LH/FSH regardless of how \"muscle-selective\" the drug is."
+   },
+   "evidence": {
+    "q": "How strong is the human evidence, really?",
+    "a": "Moderate and mixed: Phase 2 trials show real lean-mass gains, but the Phase 3 POWER program met the lean-mass endpoint and failed the physical-function endpoint, so it was never approved and has no long-term safety data in healthy users."
+   }
+  },
+  "canExplain": [
+   "Why a non-steroidal molecule can hit the exact same receptor as testosterone",
+   "What \"tissue-selective\" really means — and why it's relative, not absolute",
+   "Why even a muscle-selective drug still shuts down your own testosterone",
+   "Why the effect builds over weeks (gene transcription) rather than minutes",
+   "Why it added muscle in trials yet was still rejected by the FDA — and why athletes test positive for it"
+  ],
+  "selfTest": [
+   {
+    "q": "A friend says ostarine is safe because \"it's not a steroid, it's selective.\" Give the two-part correction.",
+    "a": "(1) \"Not a steroid\" is about chemistry, not safety — it acts on the same androgen receptor. (2) \"Selective\" means it favours muscle/bone over prostate/skin, but the whole-body androgen signal is intact, so it still suppresses your own testosterone, lowers HDL, and has caused liver injury."
+   },
+   {
+    "q": "Ostarine raised lean body mass in Phase 3, yet the FDA said no. What single missing result explains that?",
+    "a": "It failed the co-primary physical-function endpoint (stair-climb power). Extra mass on the DXA scan didn't reliably translate into better physical function, and the FDA required both — so more muscle alone wasn't enough."
+   },
+   {
+    "q": "Why does the ~24 h half-life tell you almost nothing about how fast you'll see results?",
+    "a": "Because the effect isn't a blood-level phenomenon like a stimulant — it's driven by the androgen receptor turning genes on over weeks. The half-life sets dosing frequency, but muscle accrual (and HPTA suppression) run on the slow transcription timescale, not the clearance clock."
+   }
+  ],
+  "evi": {
+   "howStrong": "For a SARM, ostarine has the strongest human evidence of the class — it's the most clinically studied, with real randomised Phase 2 trials and a completed Phase 3 program. But \"strongest SARM evidence\" is a low bar: the pivotal Phase 3 POWER trials met the lean-mass endpoint and FAILED the physical-function endpoint, so no regulator has approved it for anything, and there is essentially no long-term safety data in healthy people using it for physique.",
+   "whatItShows": "Consistently, across trials, enobosarm adds lean body mass versus placebo. What it has NOT convincingly shown is that the added mass makes people function better — the endpoint that actually matters clinically and the one that sank its cancer-cachexia approval.",
+   "effect": "In the Phase 2 trials the lean-mass gain was on the order of ~1–1.5 kg over roughly 12 weeks at 3 mg/day. That's a real, measurable anabolic effect — but modest, and not matched by a reliable functional improvement in the larger Phase 3 program.",
+   "whoBenefits": "Studied populations were people losing muscle: healthy older adults and cancer patients with cachexia, where preserving lean mass is the goal. Its use in young healthy people for bodybuilding is entirely off-label, gray-market, and unstudied for safety.",
+   "caveats": "The functional endpoint failure is the crux — muscle on a scan is not the same as being stronger or more capable. Add the near-universal HPTA suppression, lowered HDL, documented liver-injury case reports, WADA ban, and the fact that black-market products are frequently mislabeled or contaminated. Treat the trial numbers as the best case under clean, dosed, monitored conditions — not what a gray-market capsule delivers.",
+   "trials": [
+    {
+     "finding": "Phase 2, 120 healthy elderly men and postmenopausal women: 3 mg/day enobosarm significantly increased total lean body mass (~1.3–1.5 kg over 12 weeks) and improved stair-climb power versus placebo, without adverse effects on hair or sebum.",
+     "ref": "Dalton et al., 2011, J Cachexia Sarcopenia Muscle"
+    },
+    {
+     "finding": "Phase 2, cancer patients: enobosarm (1 mg and 3 mg) significantly increased lean body mass versus baseline (~1.0–1.5 kg median), supporting an anabolic effect in muscle-wasting disease.",
+     "ref": "Dobs et al., 2013, Lancet Oncology"
+    },
+    {
+     "finding": "Phase 3 POWER trials (NSCLC muscle wasting; 3 mg/day): enobosarm met the lean-body-mass co-primary endpoint but failed the physical-function (stair-climb power) co-primary endpoint, leading to lack of FDA approval.",
+     "ref": "Crawford et al., 2016 (POWER design, Curr Oncol Rep); outcome reviewed in Lambert, 2021, J Cachexia Sarcopenia Muscle"
+    },
+    {
+     "finding": "Phase 2 in AR-positive, ER-positive, HER2-negative advanced breast cancer: enobosarm showed clinical activity, reflecting ongoing legitimate oncology development of the molecule.",
+     "ref": "Enobosarm Study G200802, 2024, Lancet Oncology 25:317–325"
+    }
+   ]
+  },
+  "tech": {
+   "chem": "Enobosarm (MK-2866, GTx-024; CAS 841205-47-8) is a non-steroidal selective androgen receptor modulator — an aryl-propionamide derivative, structurally unrelated to the steroid nucleus of testosterone despite sharing its target. Its non-steroidal scaffold is central to the tissue-selectivity hypothesis: it induces a distinct receptor conformation from that produced by steroidal androgens.",
+   "targets": [
+    {
+     "sym": "AR (androgen receptor)",
+     "url": "https://www.ncbi.nlm.nih.gov/gene/367",
+     "action": "tissue-selective agonist",
+     "affinity": "Ki ≈ 3–4 nM (high/low-nanomolar; a few-fold weaker than testosterone or DHT — a moderate-potency agonist)",
+     "role": "the sole primary target; a nuclear hormone receptor / ligand-activated transcription factor. Anabolic activation in muscle and bone, with minimal stimulation of prostate and skin."
+    }
+   ],
+   "signaling": "The androgen receptor is a nuclear hormone receptor. In the unliganded state it sits in the cytoplasm complexed with chaperones (e.g. HSP90). Ligand binding triggers chaperone release, receptor dimerisation, nuclear translocation, and binding to androgen-response elements in DNA, driving transcription of anabolic genes. Tissue selectivity is attributed to the non-steroidal ligand inducing a receptor conformation that recruits a tissue-specific balance of coactivators and corepressors — strong transcriptional output in muscle/bone, weak in prostate/skin. Systemically, the same androgen signal engages hypothalamic-pituitary negative feedback, suppressing GnRH/LH/FSH and hence endogenous testosterone.",
+   "adme": {
+    "absorb": "Orally bioavailable with exposure sufficient for once-daily dosing; taken by mouth in trials.",
+    "distribute": "Distributes to androgen-receptor-bearing tissues including skeletal muscle and bone.",
+    "metabolise": "Hepatic metabolism (oxidation and glucuronidation); characteristic metabolites are the basis of anti-doping detection assays.",
+    "excrete": "Metabolites eliminated in urine (and feces); parent and metabolites detectable in urine for weeks, underpinning WADA testing. Elimination half-life ≈ 24 h."
+   },
+   "pgx": "No validated compound-specific pharmacogenetic marker. AR sensitivity varies generally with AR-gene CAG-repeat length, but this has not been characterised for enobosarm response, so individual variation should be treated as unpredictable.",
+   "dose": "Trial doses were low and monitored: 1 mg and 3 mg/day in the muscle-wasting Phase 2/3 program (3 mg being the anabolic dose in healthy older adults); the later breast-cancer oncology trial used higher 9–18 mg/day doses. Gray-market/anecdotal physique use commonly runs higher still (often cited around 10–25 mg/day), at doses never validated for safety — this is a description, not a recommendation. No approved therapeutic dose exists.",
+   "tolerance": "There is no receptor-downregulation tolerance in the caffeine sense. The dominant time-dependent consequence is cumulative HPTA suppression (falling endogenous testosterone, lowered HDL) that builds with continued use and recovers variably after cessation; this — not tachyphylaxis — is what governs \"on/off\" cycling in practice."
+  },
+  "contrasts": [
+   {
+    "title": "Ostarine vs testosterone — filed-down key vs master key",
+    "point": "Same lock (the androgen receptor), opposite reach. Testosterone is a steroid <b>master key</b> that turns every androgen lock — muscle, prostate, skin, scalp — which is why it's powerful and why it comes with prostate, hair, and virilisation effects. Ostarine is a non-steroidal <b>filed-down key</b>: it turns the muscle-and-bone locks hard and barely catches the others, giving a milder side profile at lower potency. But the master-key's biggest alarm still trips on both — your brain sees an androgen in the lock and shuts down your own production."
+   }
+  ]
  }
 }
