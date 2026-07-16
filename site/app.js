@@ -1584,25 +1584,38 @@
   function targetPage(sym) {
     const t = targetBySym[tkey(decodeURIComponent(sym))]; if (!t) return notFound();
     const list = t.compoundIds.map(id => byId[id]).filter(Boolean).sort((a, b) => b.stars - a.stars);
-    // which pathways involve compounds that hit this target
     const pw = {}; list.forEach(c => (c.pathwayIds || []).forEach(i => pw[i] = (pw[i] || 0) + 1));
     const pwChips = Object.keys(pw).sort((a, b) => pw[b] - pw[a]).slice(0, 4).map(i => `<a class="ex-node p" href="#/pathway/${i}">${D.pathways[i].shortLabel}</a>`).join('');
-    return `<div class="detail">
-      ${crumbs([{ label: 'Home', href: '#/' }, { label: 'Browse targets', href: '#/browse' }, { label: t.sym }])}
-      <div class="target-hero">
-        <div class="tsym">${t.sym}</div>
-        <div>
-          <h1>${t.name.replace(new RegExp('^' + t.sym + '\\s*', 'i'), '') || t.sym}</h1>
+    const cleanName = t.name.replace(new RegExp('^' + t.sym + '\\s*', 'i'), '') || t.sym;
+    const crumb = crumbs([{ label: 'Home', href: '#/' }, { label: 'Browse targets', href: '#/browse' }, { label: t.sym }]);
+    const cpdSection = list.length ? `<div class="section-title">Compounds acting on ${esc(t.sym)} (${list.length})</div><div class="card-grid">${list.map(cpdCard).join('')}</div>` : '';
+    const explainerHtml = (t.explainer && t.explainer.html) ? `<div class="target-explainer">${t.explainer.html}</div>` : '';
+    // Legacy render until the learning layer is authored (graceful degradation)
+    if (!(t.hook || t.bigIdea || t.mechSteps)) {
+      return `<div class="detail">${crumb}
+        <div class="target-hero"><div class="tsym">${t.sym}</div><div><h1>${cleanName}</h1>
           <p style="color:var(--muted);margin:.3rem 0"><b>${list.length} compound${list.length > 1 ? 's' : ''}</b> in the wiki act${list.length > 1 ? '' : 's'} on this target. Learn what it does once, and every compound below makes sense.</p>
-          <p><a href="${t.url}" target="_blank" rel="noopener">Official NCBI Gene record →</a></p>
-          ${pwChips ? `<div class="ex-nodes" style="margin-top:.6rem">${pwChips}</div>` : ''}
-        </div>
-      </div>
-      ${t.explainer ? `<div class="target-explainer">${t.explainer.html}</div>` : ''}
-      <div class="suggest-row"><button class="linkbtn" data-suggest="analogy" data-ref="${esc(t.sym)}">💡 Suggest a plain-English analogy</button></div>
-      <div class="section-title">Compounds acting on ${t.sym}</div>
-      <div class="card-grid">${list.map(cpdCard).join('')}</div>
-    </div>`;
+          <p><a href="${t.url}" target="_blank" rel="noopener">Official record →</a></p>${pwChips ? `<div class="ex-nodes" style="margin-top:.6rem">${pwChips}</div>` : ''}</div></div>
+        ${explainerHtml}<div class="suggest-row"><button class="linkbtn" data-suggest="analogy" data-ref="${esc(t.sym)}">💡 Suggest a plain-English analogy</button></div>
+        <div class="section-title">Compounds acting on ${t.sym}</div><div class="card-grid">${list.map(cpdCard).join('')}</div></div>`;
+    }
+    // Chaptered lesson — reuse the pedagogy components via a pseudo-compound
+    const pc = Object.assign({}, t, { name: t.sym, id: 'tg-' + tkey(t.sym) });
+    const ch1 = hookBox(pc) + stakesLine(pc) + bigIdeaBanner(pc) + analogyBox(pc) + explainerHtml;
+    const ch2 = mechanismCascade(pc) + mythsBox(pc);
+    const ch3 = (cpdSection || '<p class="muted">Compounds that act here are being added.</p>') + `<p class="pw-cpd-note">Every compound here acts on ${esc(t.sym)} — open any to see whether it switches this target on or off, then come back.</p>` + (pwChips ? `<div class="section-title">Pathways this feeds into</div><div class="ex-nodes">${pwChips}</div>` : '');
+    const ch4 = selfTestBox(pc) + feynmanBox(pc) + graduationBlock(pc);
+    const chapterDefs = [
+      { n: 1, icon: '🌱', label: 'What it is', html: ch1 }, { n: 2, icon: '⚙️', label: 'How it works', html: ch2 },
+      { n: 3, icon: '💊', label: 'What acts on it', html: ch3 }, { n: 4, icon: '🎓', label: 'Prove it', html: ch4 },
+    ].filter(ch => ch.html && ch.html.trim());
+    const tabs = `<div class="ch-steps" role="tablist">${chapterDefs.map((ch, k) => `<button class="ch-step${k === 0 ? ' active' : ''}" data-ch="${ch.n}"><span class="cs-num">${k + 1}</span><span class="cs-label">${ch.icon} ${esc(ch.label)}</span></button>`).join('')}</div>`;
+    const sections = `<div class="chapters" id="cpd-chapters">${chapterDefs.map((ch, k) => { const nx = chapterDefs[k + 1]; const nav = nx ? `<button class="ch-next-btn" data-chgo="${nx.n}">Next: ${nx.icon} ${esc(nx.label)} →</button>` : ''; return `<section class="chapter${k === 0 ? ' active' : ''}" data-chapter="${ch.n}">${ch.html}${nav ? `<div class="ch-nav">${nav}</div>` : ''}</section>`; }).join('')}</div>`;
+    setTimeout(() => { wirePathwayLearning(pc); }, 0);
+    return `<div class="detail lesson-detail" id="tg-detail">${crumb}
+      <div class="target-hero"><div class="tsym">${t.sym}</div><div><h1>${cleanName}</h1><span class="pw-badge">🎯 Molecular target · ${list.length} compound${list.length > 1 ? 's' : ''}</span><p><a href="${t.url}" target="_blank" rel="noopener">Official record ↗</a></p></div></div>
+      <p class="ch-lead">Learn this target once — then every compound that acts on it makes sense. Tap through from beginner to expert.</p>
+      ${tabs}${sections}</div>`;
   }
 
   function browsePage() {
@@ -1749,7 +1762,7 @@
     const tabs = `<div class="ch-steps" role="tablist">${chapterDefs.map((ch, k) => `<button class="ch-step${k === 0 ? ' active' : ''}" data-ch="${ch.n}"><span class="cs-num">${k + 1}</span><span class="cs-label">${ch.icon} ${esc(ch.label)}</span></button>`).join('')}</div>`;
     const sections = `<div class="chapters" id="cpd-chapters">${chapterDefs.map((ch, k) => { const nx = chapterDefs[k + 1]; const nav = nx ? `<button class="ch-next-btn" data-chgo="${nx.n}">Next: ${nx.icon} ${esc(nx.label)} →</button>` : ''; return `<section class="chapter${k === 0 ? ' active' : ''}" data-chapter="${ch.n}">${ch.html}${nav ? `<div class="ch-nav">${nav}</div>` : ''}</section>`; }).join('')}</div>`;
     setTimeout(() => { wirePathwayLearning(pc); }, 0);
-    return `<div class="detail" id="pw-detail">${crumb}
+    return `<div class="detail lesson-detail" id="pw-detail">${crumb}
       <div class="detail-head"><div><h1>${esc(p.shortLabel)}</h1><span class="pw-badge">🧬 Master pathway</span></div></div>
       ${pwFactHtml}${journeyRibbon('pathway', i)}
       <p class="ch-lead">A step-by-step lesson on this master control system — tap through from beginner to expert.</p>
@@ -1758,7 +1771,7 @@
       <div id="goal-comments" class="page-discuss"></div></div>`;
   }
   function wirePathwayLearning(pc) {
-    const root = document.getElementById('pw-detail'); if (!root) return;
+    const root = document.querySelector('.lesson-detail'); if (!root) return;
     const chapters = document.getElementById('cpd-chapters');
     const allSteps = [...root.querySelectorAll('.ch-step')];
     const showChapter = (n, scroll) => {
