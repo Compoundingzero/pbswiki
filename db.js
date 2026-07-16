@@ -257,6 +257,11 @@ CREATE TABLE IF NOT EXISTS clinician_interest (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_clinician_created ON clinician_interest(created_at DESC);
+-- Widened from Singapore-GP-only to any healthcare professional worldwide: country, professional
+-- registration/licence number, and a photo proof of credentials (stored as a data URL) for verification.
+ALTER TABLE clinician_interest ADD COLUMN IF NOT EXISTS country TEXT;
+ALTER TABLE clinician_interest ADD COLUMN IF NOT EXISTS license_no TEXT;
+ALTER TABLE clinician_interest ADD COLUMN IF NOT EXISTS proof_photo TEXT;
 
 -- The outcome loop (Phase 4). One experiment = one participant running one protocol. participant is
 -- 'u:<user id>' when signed in, else 'v:<anonymous voter key>' so anyone can take part and the ledger

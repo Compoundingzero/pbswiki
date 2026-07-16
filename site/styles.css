@@ -2593,3 +2593,8 @@ a.dp-name:hover{color:var(--accent)}
 .whenuse.danger .wu-h{color:#dc2626}
 .whenuse.caution{background:color-mix(in srgb,#d97706 5%,transparent);border-color:color-mix(in srgb,#d97706 28%,var(--line))}
 .whenuse.caution .wu-h{color:#b45309}
+
+/* /gp contributor form — credential photo hint + file input */
+.gp-form .gp-hint{display:block;margin-top:.35rem;font-size:.78rem;color:var(--muted);line-height:1.4}
+.gp-form input[type=file]{display:block;width:100%;margin-top:.3rem;padding:.55rem;border:1px dashed var(--line);border-radius:10px;background:var(--panel);font:inherit;font-size:.88rem;cursor:pointer;color:var(--muted)}
+.gp-form select{width:100%;padding:.6rem .7rem;border:1px solid var(--line);border-radius:10px;background:var(--panel);font:inherit;color:inherit}

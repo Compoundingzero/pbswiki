@@ -947,7 +947,7 @@
     <section class="trust reveal">
       <div class="section-title center">Open, and honest</div>
       <h2 class="wr-head">Not a wiki of opinions.<br>An <span class="lead">open, evidence-ranked</span> engine.</h2>
-      <p class="trust-lead">Every protocol here is ranked by the strength of real human evidence — hype earns nothing, and it’s free to read and use today. The information is overseen by verified Singapore GPs who stand behind its accuracy and credibility.</p>
+      <p class="trust-lead">Every protocol here is ranked by the strength of real human evidence — hype earns nothing, and it’s free to read and use today. The information is overseen by verified healthcare professionals worldwide who stand behind its accuracy and credibility.</p>
       <div class="trust-row">
         <div class="trust-pill"><b>${cc.compounds}</b> compounds, evidence-ranked</div>
         <div class="trust-pill"><b>${GRAPH.problems.length}</b> problems, mapped to root causes</div>
@@ -957,7 +957,7 @@
 
     <section class="gp-home reveal">
       <div class="gp-home-inner">
-        <div class="gp-home-txt"><div class="gp-eyebrow">For Singapore GPs</div><h2>Are you a doctor? Turn your expertise into a clinic patients seek out.</h2><p>Feature your clinic, build recurring patient programs, and join a free alliance that cuts your cost of goods — by overseeing the information you already know best.</p></div>
+        <div class="gp-home-txt"><div class="gp-eyebrow">For healthcare professionals worldwide</div><h2>A health professional? Share what you know — and help thousands.</h2><p>Doctor, nurse, pharmacist, dietitian, physio, TCM, coach — anywhere in the world. Contribute the knowledge you already have, build a name people trust, and help them live healthier. Free.</p></div>
         <a class="cta-primary" href="#/gp">See how it works →</a>
       </div>
     </section>
@@ -2453,7 +2453,7 @@
       // GP-only model: all provider queues merged into GP/Clinics; feedback + requests merged.
       const OPS = [
         ['members', '👥', 'Members', 'Everyone who signed up — emails, join dates & roles'],
-        ['gps', '🩺', 'GP & clinic applications', 'Singapore GPs registering interest + clinics to feature'],
+        ['gps', '🩺', 'Professional applications', 'Health professionals worldwide applying to contribute + clinics to feature'],
         ['feedback', '💬', 'Feedback & requests', 'Ideas, bug reports and features users asked for'],
         ['foods', '🥗', 'Food submissions', 'User-submitted foods awaiting your approval'],
       ];
@@ -2487,13 +2487,13 @@
       const body = app.querySelector('#adm-body'); if (!OV) return;
       if (tab === 'gps') {   // GP-only: interest (from /gp) + verified-badge applications + clinics to feature
         const ci = OV.clinicians || [];
-        const ciRows = ci.length ? ci.map(c => `<tr><td>${esc(c.name)}</td><td>${esc(c.email)}</td><td>${esc(c.note || c.discipline || '—')}</td><td>${c.created_at ? esc(String(c.created_at).slice(0, 10)) : '—'}</td></tr>`).join('') : '<tr><td colspan="4" class="muted">No GP interest yet — share the <a href="#/gp">/gp</a> landing page.</td></tr>';
+        const ciRows = ci.length ? ci.map(c => `<tr><td>${esc(c.name)}<br><span class="muted" style="font-size:.8rem">${esc(c.email)}</span>${c.note ? `<br><span class="muted" style="font-size:.78rem">“${esc(c.note)}”</span>` : ''}</td><td>${esc(c.discipline || '—')}</td><td>${esc(c.country || '—')}</td><td>${esc(c.license_no || '—')}</td><td>${c.has_proof ? `<a class="admin-btn" href="/api/clinician-photo?id=${c.id}" target="_blank" rel="noopener">View proof↗</a>` : '<span class="muted">none</span>'}</td><td>${c.created_at ? esc(String(c.created_at).slice(0, 10)) : '—'}</td></tr>`).join('') : '<tr><td colspan="6" class="muted">No applications yet — share the <a href="#/gp">/gp</a> page.</td></tr>';
         const ex = OV.experts || [];
         const exRows = ex.length ? ex.map(e => { const status = e.domain_verified ? '✓ verified' : (e.application_status || 'none'); const actions = e.domain_verified ? `<button class="admin-btn" data-verify="${esc(e.username)}" data-to="0">Revoke</button>` : `<button class="admin-btn ok" data-verify="${esc(e.username)}" data-to="1">Approve</button> <button class="admin-btn" data-verify="${esc(e.username)}" data-to="0">Reject</button>`; return `<tr><td>@${esc(e.username)}</td><td>${esc(e.credential || '—')}${e.role_backlink ? ` · <a href="${esc(e.role_backlink)}" target="_blank" rel="noopener nofollow">backlink↗</a>` : ''}</td><td>${esc(status)}</td><td>${actions}</td></tr>`; }).join('') : '<tr><td colspan="4" class="muted">No badge applications.</td></tr>';
         const pt = OV.partners || [];
         const ptRows = pt.length ? pt.map(p => `<tr><td>${esc(p.name)}</td><td>${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">site</a>` : '—'}${p.backlink_url ? ` · <a href="${esc(p.backlink_url)}" target="_blank" rel="noopener">backlink↗</a>` : ''}</td><td>${esc(p.status)}</td><td>${p.status !== 'active' ? `<button class="admin-btn ok" data-partner="${p.id}" data-to="active">Approve</button> ` : ''}${p.status !== 'rejected' ? `<button class="admin-btn" data-partner="${p.id}" data-to="rejected">Reject</button>` : ''}</td></tr>`).join('') : '<tr><td colspan="4" class="muted">No clinics listed yet.</td></tr>';
-        body.innerHTML = `<p class="muted">Singapore GPs &amp; clinics only. <a class="admin-btn ok" href="/api/admin/export?type=clinicians" download>⤓ Export GP interest (CSV)</a></p>
-          <h3 class="adm-sub-h">🩺 GP interest — from the /gp page</h3><div class="ao-table-wrap"><table class="board"><thead><tr><th>Name</th><th>Email</th><th>Clinic / note</th><th>When</th></tr></thead><tbody>${ciRows}</tbody></table></div>
+        body.innerHTML = `<p class="muted">Health professionals worldwide. <a class="admin-btn ok" href="/api/admin/export?type=clinicians" download>⤓ Export applications (CSV)</a></p>
+          <h3 class="adm-sub-h">🩺 Contributor applications — from the /gp page</h3><div class="ao-table-wrap"><table class="board"><thead><tr><th>Name</th><th>Profession</th><th>Country</th><th>Licence no.</th><th>Proof</th><th>When</th></tr></thead><tbody>${ciRows}</tbody></table></div>
           <h3 class="adm-sub-h">✅ Verified-badge applications</h3><div class="ao-table-wrap"><table class="board"><thead><tr><th>User</th><th>Credential</th><th>Status</th><th></th></tr></thead><tbody>${exRows}</tbody></table></div>
           <h3 class="adm-sub-h">🏥 Clinics to feature</h3><div class="ao-table-wrap"><table class="board"><thead><tr><th>Clinic</th><th>Links</th><th>Status</th><th></th></tr></thead><tbody>${ptRows}</tbody></table></div>`;
         body.querySelectorAll('[data-verify]').forEach(b => b.onclick = () => act(() => api.adminVerify(b.dataset.verify, b.dataset.to === '1')));
@@ -5519,16 +5519,16 @@
     el.querySelectorAll('[data-food-no]').forEach(b => b.onclick = async () => { try { await api.verifyFood(b.dataset.foodNo, 'rejected'); mountFoodQueue(); } catch (e) { alert(e.message); } });
   }
 
-  // ---------- /gp — emotional, scroll-driven landing page to recruit Singapore GPs (indication of interest) ----------
-  // Features shown here are a DEMO of the vision (not yet built) — the goal is to convert doctors to register interest.
+  // ---------- /gp — emotional, scroll-driven landing page to recruit healthcare professionals worldwide ----------
+  // A knowledge-sharing platform: professionals of any discipline apply (with credential proof) to contribute.
   function renderGpLanding() {
-    app.innerHTML = `${crumbs([{ label: 'Home', href: '#/' }, { label: 'For GPs' }])}
+    app.innerHTML = `${crumbs([{ label: 'Home', href: '#/' }, { label: 'For professionals' }])}
       <section class="gp-hero">
-        <div class="gp-eyebrow">For Singapore GPs &amp; clinics</div>
-        <h1 class="gp-h1">You trained for years to <span class="lead">heal people</span>.<br>Not to fight for the next one-off sale.</h1>
-        <p class="gp-sub">Turn your expertise into a clinic patients <b>seek out</b> — and programs they <b>stay in</b>. Free, for Singapore's founding clinics.</p>
-        <a class="cta-primary gp-cta" href="#gp-apply">Register your clinic's interest →</a>
-        <div class="gp-hero-note">Takes 60 seconds · no cost · no obligation</div>
+        <div class="gp-eyebrow">For healthcare professionals worldwide</div>
+        <h1 class="gp-h1">You trained for years to <span class="lead">help people</span>.<br>Here, what you know helps thousands.</h1>
+        <p class="gp-sub">Share your expertise, cut through the health noise, and help people everywhere live better — while building a name the world learns to <b>trust</b>. Free, for every professional who makes health make sense.</p>
+        <a class="cta-primary gp-cta" href="#gp-apply">Join as a contributor →</a>
+        <div class="gp-hero-note">Takes 60 seconds · no cost · open to every discipline</div>
         <div class="gp-scrollhint">Scroll to see how ↓</div>
       </section>
 
@@ -5566,14 +5566,14 @@
           </div>
           <div class="gpx-cap">
             <div class="gpx-cap-l gpx-cap-pain">
-              <span class="gpx-name gpx-name-pain">Lost in the crowd</span>
-              <h3>You're one clinic among dozens.</h3>
-              <p>Patients scroll straight past. There's nothing to pick you for but price. You did the training, you have the skill — and still, you're invisible.</p>
+              <span class="gpx-name gpx-name-pain">Capped by the clock</span>
+              <h3>Your expertise stops at the door.</h3>
+              <p>You help one person at a time, for as many hours as a day holds. Years of training — and its reach is limited to whoever can reach you.</p>
             </div>
             <div class="gpx-cap-l gpx-cap-fix">
-              <span class="gpx-name gpx-name-fix">The name they trust</span>
-              <h3>Now you're the name they <span class="lead">seek out</span>.</h3>
-              <p>Your reliable contributions lift your clinic to the top of what patients see nearby. They choose you for credibility — not the cheapest price.</p>
+              <span class="gpx-name gpx-name-fix">The voice they trust</span>
+              <h3>Now your knowledge reaches <span class="lead">everyone</span> who needs it.</h3>
+              <p>What you know rises above the noise — helping people across the world find clarity, with your name and credentials on every trusted contribution.</p>
             </div>
           </div>
           <div class="gpx-cue">keep scrolling ↓</div>
@@ -5601,14 +5601,14 @@
           </div>
           <div class="gpx-cap">
             <div class="gpx-cap-l gpx-cap-pain">
-              <span class="gpx-name gpx-name-pain">Here today, gone forever</span>
-              <h3>Consult. Prescribe. Gone.</h3>
-              <p>Every patient is a one-time transaction. They walk out and you may never see them again. Tomorrow you start back at zero. Again.</p>
+              <span class="gpx-name gpx-name-pain">Drowning in noise</span>
+              <h3>The internet is full of health nonsense.</h3>
+              <p>For every good answer, a hundred bad ones. People follow influencers over experts — and get hurt by advice that's confident and wrong.</p>
             </div>
             <div class="gpx-cap-l gpx-cap-fix">
-              <span class="gpx-name gpx-name-fix">Patients who stay</span>
-              <h3>They join <span class="lead">your</span> program — and stay.</h3>
-              <p>From the protocols you maintain, patients enrol in programs you built — buying supplements and prescriptions through your clinic, month after month.</p>
+              <span class="gpx-name gpx-name-fix">You put the signal back</span>
+              <h3>Your knowledge becomes the layer people <span class="lead">actually trust</span>.</h3>
+              <p>Verified by real professionals, your contributions become the reference people rely on — working for thousands, long after you write them.</p>
             </div>
           </div>
           <div class="gpx-cue">keep scrolling ↓</div>
@@ -5623,15 +5623,15 @@
                 <line class="gpx-ln" style="--d:.2" x1="200" y1="72" x2="86" y2="34" pathLength="100"/><line class="gpx-ln" style="--d:.3" x1="200" y1="72" x2="330" y2="40" pathLength="100"/><line class="gpx-ln" style="--d:.4" x1="200" y1="72" x2="60" y2="96" pathLength="100"/><line class="gpx-ln" style="--d:.5" x1="200" y1="72" x2="346" y2="100" pathLength="100"/><line class="gpx-ln" style="--d:.6" x1="200" y1="72" x2="130" y2="122" pathLength="100"/><line class="gpx-ln" style="--d:.7" x1="200" y1="72" x2="280" y2="124" pathLength="100"/>
               </g>
               <g class="gpx-sats" fill="#16a34a">
-                <g transform="translate(86,34)" class="gpx-sat" style="--d:.24"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
-                <g transform="translate(330,40)" class="gpx-sat" style="--d:.34"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
-                <g transform="translate(60,96)" class="gpx-sat" style="--d:.44"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
-                <g transform="translate(346,100)" class="gpx-sat" style="--d:.54"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
-                <g transform="translate(130,122)" class="gpx-sat" style="--d:.64"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
-                <g transform="translate(280,124)" class="gpx-sat" style="--d:.74"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🏥</text></g>
+                <g transform="translate(86,34)" class="gpx-sat" style="--d:.24"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🧑‍⚕️</text></g>
+                <g transform="translate(330,40)" class="gpx-sat" style="--d:.34"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🧑‍⚕️</text></g>
+                <g transform="translate(60,96)" class="gpx-sat" style="--d:.44"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🧑‍⚕️</text></g>
+                <g transform="translate(346,100)" class="gpx-sat" style="--d:.54"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🧑‍⚕️</text></g>
+                <g transform="translate(130,122)" class="gpx-sat" style="--d:.64"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🧑‍⚕️</text></g>
+                <g transform="translate(280,124)" class="gpx-sat" style="--d:.74"><circle r="15" fill="#dcfce7"/><text x="0" y="5" text-anchor="middle" font-size="15">🧑‍⚕️</text></g>
               </g>
               <g transform="translate(200,72)"><circle r="26" class="gpx-center-halo" fill="#22c55e" opacity="0"/><circle r="21" fill="#16a34a"/><rect x="-9" y="-9" width="18" height="18" rx="3" fill="#fff"/><path d="M0 -6 v12 M-6 0 h12" stroke="#16a34a" stroke-width="3"/></g>
-              <text x="200" y="168" text-anchor="middle" class="gpx-lbl">Your margin on a box of medicine</text>
+              <text x="200" y="168" text-anchor="middle" class="gpx-lbl">The reach of what you know</text>
               <g transform="translate(70,178)">
                 <rect x="0" y="0" width="260" height="20" rx="6" fill="#fecaca"/>
                 <rect class="gpx-keep" x="0" y="0" width="260" height="20" rx="6" fill="#22c55e"/>
@@ -5640,14 +5640,14 @@
           </div>
           <div class="gpx-cap">
             <div class="gpx-cap-l gpx-cap-pain">
-              <span class="gpx-name gpx-name-pain">The margin trap</span>
-              <h3>The medicine sells. You barely keep a cent.</h3>
-              <p>Drug costs devour the margin on every box. You became a doctor to change lives — and the business turned you into a dispensary running on fumes.</p>
+              <span class="gpx-name gpx-name-pain">One expert, one tide</span>
+              <h3>Alone, you can't fix health.</h3>
+              <p>You can correct the myths in front of you — but the tide of misinformation is bigger than any one person, in any one place.</p>
             </div>
             <div class="gpx-cap-l gpx-cap-fix">
               <span class="gpx-name gpx-name-fix">Stronger together</span>
-              <h3>A network that <span class="lead">lifts every clinic</span>.</h3>
-              <p>The alliance buys in bulk, so your cost of goods drops — and clinics share stock through consignment. Your margin grows. And it costs you nothing.</p>
+              <h3>A <span class="lead">global community</span> of professionals.</h3>
+              <p>Thousands of verified experts, each adding their slice, together build the most trusted health resource in the world — and your name is part of it.</p>
             </div>
           </div>
           <div class="gpx-cue">keep scrolling ↓</div>
@@ -5655,53 +5655,64 @@
       </section>
 
       <section class="gpj" id="gpj">
-        <div class="gpj-head"><div class="gp-eyebrow">How it works — from your chair</div><h2>You already have the expertise.<br>Here's how it <span class="lead">compounds</span>.</h2></div>
+        <div class="gpj-head"><div class="gp-eyebrow">How it works — from wherever you are</div><h2>You already have the expertise.<br>Here's how it <span class="lead">compounds</span>.</h2></div>
         <div class="gpj-track">
           <div class="gpj-line"><div class="gpj-fill" id="gpj-fill"></div></div>
           <div class="gpj-steps">
-            <div class="gpj-step"><div class="gpj-node">✍️</div><div class="gpj-body"><h4>You share what you know</h4><p>Review and sharpen the clinical information in your field — a few minutes when you have them. Your name and clinic ride on every trusted contribution.</p></div></div>
-            <div class="gpj-step"><div class="gpj-node">⭐</div><div class="gpj-body"><h4>Trust compounds</h4><p>Every patient your expertise helps adds to your clinic's standing. Credibility you build once keeps working for you.</p></div></div>
-            <div class="gpj-step"><div class="gpj-node">📍</div><div class="gpj-body"><h4>Your clinic gets featured</h4><p>You rise on “Top trusted clinics near you.” The people in your neighbourhood discover you first — for credibility, not price.</p></div></div>
-            <div class="gpj-step"><div class="gpj-node">🧬</div><div class="gpj-body"><h4>You build the programs</h4><p>Turn the reliable protocols you maintain into programs patients enrol in — your name, your care, your standards.</p></div></div>
-            <div class="gpj-step"><div class="gpj-node">🔁</div><div class="gpj-body"><h4>Patients stay — and buy through you</h4><p>Supplements and prescriptions flow through your clinic, month after month. A recurring relationship that compounds — all of it free to you.</p></div></div>
+            <div class="gpj-step"><div class="gpj-node">✍️</div><div class="gpj-body"><h4>You share what you know</h4><p>Contribute and sharpen the health knowledge in your field — a few minutes when you have them. Your name and credentials ride on every trusted contribution.</p></div></div>
+            <div class="gpj-step"><div class="gpj-node">⭐</div><div class="gpj-body"><h4>Your reputation compounds</h4><p>Every person your expertise helps builds your standing as a verified expert. Credibility you build once keeps working for you.</p></div></div>
+            <div class="gpj-step"><div class="gpj-node">🌍</div><div class="gpj-body"><h4>You reach people everywhere</h4><p>Your guidance surfaces to people worldwide searching for real answers — not only those who can sit in front of you.</p></div></div>
+            <div class="gpj-step"><div class="gpj-node">🧬</div><div class="gpj-body"><h4>You shape the protocols</h4><p>Turn your expertise into the trusted, step-by-step protocols people actually follow to eat, move, sleep and live better.</p></div></div>
+            <div class="gpj-step"><div class="gpj-node">🤝</div><div class="gpj-body"><h4>You help people succeed — at scale</h4><p>The impact of your career, multiplied: your knowledge quietly changes how thousands of people live. That's the whole point — and it's free.</p></div></div>
           </div>
         </div>
       </section>
 
       <section class="gp-aspire reveal">
-        <h2>Imagine being the clinic your neighbourhood <span class="lead">names first</span>.</h2>
-        <p>Not the cheapest. Not the closest. The one they <b>trust</b> — with patients who stay, and the respect you earned the day you qualified.</p>
+        <h2>Imagine being one of the experts the world learns to <span class="lead">trust</span>.</h2>
+        <p>Not the loudest. Not the flashiest. The one people rely on to get their health <b>right</b> — with your name on the knowledge that helped them.</p>
       </section>
 
       <section class="gp-faq reveal">
         <div class="section-title center">Straight answers</div>
         <div class="gp-faq-list">
-          <details class="gp-q"><summary>Is it really free?</summary><p>Completely. No fees, no lock-in, no card. We grow only when your clinic does.</p></details>
-          <details class="gp-q"><summary>What's the catch?</summary><p>There isn't one. We're building the trusted health layer for Singapore — and credible GPs are what make it real. Featuring your clinic is simply how patients find that credibility.</p></details>
-          <details class="gp-q"><summary>How much of my time does this take?</summary><p>As little as you like. Review the occasional protocol in your field when you have a spare moment — even small, trusted contributions lift your clinic.</p></details>
-          <details class="gp-q"><summary>Do I have to sell supplements?</summary><p>No obligation at all. The programs and purchases are opt-in — a new recurring revenue stream if you want it, quietly ignored if you don't.</p></details>
-          <details class="gp-q"><summary>Is my information safe?</summary><p>Your details are used solely to contact you about the founding network. Never sold, never shared.</p></details>
+          <details class="gp-q"><summary>Who can join?</summary><p>Any qualified health or healthcare professional, anywhere in the world — doctors, nurses, pharmacists, dietitians, physiotherapists, TCM practitioners, psychologists, health coaches and more. If you're trained to help people be healthier, you belong here.</p></details>
+          <details class="gp-q"><summary>Is it really free?</summary><p>Completely. No fees, no lock-in, no card. It's built by professionals, for people.</p></details>
+          <details class="gp-q"><summary>What's the catch?</summary><p>There isn't one. We're building the world's most trusted health layer — and verified professionals are what make it real.</p></details>
+          <details class="gp-q"><summary>How much of my time does this take?</summary><p>As little as you like. Contribute in your field when you have a spare moment — even small, trusted additions help people and lift your standing.</p></details>
+          <details class="gp-q"><summary>Do I have to sell anything?</summary><p>Never. This is a knowledge platform, not a sales channel. Your only currency here is what you know.</p></details>
+          <details class="gp-q"><summary>Is my information safe?</summary><p>Your details and proof of credentials are used solely to verify you and contact you about the network. Never sold, never shared.</p></details>
         </div>
       </section>
 
       <section class="gp-join" id="gp-apply">
         <div class="gp-join-inner">
           <div class="gp-join-head">
-            <div class="gp-eyebrow">Founding clinics · Singapore</div>
-            <h2>Be one of the <span class="lead">first clinics we feature</span>.</h2>
-            <p>We're hand-picking the founding GPs to shape this network — and to be featured first when patients start searching. It's free, with no obligation. Tell us about your clinic and we'll reach out personally.</p>
+            <div class="gp-eyebrow">Founding contributors · worldwide</div>
+            <h2>Be one of the <span class="lead">first experts we verify</span>.</h2>
+            <p>We're hand-picking the founding professionals to shape this platform — across every discipline and country. It's free, with no obligation. Tell us about yourself, verify your credential, and we'll reach out personally.</p>
           </div>
           <div class="gp-form-card">
             <form id="gp-form" class="gp-form">
-              <div class="gp-2col"><label>Your name<input name="name" required placeholder="Dr …"></label><label>Clinic name<input name="clinic" placeholder="e.g. Tan Family Clinic"></label></div>
-              <div class="gp-2col"><label>Email<input name="email" type="email" required placeholder="you@clinic.sg"></label><label>Phone <span class="opt">optional</span><input name="phone" placeholder="+65 …"></label></div>
-              <div class="gp-2col"><label>Area / region<input name="area" placeholder="e.g. Tampines"></label><label>MCR no. <span class="opt">optional</span><input name="mcr" placeholder="M…"></label></div>
-              <label>Anything you'd like us to know? <span class="opt">optional</span><textarea name="message" rows="2" placeholder="What would make this worth your time?"></textarea></label>
+              <div class="gp-2col"><label>Your name<input name="name" required placeholder="Dr / Nurse / …"></label><label>Email<input name="email" type="email" required placeholder="you@example.com"></label></div>
+              <div class="gp-2col">
+                <label>Your profession<select name="discipline" required>
+                  <option value="" disabled selected>Select…</option>
+                  <option>Doctor / Physician</option><option>Nurse</option><option>Pharmacist</option>
+                  <option>Dietitian / Nutritionist</option><option>Physiotherapist</option><option>TCM practitioner</option>
+                  <option>Psychologist / Therapist</option><option>Dentist</option><option>Health / wellness coach</option>
+                  <option>Researcher / Scientist</option><option>Other health professional</option>
+                </select></label>
+                <label>Country<input name="country" required placeholder="e.g. Singapore"></label>
+              </div>
+              <label>Professional registration / licence no.<input name="license_no" required placeholder="Your licence, registration or council number"></label>
+              <label>Photo proof of your credential<input name="proof" id="gp-proof" type="file" accept="image/*" capture="environment"><span class="gp-hint">A clear photo of your licence, registration card or professional ID. Used only to verify you.</span></label>
+              <label>Anything you'd like us to know? <span class="opt">optional</span><textarea name="message" rows="2" placeholder="Your field of expertise, how you'd like to help…"></textarea></label>
               <div class="auth-err" id="gp-err" hidden></div>
-              <button type="submit" class="cta-primary lg" id="gp-submit">Register my interest →</button>
-              <p class="gp-fineprint">🔒 Singapore-registered GPs &amp; clinics only. Your details are used solely to contact you about the founding network — never sold or shared.</p>
+              <button type="submit" class="cta-primary lg" id="gp-submit">Apply to contribute →</button>
+              <p class="gp-fineprint">🔒 Open to verified health professionals worldwide. Your details and credential proof are used only to verify you and contact you — never sold or shared.</p>
             </form>
-            <div class="gp-done" id="gp-done" hidden><div class="gp-done-ic">🎉</div><h3>You're on the founding list.</h3><p>Thank you — we'll reach out personally. Watch your inbox.</p></div>
+            <div class="gp-done" id="gp-done" hidden><div class="gp-done-ic">🎉</div><h3>You're on the founding list.</h3><p>Thank you — we'll verify your credential and reach out personally. Watch your inbox.</p></div>
           </div>
         </div>
       </section>`;
@@ -5747,14 +5758,23 @@
     initGpScroll('gpx-1'); initGpScroll('gpx-2'); initGpScroll('gpx-3'); initGpJourney('gpj');
     const form = document.getElementById('gp-form'); if (!form) return;
     const err = document.getElementById('gp-err'), btn = document.getElementById('gp-submit');
+    const showErr = (m) => { err.textContent = m; err.hidden = false; btn.disabled = false; btn.textContent = 'Apply to contribute →'; };
     form.onsubmit = async (e) => {
       e.preventDefault(); err.hidden = true; btn.disabled = true; btn.textContent = 'Sending…';
       const b = Object.fromEntries(new FormData(form));
-      const note = [b.clinic && ('Clinic: ' + b.clinic), b.area && ('Area: ' + b.area), b.phone && ('Phone: ' + b.phone), b.mcr && ('MCR: ' + b.mcr), b.message].filter(Boolean).join(' · ');
+      // read the credential photo → data URL (client-side cap so the upload stays reasonable)
+      let proof_photo = '';
+      const fi = document.getElementById('gp-proof'); const file = fi && fi.files && fi.files[0];
+      if (file) {
+        if (!/^image\//.test(file.type)) return showErr('Please attach an image of your credential.');
+        if (file.size > 4 * 1024 * 1024) return showErr('That photo is over 4 MB — please attach a smaller one.');
+        try { proof_photo = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(new Error('Could not read that file')); r.readAsDataURL(file); }); }
+        catch (ex2) { return showErr('Could not read that photo — try another.'); }
+      }
       try {
-        await api.submitClinicianInterest({ name: b.name, email: b.email, discipline: 'GP', note });
+        await api.submitClinicianInterest({ name: b.name, email: b.email, discipline: b.discipline || 'Other', country: b.country, license_no: b.license_no, proof_photo, note: b.message });
         form.hidden = true; const done = document.getElementById('gp-done'); if (done) done.hidden = false;
-      } catch (ex) { err.textContent = ex.message; err.hidden = false; btn.disabled = false; btn.textContent = 'Register my interest'; }
+      } catch (ex) { showErr(ex.message); }
     };
   }
 

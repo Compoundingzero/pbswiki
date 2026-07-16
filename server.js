@@ -2231,17 +2231,30 @@ async function api(req, res, url) {
   }
   // --- founding-clinician waitlist (public, no account needed) ---
   if (seg[0] === 'clinician-interest' && method === 'POST') {
-    const b = await readBody(req); if (!b) return json(res, 400, { error: 'Bad request' });
+    const b = await readBody(req, 6e6); if (!b) return json(res, 400, { error: 'That was too large — please attach a smaller photo (under ~4 MB).' });
     const name = clean(b.name, 120), email = clean(b.email, 160).toLowerCase();
     const discipline = clean(b.discipline, 60), note = clean(b.note, 600);
+    const country = clean(b.country, 60), license_no = clean(b.license_no, 100);
+    const proof = (typeof b.proof_photo === 'string' && /^data:image\/[\w+.-]+;base64,/.test(b.proof_photo)) ? b.proof_photo.slice(0, 5e6) : null;
     if (!name) return json(res, 400, { error: 'Please add your name' });
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json(res, 400, { error: 'Please add a valid email' });
     try {
-      await db.query(`INSERT INTO clinician_interest(name,email,discipline,note) VALUES($1,$2,$3,$4)
-        ON CONFLICT (email) DO UPDATE SET name=EXCLUDED.name, discipline=EXCLUDED.discipline, note=EXCLUDED.note`,
-        [name, email, discipline || null, note || null]);
+      await db.query(`INSERT INTO clinician_interest(name,email,discipline,note,country,license_no,proof_photo) VALUES($1,$2,$3,$4,$5,$6,$7)
+        ON CONFLICT (email) DO UPDATE SET name=EXCLUDED.name, discipline=EXCLUDED.discipline, note=EXCLUDED.note, country=EXCLUDED.country, license_no=EXCLUDED.license_no, proof_photo=COALESCE(EXCLUDED.proof_photo, clinician_interest.proof_photo)`,
+        [name, email, discipline || null, note || null, country || null, license_no || null, proof]);
       return json(res, 200, { ok: true });
     } catch (e) { console.error('[clinician-interest]', e.message); return json(res, 500, { error: 'Could not save — please try again' }); }
+  }
+  // super-admin only: view a professional's uploaded credential proof (data URL stored on the row)
+  if (seg[0] === 'clinician-photo' && method === 'GET') {
+    const u = await currentUser(req); if (!isSuper(u)) { res.writeHead(403); return res.end(); }
+    const id = +clean(new URL('http://x/' + url).searchParams.get('id'), 12); if (!id) { res.writeHead(404); return res.end(); }
+    const row = (await db.query('SELECT proof_photo FROM clinician_interest WHERE id=$1', [id])).rows[0];
+    const m = row && row.proof_photo && String(row.proof_photo).match(/^data:(image\/[\w+.-]+);base64,(.*)$/);
+    if (!m) { res.writeHead(404); return res.end(); }
+    const buf = Buffer.from(m[2], 'base64');
+    res.writeHead(200, { 'Content-Type': m[1], 'Cache-Control': 'private, max-age=60' });
+    return res.end(buf);
   }
   // ---------- the outcome loop: experiments · check-ins · results ledger ----------
   // collective counter for the home page (movement heartbeat)
@@ -2346,9 +2359,9 @@ async function api(req, res, url) {
     const u = await currentUser(req); if (!isSuper(u)) return json(res, 403, { error: 'Super-admin only' });
     const type = clean(new URL('http://x/' + url).searchParams.get('type'), 20);
     if (type === 'clinicians') {
-      const r = await db.query('SELECT name,email,discipline,note,created_at FROM clinician_interest ORDER BY created_at DESC');
-      return csvExport(res, 'rnawiki-clinicians.csv', ['name', 'email', 'discipline', 'note', 'joined'],
-        r.rows.map(x => [x.name, x.email, x.discipline, x.note, x.created_at && x.created_at.toISOString()]));
+      const r = await db.query('SELECT name,email,discipline,country,license_no,note,(proof_photo IS NOT NULL) AS has_proof,created_at FROM clinician_interest ORDER BY created_at DESC');
+      return csvExport(res, 'rnawiki-professionals.csv', ['name', 'email', 'profession', 'country', 'licence_no', 'proof_uploaded', 'note', 'joined'],
+        r.rows.map(x => [x.name, x.email, x.discipline, x.country, x.license_no, x.has_proof ? 'yes' : 'no', x.note, x.created_at && x.created_at.toISOString()]));
     }
     // --- Research dataset exports (anonymous: pseudonymous user_id join key, no name/email) ---
     // Stable, non-reversible pseudonym so the exported dataset can't be joined back to a real identity.
@@ -2569,7 +2582,7 @@ async function api(req, res, url) {
       db.query("SELECT e.id,e.compound_id,e.compound_name,e.note,e.created_at,u.username AS by_user FROM edits e JOIN users u ON u.id=e.user_id ORDER BY e.created_at DESC LIMIT 60"),
       db.query("SELECT username,email,role,domain,domain_verified,reputation_points,created_at FROM users ORDER BY created_at DESC LIMIT 500"),
       db.query('SELECT count(*)::int AS n FROM users'),
-      db.query('SELECT name,email,discipline,note,created_at FROM clinician_interest ORDER BY created_at DESC LIMIT 500'),
+      db.query('SELECT id,name,email,discipline,country,license_no,note,(proof_photo IS NOT NULL) AS has_proof,created_at FROM clinician_interest ORDER BY created_at DESC LIMIT 500'),
     ]);
     return json(res, 200, { experts: experts.rows, partners: partners.rows, foods: foods.rows, requests: requests.rows, rootcauseChanges: rcc.rows, feedback: feedback.rows, proposals: proposals.rows, compoundEdits: cedits.rows, members: members.rows, memberCount: memberCount.rows[0].n, clinicians: clinicians.rows, threshold: PANEL_THRESHOLD });
   }
