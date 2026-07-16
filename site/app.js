@@ -1425,23 +1425,37 @@
     return `<div class="positioning" data-lvl="2"><div class="section-title">📊 How it ranks on evidence <span class="pos-sub">in ${esc(c.category.split('/')[0].trim().toLowerCase())} · ${rank} of ${peers.length}</span></div><div class="pos-list">${rows}</div></div>`;
   }
   // The Technical layer: an exhaustive, structured pharmacology write-up (only rendered at 🔬 depth).
+  // Parse the curated `target` field ("[Label](url) · [PubChem](url) · …") into official-source chips.
+  function officialLinks(c) {
+    const out = []; const re = /\[([^\]]+)\]\(([^)]+)\)/g; let m;
+    while ((m = re.exec(c.target || '')) !== null) { const label = m[1].replace(/\s*\([^)]*\)\s*$/, '').trim(); out.push({ label, url: m[2] }); }
+    return out;
+  }
   function biotechDeepDive(c) {
     const t = c.tech; if (!t) return '';
     const sec = (icon, title, body) => body ? `<div class="bt-sec"><div class="bt-st">${icon} ${title}</div><div class="bt-sb">${body}</div></div>` : '';
+    // Visual: the actual 2D molecular structure (small molecules with a PubChem CID)
+    const cid = pubchemCID(c);
+    const structFig = cid ? `<figure class="bt-struct"><img loading="lazy" alt="2D chemical structure of ${esc(c.name)}" src="https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/PNG?record_type=2d&image_size=320x320"><figcaption>The 2D structure — how the atoms actually connect. <a href="https://pubchem.ncbi.nlm.nih.gov/compound/${cid}" target="_blank" rel="noopener">Open in PubChem ↗</a></figcaption></figure>` : '';
+    const chem = (t.chem || structFig) ? `<div class="bt-sec"><div class="bt-st">🧪 Chemistry &amp; structure</div><div class="bt-sb bt-chem">${structFig}${t.chem ? `<div>${mdInline(t.chem)}</div>` : ''}</div></div>` : '';
     let targets = '';
     if (Array.isArray(t.targets) && t.targets.length) targets = `<div class="bt-sec"><div class="bt-st">🎯 Molecular targets &amp; binding</div><div class="bt-targets">${t.targets.map(x => `<div class="bt-tg"><div class="bt-tg-h">${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.sym)}</a>` : esc(x.sym)}${x.action ? ` <span class="bt-tg-act">${esc(x.action)}</span>` : ''}</div>${x.affinity ? `<div class="bt-tg-aff">${mdInline(x.affinity)}</div>` : ''}${x.role ? `<div class="bt-tg-role">${mdInline(x.role)}</div>` : ''}</div>`).join('')}</div></div>`;
+    // Visual ADME: a left-to-right pipeline (Absorption → Distribution → Metabolism → Excretion)
     let adme = '';
-    if (t.adme) { const a = t.adme; const rows = [['A', 'Absorption', a.absorb], ['D', 'Distribution', a.distribute], ['M', 'Metabolism', a.metabolise], ['E', 'Excretion', a.excrete]].filter(r => r[2]); adme = rows.length ? `<div class="bt-sec"><div class="bt-st">🧬 ADME — what your body does to it</div><div class="bt-adme">${rows.map(([k, l, v]) => `<div class="bt-adme-row"><span class="bt-adme-k">${k}</span><div><b>${l}</b> ${mdInline(v)}</div></div>`).join('')}</div></div>` : ''; }
+    if (t.adme) { const a = t.adme; const rows = [['💊', 'Absorption', 'how it gets in', a.absorb], ['🩸', 'Distribution', 'where it goes', a.distribute], ['🔬', 'Metabolism', 'how it\'s broken down', a.metabolise], ['🚽', 'Excretion', 'how it leaves', a.excrete]].filter(r => r[3]); adme = rows.length ? `<div class="bt-sec"><div class="bt-st">🧬 ADME — the round trip through your body</div><div class="bt-adme-flow">${rows.map(([ic, l, sub, v], i) => `<div class="bt-adme-step"><div class="bt-adme-top"><span class="bt-adme-ic">${ic}</span><div><b>${l}</b><span class="bt-adme-sub">${sub}</span></div>${i < rows.length - 1 ? '<span class="bt-adme-arrow">→</span>' : ''}</div><div class="bt-adme-v">${mdInline(v)}</div></div>`).join('')}</div></div>` : ''; }
+    const links = officialLinks(c);
+    const refs = links.length ? `<div class="bt-sec bt-refs"><div class="bt-st">📎 Verify it yourself — official records</div><div class="bt-ref-chips">${links.map(l => `<a class="bt-ref-chip" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join('')}</div></div>` : '';
     return `<div class="biotech" id="sec-biotech">
       <div class="bt-head"><span class="bt-badge">🔬 The biotech deep-dive</span><span class="bt-sub">how a pharmacologist reads this molecule</span></div>
       <p class="bt-lead">This is the expert layer — the same facts a pharmacologist would want. Don't worry if a term is new; each one is defined on hover, and the point is simply to see <i>how</i> a scientist reasons about a molecule: what it binds, how tightly, what your body does to it, and why people respond differently.</p>
-      ${sec('🧪', 'Chemistry &amp; structure', t.chem ? mdInline(t.chem) : '')}
+      ${chem}
       ${targets}
       ${sec('🔀', 'Signal transduction', t.signaling ? mdInline(t.signaling) : '')}
       ${adme}
       ${sec('🧬', 'Pharmacogenomics — why response differs', t.pgx ? mdInline(t.pgx) : '')}
       ${sec('📐', 'Dose–response &amp; window', t.dose ? mdInline(t.dose) : '')}
       ${sec('🔁', 'Tolerance &amp; withdrawal', t.tolerance ? mdInline(t.tolerance) : '')}
+      ${refs}
     </div>`;
   }
   // ---- Pedagogy components (render only when authored; each teaches, not just informs) ----
@@ -1529,7 +1543,7 @@
     const _tui = tierUI(c);
     const ch3 = callout('protocol', _tui.protoH, c.protocol) + pkTimeline(c) + doseSimulator(c) + whenToUseBox(c) + callout('watch', 'Watch out', c.watch, 'warn') + stacksBlock + usedIn;
     const ch4 = evidenceBlock + positioningPlot(c) + exploreBlock + callout('bottom', 'Bottom line', c.bottom);
-    const ch5 = expertFramework(c) + callout('target', 'Molecular / gene target', c.target) + (c.mechSteps && c.mechanism ? callout('mechanism-full', 'The full mechanism — the original technical write-up', c.mechanism) : '') + biotechDeepDive(c);
+    const ch5 = expertFramework(c) + (c.mechSteps && c.mechanism ? callout('mechanism-full', 'The full mechanism — the original technical write-up', c.mechanism) : '') + biotechDeepDive(c);
     const ch6 = selfTestBox(c) + feynmanBox(c) + graduationBlock(c) + journeyBlock('compound', c.id);
     const chapterDefs = [
       { n: 1, icon: '🌱', label: 'Start here', html: ch1, check: 'start' }, { n: 2, icon: '⚙️', label: 'How it works', html: ch2, check: 'how' },

@@ -2602,3 +2602,23 @@ a.dp-name:hover{color:var(--accent)}
 /* Respect the hidden attribute on spec chips — Formula/Mol.weight stay hidden until PubChem
    data loads, instead of showing empty labelled boxes on peptides/compounds without a CID. */
 .spec-chip[hidden]{display:none!important}
+
+/* ---- Deep-dive visuals: structure image, ADME pipeline, official-record chips ---- */
+.bt-chem{display:flex;gap:1.1rem;align-items:flex-start;flex-wrap:wrap}
+.bt-chem>div{flex:1;min-width:240px;line-height:1.6}
+.bt-struct{margin:0;flex:0 0 auto;width:200px;max-width:100%;text-align:center}
+.bt-struct img{width:200px;max-width:100%;height:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:.5rem}
+.bt-struct figcaption{font-size:.74rem;color:var(--muted);margin-top:.4rem;line-height:1.4}
+.bt-struct figcaption a{color:var(--accent);border-bottom:1px dotted}
+.bt-adme-flow{display:flex;flex-direction:column;gap:.7rem}
+.bt-adme-step{border-left:2px solid color-mix(in srgb,var(--accent) 30%,var(--line));padding:.1rem 0 .1rem .8rem}
+.bt-adme-top{display:flex;align-items:center;gap:.5rem;position:relative}
+.bt-adme-ic{font-size:1.1rem}
+.bt-adme-top b{font-size:.92rem}
+.bt-adme-sub{display:block;font-size:.72rem;color:var(--faint);text-transform:uppercase;letter-spacing:.04em}
+.bt-adme-arrow{margin-left:auto;color:var(--faint)}
+.bt-adme-v{font-size:.9rem;line-height:1.55;color:var(--ink);margin-top:.15rem}
+.bt-refs .bt-ref-chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.bt-ref-chip{display:inline-flex;align-items:center;font-size:.82rem;padding:.35rem .7rem;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--muted)}
+.bt-ref-chip:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:560px){.bt-struct{width:100%}.bt-struct img{width:180px}}
