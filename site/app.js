@@ -212,6 +212,8 @@
     const links = [];
     s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (m, t, u) => { links.push(`<a href="${u}" target="_blank" rel="noopener">${t}</a>`); return `  ${links.length - 1}  `; });
     s = s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    // Authored content: restore a safe allowlist of inline tags the escape turned into text.
+    s = s.replace(/&lt;(\/?)(b|i|sub|sup|em|strong)&gt;/gi, '<$1$2>');
     s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>');
     s = s.replace(/ (\d+) /g, (m, i) => links[+i]);
     return s;
