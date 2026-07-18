@@ -218,7 +218,29 @@
    "pgx": "CYP1A2 activity varies up to ~40-fold between people. The CYP1A2*1F (−163C>A, rs762551) allele defines fast vs slow metabolisers: 'fast' (AA) clear it quickly and tend to get the ergogenic and cardiovascular-neutral profile; 'slow' (C-carriers) show blunted or even negative performance effects and a higher heart-attack signal at high intake. ADORA2A variants (rs5751876) predict caffeine-induced anxiety and sleep disruption. CYP1A2 is induced by smoking and cruciferous vegetables (faster clearance) and inhibited by oral contraceptives and pregnancy (half-life can roughly double).",
    "dose": "Ergogenic window 3–6 mg/kg (~200–400 mg) taken 45–60 min pre-effort; cognitive benefit plateaus by ~200 mg. Above ~9 mg/kg there's no extra benefit — only rising tachycardia and jitter. Acute toxicity climbs past ~1.2 g and lethal doses cluster near 10–14 g, a risk driven almost entirely by anhydrous powder (a teaspoon can be a lethal dose).",
    "tolerance": "Chronic exposure upregulates adenosine A1/A2A receptor density as compensation, so the net alerting effect fades over ~1–4 weeks and abrupt cessation unmasks the surplus receptors → withdrawal headache and fatigue. A 10–14-day taper every ~2 months restores sensitivity — the pharmacological basis of 'cycling'."
-  }
+  },
+  "refs": [
+   {
+    "label": "Caffeine (PubChem CID 2519)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/2519"
+   },
+   {
+    "label": "ADORA2A adenosine A2A receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/135"
+   },
+   {
+    "label": "ADORA1 adenosine A1 receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/134"
+   },
+   {
+    "label": "RYR1 ryanodine receptor 1 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6261"
+   },
+   {
+    "label": "Caffeine (Examine)",
+    "url": "https://examine.com/supplements/caffeine/"
+   }
+  ]
  },
  "creatine-monohydrate": {
   "hook": {
@@ -419,7 +441,25 @@
    "pgx": "No single-gene pharmacogenetic switch like caffeine's CYP1A2. The main determinant of response is baseline muscle creatine — set by diet (meat intake), muscle mass and fibre type — plus SLC6A8 transporter activity. Rare SLC6A8, GATM and GAMT mutations cause creatine-deficiency syndromes, in which oral creatine is used therapeutically.",
    "dose": "Maintenance 3–5 g/day of creatine monohydrate, indefinitely. Optional loading: 20 g/day split into 4 doses for 5–7 days reaches saturation faster with no better end result. No cycling needed. Higher doses don't help once muscle is saturated and can cause GI upset.",
    "tolerance": "None in the receptor sense — there is no down-regulation, so the effect doesn't fade and there's nothing to cycle off. The only ceiling is muscle saturation: once your stores are full, additional creatine simply passes through as creatinine."
-  }
+  },
+  "refs": [
+   {
+    "label": "Creatine (PubChem CID 586)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/586"
+   },
+   {
+    "label": "SLC6A8 creatine transporter (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6535"
+   },
+   {
+    "label": "CKM creatine kinase M-type (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/1158"
+   },
+   {
+    "label": "Examine: Creatine",
+    "url": "https://examine.com/supplements/creatine/"
+   }
+  ]
  },
  "semaglutide-ozempic-wegovy-rybelsus": {
   "hook": {
@@ -635,6 +675,16 @@
     "title": "Semaglutide vs caffeine — agonist vs antagonist",
     "point": "A clean lesson in reading a molecule. Caffeine <b>blocks</b> its receptor (an antagonist — it releases a brake). Semaglutide <b>activates</b> its receptor (an agonist — it presses a signal). Both change behaviour by touching a GPCR, but in opposite directions: one removes a 'slow down' signal, the other adds an 'I'm full' one."
    }
+  ],
+  "refs": [
+   {
+    "label": "GLP1R glucagon-like peptide 1 receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2740"
+   },
+   {
+    "label": "Semaglutide (PubChem CID 56843331)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/56843331"
+   }
   ]
  },
  "2-4-dinitrophenol-dnp": {
@@ -818,7 +868,17 @@
    "pgx": "No established pharmacogenetic modifier of DNP toxicity; there is no known genotype that confers safety. The absence of characterized human pharmacokinetics compounds the danger, because dose accumulation cannot be predicted for an individual.",
    "dose": "There is no safe dose. The lowest reported human lethal oral dose is about 4.3 mg/kg, the estimated lethal range is roughly 20-50 mg/kg, and the doses people take for weight loss (~3-5 mg/kg/day) reach the lowest reported lethal dose, leaving no margin. Removed from the US market as unfit for human consumption after the Federal Food, Drug, and Cosmetic Act of 1938. Do not use.",
    "tolerance": "No protective tolerance develops. The opposite is true: because clearance is slow and the effect is heat, repeated dosing causes heat load to accumulate, so a previously \"tolerated\" dose can become fatal — a risk sharply amplified by hot weather, exertion, or dehydration."
-  }
+  },
+  "refs": [
+   {
+    "label": "2,4-Dinitrophenol (PubChem CID 1493)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/1493"
+   },
+   {
+    "label": "UCP1 uncoupling protein 1 (thermogenin)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/7350"
+   }
+  ]
  },
  "ostarine-mk-2866-enobosarm": {
   "hook": {
@@ -1019,6 +1079,16 @@
     "title": "Ostarine vs testosterone — filed-down key vs master key",
     "point": "Same lock (the androgen receptor), opposite reach. Testosterone is a steroid <b>master key</b> that turns every androgen lock — muscle, prostate, skin, scalp — which is why it's powerful and why it comes with prostate, hair, and virilisation effects. Ostarine is a non-steroidal <b>filed-down key</b>: it turns the muscle-and-bone locks hard and barely catches the others, giving a milder side profile at lower potency. But the master-key's biggest alarm still trips on both — your brain sees an androgen in the lock and shuts down your own production."
    }
+  ],
+  "refs": [
+   {
+    "label": "Enobosarm (PubChem CID 11326715)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/11326715"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   }
   ]
  },
  "l-theanine": {
@@ -1217,7 +1287,25 @@
    "pgx": "No established single-gene pharmacogenetic determinant analogous to caffeine's CYP1A2. Inter-individual response is comparatively uniform, and no validated 'fast vs slow' metaboliser phenotype has been described.",
    "dose": "Common range 100–400 mg. Focus stack: ~200 mg with ~100 mg caffeine (roughly 2:1), 30–45 min before task. Sleep/calm: 200–400 mg. Wide safety margin; long history of dietary exposure through tea and Generally Recognized As Safe status for food use in several jurisdictions.",
    "tolerance": "No clear receptor down-regulation, tolerance or dependence has been demonstrated; it can be used daily without a documented withdrawal syndrome. The main practical ceiling is that its effects are mild and short-lived rather than escalating."
-  }
+  },
+  "refs": [
+   {
+    "label": "L-Theanine (PubChem CID 439378)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/439378"
+   },
+   {
+    "label": "GABRA1 GABA-A receptor subunit alpha-1 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2554"
+   },
+   {
+    "label": "SLC1A5 ASCT2 glutamine transporter (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6510"
+   },
+   {
+    "label": "Theanine (Examine)",
+    "url": "https://examine.com/supplements/theanine/"
+   }
+  ]
  },
  "omega-3-epa-dha": {
   "hook": {
@@ -1420,7 +1508,29 @@
    "pgx": "No single dominant pharmacogenetic switch. FADS1/FADS2 variants shift how efficiently ALA is converted to EPA/DHA (relevant mainly to dietary/plant intake, less so to direct EPA/DHA dosing). APOE and baseline triglyceride/fish intake modulate the response. The most practical 'personalisation' is the Omega-3 Index (red-cell EPA+DHA), a saturation biomarker.",
    "dose": "General health / low fish intake: 1–2 g/day combined EPA+DHA with a fatty meal. Hypertriglyceridemia: 2–4 g/day of prescription-grade EPA (icosapent ethyl) or EPA+DHA under medical supervision. Note label math — a '1000 mg fish oil' capsule may be only ~300 mg EPA+DHA. Above ~3 g/day the bleeding tendency rises; ~4 g/day carries a small dose-dependent atrial-fibrillation signal.",
    "tolerance": "No receptor tolerance or down-regulation — the effect doesn't fade with continued use and there's nothing to 'cycle'. The only ceiling is tissue saturation: once membrane and red-cell omega-3 are full, extra intake yields diminishing returns. Main practical downsides are fishy aftertaste/GI upset and oxidation (rancidity) of the oil itself."
-  }
+  },
+  "refs": [
+   {
+    "label": "FFAR4 free fatty acid receptor 4 (GPR120)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/338557"
+   },
+   {
+    "label": "PPARA peroxisome proliferator activated receptor alpha",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5465"
+   },
+   {
+    "label": "EPA / eicosapentaenoic acid (PubChem CID 446284)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/446284"
+   },
+   {
+    "label": "DHA / docosahexaenoic acid (PubChem CID 445580)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/445580"
+   },
+   {
+    "label": "Fish Oil (Examine)",
+    "url": "https://examine.com/supplements/fish-oil/"
+   }
+  ]
  },
  "vitamin-d3-k2": {
   "hook": {
@@ -1641,7 +1751,29 @@
    "pgx": "No dominant single-gene switch. Variation in GC (vitamin-D-binding protein), CYP2R1 (activation) and CYP24A1 (degradation) shifts baseline 25(OH)D and response. Loss-of-function CYP24A1 mutations impair the off-switch and predispose to hypercalcemia. Non-genetic modifiers — skin pigmentation, latitude/season, sunscreen use, adiposity and age — often matter more in practice than genotype.",
    "dose": "Common maintenance is 2,000–4,000 IU/day of D3 with food, titrated to a 25-OH-D target (commonly ~75–125 nmol/L / 30–50 ng/mL). 4,000 IU/day is a widely-cited safe upper bound for routine adult use; higher-dose correction and prescription forms (including the active drug calcitriol) belong under medical supervision. Often paired with ~100–200 mcg K2 (MK-7). Hypercalcemia is the toxicity endpoint and rises with chronic intakes well above the upper limit.",
    "tolerance": "No receptor down-regulation or tolerance in the pharmacological sense — it's a saturation/repletion model. Once 25(OH)D reaches a sufficient plateau, more intake yields diminishing returns and, chronically at high doses, rising hypercalcemia risk. There is nothing to cycle; the aim is a steady sufficient level, and CYP24A1-driven catabolism provides an intrinsic safety brake at normal intakes."
-  }
+  },
+  "refs": [
+   {
+    "label": "Cholecalciferol (PubChem CID 5280795)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5280795"
+   },
+   {
+    "label": "VDR vitamin D receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/7421"
+   },
+   {
+    "label": "MGP matrix Gla protein (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/4256"
+   },
+   {
+    "label": "GGCX gamma-glutamyl carboxylase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2677"
+   },
+   {
+    "label": "Vitamin D (Examine)",
+    "url": "https://examine.com/supplements/vitamin-d/"
+   }
+  ]
  },
  "magnesium": {
   "hook": {
@@ -1842,7 +1974,25 @@
    "pgx": "No single-gene pharmacogenetic switch. Response is governed by baseline status (diet, sweat/stress losses). Rare loss-of-function mutations in TRPM6 (and related genes such as CNNM2, and the tight-junction genes CLDN16/CLDN19) cause hereditary magnesium-wasting syndromes, underscoring the transporter's gatekeeping role. Drug interactions matter more than genes for most people: chronic proton-pump inhibitors and loop/thiazide diuretics lower magnesium, while magnesium can bind and reduce absorption of oral bisphosphonates and some antibiotics (tetracyclines, fluoroquinolones).",
    "dose": "200–400 mg/day of elemental magnesium as a maintenance top-up (RDA roughly 310–420 mg/day depending on age/sex, from all sources). The tolerable upper intake for supplemental (non-food) magnesium is ~350 mg/day, above which diarrhoea becomes common. Choose by goal: glycinate (sleep/calm, gentle), citrate (well-absorbed, mild laxative), L-threonate (cognition), malate. Avoid oxide for repletion (~4% absorbed).",
    "tolerance": "None in the receptor sense — there is no receptor to down-regulate, so the effect doesn't fade with continued use. The ceiling is homeostatic saturation: once tissues are repleted, extra magnesium is absorbed less and excreted more, and the unabsorbed remainder causes osmotic diarrhoea. Hypermagnesemia is rare with healthy kidneys but a genuine risk in renal impairment, where excretion is compromised."
-  }
+  },
+  "refs": [
+   {
+    "label": "Magnesium (PubChem CID 5462224)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5462224"
+   },
+   {
+    "label": "TRPM6 magnesium transporter (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/140803"
+   },
+   {
+    "label": "GRIN1 NMDA receptor subunit 1 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2902"
+   },
+   {
+    "label": "Magnesium (Examine)",
+    "url": "https://examine.com/supplements/magnesium/"
+   }
+  ]
  },
  "zinc": {
   "hook": {
@@ -2027,7 +2177,25 @@
    "pgx": "No single dominant pharmacogene like caffeine's CYP1A2. Response is governed by baseline status, diet (meat vs phytate-rich plant intake) and sweat losses. Rare loss-of-function variants in SLC39A4 (ZIP4) cause the inherited deficiency disorder acrodermatitis enteropathica, managed with lifelong oral zinc.",
    "dose": "RDA ~11 mg/day (adult men), ~8 mg/day (women). Corrective/supplemental range 15–30 mg/day with food. Tolerable upper intake level ~40 mg/day for adults; chronic intake above this impairs copper absorption and can cause copper-deficiency anaemia and myeloneuropathy — add 1–2 mg copper if supplementing for months.",
    "tolerance": "No receptor tolerance — zinc doesn't downregulate a receptor because there isn't one. The only 'ceiling' is homeostatic: once needs are met, ZIP4 downregulates and absorption falls, so surplus intake is largely excluded or excreted rather than accumulated. The real risk of overuse is not tolerance but copper antagonism."
-  }
+  },
+  "refs": [
+   {
+    "label": "SLC39A4 / ZIP4 zinc uptake transporter (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/55630"
+   },
+   {
+    "label": "SLC30A1 / ZnT1 zinc efflux transporter (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/7779"
+   },
+   {
+    "label": "Zinc (PubChem CID 23994)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/23994"
+   },
+   {
+    "label": "Zinc (Examine.com)",
+    "url": "https://examine.com/supplements/zinc/"
+   }
+  ]
  },
  "boron": {
   "hook": {
@@ -2218,7 +2386,25 @@
    "pgx": "No established single-gene pharmacogenetics for boron. Individual variation is real but uncharacterised, driven more by baseline dietary boron, hormonal status and vitamin D status than by any known genotype.",
    "dose": "Common supplemental range 3–10 mg/day with food; typical dietary intake only ~1–3 mg/day. The tolerable upper intake level for adults is 20 mg/day — there is no established EAR or RDA, since boron is not classified as strictly essential in humans. Occupational cohorts averaging ~12–13 mg/day showed no adverse effects; acute toxic poisoning requires doses far above the UL.",
    "tolerance": "No receptor-based tolerance and nothing to cycle off — boron doesn't down-regulate any receptor. The only ceiling is nutritional sufficiency and the 20 mg/day safety limit: once intake is adequate, more simply passes through unchanged in urine."
-  }
+  },
+  "refs": [
+   {
+    "label": "Boric acid (PubChem CID 7628)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/7628"
+   },
+   {
+    "label": "SHBG sex hormone-binding globulin (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6462"
+   },
+   {
+    "label": "CYP24A1 25-hydroxyvitamin D 24-hydroxylase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/1591"
+   },
+   {
+    "label": "Boron (Examine)",
+    "url": "https://examine.com/supplements/boron/"
+   }
+  ]
  },
  "taurine": {
   "hook": {
@@ -2445,7 +2631,21 @@
    "pgx": "No CYP-style pharmacogenetic switch. Baseline taurine status is driven mainly by diet (omnivores higher, strict vegans lower) and by endogenous synthesis capacity. Loss-of-function in SLC6A6 or CSAD produces taurine-deficiency phenotypes — dilated cardiomyopathy and retinal degeneration in animal models, and obligate dietary dependence in cats, which cannot synthesise or conserve enough.",
    "dose": "1–3 g/day for general use; up to 6 g/day in performance studies, with a single 1–3 g dose ~1–2 h pre-exercise for endurance. Very well tolerated with no established toxic dose; regulatory reviews of typical energy-drink and supplemental intakes have not flagged safety concerns at these levels.",
    "tolerance": "No receptor downregulation and no classic tolerance — the effect doesn't fade with use. The only ceiling is tissue saturation plus tight renal regulation of the body pool: beyond the set point, additional taurine is simply excreted."
-  }
+  },
+  "refs": [
+   {
+    "label": "SLC6A6 taurine transporter (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6533"
+   },
+   {
+    "label": "Taurine (PubChem CID 1123)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/1123"
+   },
+   {
+    "label": "Taurine (Examine)",
+    "url": "https://examine.com/supplements/taurine/"
+   }
+  ]
  },
  "n-acetylcysteine-nac": {
   "hook": {
@@ -2652,6 +2852,24 @@
     "title": "NAC vs creatine — two substrates, no receptor",
     "point": "A clean pairing for reading molecules. Neither touches a receptor: both are <b>substrates</b> your body consumes. Creatine tops up a fast-energy reservoir (phosphocreatine); NAC tops up a scarce building block (cysteine) for the antioxidant glutathione. Different systems, same lesson — not everything that changes your biology works by binding a lock."
    }
+  ],
+  "refs": [
+   {
+    "label": "Acetylcysteine (PubChem CID 12035)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/12035"
+   },
+   {
+    "label": "GCLC glutamate-cysteine ligase catalytic subunit (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2729"
+   },
+   {
+    "label": "SLC7A11 xCT cystine/glutamate antiporter (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/23657"
+   },
+   {
+    "label": "N-Acetylcysteine (Examine)",
+    "url": "https://examine.com/supplements/n-acetylcysteine/"
+   }
   ]
  },
  "coq10-ubiquinol": {
@@ -2843,7 +3061,25 @@
    "pgx": "No single-gene pharmacogenetic switch analogous to caffeine's CYP1A2. The dominant determinants of CoQ10 status are acquired depletion (statin therapy inhibiting HMG-CoA reductase, and age-related decline in synthesis) rather than a common polymorphism. Rare autosomal-recessive mutations in biosynthesis genes — COQ2, COQ8A (ADCK3), PDSS1/2, COQ4/6/7/9 — cause primary CoQ10 deficiency syndromes that respond to high-dose supplementation.",
    "dose": "Typical supplemental range 100–300 mg/day with a fat-containing meal; heart-failure trials used 100 mg three times daily and statin-myopathy trials 100–600 mg/day. Higher doses raise plasma levels but with diminishing tissue returns given absorption limits. Generally well tolerated; mild GI upset at higher doses. Note the theoretical interaction with warfarin (CoQ10's quinone structure resembles vitamin K and may blunt anticoagulation).",
    "tolerance": "No receptor down-regulation and no classic tolerance — the effect doesn't fade with continued use and there is nothing to cycle off. The practical ceiling is absorption and tissue uptake: once a depleted pool is refilled, additional oral CoQ10 yields little further benefit."
-  }
+  },
+  "refs": [
+   {
+    "label": "Coenzyme Q10 (PubChem CID 5281915)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5281915"
+   },
+   {
+    "label": "Ubiquinol-10 / reduced CoQ10 (PubChem CID 25201759)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/25201759"
+   },
+   {
+    "label": "COQ2 coenzyme Q2, polyprenyltransferase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/27235"
+   },
+   {
+    "label": "Coenzyme Q10 (Examine)",
+    "url": "https://examine.com/supplements/coenzyme-q10/"
+   }
+  ]
  },
  "beta-alanine": {
   "hook": {
@@ -3033,7 +3269,25 @@
    "pgx": "No single-gene pharmacogenetic switch like caffeine's CYP1A2. Response is set mainly by baseline muscle carnosine and loading capacity — driven by muscle fibre-type distribution (more type II fibres = higher carnosine), sex (men tend higher), age, and diet (vegetarians start lowest, having no dietary carnosine/anserine from meat, and typically gain the most). Beta-alanine transporter (TauT/SLC6A6) activity also influences muscle uptake.",
    "dose": "3.2-6.4 g/day, typically split into doses of ~0.8-1.6 g to minimise paraesthesia (or use sustained-release tablets). Muscle carnosine rises ~40-60% over 4-6 weeks; ~10 weeks of dosing pushes it higher still. Maintenance can continue at a lower daily dose once loaded. Timing within the day is not important — total accumulated intake over weeks is what drives loading.",
    "tolerance": "No receptor down-regulation and no need to cycle — the effect does not fade with continued use. The only ceiling is muscle carnosine saturation: once fibres approach their carnosine limit, additional beta-alanine yields diminishing returns. Paraesthesia is dose-spike-dependent, not cumulative, and is avoided by dividing doses."
-  }
+  },
+  "refs": [
+   {
+    "label": "Beta-Alanine (PubChem CID 239)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/239"
+   },
+   {
+    "label": "CARNS1 carnosine synthase 1 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/57571"
+   },
+   {
+    "label": "MRGPRD Mas-related GPCR member D (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/116512"
+   },
+   {
+    "label": "Beta-Alanine (Examine)",
+    "url": "https://examine.com/supplements/beta-alanine/"
+   }
+  ]
  },
  "l-citrulline-citrulline-malate": {
   "hook": {
@@ -3254,6 +3508,24 @@
     "capB": "L-arginine",
     "point": "Near-siblings: citrulline is arginine minus one chemical step, differing only by a ureido group where arginine has a guanidino group. But that small difference decides everything at the gut. Arginine is a substrate for arginase and gets destroyed first-pass; citrulline is not, so it survives absorption and is converted to arginine inside you. The paradox that beginners never expect — <b>citrulline raises your arginine better than arginine does</b>."
    }
+  ],
+  "refs": [
+   {
+    "label": "NOS3 endothelial nitric oxide synthase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/4846"
+   },
+   {
+    "label": "ASS1 argininosuccinate synthase 1 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/445"
+   },
+   {
+    "label": "L-Citrulline (PubChem CID 9750)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/9750"
+   },
+   {
+    "label": "Citrulline (Examine)",
+    "url": "https://examine.com/supplements/citrulline/"
+   }
   ]
  },
  "betaine-trimethylglycine": {
@@ -3453,7 +3725,29 @@
    "pgx": "No dominant single-gene pharmacogenetic switch like caffeine's CYP1A2. The homocysteine-lowering response interacts with folate and B12 status and with MTHFR/BHMT genotype; baseline one-carbon (methyl-donor) status and habitual dietary betaine intake shape the headroom. Rare inborn errors (e.g. CBS-deficient homocystinuria) are treated therapeutically with pharmacological betaine.",
    "dose": "~2.5 g/day is the dose used in most performance trials; benefits accrue over ≥1–2 weeks of daily use. Higher doses (≥4–6 g/day, as used for homocysteine lowering) add little performance benefit and have raised total/LDL cholesterol in some healthy-adult trials. Betaine anhydrous (Cystadane) is an FDA-approved drug at gram doses for inherited homocystinuria.",
    "tolerance": "No receptor down-regulation and nothing to cycle. The ceiling is tissue osmolyte saturation and methyl-pool status — once filled, additional betaine is metabolised or excreted. GI upset and, at high doses, a fishy body odor can appear (from DMG/trimethylamine metabolism)."
-  }
+  },
+  "refs": [
+   {
+    "label": "Betaine (PubChem CID 247)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/247"
+   },
+   {
+    "label": "BHMT betaine-homocysteine methyltransferase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/635"
+   },
+   {
+    "label": "SLC6A12 betaine/GABA transporter BGT1 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6539"
+   },
+   {
+    "label": "GAMT guanidinoacetate methyltransferase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2593"
+   },
+   {
+    "label": "Betaine (Examine)",
+    "url": "https://examine.com/supplements/betaine/"
+   }
+  ]
  },
  "sodium-bicarbonate": {
   "hook": {
@@ -3654,6 +3948,24 @@
    {
     "title": "Sodium bicarbonate vs beta-alanine — the outside vs inside buffer",
     "point": "Same goal, opposite side of the wall. Sodium bicarbonate is the <b>extracellular</b> buffer — it raises blood pH to pull acid <i>out</i> of the muscle. Beta-alanine builds <b>intracellular</b> carnosine, which mops up H+ <i>inside</i> the muscle cell before it can leave. Different compartments, no overlap in mechanism — which is exactly why they're often stacked: one buffers the acid where it's made, the other speeds its exit."
+   }
+  ],
+  "refs": [
+   {
+    "label": "Sodium Bicarbonate (PubChem CID 516892)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/516892"
+   },
+   {
+    "label": "SLC16A1 monocarboxylate transporter 1 (MCT1)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6566"
+   },
+   {
+    "label": "SLC16A3 monocarboxylate transporter 4 (MCT4)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/9123"
+   },
+   {
+    "label": "Examine: Sodium bicarbonate",
+    "url": "https://examine.com/supplements/sodium-bicarbonate/"
    }
   ]
  },
@@ -3859,7 +4171,29 @@
    "pgx": "No established single-gene pharmacogenetic switch analogous to caffeine's CYP1A2. Inter-individual response is governed mainly by physiological state — baseline muscle protein turnover, age, training status and catabolic stress — rather than a known genotype.",
    "dose": "Common effective dose ~3 g/day (≈38 mg/kg body mass), typically split into 2–3 doses; studied range across the literature is ~1.5–6 g/day. Calcium salt and free-acid forms are both used and both shown safe for up to ~12 months. No clear dose-response benefit above ~3 g in healthy people.",
    "tolerance": "No receptor down-regulation or classic tolerance is described, and no cycling is required. The practical ceiling is contextual, not pharmacological: once muscle breakdown is already low (fed, trained, protein-replete), additional HMB has little left to act on."
-  }
+  },
+  "refs": [
+   {
+    "label": "HMB (PubChem CID 69362)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/69362"
+   },
+   {
+    "label": "MTOR mechanistic target of rapamycin kinase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2475"
+   },
+   {
+    "label": "TRIM63 tripartite motif containing 63 / MuRF1 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/84676"
+   },
+   {
+    "label": "FBXO32 F-box protein 32 / MAFbx atrogin-1 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/114907"
+   },
+   {
+    "label": "HMB (Examine)",
+    "url": "https://examine.com/supplements/hmb/"
+   }
+  ]
  },
  "whey-casein-protein": {
   "hook": {
@@ -4061,7 +4395,29 @@
    "pgx": "No single-gene pharmacogenetic switch like caffeine's CYP1A2. Response is governed by training, total protein intake, age (anabolic resistance in older muscle), and baseline diet — not a genotype. Lactase persistence affects tolerance of lactose-containing whey concentrate, not the muscle effect itself.",
    "dose": "Total protein 1.6–2.2 g/kg/day for training adults (Morton plateau ~1.62, CI to ~2.2). Per meal ~20–40 g of complete protein (~0.25–0.4 g/kg) to clear the ~2.5–3 g leucine threshold, older adults toward the top. Whey and casein are optional gap-fillers, not requirements.",
    "tolerance": "No receptor down-regulation and nothing to cycle — it's food. The only ceilings are the per-meal MPS maximum (the 'muscle-full' effect) and the daily plateau; beyond those, extra protein is oxidised or stored as energy, not turned into muscle."
-  }
+  },
+  "refs": [
+   {
+    "label": "Whey Protein (Examine)",
+    "url": "https://examine.com/supplements/whey-protein/"
+   },
+   {
+    "label": "Leucine (PubChem CID 6106)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/6106"
+   },
+   {
+    "label": "MTOR mechanistic target of rapamycin kinase",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2475"
+   },
+   {
+    "label": "SESN2 sestrin 2",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/83667"
+   },
+   {
+    "label": "RPS6KB1 ribosomal protein S6 kinase B1 (p70S6K)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6198"
+   }
+  ]
  },
  "eaas-bcaas": {
   "hook": {
@@ -4256,7 +4612,29 @@
    "pgx": "No single-gene pharmacogenetic switch. The dominant modifiers are physiological: baseline dietary protein (adequacy erases benefit), age-related 'anabolic resistance' (older muscle needs a higher leucine dose to reach threshold), and training status. Rare inborn errors of BCAA catabolism (e.g. maple syrup urine disease, from BCKDH-complex defects) are clinically important but unrelated to supplement use.",
    "dose": "Practical: 6–12 g of complete EAAs when training fasted or when protein intake is low, ideally carrying ~2–3 g leucine to clear the anabolic threshold. BCAAs alone are not recommended — incomplete substrate. On an adequate-protein diet (~1.6 g/kg/day) no supplement is needed. Higher doses don't raise MPS beyond the muscle-full ceiling; excess is oxidised.",
    "tolerance": "No receptor down-regulation. The functional ceiling is the 'muscle-full' effect — MPS is transient and becomes refractory within a few hours despite continued aminoacidemia, so more frequent or larger doses don't stack. Generally well tolerated; very high BCAA loads can compete for transport and theoretically lower other large-neutral amino acids, but this isn't a practical concern at supplement doses."
-  }
+  },
+  "refs": [
+   {
+    "label": "L-Leucine (PubChem CID 6106)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/6106"
+   },
+   {
+    "label": "MTOR mechanistic target of rapamycin kinase",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2475"
+   },
+   {
+    "label": "SESN2 sestrin 2",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/83667"
+   },
+   {
+    "label": "SLC7A5 LAT1 large neutral amino acid transporter",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/8140"
+   },
+   {
+    "label": "Examine: Branched-Chain Amino Acids (BCAAs)",
+    "url": "https://examine.com/supplements/branched-chain-amino-acids/"
+   }
+  ]
  },
  "tirzepatide-mounjaro-zepbound": {
   "hook": {
@@ -4477,6 +4855,20 @@
    {
     "title": "Tirzepatide vs caffeine — agonist vs antagonist",
     "point": "A clean lesson in reading a molecule. Caffeine <b>blocks</b> its receptor (an antagonist — it releases a brake). Tirzepatide <b>activates</b> its receptors (an agonist — it presses two signals). Both change behaviour by touching GPCRs, but in opposite directions: one removes a 'slow down' signal, the other adds two 'I'm full' ones."
+   }
+  ],
+  "refs": [
+   {
+    "label": "GIPR gastric inhibitory polypeptide receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2696"
+   },
+   {
+    "label": "GLP1R glucagon-like peptide 1 receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2740"
+   },
+   {
+    "label": "Tirzepatide (PubChem CID 156588324)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/156588324"
    }
   ]
  },
@@ -4702,6 +5094,24 @@
     "title": "Retatrutide vs tirzepatide — three levers vs two",
     "point": "Same starting mechanism, one extra lever. Tirzepatide (Mounjaro/Zepbound) is a <b>dual agonist</b> — GLP-1R + GIPR — so it works only the 'calories in' side by suppressing appetite. Retatrutide keeps both of those and adds a third, the <b>glucagon receptor</b>, which raises energy expenditure and burns liver fat — the 'calories out' side. That single added arm is why retatrutide's trial weight loss ran higher, and why its liver-fat clearance was so striking. The trade-off is that the glucagon arm also introduces the glucose-and-heart-rate watch-out the dual agonist doesn't carry."
    }
+  ],
+  "refs": [
+   {
+    "label": "Retatrutide (PubChem CID 171390338)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/171390338"
+   },
+   {
+    "label": "GLP1R glucagon-like peptide-1 receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2740"
+   },
+   {
+    "label": "GIPR glucose-dependent insulinotropic polypeptide receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2696"
+   },
+   {
+    "label": "GCGR glucagon receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2642"
+   }
   ]
  },
  "orforglipron": {
@@ -4917,7 +5327,17 @@
     "point": "Injectable semaglutide is a long-acting <b>peptide</b> given by weekly subcutaneous injection, binding the receptor's orthosteric (peptide) site. Orforglipron reaches the <b>same GLP-1 receptor</b> daily by mouth via an allosteric site. The felt result — appetite suppression, weight loss, glucose control — overlaps heavily; the trade is convenience (a pill) against a somewhat more modest effect than the strongest injectables."
    }
   ],
-  "stakes": "Oral GLP-1 was the convenience breakthrough the category had been chasing: if a small-molecule pill can approach injectable-level results, GLP-1 therapy becomes dramatically easier to manufacture, distribute and take — potentially reshaping how obesity and type 2 diabetes are treated at scale."
+  "stakes": "Oral GLP-1 was the convenience breakthrough the category had been chasing: if a small-molecule pill can approach injectable-level results, GLP-1 therapy becomes dramatically easier to manufacture, distribute and take — potentially reshaping how obesity and type 2 diabetes are treated at scale.",
+  "refs": [
+   {
+    "label": "Orforglipron (PubChem CID 137319706)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/137319706"
+   },
+   {
+    "label": "GLP1R glucagon-like peptide-1 receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2740"
+   }
+  ]
  },
  "caffeine-thermogenic": {
   "hook": {
@@ -5160,6 +5580,28 @@
     "title": "Caffeine vs yohimbine — gas pedal vs handbrake",
     "point": "Two lipolytic fat-burners that reach the same endpoint from opposite ends. Caffeine <b>presses the gas</b> — it raises catecholamines that switch on lipolysis. Yohimbine <b>releases a handbrake</b> — it blocks alpha-2 adrenergic receptors, which normally cap lipolysis in stubborn (alpha-2-rich) fat depots. Different lever, same freed fatty acids — but both still need a calorie deficit for that fat to actually leave."
    }
+  ],
+  "refs": [
+   {
+    "label": "Caffeine (PubChem CID 2519)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/2519"
+   },
+   {
+    "label": "ADORA2A adenosine A2A receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/135"
+   },
+   {
+    "label": "ADORA1 adenosine A1 receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/134"
+   },
+   {
+    "label": "LIPE hormone-sensitive lipase",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/3991"
+   },
+   {
+    "label": "Caffeine (Examine)",
+    "url": "https://examine.com/supplements/caffeine/"
+   }
   ]
  },
  "ephedrine-ec-eca-stack": {
@@ -5381,6 +5823,24 @@
     "title": "Ephedrine vs caffeine — the releaser and the brake-remover",
     "point": "This is why they're stacked, not compared. Ephedrine <b>pushes the accelerator</b> — it dumps noradrenaline to drive thermogenesis and lipolysis. Caffeine <b>cuts the brake lines</b> — it blocks adenosine feedback and phosphodiesterase so the cAMP signal doesn't idle back down. Neither is redundant: without ephedrine there's little extra signal to sustain; without caffeine the signal is quickly damped. The synergy is the whole point of ECA."
    }
+  ],
+  "refs": [
+   {
+    "label": "Ephedrine (PubChem CID 9294)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/9294"
+   },
+   {
+    "label": "ADRB1 beta-1 adrenergic receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/153"
+   },
+   {
+    "label": "ADRB2 beta-2 adrenergic receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/154"
+   },
+   {
+    "label": "ADRB3 beta-3 adrenergic receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/155"
+   }
   ]
  },
  "yohimbine": {
@@ -5588,6 +6048,24 @@
     "title": "Yohimbine vs clonidine — antagonist vs agonist at the same receptor",
     "point": "A clean lesson in reading a molecule. Both act on alpha-2 receptors, in opposite directions. Clonidine is an <b>agonist</b> — it activates presynaptic alpha-2 autoreceptors, cutting norepinephrine release, which is why it <i>lowers</i> blood pressure and sedates. Yohimbine is the <b>antagonist</b> — it blocks those same autoreceptors, so norepinephrine floods out and blood pressure and arousal <i>rise</i>. Same receptor, mirror-image effect."
    }
+  ],
+  "refs": [
+   {
+    "label": "ADRA2A alpha-2A adrenergic receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/150"
+   },
+   {
+    "label": "HTR1A 5-HT1A serotonin receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/3350"
+   },
+   {
+    "label": "Yohimbine (PubChem CID 8969)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/8969"
+   },
+   {
+    "label": "Yohimbine (Examine)",
+    "url": "https://examine.com/supplements/yohimbine/"
+   }
   ]
  },
  "clenbuterol": {
@@ -5778,7 +6256,21 @@
    "pgx": "No validated clenbuterol-specific pharmacogenetic marker. General ADRB2 coding polymorphisms (Arg16Gly / rs1042713, Gln27Glu / rs1042714) modulate beta-2 agonist responsiveness in asthma pharmacology, but their effect on clenbuterol's body-composition or cardiac response has not been characterised — treat individual variation as unpredictable.",
    "dose": "Where approved medically, dosing is in micrograms (e.g. ~20–40 µg bronchodilator range). The 2025 human body-composition RCT used 80 µg/day. Gray-market physique misuse commonly escalates µg doses with taper schemes at levels never validated for safety — described here, not recommended. The therapeutic-to-toxic margin is narrow, and toxicity from contaminated meat residues is well documented. No approved human dose exists for fat loss or muscle building.",
    "tolerance": "Receptor-downregulation tolerance, analogous to caffeine's but on a different receptor. Chronic beta-2 stimulation reduces receptor density (~50% in chronic animal studies) and desensitises downstream signalling — the 2025 human trial showed attenuated skeletal-muscle beta-2 signalling and RpS6 phosphorylation within a two-week cycle. The effect is therefore self-limiting, while cardiac hypertrophy and cardiovascular strain are not."
-  }
+  },
+  "refs": [
+   {
+    "label": "ADRB2 beta-2 adrenergic receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/154"
+   },
+   {
+    "label": "UCP1 uncoupling protein 1 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/7350"
+   },
+   {
+    "label": "Clenbuterol (PubChem CID 2783)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/2783"
+   }
+  ]
  },
  "berberine": {
   "hook": {
@@ -5989,7 +6481,25 @@
    "pgx": "No single dominant pharmacogene like caffeine's CYP1A2. Variation in P-glycoprotein (ABCB1) and CYP enzymes affects the small absorbed fraction, but response is shaped far more by baseline metabolic state and gut-microbiota composition than by any one genotype.",
    "dose": "Typically 500 mg two to three times daily with meals (1000–1500 mg/day total), deliberately split to offset the poor absorption and GI upset. Dihydroberberine reaches similar exposure at lower doses. Effects on glucose and lipids accrue over weeks, not with a single dose.",
    "tolerance": "No classic receptor down-regulation or tolerance is described — the effect doesn't fade with continued use, and there's nothing to cycle off. The main practical limiters are GI upset (often easing over the first weeks) and the CYP3A4 drug-interaction risk."
-  }
+  },
+  "refs": [
+   {
+    "label": "Berberine (PubChem CID 2353)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/2353"
+   },
+   {
+    "label": "PRKAA1 AMPK α1 catalytic subunit (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5562"
+   },
+   {
+    "label": "LDLR LDL receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/3949"
+   },
+   {
+    "label": "CYP3A4 cytochrome P450 3A4 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/1576"
+   }
+  ]
  },
  "green-tea-extract-egcg": {
   "hook": {
@@ -6199,6 +6709,24 @@
     "title": "EGCG vs entacapone — same enzyme, different league",
     "point": "Both inhibit COMT, but that's where the resemblance ends. Entacapone is a licensed, well-characterised COMT inhibitor dosed precisely to extend L-DOPA in Parkinson's disease. EGCG is a weak, poorly-absorbed dietary COMT inhibitor with a small, caffeine-dependent metabolic effect. Same target — wildly different reliability, potency and purpose."
    }
+  ],
+  "refs": [
+   {
+    "label": "EGCG (PubChem CID 65064)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/65064"
+   },
+   {
+    "label": "COMT catechol-O-methyltransferase",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/1312"
+   },
+   {
+    "label": "RPSA 67-kDa laminin receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/3921"
+   },
+   {
+    "label": "Green Tea Extract (Examine)",
+    "url": "https://examine.com/supplements/green-tea-extract/"
+   }
   ]
  },
  "naltrexone-bupropion-contrave": {
@@ -6405,7 +6933,29 @@
     "point": "Same goal, different organ. Contrave works in the <b>brain's appetite and reward circuit</b>, dulling craving and the urge to eat. A GLP-1 agonist like semaglutide mimics a <b>gut hormone</b>, slowing gastric emptying and signalling physical fullness. That difference explains both the magnitude gap (GLP-1 ~15% vs Contrave ~5% average loss) and the niche: Contrave suits reward- and emotion-driven eating rather than portion-size hunger."
    }
   ],
-  "stakes": "Obesity pharmacology is dominated by GLP-1 drugs, but they don't suit everyone — cost, supply, injection aversion, side effects, or a craving-driven eating pattern. Contrave is one of the few oral, non-GLP-1 options that targets the wanting rather than the fullness."
+  "stakes": "Obesity pharmacology is dominated by GLP-1 drugs, but they don't suit everyone — cost, supply, injection aversion, side effects, or a craving-driven eating pattern. Contrave is one of the few oral, non-GLP-1 options that targets the wanting rather than the fullness.",
+  "refs": [
+   {
+    "label": "Bupropion (PubChem CID 444)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/444"
+   },
+   {
+    "label": "Naltrexone (PubChem CID 5360515)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5360515"
+   },
+   {
+    "label": "OPRM1 mu-opioid receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/4988"
+   },
+   {
+    "label": "POMC proopiomelanocortin (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5443"
+   },
+   {
+    "label": "MC4R melanocortin 4 receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/4160"
+   }
+  ]
  },
  "phentermine-qsymia-phentermine-topiramate": {
   "hook": {
@@ -6626,7 +7176,25 @@
    "pgx": "No validated pharmacogenetic marker predicts weight-loss response. The main pharmacokinetic variable is urine pH, which modulates phentermine's renal clearance and half-life. Topiramate exposure rises with impaired renal function.",
    "dose": "Qsymia is titrated once daily: 3.75/23 mg → 7.5/46 mg → 11.25/69 mg → 15/92 mg (phentermine/topiramate ER), with the 15/92 dose the top dose in the pivotal trials. Phentermine monotherapy is typically 15–37.5 mg/day for short-term use only. This is a description of the labelled regimen, not a recommendation — dosing is a prescriber's decision.",
    "tolerance": "Phentermine's appetite-suppressant effect wanes over weeks (tolerance), which is why monotherapy is limited to short-term use; combining low-dose phentermine with topiramate helps sustain the effect. There is no receptor-downregulation tolerance to topiramate in the caffeine sense, but weight regain after stopping the combination is common, since the underlying appetite set-point is not permanently changed."
-  }
+  },
+  "refs": [
+   {
+    "label": "Phentermine (PubChem CID 4771)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/4771"
+   },
+   {
+    "label": "Topiramate (PubChem CID 5284627)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5284627"
+   },
+   {
+    "label": "SLC6A2 norepinephrine transporter (NET)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6530"
+   },
+   {
+    "label": "CA2 carbonic anhydrase 2",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/760"
+   }
+  ]
  },
  "testosterone-trt": {
   "hook": {
@@ -6832,6 +7400,20 @@
     "title": "Testosterone vs a SARM — master key vs filed-down key",
     "point": "Same lock (the androgen receptor), different reach. Testosterone is the steroid <b>master key</b> that turns every androgen lock — muscle, bone, prostate, skin, scalp — which is why it's powerful and why it comes with prostate, hair and estrogen effects (it also aromatises to estradiol). A SARM like ostarine is a non-steroidal <b>filed-down key</b> that turns the muscle-and-bone locks hard and barely catches the others, for a milder side profile at lower potency. But the master key's biggest alarm trips on both — your brain sees an androgen in the lock and shuts down your own production."
    }
+  ],
+  "refs": [
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   },
+   {
+    "label": "CYP19A1 aromatase",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/1588"
+   },
+   {
+    "label": "Testosterone (PubChem CID 6013)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/6013"
+   }
   ]
  },
  "hcg-human-chorionic-gonadotropin": {
@@ -7028,6 +7610,20 @@
    {
     "title": "hCG vs clomiphene — poke the testicle vs restart the brain",
     "point": "Both aim to protect fertility, but from opposite ends of the axis. hCG <b>bypasses the shut-down pituitary and pokes the testicle directly</b>, so it works even when TRT has fully silenced the brain. Clomiphene (or enclomiphene) instead <b>blocks estrogen feedback at the pituitary to coax the man's own LH back on</b> — which only works if the axis isn't already suppressed by exogenous testosterone. Different lever, different situation."
+   }
+  ],
+  "refs": [
+   {
+    "label": "LHCGR LH/choriogonadotropin receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/3973"
+   },
+   {
+    "label": "hCG beta subunit CGB3 (UniProt P0DN86)",
+    "url": "https://www.uniprot.org/uniprotkb/P0DN86/entry"
+   },
+   {
+    "label": "CGB3 chorionic gonadotropin subunit beta (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/1082"
    }
   ]
  },
@@ -7236,7 +7832,21 @@
    "pgx": "No clinically actionable single-gene pharmacogenetic switch guides dosing (unlike caffeine's CYP1A2). The dominant determinant of response is physiological rather than genetic: an intact, responsive hypothalamic–pituitary–testicular axis. Men with primary testicular failure do not respond.",
    "dose": "Prescription, and in men off-label. Typical clinical off-label dosing is low: clomiphene citrate ~25–50 mg daily or every other day; enclomiphene ~12.5–25 mg daily (compounded). Testosterone typically rises after about four weeks, with bloods (testosterone, LH/FSH, estradiol) rechecked to titrate. Not to be self-dosed outside medical care.",
    "tolerance": "Not a classic receptor-desensitisation story. The main pharmacological caveat with the racemic drug is zuclomiphene accumulation — its long half-life means the estrogenic isomer builds up over months of daily use, shifting the net hormonal effect. That is a key rationale for the purified enclomiphene isomer."
-  }
+  },
+  "refs": [
+   {
+    "label": "ESR1 estrogen receptor alpha (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2099"
+   },
+   {
+    "label": "Clomifene (PubChem CID 2800)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/2800"
+   },
+   {
+    "label": "Enclomiphene (PubChem CID 1548953)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/1548953"
+   }
+  ]
  },
  "anastrozole-exemestane-aromatase-inhibitors": {
   "hook": {
@@ -7441,6 +8051,20 @@
    {
     "title": "Aromatase inhibitor vs tamoxifen — cut supply vs block the receptor",
     "point": "Two ways to fight estrogen-driven cancer, at opposite ends of the pathway. An aromatase inhibitor <b>shuts off estrogen production</b> upstream (less hormone made). Tamoxifen is a SERM that <b>blocks the estrogen receptor</b> downstream (hormone is made but can't act in breast tissue). That difference drives their distinct side-effect profiles — tamoxifen carries clot and endometrial risks, while aromatase inhibitors carry joint pain and bone loss from system-wide low estrogen."
+   }
+  ],
+  "refs": [
+   {
+    "label": "CYP19A1 aromatase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/1588"
+   },
+   {
+    "label": "Anastrozole (PubChem CID 2187)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/2187"
+   },
+   {
+    "label": "Exemestane (PubChem CID 60198)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/60198"
    }
   ]
  },
@@ -7658,7 +8282,21 @@
    "pgx": "CYP2D6 is the pharmacogenetic focal point: poor and intermediate metabolisers, and patients co-prescribed strong CYP2D6 inhibitors (e.g., paroxetine, fluoxetine, bupropion), produce lower endoxifen concentrations. Whether this translates into worse breast-cancer outcomes has been genuinely inconsistent across studies, so CYP2D6 genotyping is not uniformly used to guide dosing. Roughly half the between-person variability in endoxifen is attributable to CYP2D6 activity.",
    "dose": "Prescription-only. Typical adult dose is 20 mg once daily for breast cancer treatment and risk reduction, usually continued for 5-10 years; gynecomastia and off-label hormonal uses employ lower daily doses (commonly ~10-20 mg). Not to be self-dosed outside clinical care.",
    "tolerance": "No classic receptor down-regulation causing the effect to fade — efficacy is sustained over years of use. The clinical limits are different: cumulative agonist-driven risks (endometrial hyperplasia/cancer, venous thromboembolism) and, in cancer, acquired endocrine resistance through altered ER signalling — a change in tumour biology rather than pharmacological tolerance."
-  }
+  },
+  "refs": [
+   {
+    "label": "Tamoxifen (PubChem CID 2733526)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/2733526"
+   },
+   {
+    "label": "ESR1 estrogen receptor alpha",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2099"
+   },
+   {
+    "label": "ESR2 estrogen receptor beta",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2100"
+   }
+  ]
  },
  "dhea": {
   "hook": {
@@ -7862,7 +8500,29 @@
    "pgx": "No single-gene pharmacogenetic switch analogous to caffeine's CYP1A2. Response is governed by baseline DHEA-S (age- and sex-dependent) and by how much converting enzyme a given tissue expresses, which shifts the androgen-versus-estrogen balance of the same dose between individuals.",
    "dose": "Common OTC ranges: 25-50 mg/day for men 40+ and 10-25 mg/day for women. Adrenal-insufficiency replacement studies used ~25-50 mg/day. The prescription intravaginal form (prasterone/Intrarosa) is 6.5 mg nightly. Because effects run through sex-hormone conversion, dosing is best guided by measured DHEA-S and downstream hormones under medical supervision.",
    "tolerance": "No receptor down-regulation / classic tolerance. The ceiling is a saturation-and-deficiency one: once downstream hormone demand is met, extra precursor adds little. Sustained use in women can accumulate androgenic side effects (acne, hirsutism); WADA-banned for competitive athletes."
-  }
+  },
+  "refs": [
+   {
+    "label": "DHEA (PubChem CID 5881)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5881"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   },
+   {
+    "label": "ESR1 estrogen receptor alpha",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2099"
+   },
+   {
+    "label": "ESR2 estrogen receptor beta",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2100"
+   },
+   {
+    "label": "CYP19A1 aromatase",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/1588"
+   }
+  ]
  },
  "finasteride-dutasteride": {
   "hook": {
@@ -8073,7 +8733,25 @@
    "pgx": "The clinically relevant genetics is at the target, not clearance: loss-of-function SRD5A2 causes congenital 5α-reductase deficiency (ambiguous genitalia at birth, but no male-pattern balding later) — the phenotype these drugs partly reproduce. Androgen-receptor CAG-repeat length and follicle androgen sensitivity influence both baldness susceptibility and likely treatment response, though neither is used clinically to guide dosing.",
    "dose": "Finasteride 1 mg/day for hair, 5 mg/day for BPH. Dutasteride 0.5 mg/day (approved broadly for BPH; for hair loss approved only in a few countries, off-label elsewhere). Once daily is enough, and timing doesn't matter — the enzyme block, not the plasma level, drives the effect.",
    "tolerance": "No pharmacological tolerance — the enzyme block doesn't wane, so the effect is maintained with continued daily use and there is nothing to cycle. Stopping reverses it: DHT rebounds within days (finasteride) or over weeks (dutasteride), and hair gained is typically lost within ~6–12 months."
-  }
+  },
+  "refs": [
+   {
+    "label": "SRD5A2 (5α-reductase type 2, NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6716"
+   },
+   {
+    "label": "SRD5A1 (5α-reductase type 1, NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6715"
+   },
+   {
+    "label": "Finasteride (PubChem CID 57363)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/57363"
+   },
+   {
+    "label": "Dutasteride (PubChem CID 6918296)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/6918296"
+   }
+  ]
  },
  "tongkat-ali-eurycoma-longifolia": {
   "hook": {
@@ -8265,7 +8943,21 @@
    "pgx": "No single-gene pharmacogenetic switch has been identified. The dominant response modifier is baseline endocrine state — stress load and starting testosterone (hypogonadal/older men respond most; eugonadal young men least).",
    "dose": "200–400 mg/day of a standardised extract (Physta or LJ100 in the trials), taken daily; benefits assessed over 2–12 weeks. No good evidence that higher doses add benefit.",
    "tolerance": "Not well characterised. There's no receptor to down-regulate, so classic pharmacological tolerance isn't expected, but long-term human data on sustained effect are limited. Cycling is commonly practised but not evidence-based."
-  }
+  },
+  "refs": [
+   {
+    "label": "SHBG sex hormone-binding globulin (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6462"
+   },
+   {
+    "label": "Eurycomanone (PubChem CID 13936691)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/13936691"
+   },
+   {
+    "label": "Tongkat Ali (Examine)",
+    "url": "https://examine.com/supplements/tongkat-ali/"
+   }
+  ]
  },
  "fadogia-agrestis": {
   "hook": {
@@ -8412,7 +9104,17 @@
    "pgx": "None. No pharmacogenetics have been studied — there is no defined metabolising enzyme or target to vary between people.",
    "dose": "No established human dose. Commercial products commonly sell 300–600 mg/day of stem extract, but this figure has no human safety or efficacy basis. In rats, effects (and toxicity) were seen at 18–100 mg/kg; reversible testicular harm appeared at 18 mg/kg and irreversible harm at 50–100 mg/kg over 28 days.",
    "tolerance": "Unknown — never studied. There is no data on adaptation, receptor changes, or cycling because the basic pharmacology has not been worked out."
-  }
+  },
+  "refs": [
+   {
+    "label": "Fadogia agrestis (Examine)",
+    "url": "https://examine.com/supplements/fadogia-agrestis/"
+   },
+   {
+    "label": "Fadogia agrestis (PubChem Taxonomy)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/taxonomy/Fadogia-agrestis"
+   }
+  ]
  },
  "nandrolone-deca-durabolin": {
   "hook": {
@@ -8618,6 +9320,20 @@
     "title": "Nandrolone vs testosterone — one atom, opposite amplifier",
     "point": "Same androgen receptor, one carbon apart. Testosterone is <b>amplified</b> where you least want it — 5-alpha-reductase turns it into stronger DHT in prostate and scalp. Nandrolone (testosterone minus the C19 methyl) runs that same reaction in reverse: it becomes the <b>weaker</b> DHN there, so it's milder on prostate and hair while staying strong in muscle and bone. But nandrolone adds a cost testosterone doesn't carry — progesterone-receptor activity — which is why its signature side effect is a libido crash, not male-pattern hair loss."
    }
+  ],
+  "refs": [
+   {
+    "label": "Nandrolone (PubChem CID 9904)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/9904"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   },
+   {
+    "label": "PGR progesterone receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5241"
+   }
   ]
  },
  "trenbolone": {
@@ -8821,7 +9537,25 @@
     "point": "Both are 19-nor steroids, so both resist aromatisation better than testosterone. Trenbolone is <b>nandrolone plus two extra double bonds</b>, and that small change is the whole story: it stops 5α-reductase from weakening the molecule and pushes androgen-receptor affinity up to DHT-like levels, making trenbolone far more potent — and far more punishing (night sweats, insomnia, aggression, brutal HDL crash) than its milder parent. Same backbone, very different force."
    }
   ],
-  "stakes": "It was never meant for you — it's a beef-cattle growth implant that became one of the most potent and most punishing steroids in gym culture, and the fact that it has zero human safety data is not a detail, it's the whole risk."
+  "stakes": "It was never meant for you — it's a beef-cattle growth implant that became one of the most potent and most punishing steroids in gym culture, and the fact that it has zero human safety data is not a detail, it's the whole risk.",
+  "refs": [
+   {
+    "label": "Trenbolone (PubChem CID 25015)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/25015"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   },
+   {
+    "label": "PGR progesterone receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5241"
+   },
+   {
+    "label": "NR3C1 glucocorticoid receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2908"
+   }
+  ]
  },
  "oxandrolone-anavar": {
   "hook": {
@@ -9031,6 +9765,16 @@
    {
     "title": "Oxandrolone vs a SARM (ostarine) — a re-tuned steroid vs a non-steroid",
     "point": "Both chase the same idea — muscle without the full masculinising toll — by different routes. Oxandrolone is a <b>true steroid</b> that engages AR body-wide and gets its 'mildness' from low androgenic potency plus non-aromatisation. A SARM like ostarine is a <b>non-steroidal</b> molecule that tries to build selectivity into the receptor's shape itself. Different chemistry, same unavoidable catch: both still suppress your own testosterone and lower HDL, because both feed the same androgen signal your brain is monitoring."
+   }
+  ],
+  "refs": [
+   {
+    "label": "Oxandrolone (PubChem CID 5878)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5878"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
    }
   ]
  },
@@ -9243,7 +9987,21 @@
    "pgx": "No validated compound-specific pharmacogenetic marker. AR sensitivity varies generally with AR-gene CAG-repeat length, but this has not been characterised for stanozolol, so individual variation should be treated as unpredictable.",
    "dose": "Approved clinical dosing is low and monitored: 0.5–2 mg/day for hereditary angioedema. Gray-market/anecdotal physique use runs far higher (commonly cited in the tens of milligrams per day, oral or injectable) at doses never validated for safety — this is a description, not a recommendation. No approved physique-enhancement dose exists.",
    "tolerance": "There is no receptor-downregulation tolerance in the caffeine sense. The dominant time-dependent consequences are cumulative and toxic rather than adaptive: HPTA suppression (falling endogenous testosterone), progressively lowered HDL cholesterol, and rising hepatic risk (cholestatic injury, and with prolonged use peliosis hepatis and hepatic tumors) — these, not tachyphylaxis, are what govern how long it can be used."
-  }
+  },
+  "refs": [
+   {
+    "label": "Stanozolol (PubChem CID 25249)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/25249"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   },
+   {
+    "label": "SHBG sex hormone-binding globulin",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6462"
+   }
+  ]
  },
  "boldenone-equipoise": {
   "hook": {
@@ -9439,6 +10197,16 @@
    {
     "title": "Boldenone vs a SARM like ostarine — real steroid vs filed-down key",
     "point": "Both end at the androgen receptor, but boldenone is a genuine steroid <b>master key</b> that turns every androgen lock in the body with no tissue selectivity, whereas a SARM is engineered to favour muscle and bone. That's why boldenone's androgenic and red-cell effects are body-wide and pronounced. The one alarm both trip identically: your brain sees the androgen and shuts down your own testosterone."
+   }
+  ],
+  "refs": [
+   {
+    "label": "Boldenone (PubChem CID 13308)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/13308"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
    }
   ]
  },
@@ -9654,6 +10422,20 @@
     "title": "Dianabol vs ostarine — old-school flood vs filed-down key",
     "point": "Both act on the androgen receptor, but from opposite design philosophies. Ostarine is a non-steroidal 'selective' modulator engineered to favour muscle over prostate and skin. Dbol is an unselective steroidal <b>flood</b> — it hits every androgen lock and aromatises to estrogen on top, which is why it carries the full package of gyno, hypertension, and liver strain rather than a trimmed side-effect profile. Both still shut down your own testosterone."
    }
+  ],
+  "refs": [
+   {
+    "label": "Methandrostenolone (PubChem CID 6300)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/6300"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   },
+   {
+    "label": "CYP19A1 aromatase",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/1588"
+   }
   ]
  },
  "oxymetholone-anadrol-drostanolone-masteron-methenolone-primobolan": {
@@ -9842,7 +10624,29 @@
    "pgx": "No validated compound-specific pharmacogenetic marker for any of the three. Androgen sensitivity varies generally with AR-gene CAG-repeat length, but this has not been characterised for these molecules, so individual response — including the degree of HPTA suppression — should be treated as unpredictable.",
    "dose": "Medical/trial doses are the only ones grounded in evidence and are NOT recommendations: oxymetholone was studied around 50 mg two-to-three times daily in the HIV-wasting trial and is dosed in the low tens of milligrams for anemia. Drostanolone and methenolone physique use is entirely gray-market and unvalidated for safety at any dose. No approved dose exists for muscle-building in healthy people.",
    "tolerance": "There is no receptor-downregulation tolerance in the caffeine sense. The dominant time-dependent consequence is cumulative HPTA suppression — falling endogenous testosterone and lowered HDL cholesterol — that builds with continued use and recovers variably after cessation. This suppression, not tachyphylaxis, is what governs on/off cycling in practice."
-  }
+  },
+  "refs": [
+   {
+    "label": "Oxymetholone (PubChem CID 5281034)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5281034"
+   },
+   {
+    "label": "Drostanolone (PubChem CID 6011)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/6011"
+   },
+   {
+    "label": "Methenolone (PubChem CID 3037705)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/3037705"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   },
+   {
+    "label": "ESR1 estrogen receptor 1",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2099"
+   }
+  ]
  },
  "ligandrol-lgd-4033": {
   "hook": {
@@ -10043,6 +10847,16 @@
     "title": "Ligandrol vs ostarine — the stronger SARM, and the better trial result",
     "point": "Both are non-steroidal SARMs, but ligandrol binds AR harder (Ki ≈ 1 nM vs ostarine's ~3–4 nM) — which is why it's regarded as the stronger mass-builder and correspondingly the stronger suppressor. And where ostarine's Phase 3 <b>failed</b> its physical-function endpoint despite adding muscle, ligandrol's Phase 2 in hip-fracture patients reported <b>both</b> lean-mass and walking-distance gains. That's a genuinely better functional signal — yet ligandrol still has no Phase 3 and no approval, so \"better than ostarine\" is not \"proven safe or effective.\""
    }
+  ],
+  "refs": [
+   {
+    "label": "Ligandrol (PubChem CID 44137686)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/44137686"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   }
   ]
  },
  "testolone-rad-140": {
@@ -10238,7 +11052,17 @@
    "pgx": "No validated compound-specific pharmacogenetic marker. AR sensitivity varies generally with AR-gene CAG-repeat length, but this has not been characterised for RAD-140 response, so individual variation should be treated as unpredictable.",
    "dose": "No approved therapeutic dose exists. Early-phase oncology trials used low, monitored oral doses in a dose-escalation design. Gray-market/anecdotal physique use is commonly cited around 10–20 mg/day — doses never validated for safety, and delivered by products of unverified content. This is a description, not a recommendation.",
    "tolerance": "There is no receptor-downregulation tolerance in the caffeine sense. The dominant time-dependent consequence is cumulative HPTA suppression (falling endogenous testosterone) that builds with continued use and recovers variably after cessation; this — plus the risk of organ injury seen in case reports — is what actually governs the harm profile, not tachyphylaxis."
-  }
+  },
+  "refs": [
+   {
+    "label": "Testolone / RAD-140 (PubChem CID 44200882)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/44200882"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   }
+  ]
  },
  "andarine-s4-yk-11-s-23": {
   "hook": {
@@ -10445,6 +11269,32 @@
     "title": "This trio vs ostarine — the studied sibling vs the deep end",
     "point": "Same androgen-receptor engine, wildly different evidence. Ostarine at least reached human Phase 2 and Phase 3 trials — imperfect, but real people, real endpoints. These three fall off an evidence cliff: Andarine is animal-only, YK-11 is <b>cell-culture-only</b>, S-23 is rat-only. And they're not milder for being obscure — S-23 is <i>more</i> suppressive than ostarine, Andarine adds a vision side effect ostarine doesn't have, and YK-11 is actually steroidal. Less data, not less risk."
    }
+  ],
+  "refs": [
+   {
+    "label": "Andarine (S4) (PubChem CID 9824562)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/9824562"
+   },
+   {
+    "label": "YK-11 (PubChem CID 119058028)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/119058028"
+   },
+   {
+    "label": "S-23 (PubChem CID 44513723)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/44513723"
+   },
+   {
+    "label": "AR androgen receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   },
+   {
+    "label": "MSTN myostatin (GDF-8)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2660"
+   },
+   {
+    "label": "FST follistatin",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/10468"
+   }
   ]
  },
  "cardarine-gw-501516": {
@@ -10623,7 +11473,17 @@
    "pgx": "No validated compound-specific pharmacogenetic marker. Individual response should be treated as uncharacterised.",
    "dose": "Human trial doses were low and monitored: 2.5–10 mg/day (10 mg being the dose in the lipid and metabolic studies). Gray-market/anecdotal physique and endurance use is commonly cited around 10–20 mg/day, at doses never validated for safety — a description, not a recommendation. No approved therapeutic dose exists for any indication.",
    "tolerance": "No classic receptor-downregulation tolerance is described. The dominant time-dependent consequence is not tachyphylaxis but cumulative risk: the proliferative signalling that produced multi-organ tumours in long-term rodent studies is what makes chronic exposure the concern, not fading effect."
-  }
+  },
+  "refs": [
+   {
+    "label": "GW501516 / Cardarine (PubChem CID 9803963)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/9803963"
+   },
+   {
+    "label": "PPARD peroxisome proliferator-activated receptor delta (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5467"
+   }
+  ]
  },
  "stenabolic-sr9009": {
   "hook": {
@@ -10822,7 +11682,21 @@
    "pgx": "No validated compound-specific pharmacogenetic marker. There are no human data from which to characterise inter-individual variation.",
    "dose": "No approved therapeutic dose exists anywhere. Mouse studies used high parenteral doses (on the order of 100 mg/kg/day intraperitoneally); gray-market human oral use is anecdotal, unstudied, and — given near-zero oral bioavailability — of uncertain delivery. This is a description, not a recommendation.",
    "tolerance": "Not characterised in humans. There is no human dosing data from which any tolerance, dependence, or withdrawal pattern could be described."
-  }
+  },
+  "refs": [
+   {
+    "label": "SR9009 / Stenabolic (PubChem CID 57394020)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/57394020"
+   },
+   {
+    "label": "NR1D1 REV-ERBα (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/9572"
+   },
+   {
+    "label": "NR1D2 REV-ERBβ (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/9975"
+   }
+  ]
  },
  "tesamorelin-egrifta": {
   "hook": {
@@ -11023,6 +11897,16 @@
    {
     "title": "Tesamorelin vs sermorelin / CJC-1295 — the approved one",
     "point": "All three are GHRH-based secretagogues, but tesamorelin is the outlier with an <b>FDA approval and phase-3 evidence</b> behind a specific indication. Sermorelin is a shorter GHRH(1-29) fragment, and CJC-1295 is another modified GHRH analog — both are used in the gray-market peptide world without the same regulatory approval or trial base. Same mechanistic idea, very different weight of evidence."
+   }
+  ],
+  "refs": [
+   {
+    "label": "Tesamorelin (PubChem CID 16137828)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/16137828"
+   },
+   {
+    "label": "GHRHR growth hormone-releasing hormone receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2692"
    }
   ]
  },
@@ -11226,6 +12110,16 @@
     "title": "Sermorelin vs ghrelin mimetics (GHRPs like ipamorelin) — two different doors to the same room",
     "point": "Both make your pituitary release its own GH, but through different receptors. Sermorelin works the GHRH receptor (the 'GHRH arm'). Ghrelin mimetics such as ipamorelin work the growth-hormone-secretagogue receptor, GHSR (the 'ghrelin arm'), and also blunt somatostatin. Because they pull different levers, the two are often combined for a larger, still-endogenous pulse — a genuine mechanistic sibling, not a rival."
    }
+  ],
+  "refs": [
+   {
+    "label": "Sermorelin (PubChem CID 16132413)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/16132413"
+   },
+   {
+    "label": "GHRHR growth hormone releasing hormone receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2692"
+   }
   ]
  },
  "cjc-1295-dac": {
@@ -11425,7 +12319,17 @@
    "halfLife": "5.8–8.1 days (DAC form); ~30 min (no-DAC / Modified GRF 1-29)",
    "duration": "GH elevated ~6 days and IGF-1 elevated 9–11 days after a single DAC dose",
    "note": "Don't read this like a stimulant's stopwatch. The multi-day half-life sets how often you'd dose, but what the body experiences is a sustained rise in GH and then IGF-1 over days — a hormonal cascade, not a blood-level peak you feel. With repeated weekly DAC dosing, IGF-1 accumulates rather than returning to baseline between doses."
-  }
+  },
+  "refs": [
+   {
+    "label": "GHRHR (growth-hormone-releasing hormone receptor)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2692"
+   },
+   {
+    "label": "CJC-1295 (PubChem CID 91976842)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/91976842"
+   }
+  ]
  },
  "ipamorelin": {
   "hook": {
@@ -11614,7 +12518,17 @@
    "pgx": "No validated compound-specific pharmacogenetic marker. GHSR gene variants and general GH-axis responsiveness (modulated by age, adiposity, sleep and sex-steroid status) will influence response, but none has been characterised for ipamorelin — individual variation should be treated as unpredictable.",
    "dose": "No approved therapeutic dose exists. Human research used intravenous infusions across a dose range for PK characterisation; grey-market physique use commonly cites microgram-scale subcutaneous doses (often ~100–300 mcg) given once or multiple times daily to mimic natural pulsatility — this is a description of what is reported, not a recommendation, and none of these regimens is validated for efficacy or safety.",
    "tolerance": "There is no classic receptor-downregulation tolerance documented at typical use, but continuous (non-pulsatile) GHSR stimulation can desensitise the GH response, which is the rationale offered for pulsatile dosing. The more relevant time-dependent concern is sustained IGF-1 elevation and its unresolved long-term safety, not tachyphylaxis."
-  }
+  },
+  "refs": [
+   {
+    "label": "GHSR growth hormone secretagogue receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2693"
+   },
+   {
+    "label": "Ipamorelin (PubChem CID 9831659)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/9831659"
+   }
+  ]
  },
  "mk-677-ibutamoren": {
   "hook": {
@@ -11833,6 +12747,16 @@
     "title": "MK-677 vs SARMs (ostarine) — the same failed exam",
     "point": "Two different molecules, one identical verdict. Each reliably moves a headline biomarker — ostarine adds lean mass, MK-677 raises IGF-1 and lean mass — and each then <b>failed the endpoint that actually matters</b>: physical function and strength. Both were rejected by regulators despite 'working' on paper. It's the cleanest lesson on this site — a number moving the right way is not the same as a person being better off."
    }
+  ],
+  "refs": [
+   {
+    "label": "Ibutamoren (PubChem CID 178024)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/178024"
+   },
+   {
+    "label": "GHSR growth hormone secretagogue receptor",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2693"
+   }
   ]
  },
  "human-growth-hormone-somatropin": {
@@ -12037,7 +12961,17 @@
    "pgx": "No validated single-gene switch governing response. The GHR exon-3 deletion polymorphism (d3-GHR) has been associated in some pediatric cohorts with a greater growth response to GH therapy, but results are inconsistent across studies and populations, so it is not a reliable predictor. IGF-1 pathway variation may modulate response but is not clinically actionable here.",
    "dose": "Therapeutic dosing is weight- or condition-based and physician-titrated to IGF-1 levels — adult deficiency typically uses small daily microgram-per-kg subcutaneous doses. Historical study doses like Rudman's ~0.03 mg/kg three times weekly are now considered high. Grey-market physique use runs well above replacement, at exposures never validated for safety — a description, not a recommendation. No approved dose exists for anti-aging or athletic use.",
    "tolerance": "No receptor-desensitisation tolerance in the caffeine sense. The dominant time-dependent phenomena are (1) suppression of endogenous GH pulses during dosing via negative feedback, and (2) cumulative metabolic and structural consequences of sustained supraphysiologic signalling — insulin resistance, fluid retention, and acromegalic tissue changes — that build with continued use rather than fading."
-  }
+  },
+  "refs": [
+   {
+    "label": "GHR growth hormone receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2690"
+   },
+   {
+    "label": "Somatropin / human growth hormone (UniProt P01241)",
+    "url": "https://www.uniprot.org/uniprotkb/P01241/entry"
+   }
+  ]
  },
  "igf-1-lr3": {
   "hook": {
@@ -12232,6 +13166,20 @@
    {
     "title": "IGF-1 vs insulin — cousins that share a receptor",
     "point": "IGF-1 and insulin are built on the same molecular scaffold and their receptors are close relatives that even form hybrids. That kinship is why IGF-1 LR3 <b>spills onto the insulin receptor</b> and can crash your blood sugar — the hypoglycemia isn't a contaminant or an accident, it's the predictable cost of a growth factor shaped like insulin."
+   }
+  ],
+  "refs": [
+   {
+    "label": "IGF1R IGF-1 receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/3480"
+   },
+   {
+    "label": "INSR insulin receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/3643"
+   },
+   {
+    "label": "IGF1 insulin-like growth factor 1 precursor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/3479"
    }
   ]
  },
@@ -12447,7 +13395,21 @@
     "point": "Both are your brain's inhibitory 'calm down' neurotransmitters, and both work by opening a chloride channel to quiet neurons. The difference is location and division of labour: <b>GABA</b> is the dominant inhibitory brake across the higher brain (cortex, forebrain), while <b>glycine</b> handles fast inhibition mainly in the spinal cord and brainstem. Same trick — chloride in, neuron hushed — different circuits. And glycine has a second life GABA doesn't: as a co-agonist at excitatory NMDA receptors and as a structural building block."
    }
   ],
-  "stakes": "Glycine is quietly one of the most-used molecules in your body: it's the single most abundant amino acid in collagen — the most abundant protein in you — and your daily demand for it (collagen, glutathione, creatine, methyl clearance) is large enough that many diets fall short. Yet it costs cents per gram."
+  "stakes": "Glycine is quietly one of the most-used molecules in your body: it's the single most abundant amino acid in collagen — the most abundant protein in you — and your daily demand for it (collagen, glutathione, creatine, methyl clearance) is large enough that many diets fall short. Yet it costs cents per gram.",
+  "refs": [
+   {
+    "label": "Glycine (PubChem CID 750)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/750"
+   },
+   {
+    "label": "GLRA1 glycine receptor α1 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2741"
+   },
+   {
+    "label": "GRIN1 NMDA receptor GluN1 subunit (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2902"
+   }
+  ]
  },
  "liraglutide-saxenda-victoza": {
   "hook": {
@@ -12645,7 +13607,21 @@
    "pgx": "No established, clinically actionable pharmacogenetic determinant of response — there is no CYP1A2-style single-gene switch. GLP1R polymorphisms have been studied in relation to incretin response but are not used to guide prescribing. Because clearance is non-CYP and non-renal, major dose adjustment is not required for renal or hepatic impairment.",
    "dose": "Prescription-only, titrated under medical supervision to limit nausea: subcutaneous 0.6 mg once daily, increased in 0.6 mg weekly steps to 1.8 mg (Victoza, diabetes) or 3.0 mg (Saxenda, weight management). Not to be self-dosed outside clinical care.",
    "tolerance": "No classic receptor down-regulation that erodes efficacy. Gastrointestinal side effects (nausea, vomiting) typically wane as the dose is titrated and the body adapts. Weight loss plateaus as intake and expenditure re-balance; stopping leads to appetite and weight rebound rather than a withdrawal syndrome."
-  }
+  },
+  "refs": [
+   {
+    "label": "Liraglutide (PubChem CID 16134956)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/16134956"
+   },
+   {
+    "label": "GLP1R glucagon-like peptide 1 receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2740"
+   },
+   {
+    "label": "ALB serum albumin (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/213"
+   }
+  ]
  },
  "hexarelin-ghrp-2-ghrp-6": {
   "hook": {
@@ -12849,7 +13825,29 @@
    "pgx": "No validated compound-specific pharmacogenetic marker. GHSR gene polymorphisms exist and could in principle modulate response, but this has not been characterised for these peptides — treat inter-individual variation as unpredictable.",
    "dose": "The only approved dose is diagnostic: GHRP-2/pralmorelin ~1 µg/kg IV as a single GH-provocation test in Japan. Historical human research used single µg/kg boluses. Gray-market physique use commonly cites ~100 µg subcutaneous once or several times daily — doses never validated for chronic safety. This is description, not recommendation; no approved therapeutic (non-diagnostic) dose exists.",
    "tolerance": "Marked, and central to the class: repeated GHSR stimulation causes receptor desensitisation and down-regulation, blunting the GH response — fastest with hexarelin, with a 16-week human study showing roughly a halving of the response (partial and reversible after a break). This tachyphylaxis (not clearance) is what forces intermittent 'cycling' and is a major reason the class was superseded by ipamorelin."
-  }
+  },
+  "refs": [
+   {
+    "label": "GHSR growth hormone secretagogue receptor (ghrelin receptor)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2693"
+   },
+   {
+    "label": "CD36 CD36 molecule (scavenger receptor)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/948"
+   },
+   {
+    "label": "Hexarelin (PubChem CID 6918297)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/6918297"
+   },
+   {
+    "label": "GHRP-2 / Pralmorelin (PubChem CID 6918245)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/6918245"
+   },
+   {
+    "label": "GHRP-6 (PubChem CID 4345065)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/4345065"
+   }
+  ]
  },
  "follistatin-myostatin-inhibitors-ace-031-yk-11": {
   "hook": {
@@ -13076,6 +14074,28 @@
     "title": "Myostatin inhibitors vs anabolic steroids — releasing a brake vs flooring the accelerator",
     "point": "Both grow muscle, opposite logic. A steroid FLOORS THE ACCELERATOR — it drives the androgen receptor to push growth genes harder. A myostatin inhibitor RELEASES A BRAKE — it removes the ceiling the body normally imposes. (YK-11 confusingly does a bit of both, which is why it's mis-sold as 'natural'.) The brake approach is elegant on paper, but cutting a regulator this deep in TGF-β biology reaches vessels and other tissues — which is exactly why the clean-looking mechanism has been so hard to turn into a safe drug."
    }
+  ],
+  "refs": [
+   {
+    "label": "MSTN myostatin/GDF-8 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2660"
+   },
+   {
+    "label": "ACVR2B activin receptor type 2B (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/93"
+   },
+   {
+    "label": "FST follistatin (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/10468"
+   },
+   {
+    "label": "AR androgen receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/367"
+   },
+   {
+    "label": "YK-11 (PubChem CID 119058028)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/119058028"
+   }
   ]
  },
  "bpc-157": {
@@ -13296,7 +14316,29 @@
   "pk": {
    "halfLife": "≈15 min (rat, IV); <30 min in rats and dogs; no human data",
    "note": "This is the number that fools people. A sub-30-minute half-life would suggest a fleeting drug — yet the healing effect runs for days to weeks. The resolution is that BPC-157 acts by changing gene expression, not by maintaining a blood level, so the clearance clock and the effect clock are decoupled (the PK-PD disconnect). Treat the half-life as animal-only and don't read it like a stimulant's stopwatch."
-  }
+  },
+  "refs": [
+   {
+    "label": "BPC-157 (PubChem CID 9941957)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/9941957"
+   },
+   {
+    "label": "KDR VEGFR2 receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/3791"
+   },
+   {
+    "label": "NOS3 eNOS (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/4846"
+   },
+   {
+    "label": "GHR growth hormone receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2690"
+   },
+   {
+    "label": "PTK2 FAK kinase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5747"
+   }
+  ]
  },
  "tb-500-thymosin-beta-4-fragment": {
   "hook": {
@@ -13485,6 +14527,24 @@
    {
     "title": "TB-500 vs BPC-157 — the whole-body healer vs the local one",
     "point": "The two most-stacked 'repair' peptides, with different origins and reach. TB-500 is a fragment of <b>thymosin β4</b> and works through <b>actin regulation, cell migration and angiogenesis</b> — framed as a systemic, 'whole-body' healer. BPC-157 is a fragment linked to a <b>gastric protective protein</b> and is described as acting more <b>locally</b> on tissue and the gut. They're commonly paired for exactly that complementary framing — but both share the same fundamental problem: strong mechanistic stories, animal data, and essentially no human trials of the actual injected peptides."
+   }
+  ],
+  "refs": [
+   {
+    "label": "Thymosin Beta 4 / TB-500 (PubChem CID 45382195)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/45382195"
+   },
+   {
+    "label": "TMSB4X thymosin beta 4 X-linked (parent gene, NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/7114"
+   },
+   {
+    "label": "ACTB actin beta (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/60"
+   },
+   {
+    "label": "Thymosin beta-4, human (UniProt P62328)",
+    "url": "https://www.uniprot.org/uniprotkb/P62328/entry"
    }
   ]
  },
@@ -13876,7 +14936,25 @@
    "pgx": "No validated pharmacogenetic marker. Mechanistically, PepT1 (SLC15A1) expression level sets how much KPV a tissue can take up, and PepT1 is upregulated in inflamed intestine — a plausible modifier of local response — but this has not been characterised as a personal-response predictor. Treat individual response as unknown.",
    "dose": "No approved or trial-validated human dose exists. Preclinical work used defined concentrations (nanomolar in cell studies; mg-scale oral dosing in mouse colitis models), which do not translate directly to a human regimen. Gray-market gut/skin protocols cite various injected or oral doses, none validated for safety or efficacy — this is a description, not a recommendation.",
    "tolerance": "No receptor-downregulation tolerance is described, since the anti-inflammatory action is receptor-independent. There is no characterised tolerance, dependence, or withdrawal profile in humans — simply because the human studies to define one have not been done."
-  }
+  },
+  "refs": [
+   {
+    "label": "KPV (PubChem CID 125672)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/125672"
+   },
+   {
+    "label": "POMC proopiomelanocortin (α-MSH precursor)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5443"
+   },
+   {
+    "label": "SLC15A1 peptide transporter 1 (PepT1)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6564"
+   },
+   {
+    "label": "RELA NF-κB p65 subunit",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5970"
+   }
+  ]
  },
  "thymosin-alpha-1-zadaxin": {
   "hook": {
@@ -14064,7 +15142,21 @@
    "pgx": "No validated pharmacogenetic marker. Response is governed by baseline immune state rather than a single-gene switch — the clearest rationale is in immune-suppressed or immune-exhausted patients, with little expected effect in the immunocompetent.",
    "dose": "Trial dosing has centred on the 1.6 mg subcutaneous unit: e.g. 1.6 mg every 12 hours in the severe-sepsis ETASS protocol, and roughly 1.6 mg twice weekly over months for chronic hepatitis B. These are the studied, monitored regimens under specific indications — no FDA-approved dose exists, and gray-market wellness use is off-label and unstandardised. This is description, not recommendation.",
    "tolerance": "There is no receptor-downregulation tolerance in the caffeine sense. As an intermittently dosed immunomodulator it doesn't produce classic tachyphylaxis; the relevant consideration is instead the direction of immune modulation in a given clinical context, which can be beneficial or harmful depending on the starting immune state."
-  }
+  },
+  "refs": [
+   {
+    "label": "Thymalfasin (PubChem CID 16130571)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/16130571"
+   },
+   {
+    "label": "TLR9 toll-like receptor 9",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/54106"
+   },
+   {
+    "label": "TLR2 toll-like receptor 2",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/7097"
+   }
+  ]
  },
  "ll-37": {
   "hook": {
@@ -14263,7 +15355,29 @@
    "pgx": "No validated compound-specific pharmacogenetic marker. Endogenous LL-37 is governed chiefly by vitamin-D status via VDR-driven CAMP transcription (circulating hCAP18/LL-37 correlates with 25-hydroxyvitamin D), and by the local proteases that activate hCAP18. Pathologically elevated LL-37 characterises psoriasis and rosacea lesions.",
    "dose": "No approved therapeutic dose exists. Human trials used topical wound application at 0.5 and 1.6 mg/mL (with 3.2 mg/mL in the earlier study), applied locally to venous leg ulcers under monitoring — a description of trial protocols, not a recommendation. Gray-market injectable/oral 'peptide' use is unstudied for safety and has no validated regimen.",
    "tolerance": "Not a receptor-tolerance (tachyphylaxis) story. The time-dependent concerns are different: potential microbial resistance via surface-charge remodelling and protease secretion, and the auto-inflammatory/pro-tumorigenic liabilities of sustained high LL-37 in the wrong tissue."
-  }
+  },
+  "refs": [
+   {
+    "label": "LL-37 (PubChem CID 16198951)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/16198951"
+   },
+   {
+    "label": "CAMP cathelicidin antimicrobial peptide (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/820"
+   },
+   {
+    "label": "FPR2 formyl peptide receptor 2 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2358"
+   },
+   {
+    "label": "P2RX7 purinergic receptor P2X 7 (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5027"
+   },
+   {
+    "label": "EGFR epidermal growth factor receptor (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/1956"
+   }
+  ]
  },
  "rapamycin-sirolimus": {
   "hook": {
@@ -14483,6 +15597,20 @@
    {
     "title": "Rapamycin vs metformin — direct brake vs indirect nudge",
     "point": "Both are studied as geroprotectors, but they hit the growth axis from opposite ends. Rapamycin <b>directly inhibits mTORC1</b>, the growth hub itself. Metformin works upstream and indirectly — dampening mitochondrial energy output and activating AMPK, which in turn eases off mTORC1 among other targets. Rapamycin's animal lifespan data is far stronger and more reproducible; metformin's is weaker and its healthy-human longevity trial (TAME) is still the open question."
+   }
+  ],
+  "refs": [
+   {
+    "label": "MTOR mechanistic target of rapamycin kinase (NCBI Gene 2475)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2475"
+   },
+   {
+    "label": "FKBP1A FKBP prolyl isomerase 1A / FKBP12 (NCBI Gene 2280)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2280"
+   },
+   {
+    "label": "Sirolimus (PubChem CID 5284616)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5284616"
    }
   ]
  },
@@ -14704,7 +15832,25 @@
    "halfLife": "~5–6 h in plasma (longer in the red-cell compartment)",
    "duration": "dosed 1–2× daily to hold a steady effect",
    "note": "Metformin breaks the usual timing rules: the benefit isn't chased by a daily blood peak but by keeping steady levels in the liver, so it's a habit, not a stopwatch. Because it leaves only through the kidneys and isn't metabolised, impaired kidney function lets it accumulate — the reason dosing is capped or stopped as renal function falls."
-  }
+  },
+  "refs": [
+   {
+    "label": "Metformin (PubChem CID 4091)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/4091"
+   },
+   {
+    "label": "PRKAA1 AMPK catalytic subunit α1",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/5562"
+   },
+   {
+    "label": "GPD2 mitochondrial glycerophosphate dehydrogenase",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/2820"
+   },
+   {
+    "label": "SLC22A1 OCT1 organic cation transporter",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6580"
+   }
+  ]
  },
  "acarbose": {
   "hook": {
@@ -14909,7 +16055,25 @@
    "pgx": "No single-gene pharmacogenetic switch like caffeine's CYP1A2 — clearance doesn't depend on a hepatic enzyme genotype because the drug largely isn't systemically metabolised. Response is governed instead by dietary carbohydrate load and by gut microbiome composition, which determines how the spared starch is fermented. In the ITP mouse studies the lifespan effect was diet-dependent and sex-biased (larger in males), a difference not yet mechanistically resolved.",
    "dose": "Prescription-only, titrated under medical supervision: typically started at 25 mg three times daily and increased toward 50–100 mg three times daily, each dose taken with the first bite of a main meal. Pivotal trials (STOP-NIDDM, ACE) used 100 mg three times daily. Low starting doses and gradual titration limit the gas/bloating. Off-label longevity dosing in humans is not established.",
    "tolerance": "No receptor down-regulation and no loss of glucose-lowering efficacy over time. The prominent early gastrointestinal effects (flatulence, bloating, loose stools) typically diminish over weeks as the colonic microbiome adapts to the increased fermentable carbohydrate load — which is why starting low and going slow matters."
-  }
+  },
+  "refs": [
+   {
+    "label": "Acarbose (PubChem CID 41774)",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/compound/41774"
+   },
+   {
+    "label": "MGAM maltase-glucoamylase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/8972"
+   },
+   {
+    "label": "SI sucrase-isomaltase (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/6476"
+   },
+   {
+    "label": "AMY2A pancreatic alpha-amylase 2A (NCBI Gene)",
+    "url": "https://www.ncbi.nlm.nih.gov/gene/279"
+   }
+  ]
  },
  "nmn-nr-nad-precursors": {
   "hook": {
