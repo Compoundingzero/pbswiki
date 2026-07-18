@@ -1751,6 +1751,12 @@
     const pwFact = (window.RNAWIKI_FACTS || []).find(x => x.href === '/pathway/' + i);
     const pwFactHtml = pwFact ? `<div class="cpd-fact"><span class="cf-k">💡 Did you know?</span> <span class="cf-t">${pwFact.t}</span></div>` : '';
     const crumb = crumbs([{ label: 'Home', href: '#/' }, { label: 'Pathways', href: '#/pathways' }, { label: p.shortLabel }]);
+    // Deep-expanded course (full fundamentals/deep-dive/expert-lens) — route through the course renderer,
+    // injecting a "compounds that pull this lever" chapter that the generic renderer doesn't have.
+    if (p.expand) {
+      const cpdChapter = { icon: '💊', label: 'The compounds', at: 3, html: (cpdSection || '<p class="muted">Compounds that act here are being added.</p>') + `<p class="pw-cpd-note">Each of these pulls this exact lever — open any compound to see how it does, then come back. That's how the whole map connects.</p>` };
+      return learnCourse(p.expand, { name: p.shortLabel, key: 'pathway-' + i, crumb, badge: '<span class="pw-badge">🧬 Master-pathway course</span>', prevnext: prev + next, journey: journeyBlock('pathway', i), extraChapters: [cpdChapter] });
+    }
     // Legacy render until the learning layer is authored (graceful degradation)
     if (!(p.hook || p.bigIdea || p.mechSteps)) {
       return `<div class="article">${crumb}<h1>${p.shortLabel}</h1>${pwFactHtml}${pathwayDiagram(p.diagram, p.shortLabel)}${p.html}<div class="suggest-row"><button class="linkbtn" data-suggest="simplify" data-ref="${esc(p.shortLabel)} pathway">✨ Too technical? Suggest a simpler version</button></div>${cpdSection}${journeyBlock('pathway', i)}<div id="goal-comments" class="page-discuss"></div><div class="prevnext">${prev}${next}</div></div>`;
@@ -1806,11 +1812,13 @@
     const ch3 = deep;
     const ch4 = expert + conns;
     const ch5 = mythsBox(pc) + selfTestBox(pc) + feynmanBox(pc) + graduationBlock(pc);
-    const chapterDefs = [
-      { n: 1, icon: '🌱', label: 'The big picture', html: ch1 }, { n: 2, icon: '⚙️', label: 'The mechanism', html: ch2 },
-      { n: 3, icon: '🔬', label: 'Deep dive', html: ch3 }, { n: 4, icon: '🧠', label: 'Think like an expert', html: ch4 },
-      { n: 5, icon: '🎓', label: 'Prove it', html: ch5 },
-    ].filter(ch => ch.html && ch.html.trim());
+    let chapterDefs = [
+      { icon: '🌱', label: 'The big picture', html: ch1 }, { icon: '⚙️', label: 'The mechanism', html: ch2 },
+      { icon: '🔬', label: 'Deep dive', html: ch3 }, { icon: '🧠', label: 'Think like an expert', html: ch4 },
+      { icon: '🎓', label: 'Prove it', html: ch5 },
+    ];
+    (ctx.extraChapters || []).forEach(ec => chapterDefs.splice(ec.at != null ? ec.at : chapterDefs.length, 0, ec));
+    chapterDefs = chapterDefs.filter(ch => ch.html && ch.html.trim()).map((ch, k) => Object.assign(ch, { n: k + 1 }));
     const tabs = `<div class="ch-steps" role="tablist">${chapterDefs.map((ch, k) => `<button class="ch-step${k === 0 ? ' active' : ''}" data-ch="${ch.n}"><span class="cs-num">${k + 1}</span><span class="cs-label">${ch.icon} ${esc(ch.label)}</span></button>`).join('')}</div>`;
     const sections = `<div class="chapters" id="cpd-chapters">${chapterDefs.map((ch, k) => { const nx = chapterDefs[k + 1]; const nav = nx ? `<button class="ch-next-btn" data-chgo="${nx.n}">Next: ${nx.icon} ${esc(nx.label)} →</button>` : ''; return `<section class="chapter${k === 0 ? ' active' : ''}" data-chapter="${ch.n}">${ch.html}${nav ? `<div class="ch-nav">${nav}</div>` : ''}</section>`; }).join('')}</div>`;
     setTimeout(() => { wirePathwayLearning(pc); }, 0);
