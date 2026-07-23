@@ -4632,29 +4632,39 @@
     const w = problem.why; if (!w || !w.theOneThing) return '';
     return `<div class="one-thing-head"><span class="oth-badge">⭐ Start here — the one thing</span><p>${mdInline(w.theOneThing)}</p><a class="oth-jump" data-scroll="p-causes">See the full cause-by-cause plan ↓</a></div>`;
   }
+  // Short symptom teaser for the accordion header — authored `hook`, else the first clause of the symptoms.
+  function causeHook(c) {
+    if (c.hook) return c.hook;
+    const s = String((c.tell && c.tell.symptoms) || '').replace(/\s*Honest tiering:.*$/i, '').split(/[.;]/)[0].trim();
+    return s.length > 96 ? s.slice(0, 94).trim() + '…' : s;
+  }
   function causesSection(problem) {
     const w = problem.why; if (!w) return '';
-    const ladder = (Array.isArray(w.ladder) && w.ladder.length) ? `<div class="cause-ladder-wrap"><div class="cause-ladder-h">The chain, surface → root:</div><ol class="cause-ladder">${w.ladder.map(l => `<li>${mdInline(l)}</li>`).join('')}</ol></div>` : '';
-    // Confirm-the-cause: aggregate every cause's lab marker into one "how to know which is yours" strip.
-    const labs = (w.causes || []).filter(c => c.tell && c.tell.labMarker).map(c => `<li><b>${esc(c.name)}:</b> ${mdInline(c.tell.labMarker)}</li>`).join('');
-    const confirm = labs ? `<details class="cause-confirm"><summary>🩸 Confirm which cause is yours — the labs to ask for</summary><ul>${labs}</ul><p class="cc-note">Symptoms narrow it down; these markers confirm it. Not medical advice — discuss testing with a clinician.</p></details>` : '';
-    const cards = (w.causes || []).slice().sort((a, b) => (a.rank || 9) - (b.rank || 9)).map(c => {
+    const ladder = (Array.isArray(w.ladder) && w.ladder.length) ? `<details class="cause-bigpic"><summary>🧭 The big picture — how one spot forms, surface → root</summary><ol class="cause-ladder">${w.ladder.map(l => `<li>${mdInline(l)}</li>`).join('')}</ol></details>` : '';
+    const causes = (w.causes || []).slice().sort((a, b) => (a.rank || 9) - (b.rank || 9));
+    const items = causes.map((c, i) => {
       const fixes = sortedFixes(c).map(f => { const ic = FIX_ICO[f.kind] || '•'; const cs = (f.kind === 'compound' && f.ref) ? slug(f.ref) : null; const inner = cs ? `<a href="#/c/${cs}">${mdInline(f.what)}</a>` : mdInline(f.what); return `<li><span class="fix-kind fk-${esc(f.kind || 'x')}">${ic} ${esc(FIX_LBL[f.kind] || 'Other')}</span> ${inner}</li>`; }).join('');
-      return `<div class="cause-card lev-${esc(c.leverage || 'med')}">
-        <div class="cause-head"><span class="cause-rank">${c.rank || ''}</span><h4>${esc(c.name)}</h4><span class="cause-lev">${esc(c.leverage || '')} leverage${c.modifiable === false ? ' · mostly fixed' : ''}</span>${causeTier(c.evidenceTier)}</div>
-        ${causeChain(c.chain)}
-        <div class="cause-tell"><b>Is this you?</b> ${mdInline((c.tell && c.tell.symptoms) || '')}${(c.tell && c.tell.labMarker) ? `<div class="cause-lab">🩸 Confirm it: ${mdInline(c.tell.labMarker)}</div>` : ''}</div>
-        ${fixes ? `<div class="cause-fix"><b>The fix</b> <span class="fix-order-note">cheapest &amp; safest first ↓</span><ul class="fix-list">${fixes}</ul></div>` : ''}
-        ${c.confusedWith ? `<div class="cause-confused">↔️ <b>Not:</b> ${mdInline(c.confusedWith)}</div>` : ''}
-      </div>`;
+      const plain = c.plain ? `<div class="cause-plain"><span class="cbl">What’s actually going on</span><p>${mdInline(c.plain)}</p></div>` : '';
+      const evi = c.evidence ? `<div class="cause-evi"><span class="cbl">How sure are we?</span> ${mdInline(c.evidence)} ${causeTier(c.evidenceTier)}</div>` : '';
+      return `<details class="cause-acc lev-${esc(c.leverage || 'med')}" name="p-cause-acc"${i === 0 ? ' open' : ''}>
+        <summary class="cause-sum"><span class="cause-rank">${c.rank || i + 1}</span><span class="cs-main"><span class="cs-name">${esc(c.name)}</span>${causeHook(c) ? `<span class="cs-hook">${mdInline(causeHook(c))}</span>` : ''}</span><span class="cs-meta"><span class="cause-lev">${esc(c.leverage || '')} leverage</span></span></summary>
+        <div class="cause-body">
+          ${causeChain(c.chain)}
+          ${plain}
+          <div class="cause-tell"><span class="cbl">Is this you?</span> ${mdInline(String((c.tell && c.tell.symptoms) || '').replace(/\s*Honest tiering:.*$/i, '').trim())}</div>
+          ${evi}
+          ${(c.tell && c.tell.labMarker) ? `<div class="cause-lab">🩸 <b>Confirm it:</b> ${mdInline(c.tell.labMarker)}</div>` : ''}
+          ${fixes ? `<div class="cause-fix"><b>The fix</b> <span class="fix-order-note">cheapest &amp; safest first ↓</span><ul class="fix-list">${fixes}</ul></div>` : ''}
+          ${c.confusedWith ? `<div class="cause-confused">↔️ <b>Not:</b> ${mdInline(c.confusedWith)}</div>` : ''}
+        </div>
+      </details>`;
     }).join('');
     return `<section class="causes-section" id="p-causes">
-      <div class="cause-h"><h2>🔍 Why this happens — and the fix, cause by cause</h2>${w.intro ? `<p class="cause-sub">${mdInline(w.intro)}</p>` : ''}
-        <p class="cause-howto">Work <b>top-down</b> — the highest-leverage cause is first. For each, fixes are ordered <b>behaviour → food → supplement → prescription</b>: exhaust the cheaper, safer levers before the next.</p>
+      <div class="cause-h"><h2>🔍 Why this happens — find your cause</h2>${w.intro ? `<p class="cause-sub">${mdInline(w.intro)}</p>` : ''}
+        <p class="cause-howto">Ranked by leverage — <b>#1 fixes the most</b>. Open the one whose symptoms sound like you and read just that: each is a self-contained explanation and plan. Fixes run <b>behaviour → food → supplement → prescription</b>.</p>
         <button class="share-short-btn" data-share-short="cause:${esc(problem.id)}">📱 Make a short — TikTok / Reel</button></div>
-      ${confirm}
       ${ladder}
-      <div class="cause-cards">${cards}</div>
+      <div class="cause-accordion">${items}</div>
       ${w.theOneThing ? `<div class="cause-one"><span class="cause-one-t">⭐ If you do only one thing</span><p>${mdInline(w.theOneThing)}</p></div>` : ''}
     </section>`;
   }
