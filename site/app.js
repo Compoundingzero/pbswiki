@@ -4660,9 +4660,11 @@
     if (!Array.isArray(chain) || !chain.length) return '';
     const steps = chain.map(n => {
       const link = n.type === 'mediator' && n.ref ? mediatorLink(n.ref) : null;
-      const label = link ? `<a href="${link}">${esc(n.node)}</a>` : esc(n.node);
+      // Lead with plain English (n.lay); show the technical name (n.node) only as a subtle, linkable tag.
+      const head = n.lay ? esc(n.lay) : (link ? `<a href="${link}">${esc(n.node)}</a>` : esc(n.node));
+      const sci = n.lay ? `<div class="bj-sci"><span class="bj-sci-k">the science</span> ${link ? `<a href="${link}">${esc(n.node)}</a>` : esc(n.node)}</div>` : '';
       const say = n.say ? `<div class="bj-say">${mdInline(n.say)}</div>` : '';
-      return `<div class="bj-step bj-${esc(n.type)}"><div class="bj-rail"><span class="bj-dot">${CC_ICON[n.type] || '•'}</span></div><div class="bj-content"><div class="bj-kind">${esc(CC_WORD[n.type] || n.type)}</div><div class="bj-node">${label}</div>${say}</div></div>`;
+      return `<div class="bj-step bj-${esc(n.type)}"><div class="bj-rail"><span class="bj-dot">${CC_ICON[n.type] || '•'}</span></div><div class="bj-content"><div class="bj-kind">${esc(CC_WORD[n.type] || n.type)}</div><div class="bj-node">${head}</div>${sci}${say}</div></div>`;
     }).join('');
     return `<div class="bio-journey">${steps}</div>`;
   }
