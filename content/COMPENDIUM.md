@@ -53,7 +53,7 @@ These are the highest-evidence, lowest-risk compounds. Most people are deficient
 **Bottom line:** If you take one supplement, this is it.
 **Human evidence:** Among the most-studied supplements in existence — hundreds of RCTs and multiple meta-analyses consistently show small but reliable gains in strength, power and lean mass alongside resistance training, plus emerging cognitive benefit under sleep deprivation. One of the very few supplements with strong, replicated human evidence.
 **Stacks with:** Whey/protein and carbs post-workout (the insulin bump helps uptake).
-**Cost:** The cheapest effective supplement — ~S$20–40 for 3–6 months of monohydrate. Buy plain “creatine monohydrate” (Creapure is a quality mark); skip pricey “advanced” forms.
+**Cost:** The cheapest effective supplement — ~S$20–40 for 3–6 months of monohydrate. Buy plain, third-party-tested “creatine monohydrate”; skip pricey “advanced” forms.
 
 ---
 
