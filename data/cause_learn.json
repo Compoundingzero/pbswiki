@@ -901,25 +901,30 @@
     "chain": [
      {
       "node": "High-glycemic carbs, sugary drinks + dairy (skim milk, whey)",
-      "type": "trigger"
+      "type": "trigger",
+      "say": "A high-glycemic meal or a glass of milk hits your bloodstream."
      },
      {
       "node": "Insulin & IGF-1 surge",
       "type": "mediator",
-      "ref": "IGF1"
+      "ref": "IGF1",
+      "say": "Insulin and IGF-1 spike — the body’s “grow and store” signal."
      },
      {
       "node": "AKT suppresses FoxO1, activating mTORC1/SREBP-1",
       "type": "mediator",
-      "ref": "mTOR"
+      "ref": "mTOR",
+      "say": "That signal flips a genetic switch inside the oil gland: FoxO1 off, mTOR on."
      },
      {
       "node": "Sebocyte lipogenesis and androgen-receptor activity rise",
-      "type": "tissue"
+      "type": "tissue",
+      "say": "The gland obeys — it makes more oil and turns up its androgen sensitivity."
      },
      {
       "node": "Oily skin, comedones and inflammatory papules",
-      "type": "symptom"
+      "type": "symptom",
+      "say": "The follicle floods with oil, and a spot forms."
      }
     ],
     "tell": {
@@ -956,7 +961,8 @@
     "confusedWith": "PCOS-driven acne — also insulin-linked, but with irregular cycles, extra facial/body hair and menstrual timing",
     "hook": "Oily T-zone and jaw; breakouts flare 1–2 days after sugary meals or a whey shake",
     "plain": "Your acne here is a **sebum problem driven by diet-triggered hormones**. High-glycemic foods (white bread, sugar, sodas) and dairy — especially skim milk and whey — spike **insulin and IGF-1**. Those two signals switch *off* a brake gene called FoxO1 and switch *on* a growth programme (mTORC1/SREBP-1) inside your oil glands. The glands respond by pumping out more oil and becoming more sensitive to androgens — and an oily, androgen-primed follicle is exactly where a spot begins. In plain terms: the sugar and dairy aren’t *dirtying* your skin, they’re *instructing* your oil glands to overproduce.",
-    "evidence": "The insulin/IGF-1 → FoxO1 → mTORC1/SREBP-1 → sebum mechanism is well established in the lab and in Melnik’s model, and low-glycemic-diet trials show real acne improvement (moderate human evidence). The dairy link specifically is *observational only* — no randomized trials — so treat it as an association worth testing, not proof."
+    "evidence": "The insulin/IGF-1 → FoxO1 → mTORC1/SREBP-1 → sebum mechanism is well established in the lab and in Melnik’s model, and low-glycemic-diet trials show real acne improvement (moderate human evidence). The dairy link specifically is *observational only* — no randomized trials — so treat it as an association worth testing, not proof.",
+    "keyInsight": "Insulin doesn’t dirty your skin — it rewires your oil glands to overproduce. It turns a meal into fuel for acne."
    },
    {
     "name": "Androgen-driven (hormonal / jawline) acne",
@@ -965,25 +971,30 @@
     "chain": [
      {
       "node": "Higher androgens (testosterone) and/or low SHBG raising free androgen",
-      "type": "trigger"
+      "type": "trigger",
+      "say": "Free androgens run high — or the protein that reins them in (SHBG) runs low."
      },
      {
       "node": "5-alpha-reductase converts testosterone to DHT in the skin",
       "type": "mediator",
-      "ref": "DHT"
+      "ref": "DHT",
+      "say": "In the skin, an enzyme converts testosterone into DHT, a far stronger signal."
      },
      {
       "node": "DHT binds the sebocyte androgen receptor",
       "type": "mediator",
-      "ref": "AR"
+      "ref": "AR",
+      "say": "DHT locks onto the oil gland’s androgen receptor."
      },
      {
       "node": "Sebaceous gland enlarges and sebum output climbs",
-      "type": "tissue"
+      "type": "tissue",
+      "say": "The gland enlarges and pumps out thick, sticky sebum."
      },
      {
       "node": "Deep, tender cysts on jaw/chin/neck; premenstrual flares",
-      "type": "symptom"
+      "type": "symptom",
+      "say": "Deep, tender cysts settle along the jaw and chin — worst before a period."
      }
     ],
     "tell": {
@@ -1015,7 +1026,8 @@
     "confusedWith": "PCOS specifically — worth confirming or excluding if cycles are irregular",
     "hook": "Deep, cystic lesions on the lower face and jaw; women flare before their period",
     "plain": "Here the driver is **androgens** — testosterone-family hormones — acting straight on the oil gland. Androgens dock onto receptors in the gland and tell it to grow and pour out thick, sticky sebum, which plugs the follicle and feeds inflammation. That’s why these lesions are **deep and cystic** rather than surface blackheads, and why they cluster on the lower face, jaw and neck where the glands are most androgen-sensitive. In women it tracks the cycle (worst the week before the period), when the androgen-to-estrogen balance tips. Crucially, your *total* androgen level can look normal — what matters is how **sensitive** your glands are and how much hormone is **free** (unbound) to act.",
-    "evidence": "Well established — androgen action on the sebaceous gland is core acne biology, and hormonal treatments work in the right people. The real question is usually *your* levels versus *your* gland sensitivity, which is why the labs help."
+    "evidence": "Well established — androgen action on the sebaceous gland is core acne biology, and hormonal treatments work in the right people. The real question is usually *your* levels versus *your* gland sensitivity, which is why the labs help.",
+    "keyInsight": "This acne isn’t about how much testosterone you have. It’s about how loudly your oil glands are listening."
    },
    {
     "name": "Follicular plugging + C. acnes inflammation",
@@ -1024,24 +1036,29 @@
     "chain": [
      {
       "node": "Abnormal keratinocyte shedding + sebum low in linoleic acid",
-      "type": "trigger"
+      "type": "trigger",
+      "say": "Pore-lining cells stop shedding cleanly, and the sebum runs low in a key fatty acid."
      },
      {
       "node": "Microcomedo (plugged follicle) forms",
-      "type": "tissue"
+      "type": "tissue",
+      "say": "A microscopic plug forms deep in the follicle."
      },
      {
       "node": "C. acnes overgrowth (loss of phylotype diversity, IA1 dominance) and biofilm in trapped sebum",
-      "type": "mediator"
+      "type": "mediator",
+      "say": "Behind the plug, your own skin bacteria shift toward a pro-inflammatory strain."
      },
      {
       "node": "TLR2 innate-immune activation and IL-1 inflammation",
       "type": "mediator",
-      "ref": "TLR2"
+      "ref": "TLR2",
+      "say": "The immune system spots them and lights the inflammation fuse."
      },
      {
       "node": "Blackheads, whiteheads, red papules and pustules",
-      "type": "symptom"
+      "type": "symptom",
+      "say": "Blackheads, whiteheads and red, angry papules appear."
      }
     ],
     "tell": {
@@ -1074,7 +1091,8 @@
     "confusedWith": "Fungal (Malassezia) folliculitis — uniform, itchy same-size bumps that worsen on antibiotics",
     "hook": "Blackheads, whiteheads and gritty bumps; responds to exfoliation, not to diet",
     "plain": "This is the **final common pathway every kind of acne funnels through** — the actual clog. The cells lining the pore stop shedding cleanly and stick together into a plug (that’s the blackhead or whitehead). Behind the plug, your skin’s **own** *Cutibacterium acnes* — a normal resident, not a foreign infection — shifts toward a pro-inflammatory strain and sets off the redness and pus. So it isn’t dirt or an infection: it’s a **clogging-plus-inflammation cascade inside the follicle itself**. Because it’s the shared endpoint, pore-unclogging topicals (retinoids) help almost everyone, while diet changes alone barely move it.",
-    "evidence": "Well established — this cascade is textbook acne pathophysiology and the reason retinoids are first-line for nearly everyone."
+    "evidence": "Well established — this cascade is textbook acne pathophysiology and the reason retinoids are first-line for nearly everyone.",
+    "keyInsight": "Every spot — whatever set it off — funnels through this one clog. It is the final common path of all acne."
    },
    {
     "name": "Cosmetic / mechanical (acne cosmetica & barrier damage)",
@@ -1083,19 +1101,23 @@
     "chain": [
      {
       "node": "Comedogenic products, occlusion, friction, or over-washing",
-      "type": "trigger"
+      "type": "trigger",
+      "say": "A heavy cream, a mask, friction or over-scrubbing meets your skin."
      },
      {
       "node": "Pore occlusion plus a stripped, damaged barrier",
-      "type": "tissue"
+      "type": "tissue",
+      "say": "The pore is physically blocked while the barrier is stripped raw."
      },
      {
       "node": "Reactive irritation and impaired barrier lowering the threshold for plugging",
-      "type": "mediator"
+      "type": "mediator",
+      "say": "Irritation and a broken barrier drop the threshold for a clog."
      },
      {
       "node": "Bumps mapped to where products, mask or hair touch skin",
-      "type": "symptom"
+      "type": "symptom",
+      "say": "Bumps appear exactly where the product, mask or hair touches."
      }
     ],
     "tell": {
@@ -1122,7 +1144,8 @@
     "confusedWith": "True inflammatory acne — cosmetica usually clears fast once the trigger is removed",
     "hook": "Breakouts map to where you apply products, wear a mask, or rest your phone",
     "plain": "Sometimes the cause is **external and local** — something physically clogging or irritating the follicle. Heavy or comedogenic creams, hair products drifting onto the hairline, an occlusive mask or helmet, or a phone or hand resting on the skin either block the pore mechanically or damage the skin barrier — and a damaged barrier inflames easily. The tell is the **map**: spots appear exactly where the product sits or the friction happens, and they often began after a new product or an aggressive scrubbing routine. The upside — this is the **most fixable** cause: remove the trigger and it usually clears fast.",
-    "evidence": "Comedogenicity and “acne mechanica” are real and well-documented, but individual product reactions vary a lot — so the evidence here is clinical and pattern-based rather than from trials."
+    "evidence": "Comedogenicity and “acne mechanica” are real and well-documented, but individual product reactions vary a lot — so the evidence here is clinical and pattern-based rather than from trials.",
+    "keyInsight": "Sometimes the cause isn’t inside you at all — it’s whatever is sitting on your skin."
    },
    {
     "name": "Stress / cortisol / poor sleep",
@@ -1131,20 +1154,24 @@
     "chain": [
      {
       "node": "Chronic stress and short sleep",
-      "type": "trigger"
+      "type": "trigger",
+      "say": "A stretch of pressure and short sleep sets in."
      },
      {
       "node": "CRH acts on sebocyte CRH-R1 (autocrine), driving lipogenesis and 3-beta-HSD",
       "type": "mediator",
-      "ref": "cortisol"
+      "ref": "cortisol",
+      "say": "Your body releases CRH — and the oil gland carries receptors for it."
      },
      {
       "node": "More sebum, higher systemic inflammation, worse insulin sensitivity",
-      "type": "tissue"
+      "type": "tissue",
+      "say": "Sebum climbs, inflammation rises, insulin sensitivity dips."
      },
      {
       "node": "Flares during deadline weeks and poor-sleep stretches",
-      "type": "symptom"
+      "type": "symptom",
+      "say": "Breakouts flare through the deadline, and calm on holiday."
      }
     ],
     "tell": {
@@ -1176,7 +1203,8 @@
     "confusedWith": "Diet-driven acne — stress weeks often also mean more sugar and dairy, which can be the real driver",
     "hook": "Breakouts track stress and sleep — flare in deadline weeks, calm on holiday",
     "plain": "Stress reaches your skin **chemically**. Under pressure your body releases CRH and cortisol, and the oil gland carries receptors for both — so stress *directly* tells sebocytes to make more oil and turns up inflammation. Poor sleep compounds it by pushing cortisol and inflammation higher still. That’s why spots flare in exam or deadline weeks and settle on holiday. The honest caveat: stressful weeks usually also mean more sugar, more dairy and worse sleep — so some “stress acne” is really **diet acne wearing a stress costume**, and it’s worth teasing the two apart.",
-    "evidence": "The CRH → sebocyte lipogenesis mechanism is confirmed in the lab; the stress-to-acne link in real people is observational, and stress is genuinely hard to separate from the diet and sleep changes that ride along with it."
+    "evidence": "The CRH → sebocyte lipogenesis mechanism is confirmed in the lab; the stress-to-acne link in real people is observational, and stress is genuinely hard to separate from the diet and sleep changes that ride along with it.",
+    "keyInsight": "Stress doesn’t reach your skin as a feeling. It arrives as a chemical that tells your oil glands to switch on."
    }
   ]
  },

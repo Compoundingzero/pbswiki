@@ -4653,6 +4653,34 @@
   }
   const TIER_LABEL = ['', 'emerging / associative', 'strong association', 'established mechanism'];
   function causeTier(t) { t = t || 1; return `<span class="cause-tier t${t}" title="Strength of the causal link">${'●'.repeat(t)}${'○'.repeat(3 - t)} <span class="ct-lbl">${TIER_LABEL[t] || ''}</span></span>`; }
+  // ---- Apple-style scroll-reveal biological journey: the chain becomes moments you move through ----
+  const CC_ICON = { trigger: '⚡', mediator: '⚙️', tissue: '🧬', symptom: '💥' };
+  const CC_WORD = { trigger: 'Trigger', mediator: 'Signal', tissue: 'Response', symptom: 'Outcome' };
+  function bioJourney(chain) {
+    if (!Array.isArray(chain) || !chain.length) return '';
+    const steps = chain.map(n => {
+      const link = n.type === 'mediator' && n.ref ? mediatorLink(n.ref) : null;
+      const label = link ? `<a href="${link}">${esc(n.node)}</a>` : esc(n.node);
+      const say = n.say ? `<div class="bj-say">${mdInline(n.say)}</div>` : '';
+      return `<div class="bj-step bj-${esc(n.type)}"><div class="bj-rail"><span class="bj-dot">${CC_ICON[n.type] || '•'}</span></div><div class="bj-content"><div class="bj-kind">${esc(CC_WORD[n.type] || n.type)}</div><div class="bj-node">${label}</div>${say}</div></div>`;
+    }).join('');
+    return `<div class="bio-journey">${steps}</div>`;
+  }
+  function keyInsightBlock(c) { if (!c.keyInsight) return ''; return `<div class="key-insight"><span class="ki-mark">“</span><p>${mdInline(c.keyInsight)}</p></div>`; }
+  const CONF = { 1: { lbl: 'Emerging — worth testing', w: 34, cls: 'c1' }, 2: { lbl: 'Strong association', w: 67, cls: 'c2' }, 3: { lbl: 'Established mechanism', w: 100, cls: 'c3' } };
+  function confidenceMeter(c) {
+    const t = c.evidenceTier || 1; const m = CONF[t] || CONF[1];
+    return `<div class="conf"><div class="cbl">How strong is the evidence?</div><div class="conf-bar ${m.cls}"><i style="width:${m.w}%"></i></div><div class="conf-lbl">${esc(m.lbl)}</div>${c.evidence ? `<details class="conf-more"><summary>See the science</summary><p>${mdInline(c.evidence)}</p></details>` : ''}</div>`;
+  }
+  // Scroll-reveal for the biological journeys: each step eases up as it enters the viewport.
+  function initCauseMotion() {
+    const journeys = document.querySelectorAll('.bio-journey'); if (!journeys.length) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) return; // graceful: steps stay fully visible
+    journeys.forEach(j => j.classList.add('bj-animate'));
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.28, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.bio-journey .bj-step').forEach(s => io.observe(s));
+  }
   // Fix-the-cause hierarchy — try cheapest/safest first: behaviour → food → supplement → prescription.
   const FIX_ORDER = { behavior: 1, food: 2, compound: 3, rx: 4 };
   const FIX_ICO = { behavior: '🔁', food: '🥗', compound: '💊', rx: '🩺' };
@@ -4677,18 +4705,18 @@
       const _fixArr = sortedFixes(c);
       const fixes = _fixArr.map(f => { const ic = FIX_ICO[f.kind] || '•'; const cc = (f.kind === 'compound' && f.ref) ? resolveCompound(f.ref) : null; const inner = cc ? `<a href="#/c/${slug(cc.name)}">${mdInline(f.what)}</a>` : mdInline(f.what); return `<li><span class="fix-kind fk-${esc(f.kind || 'x')}">${ic} ${esc(FIX_LBL[f.kind] || 'Other')}</span> ${inner}</li>`; }).join('');
       const suppIds = [...new Set(_fixArr.filter(f => f.kind === 'compound' && f.ref).map(f => { const cc = resolveCompound(f.ref); return cc ? cc.id : null; }).filter(Boolean))];
-      const plain = c.plain ? `<div class="cause-plain"><span class="cbl">What’s actually going on</span><p>${mdInline(c.plain)}</p></div>` : '';
-      const evi = c.evidence ? `<div class="cause-evi"><span class="cbl">How sure are we?</span> ${mdInline(c.evidence)} ${causeTier(c.evidenceTier)}</div>` : '';
+      const symptoms = mdInline(String((c.tell && c.tell.symptoms) || '').replace(/\s*Honest tiering:.*$/i, '').trim());
+      const goDeeper = (c.plain || c.confusedWith) ? `<details class="cause-deeper"><summary>Go deeper — the full mechanism</summary>${c.plain ? `<p>${mdInline(c.plain)}</p>` : ''}${c.confusedWith ? `<div class="cause-confused">↔️ <b>Often confused with:</b> ${mdInline(c.confusedWith)}</div>` : ''}</details>` : '';
       return `<details class="cause-acc lev-${esc(c.leverage || 'med')}" name="p-cause-acc"${i === 0 ? ' open' : ''}>
         <summary class="cause-sum"><span class="cause-rank">${c.rank || i + 1}</span><span class="cs-main"><span class="cs-name">${esc(c.name)}</span>${causeHook(c) ? `<span class="cs-hook">${mdInline(causeHook(c))}</span>` : ''}</span><span class="cs-meta"><span class="cause-lev">${esc(c.leverage || '')} leverage</span></span></summary>
         <div class="cause-body">
-          ${causeChain(c.chain)}
-          ${plain}
-          <div class="cause-tell"><span class="cbl">Is this you?</span> ${mdInline(String((c.tell && c.tell.symptoms) || '').replace(/\s*Honest tiering:.*$/i, '').trim())}</div>
-          ${evi}
+          ${keyInsightBlock(c)}
+          ${c.chain && c.chain.length ? `<div class="bj-lead"><span class="cbl">The pathway — step by step</span></div>${bioJourney(c.chain)}` : ''}
+          ${symptoms ? `<div class="cause-tell"><span class="cbl">Is this you?</span> ${symptoms}</div>` : ''}
+          ${confidenceMeter(c)}
           ${(c.tell && c.tell.labMarker) ? `<div class="cause-lab">🩸 <b>Confirm it:</b> ${mdInline(c.tell.labMarker)}</div>` : ''}
           ${fixes ? `<div class="cause-fix"><div class="cf-plan-h"><span class="cbl">✅ Your plan if this is your cause</span><span class="fix-order-note">work down the list — cheapest &amp; safest first</span></div><ul class="fix-list">${fixes}</ul>${suppIds.length ? `<button class="adopt-plan" data-adopt="${suppIds.join(',')}">➕ Add ${suppIds.length === 1 ? 'this supplement' : 'these ' + suppIds.length + ' supplements'} to my stack</button>` : ''}</div>` : ''}
-          ${c.confusedWith ? `<div class="cause-confused">↔️ <b>Not:</b> ${mdInline(c.confusedWith)}</div>` : ''}
+          ${goDeeper}
         </div>
       </details>`;
     }).join('');
@@ -4991,6 +5019,7 @@
     wireTgCoach();
     const assessBtn = document.getElementById('assess-trigger');
     if (assessBtn) assessBtn.onclick = () => openAssessment(problem);
+    initCauseMotion();
     const citeBtn = document.getElementById('cite-proto');
     if (citeBtn) citeBtn.onclick = () => citeModal(`${problem.name} — ${rc.name.split('(')[0].trim()} protocol`, (location.origin || 'https://rnawiki.com') + '/protocol/' + problem.id + '/' + rc.id);
     mountVotes([`${problem.id}:${rc.id}:protocol`]);

@@ -2706,6 +2706,44 @@ a.dp-name:hover{color:var(--accent)}
 .adopt-plan{margin-top:.7rem;border:1px solid color-mix(in srgb,#16a34a 40%,var(--line));background:color-mix(in srgb,#16a34a 10%,transparent);color:#15803d;border-radius:999px;padding:.45rem 1rem;font-size:.86rem;font-weight:600;cursor:pointer}
 .adopt-plan:hover{background:color-mix(in srgb,#16a34a 18%,transparent)}
 .adopt-plan.adopted{background:color-mix(in srgb,#16a34a 20%,transparent);cursor:default}
+/* ---- Apple-style scroll-reveal biological journey ---- */
+.key-insight{margin:1.5rem 0 1.7rem;padding:1.3rem 1.2rem 1rem;text-align:center;position:relative}
+.ki-mark{display:block;font-family:Georgia,"Times New Roman",serif;font-size:2.6rem;line-height:.6;color:color-mix(in srgb,var(--accent) 42%,transparent);margin-bottom:.2rem}
+.key-insight p{font-size:1.32rem;line-height:1.42;font-weight:600;letter-spacing:-.01em;color:var(--head);margin:0 auto;max-width:34rem}
+.bj-lead{margin:.4rem 0 .3rem}
+.bio-journey{position:relative;margin:.5rem 0 1.6rem}
+.bj-step{display:grid;grid-template-columns:2.1rem 1fr;gap:.85rem;padding:.15rem 0 1.15rem;position:relative}
+.bj-rail{display:flex;justify-content:center;position:relative}
+.bj-rail::before{content:"";position:absolute;top:2rem;bottom:-1.15rem;left:50%;transform:translateX(-50%);width:2px;background:var(--line)}
+.bj-step:last-child .bj-rail::before{display:none}
+.bj-dot{width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.92rem;background:var(--panel2);border:1px solid var(--line);z-index:1;flex:0 0 auto}
+.bj-trigger .bj-dot{background:color-mix(in srgb,#ef4444 12%,#fff);border-color:color-mix(in srgb,#ef4444 32%,var(--line))}
+.bj-mediator .bj-dot{background:color-mix(in srgb,#8b5cf6 12%,#fff);border-color:color-mix(in srgb,#8b5cf6 32%,var(--line))}
+.bj-tissue .bj-dot{background:color-mix(in srgb,#0ea5e9 12%,#fff);border-color:color-mix(in srgb,#0ea5e9 32%,var(--line))}
+.bj-symptom .bj-dot{background:color-mix(in srgb,#f59e0b 16%,#fff);border-color:color-mix(in srgb,#f59e0b 36%,var(--line))}
+.bj-content{padding-top:.05rem;min-width:0}
+.bj-kind{font-size:.66rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--faint)}
+.bj-node{font-size:1.12rem;font-weight:650;line-height:1.32;color:var(--head);margin:.05rem 0 .12rem}
+.bj-node a{color:var(--head);border-bottom:1.5px solid color-mix(in srgb,var(--accent) 42%,transparent)}
+.bj-node a:hover{border-bottom-color:var(--accent);text-decoration:none}
+.bj-say{font-size:.96rem;line-height:1.55;color:var(--muted)}
+.bio-journey.bj-animate .bj-step{opacity:0;transform:translateY(14px);transition:opacity .55s cubic-bezier(.22,.61,.36,1),transform .55s cubic-bezier(.22,.61,.36,1)}
+.bio-journey.bj-animate .bj-step.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.bio-journey.bj-animate .bj-step{opacity:1;transform:none;transition:none}}
+/* evidence as confidence */
+.conf{margin:1.2rem 0}
+.conf-bar{height:8px;border-radius:999px;background:var(--panel2);overflow:hidden;margin:.45rem 0 .35rem;max-width:20rem}
+.conf-bar i{display:block;height:100%;border-radius:999px;background:#16a34a;transition:width .8s cubic-bezier(.22,.61,.36,1)}
+.conf-bar.c1 i{background:#f59e0b}
+.conf-bar.c2 i{background:linear-gradient(90deg,#f59e0b,#84cc16)}
+.conf-bar.c3 i{background:#16a34a}
+.conf-lbl{font-weight:700;font-size:.94rem;color:var(--head)}
+.conf-more{margin-top:.55rem}
+.conf-more summary{cursor:pointer;font-size:.85rem;color:var(--muted)}
+.conf-more p{font-size:.9rem;line-height:1.55;color:var(--muted);margin:.45rem 0 0}
+.cause-deeper{margin:1.2rem 0 .2rem;border-top:1px solid var(--line-soft);padding-top:.85rem}
+.cause-deeper summary{cursor:pointer;font-size:.88rem;color:var(--muted);font-weight:600}
+.cause-deeper>p{line-height:1.68;margin:.7rem 0}
 .cause-head{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin-bottom:.7rem}
 .cause-rank{flex:0 0 auto;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--ink);color:var(--bg,#fff);font-weight:700;font-size:.82rem;display:flex;align-items:center;justify-content:center}
 .cause-head h4{margin:0;font-size:1.02rem;flex:1;min-width:150px}
