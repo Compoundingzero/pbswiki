@@ -4622,22 +4622,37 @@
   }
   const TIER_LABEL = ['', 'emerging / associative', 'strong association', 'established mechanism'];
   function causeTier(t) { t = t || 1; return `<span class="cause-tier t${t}" title="Strength of the causal link">${'●'.repeat(t)}${'○'.repeat(3 - t)} <span class="ct-lbl">${TIER_LABEL[t] || ''}</span></span>`; }
+  // Fix-the-cause hierarchy — try cheapest/safest first: behaviour → food → supplement → prescription.
+  const FIX_ORDER = { behavior: 1, food: 2, compound: 3, rx: 4 };
+  const FIX_ICO = { behavior: '🔁', food: '🥗', compound: '💊', rx: '🩺' };
+  const FIX_LBL = { behavior: 'Behaviour', food: 'Food', compound: 'Supplement', rx: 'Prescription' };
+  function sortedFixes(c) { return (c.fixes || []).slice().sort((a, b) => (FIX_ORDER[a.kind] || 5) - (FIX_ORDER[b.kind] || 5)); }
+  // The single highest-leverage action, surfaced at the top of a protocol.
+  function theOneThingHead(problem) {
+    const w = problem.why; if (!w || !w.theOneThing) return '';
+    return `<div class="one-thing-head"><span class="oth-badge">⭐ Start here — the one thing</span><p>${mdInline(w.theOneThing)}</p><a class="oth-jump" data-scroll="p-causes">See the full cause-by-cause plan ↓</a></div>`;
+  }
   function causesSection(problem) {
     const w = problem.why; if (!w) return '';
     const ladder = (Array.isArray(w.ladder) && w.ladder.length) ? `<div class="cause-ladder-wrap"><div class="cause-ladder-h">The chain, surface → root:</div><ol class="cause-ladder">${w.ladder.map(l => `<li>${mdInline(l)}</li>`).join('')}</ol></div>` : '';
+    // Confirm-the-cause: aggregate every cause's lab marker into one "how to know which is yours" strip.
+    const labs = (w.causes || []).filter(c => c.tell && c.tell.labMarker).map(c => `<li><b>${esc(c.name)}:</b> ${mdInline(c.tell.labMarker)}</li>`).join('');
+    const confirm = labs ? `<details class="cause-confirm"><summary>🩸 Confirm which cause is yours — the labs to ask for</summary><ul>${labs}</ul><p class="cc-note">Symptoms narrow it down; these markers confirm it. Not medical advice — discuss testing with a clinician.</p></details>` : '';
     const cards = (w.causes || []).slice().sort((a, b) => (a.rank || 9) - (b.rank || 9)).map(c => {
-      const fixes = (c.fixes || []).map(f => { const ic = { behavior: '🔁', food: '🥗', compound: '💊', rx: '🩺' }[f.kind] || '•'; const cs = (f.kind === 'compound' && f.ref) ? slug(f.ref) : null; const inner = cs ? `<a href="#/c/${cs}">${mdInline(f.what)}</a>` : mdInline(f.what); return `<li>${ic} ${inner}</li>`; }).join('');
+      const fixes = sortedFixes(c).map(f => { const ic = FIX_ICO[f.kind] || '•'; const cs = (f.kind === 'compound' && f.ref) ? slug(f.ref) : null; const inner = cs ? `<a href="#/c/${cs}">${mdInline(f.what)}</a>` : mdInline(f.what); return `<li><span class="fix-kind fk-${esc(f.kind || 'x')}">${ic} ${esc(FIX_LBL[f.kind] || 'Other')}</span> ${inner}</li>`; }).join('');
       return `<div class="cause-card lev-${esc(c.leverage || 'med')}">
         <div class="cause-head"><span class="cause-rank">${c.rank || ''}</span><h4>${esc(c.name)}</h4><span class="cause-lev">${esc(c.leverage || '')} leverage${c.modifiable === false ? ' · mostly fixed' : ''}</span>${causeTier(c.evidenceTier)}</div>
         ${causeChain(c.chain)}
         <div class="cause-tell"><b>Is this you?</b> ${mdInline((c.tell && c.tell.symptoms) || '')}${(c.tell && c.tell.labMarker) ? `<div class="cause-lab">🩸 Confirm it: ${mdInline(c.tell.labMarker)}</div>` : ''}</div>
-        ${fixes ? `<div class="cause-fix"><b>The fix</b><ul>${fixes}</ul></div>` : ''}
+        ${fixes ? `<div class="cause-fix"><b>The fix</b> <span class="fix-order-note">cheapest &amp; safest first ↓</span><ul class="fix-list">${fixes}</ul></div>` : ''}
         ${c.confusedWith ? `<div class="cause-confused">↔️ <b>Not:</b> ${mdInline(c.confusedWith)}</div>` : ''}
       </div>`;
     }).join('');
     return `<section class="causes-section" id="p-causes">
-      <div class="cause-h"><h2>🔍 Why this happens to you</h2>${w.intro ? `<p class="cause-sub">${mdInline(w.intro)}</p>` : ''}
+      <div class="cause-h"><h2>🔍 Why this happens — and the fix, cause by cause</h2>${w.intro ? `<p class="cause-sub">${mdInline(w.intro)}</p>` : ''}
+        <p class="cause-howto">Work <b>top-down</b> — the highest-leverage cause is first. For each, fixes are ordered <b>behaviour → food → supplement → prescription</b>: exhaust the cheaper, safer levers before the next.</p>
         <button class="share-short-btn" data-share-short="cause:${esc(problem.id)}">📱 Make a short — TikTok / Reel</button></div>
+      ${confirm}
       ${ladder}
       <div class="cause-cards">${cards}</div>
       ${w.theOneThing ? `<div class="cause-one"><span class="cause-one-t">⭐ If you do only one thing</span><p>${mdInline(w.theOneThing)}</p></div>` : ''}
@@ -4880,6 +4895,7 @@
           <div class="ps-cell"><span class="ps-k">This protocol</span><b>${moveN ? moveN + ' move' + (moveN !== 1 ? 's' : '') + ' · ' : ''}${P.stack.length} supplement${P.stack.length !== 1 ? 's' : ''}${ntN ? ' · ' + ntN + ' food target' + (ntN !== 1 ? 's' : '') : ''}</b></div>
         </div>`;
       })()}
+      ${theOneThingHead(problem)}
       ${causesSection(problem)}
       <div class="start-plan-row"><button class="cta-primary start-plan" id="start-plan">▶ Start building my plan</button><span class="start-plan-note">Browse the movements &amp; supplements, keep what fits you, then track it daily on <b>My Plan</b>.</span></div>
       ${rcSwitch}
@@ -6386,6 +6402,8 @@
   document.addEventListener('click', e => { const b = e.target.closest('[data-suggest]'); if (b) { e.preventDefault(); openSuggestModal(b.dataset.suggest, b.dataset.ref); } });
   document.addEventListener('click', e => { if (e.target.closest('[data-mastery-map]')) { e.preventDefault(); masteryMapModal(); } });
   document.addEventListener('click', e => { const b = e.target.closest('[data-share-short]'); if (b) { e.preventDefault(); shareShortModal(b.getAttribute('data-share-short')); } });
+  // Smooth-scroll to an on-page section by id (journey rail, "one thing" jump) without hijacking the hash router.
+  document.addEventListener('click', e => { const b = e.target.closest('[data-scroll]'); if (b) { e.preventDefault(); const t = document.getElementById(b.getAttribute('data-scroll')); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
   // Personalized per-kg dose calculator (biohacker layer)
   document.addEventListener('input', e => {
     const i = e.target.closest('.bio-dose-w'); if (!i) return;
