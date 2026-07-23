@@ -8,32 +8,92 @@
       "tier": 3
     },
     "biomarkers": [
-      {"marker": "Scale weight", "why": "Creatine pulls water into muscle. A +0.5–2 kg jump in the first 1–2 weeks confirms it's loading into the tissue.", "range": "+1–2% body weight", "when": "Baseline, then week 2", "tier": 3},
-      {"marker": "Serum creatinine", "why": "Rises modestly on creatine — a benign lab artifact from the extra substrate, **not** kidney damage. Know this before a routine panel so a high reading isn't misread.", "range": "May rise ~0.1–0.3 mg/dL", "when": "Flag it before any eGFR/kidney test", "tier": 3}
+      {
+        "marker": "Scale weight",
+        "why": "Creatine pulls water into muscle. A +0.5–2 kg jump in the first 1–2 weeks confirms it's loading into the tissue.",
+        "range": "+1–2% body weight",
+        "when": "Baseline, then week 2",
+        "tier": 3
+      },
+      {
+        "marker": "Serum creatinine",
+        "why": "Rises modestly on creatine — a benign lab artifact from the extra substrate, **not** kidney damage. Know this before a routine panel so a high reading isn't misread.",
+        "range": "May rise ~0.1–0.3 mg/dL",
+        "when": "Flag it before any eGFR/kidney test",
+        "tier": 3
+      }
     ],
     "cofactors": {
-      "needs": [{"nutrient": "Carbohydrate (insulin)", "role": "Insulin drives creatine into muscle via GLUT4; co-ingesting carbs raised uptake in early loading studies.", "tier": 2}],
+      "needs": [
+        {
+          "nutrient": "Carbohydrate (insulin)",
+          "role": "Insulin drives creatine into muscle via GLUT4; co-ingesting carbs raised uptake in early loading studies.",
+          "tier": 2
+        }
+      ],
       "depletes": [],
-      "antagonists": [{"nutrient": "Caffeine (very high, acute)", "role": "Some evidence a large acute caffeine dose blunts creatine's ergogenic effect the same session — the interaction is small and debated, and daily coffee is fine.", "tier": 1}]
+      "antagonists": [
+        {
+          "nutrient": "Caffeine (very high, acute)",
+          "role": "Some evidence a large acute caffeine dose blunts creatine's ergogenic effect the same session — the interaction is small and debated, and daily coffee is fine.",
+          "tier": 1
+        }
+      ]
     },
     "foodFirst": {
       "line": "~450 g (1 lb) of **raw** red meat or fish supplies roughly **2 g** creatine — about half a daily dose. Cooking destroys 20–30% of it.",
       "note": "This is why vegetarians and vegans carry lower muscle creatine and tend to respond the strongest to supplementing.",
       "tier": 3
     },
-    "cost": {"perDose": "~S$0.10–0.20 per 5 g dose", "math": "≈ S$25–40 tub ÷ ~200 servings", "note": "The cheapest evidence-backed supplement there is, per effective dose.", "tier": 3},
-    "dosing": {"perKg": 0.03, "unit": "g/kg/day", "cap": "5 g", "note": "A flat **3–5 g/day** works for almost everyone — per-kg only matters at the extremes. Optional loading: 0.3 g/kg/day split into 4 doses for 5–7 days saturates faster, then drop to maintenance.", "tier": 2},
-    "timing": {"line": "Barely matters — it's a saturation game, not a pre-workout stopwatch. If you want the tiny edge, take it **post-workout with carbs/protein**. Consistency (daily) beats timing.", "tier": 2},
-    "cycling": {"line": "**No cycling needed.** No tolerance, no receptor downregulation, no washout. Take it daily, indefinitely. Stopping just lets muscle stores fade over ~4–6 weeks.", "tier": 3},
-    "contra": [{"flag": "Pre-existing kidney disease", "advice": "Monohydrate is safe for healthy kidneys, but data in established CKD is thin — clear it with a doctor first.", "tier": 2}],
-    "quality": {"line": "Choose a **third-party-tested** monohydrate (independent certification such as Informed Sport or NSF). Cheap bulk creatine from poor synthesis can carry contaminants like dicyandiamide and excess creatinine — independent purity testing is the safeguard.", "tier": 2},
-    "nonResponders": {"line": "~20–30% see little scale/strength jump — usually because their muscle creatine is **already near-full** from a meat-heavy diet, so there's no room to top up. Vegetarians almost always respond.", "tier": 3},
+    "cost": {
+      "perDose": "~S$0.10–0.20 per 5 g dose",
+      "math": "≈ S$25–40 tub ÷ ~200 servings",
+      "note": "The cheapest evidence-backed supplement there is, per effective dose.",
+      "tier": 3
+    },
+    "dosing": {
+      "perKg": 0.03,
+      "unit": "g/kg/day",
+      "cap": "5 g",
+      "note": "A flat **3–5 g/day** works for almost everyone — per-kg only matters at the extremes. Optional loading: 0.3 g/kg/day split into 4 doses for 5–7 days saturates faster, then drop to maintenance.",
+      "tier": 2
+    },
+    "timing": {
+      "line": "Barely matters — it's a saturation game, not a pre-workout stopwatch. If you want the tiny edge, take it **post-workout with carbs/protein**. Consistency (daily) beats timing.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "**No cycling needed.** No tolerance, no receptor downregulation, no washout. Take it daily, indefinitely. Stopping just lets muscle stores fade over ~4–6 weeks.",
+      "tier": 3
+    },
+    "contra": [
+      {
+        "flag": "Pre-existing kidney disease",
+        "advice": "Monohydrate is safe for healthy kidneys, but data in established CKD is thin — clear it with a doctor first.",
+        "tier": 2
+      }
+    ],
+    "quality": {
+      "line": "Choose a **third-party-tested** monohydrate (independent certification such as Informed Sport or NSF). Cheap bulk creatine from poor synthesis can carry contaminants like dicyandiamide and excess creatinine — independent purity testing is the safeguard.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "~20–30% see little scale/strength jump — usually because their muscle creatine is **already near-full** from a meat-heavy diet, so there's no room to top up. Vegetarians almost always respond.",
+      "tier": 3
+    },
     "synergy": [
-      {"with": "Resistance training", "why": "Creatine only expresses its benefit when you supply the training stimulus it fuels — it's a battery, not a spark.", "tier": 3},
-      {"with": "Carbohydrate", "why": "The insulin bump drives more creatine into muscle during loading.", "tier": 2}
+      {
+        "with": "Resistance training",
+        "why": "Creatine only expresses its benefit when you supply the training stimulus it fuels — it's a battery, not a spark.",
+        "tier": 3
+      },
+      {
+        "with": "Carbohydrate",
+        "why": "The insulin bump drives more creatine into muscle during loading.",
+        "tier": 2
+      }
     ]
   },
-
   "vitamin-d3-k2": {
     "form": {
       "buy": "**D3 (cholecalciferol)** — raises blood levels more effectively than D2. Choose an **oil-based softgel** (it's fat-soluble) and pair K2 as **MK-7** for its long half-life.",
@@ -43,15 +103,41 @@
       "tier": 3
     },
     "biomarkers": [
-      {"marker": "Serum 25-OH-D", "why": "The single number that matters — it's your actual vitamin D status. Dose to the target, don't guess.", "range": "Target ~30–50 ng/mL (75–125 nmol/L)", "when": "Baseline, then ~8–12 weeks after a dose change; twice a year", "tier": 3},
-      {"marker": "Serum calcium", "why": "The safety check. Sustained high-dose D can push calcium up (hypercalcemia) — the main real risk of over-supplementing.", "range": "Stay within lab reference range", "when": "If taking >4000 IU/day long-term", "tier": 2}
+      {
+        "marker": "Serum 25-OH-D",
+        "why": "The single number that matters — it's your actual vitamin D status. Dose to the target, don't guess.",
+        "range": "Target ~30–50 ng/mL (75–125 nmol/L)",
+        "when": "Baseline, then ~8–12 weeks after a dose change; twice a year",
+        "tier": 3
+      },
+      {
+        "marker": "Serum calcium",
+        "why": "The safety check. Sustained high-dose D can push calcium up (hypercalcemia) — the main real risk of over-supplementing.",
+        "range": "Stay within lab reference range",
+        "when": "If taking >4000 IU/day long-term",
+        "tier": 2
+      }
     ],
     "cofactors": {
       "needs": [
-        {"nutrient": "Magnesium", "role": "A required cofactor for the enzymes that activate vitamin D. Low magnesium blunts your response no matter how much D you take.", "tier": 2},
-        {"nutrient": "Vitamin K2 (MK-7)", "role": "Directs the calcium D absorbs **into bone** and away from arteries — which is why they're paired.", "tier": 2}
+        {
+          "nutrient": "Magnesium",
+          "role": "A required cofactor for the enzymes that activate vitamin D. Low magnesium blunts your response no matter how much D you take.",
+          "tier": 2
+        },
+        {
+          "nutrient": "Vitamin K2 (MK-7)",
+          "role": "Directs the calcium D absorbs **into bone** and away from arteries — which is why they're paired.",
+          "tier": 2
+        }
       ],
-      "depletes": [{"nutrient": "Magnesium / K2", "role": "High-dose D increases demand for both — supplementing D alone can unmask a magnesium or K2 shortfall.", "tier": 1}],
+      "depletes": [
+        {
+          "nutrient": "Magnesium / K2",
+          "role": "High-dose D increases demand for both — supplementing D alone can unmask a magnesium or K2 shortfall.",
+          "tier": 1
+        }
+      ],
       "antagonists": []
     },
     "foodFirst": {
@@ -59,21 +145,53 @@
       "note": "Above ~35° latitude you make almost no vitamin D from sun in winter — which is when supplementing matters most.",
       "tier": 3
     },
-    "cost": {"perDose": "~S$0.03–0.10 per day", "math": "≈ S$15–25 bottle ÷ ~250 days", "note": "Pennies a day to correct a genuine deficiency — one of the highest value-per-dollar supplements when you're actually low.", "tier": 3},
-    "timing": {"line": "**With your largest fatty meal**, any time of day. A few people report high evening doses disturb sleep (weak evidence) — if that's you, take it in the morning. D3's long half-life means a weekly dose works as well as daily.", "tier": 2},
-    "cycling": {"line": "No cycling. D3 stores in fat with a **~2–3 week half-life**, so daily or once-weekly dosing both work. Re-test and titrate to your 25-OH-D target rather than cycling.", "tier": 3},
+    "cost": {
+      "perDose": "~S$0.03–0.10 per day",
+      "math": "≈ S$15–25 bottle ÷ ~250 days",
+      "note": "Pennies a day to correct a genuine deficiency — one of the highest value-per-dollar supplements when you're actually low.",
+      "tier": 3
+    },
+    "timing": {
+      "line": "**With your largest fatty meal**, any time of day. A few people report high evening doses disturb sleep (weak evidence) — if that's you, take it in the morning. D3's long half-life means a weekly dose works as well as daily.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "No cycling. D3 stores in fat with a **~2–3 week half-life**, so daily or once-weekly dosing both work. Re-test and titrate to your 25-OH-D target rather than cycling.",
+      "tier": 3
+    },
     "contra": [
-      {"flag": "Sarcoidosis / granulomatous disease", "advice": "These conditions dysregulate vitamin D activation and can cause hypercalcemia even at normal doses — supplement only under medical supervision.", "tier": 3},
-      {"flag": "Thiazide diuretics or a history of calcium kidney stones", "advice": "Both raise hypercalcemia/stone risk when stacked with high-dose D — get calcium monitored.", "tier": 2}
+      {
+        "flag": "Sarcoidosis / granulomatous disease",
+        "advice": "These conditions dysregulate vitamin D activation and can cause hypercalcemia even at normal doses — supplement only under medical supervision.",
+        "tier": 3
+      },
+      {
+        "flag": "Thiazide diuretics or a history of calcium kidney stones",
+        "advice": "Both raise hypercalcemia/stone risk when stacked with high-dose D — get calcium monitored.",
+        "tier": 2
+      }
     ],
-    "quality": {"line": "Choose **USP-verified** products. Independent testing has repeatedly found softgel D content ranging from ~9% to ~140% of the label. For K2, look for **all-trans MK-7**.", "tier": 2},
-    "nonResponders": {"line": "If your 25-OH-D won't budge, suspect: **obesity** (D sequesters in fat), **fat malabsorption** (celiac, IBD, bariatric surgery), or **low magnesium** (can't activate it). Genetic GC/VDR variants also shift where your set-point lands.", "tier": 2},
+    "quality": {
+      "line": "Choose **USP-verified** products. Independent testing has repeatedly found softgel D content ranging from ~9% to ~140% of the label. For K2, look for **all-trans MK-7**.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "If your 25-OH-D won't budge, suspect: **obesity** (D sequesters in fat), **fat malabsorption** (celiac, IBD, bariatric surgery), or **low magnesium** (can't activate it). Genetic GC/VDR variants also shift where your set-point lands.",
+      "tier": 2
+    },
     "synergy": [
-      {"with": "Vitamin K2 (MK-7)", "why": "Routes the extra absorbed calcium into bone instead of soft tissue and arteries.", "tier": 2},
-      {"with": "Magnesium", "why": "Powers the enzymes that convert D to its active form — the missing link in many non-responders.", "tier": 2}
+      {
+        "with": "Vitamin K2 (MK-7)",
+        "why": "Routes the extra absorbed calcium into bone instead of soft tissue and arteries.",
+        "tier": 2
+      },
+      {
+        "with": "Magnesium",
+        "why": "Powers the enzymes that convert D to its active form — the missing link in many non-responders.",
+        "tier": 2
+      }
     ]
   },
-
   "omega-3-epa-dha": {
     "form": {
       "buy": "Read the label for **EPA + DHA content**, not total 'fish oil' mg. **Triglyceride (rTG/TG)** form absorbs better than ethyl ester; **phospholipid** (krill) is well-absorbed too. Enteric-coated caps cut the fishy burps.",
@@ -83,31 +201,979 @@
       "tier": 2
     },
     "biomarkers": [
-      {"marker": "Omega-3 Index", "why": "Red-blood-cell EPA+DHA — the validated status marker. It's the omega-3 equivalent of 25-OH-D.", "range": "Target ≥ 8%", "when": "Baseline, then ~3–4 months later", "tier": 2},
-      {"marker": "Fasting triglycerides", "why": "The clearest dose-dependent effect — high-dose fish oil lowers triglycerides.", "range": "Drops noticeably at ≥2–4 g/day EPA+DHA", "when": "If taking it for lipids", "tier": 3}
+      {
+        "marker": "Omega-3 Index",
+        "why": "Red-blood-cell EPA+DHA — the validated status marker. It's the omega-3 equivalent of 25-OH-D.",
+        "range": "Target ≥ 8%",
+        "when": "Baseline, then ~3–4 months later",
+        "tier": 2
+      },
+      {
+        "marker": "Fasting triglycerides",
+        "why": "The clearest dose-dependent effect — high-dose fish oil lowers triglycerides.",
+        "range": "Drops noticeably at ≥2–4 g/day EPA+DHA",
+        "when": "If taking it for lipids",
+        "tier": 3
+      }
     ],
     "cofactors": {
-      "needs": [{"nutrient": "Vitamin E / antioxidants", "role": "Polyunsaturated oils oxidise easily; a little vitamin E (many products add it) protects the oil and your tissue stores.", "tier": 2}],
+      "needs": [
+        {
+          "nutrient": "Vitamin E / antioxidants",
+          "role": "Polyunsaturated oils oxidise easily; a little vitamin E (many products add it) protects the oil and your tissue stores.",
+          "tier": 2
+        }
+      ],
       "depletes": [],
-      "antagonists": [{"nutrient": "High omega-6 (seed-oil-heavy diet)", "role": "Omega-6 and omega-3 compete for the same desaturase/elongase enzymes and eicosanoid pathways — a very high omega-6 intake works against your omega-3 status.", "tier": 2}]
+      "antagonists": [
+        {
+          "nutrient": "High omega-6 (seed-oil-heavy diet)",
+          "role": "Omega-6 and omega-3 compete for the same desaturase/elongase enzymes and eicosanoid pathways — a very high omega-6 intake works against your omega-3 status.",
+          "tier": 2
+        }
+      ]
     },
     "foodFirst": {
       "line": "**Fatty fish twice a week** basically covers general needs — salmon, mackerel and sardines give ~1–2 g EPA+DHA per serving. Plant ALA (flax, chia, walnuts) is **not** a substitute: conversion is <10% to EPA and ~1% to DHA.",
       "note": "If you eat oily fish regularly you may not need a supplement at all — test your Omega-3 Index before buying.",
       "tier": 3
     },
-    "cost": {"perDose": "~S$0.15–0.60 per 1 g EPA+DHA", "math": "Cost varies with concentration — a concentrated rTG can be cheaper per gram of actual EPA+DHA than a bulk low-strength oil.", "note": "Compare on cost-per-gram-EPA+DHA, not per capsule — low-strength oils hide the real price.", "tier": 2},
-    "timing": {"line": "**With a fatty meal**, and split larger doses across two meals to cut burps and steady absorption. Time of day doesn't matter for the benefit.", "tier": 2},
-    "cycling": {"line": "No cycling — it's a status you build and maintain, like vitamin D. Stores decline over months if you stop. Steady daily intake keeps the Omega-3 Index up.", "tier": 3},
+    "cost": {
+      "perDose": "~S$0.15–0.60 per 1 g EPA+DHA",
+      "math": "Cost varies with concentration — a concentrated rTG can be cheaper per gram of actual EPA+DHA than a bulk low-strength oil.",
+      "note": "Compare on cost-per-gram-EPA+DHA, not per capsule — low-strength oils hide the real price.",
+      "tier": 2
+    },
+    "timing": {
+      "line": "**With a fatty meal**, and split larger doses across two meals to cut burps and steady absorption. Time of day doesn't matter for the benefit.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "No cycling — it's a status you build and maintain, like vitamin D. Stores decline over months if you stop. Steady daily intake keeps the Omega-3 Index up.",
+      "tier": 3
+    },
     "contra": [
-      {"flag": "Anticoagulant / antiplatelet medication", "advice": "High doses modestly affect bleeding time; the clinical bleeding risk is small but worth flagging to your doctor, especially before surgery.", "tier": 2},
-      {"flag": "History of atrial fibrillation", "advice": "Large trials (REDUCE-IT, STRENGTH) found a small increase in AF signal at **≥4 g/day** — relevant only at prescription-level doses.", "tier": 2}
+      {
+        "flag": "Anticoagulant / antiplatelet medication",
+        "advice": "High doses modestly affect bleeding time; the clinical bleeding risk is small but worth flagging to your doctor, especially before surgery.",
+        "tier": 2
+      },
+      {
+        "flag": "History of atrial fibrillation",
+        "advice": "Large trials (REDUCE-IT, STRENGTH) found a small increase in AF signal at **≥4 g/day** — relevant only at prescription-level doses.",
+        "tier": 2
+      }
     ],
-    "quality": {"line": "Oxidation is the real problem — a lot of retail fish oil is already **rancid**. Look for **IFOS certification** and low oxidation markers (TOTOX), plus heavy-metal and PCB testing. A fish oil that smells strongly fishy is oxidised.", "tier": 2},
-    "nonResponders": {"line": "Poor **ALA→EPA/DHA converters** (common, and worse with **FADS gene** variants) get little from plant sources and must use fish/algae oil directly. Women convert ALA somewhat better than men.", "tier": 2},
+    "quality": {
+      "line": "Oxidation is the real problem — a lot of retail fish oil is already **rancid**. Look for **IFOS certification** and low oxidation markers (TOTOX), plus heavy-metal and PCB testing. A fish oil that smells strongly fishy is oxidised.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "Poor **ALA→EPA/DHA converters** (common, and worse with **FADS gene** variants) get little from plant sources and must use fish/algae oil directly. Women convert ALA somewhat better than men.",
+      "tier": 2
+    },
     "synergy": [
-      {"with": "Vitamin E", "why": "Protects the fragile PUFA from oxidising before and after you absorb it.", "tier": 2},
-      {"with": "A fatty meal", "why": "Dietary fat triggers the bile and lipase that carry omega-3s across the gut.", "tier": 3}
+      {
+        "with": "Vitamin E",
+        "why": "Protects the fragile PUFA from oxidising before and after you absorb it.",
+        "tier": 2
+      },
+      {
+        "with": "A fatty meal",
+        "why": "Dietary fat triggers the bile and lipase that carry omega-3s across the gut.",
+        "tier": 3
+      }
+    ]
+  },
+  "magnesium": {
+    "form": {
+      "buy": "**Glycinate (bisglycinate)** for sleep and calm, **citrate** if you also want mild bowel help, **malate** for daytime/muscle use.",
+      "avoid": "**Magnesium oxide** — poorly absorbed and mostly acts as a laxative; also skip cheap 'oxide' blends dressed up as sleep aids.",
+      "withFood": "Take with or without food; **glycinate is gentle** on an empty stomach, while citrate/oxide are better spread out to avoid loose stools.",
+      "bioavailability": "Organic forms (**glycinate, citrate, malate**) absorb better than oxide; check the **elemental magnesium** figure, not the total salt weight.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "**Serum magnesium**",
+        "why": "The standard, cheap lab — but only ~1% of body magnesium is extracellular, so it stays 'normal' until you are quite depleted. Useful mainly to rule out overt deficiency.",
+        "range": "~0.75-0.95 mmol/L (1.8-2.3 mg/dL), lab-dependent",
+        "when": "Fasting; recheck only if symptomatic or on interacting meds",
+        "tier": 3
+      },
+      {
+        "marker": "**RBC magnesium**",
+        "why": "Reflects intracellular stores better than serum and is a more sensitive read of true status if you want a real baseline.",
+        "range": "~1.65-2.65 mmol/L (4.0-6.4 mg/dL), lab-dependent",
+        "when": "Baseline, then after ~8-12 weeks of supplementing",
+        "tier": 2
+      }
+    ],
+    "cofactors": {
+      "needs": [
+        {
+          "nutrient": "**Vitamin B6**",
+          "role": "May support cellular magnesium uptake; the two are often paired for this reason, though the mechanistic evidence is limited.",
+          "tier": 1
+        },
+        {
+          "nutrient": "**Vitamin D**",
+          "role": "Magnesium is a required cofactor for the enzymes that activate vitamin D — low magnesium blunts your response to D.",
+          "tier": 2
+        }
+      ],
+      "depletes": [
+        {
+          "nutrient": "**Alcohol**",
+          "role": "Increases urinary magnesium loss; heavy or chronic intake is a common driver of low status.",
+          "tier": 3
+        },
+        {
+          "nutrient": "**Caffeine / diuretics**",
+          "role": "Mild diuretic effect raises renal magnesium excretion.",
+          "tier": 2
+        }
+      ],
+      "antagonists": [
+        {
+          "nutrient": "**High-dose calcium**",
+          "role": "Competes for intestinal absorption when taken together in large single doses — separate them.",
+          "tier": 2
+        },
+        {
+          "nutrient": "**PPIs (long-term)**",
+          "role": "Chronic proton-pump-inhibitor use is a recognised cause of low magnesium.",
+          "tier": 3
+        }
+      ]
+    },
+    "foodFirst": {
+      "line": "**Pumpkin seeds, almonds, leafy greens, legumes, whole grains and dark chocolate** are all magnesium-dense — a genuinely varied wholefood diet covers most people's baseline needs.",
+      "note": "Food magnesium has no laxative ceiling; supplementation mainly matters for hard trainers, high stress, alcohol use, or documented low status.",
+      "tier": 3
+    },
+    "cost": {
+      "perDose": "~SGD 0.10-0.40 per night",
+      "math": "A bottle of ~100-120 glycinate capsules runs roughly SGD 15-35, i.e. cents per serving.",
+      "note": "One of the cheapest evidence-backed sleep/calm supplements; glycinate costs a little more than oxide but is worth it for absorption and tolerability.",
+      "tier": 2
+    },
+    "dosing": {
+      "unit": "mg elemental",
+      "cap": "350 mg/day from supplements",
+      "note": "Typical supplemental dose is **200-400 mg elemental magnesium**. The 350 mg tolerable upper limit applies to supplements only (not food) and exists because excess causes diarrhoea. Doses are given as elemental magnesium, which is a fraction of the salt weight (e.g. glycinate is ~14% elemental).",
+      "tier": 3
+    },
+    "timing": {
+      "line": "For sleep and calm, take **glycinate 30-60 minutes before bed**; malate or citrate are better earlier in the day if you want it for muscle/recovery.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "**No cycling needed** — magnesium is an essential mineral you use daily, so continuous use to maintain status is appropriate.",
+      "tier": 3
+    },
+    "contra": [
+      {
+        "flag": "**Kidney impairment**",
+        "advice": "Impaired kidneys clear magnesium poorly, so it can accumulate to dangerous levels — do not supplement without medical supervision if you have reduced renal function.",
+        "tier": 3
+      },
+      {
+        "flag": "**Certain oral medications**",
+        "advice": "Magnesium binds and reduces absorption of tetracycline/quinolone antibiotics, bisphosphonates and thyroid hormone — separate doses by at least 2-4 hours.",
+        "tier": 3
+      },
+      {
+        "flag": "**Loose stools / cramping**",
+        "advice": "If you get diarrhoea, lower the dose or switch from citrate/oxide to glycinate rather than pushing through.",
+        "tier": 3
+      }
+    ],
+    "quality": {
+      "line": "Choose a product that **lists elemental magnesium** and is **third-party tested** (e.g. NSF or USP verified); avoid proprietary blends that hide the form and dose.",
+      "tier": 3
+    },
+    "nonResponders": {
+      "line": "If you are already magnesium-replete, the sleep/calm effect is modest — the biggest responders are people who are depleted (hard training, high stress, alcohol, or an oxide-only supplement they weren't absorbing).",
+      "tier": 2
+    },
+    "synergy": [
+      {
+        "with": "**Glycine**",
+        "why": "The glycinate form itself delivers glycine, an inhibitory neurotransmitter with its own mild sleep-quality benefit — part of why this form is favoured at night.",
+        "tier": 2
+      },
+      {
+        "with": "**Vitamin D**",
+        "why": "Magnesium is needed to activate vitamin D and vice versa; correcting both together tends to work better than either alone.",
+        "tier": 2
+      },
+      {
+        "with": "**Vitamin B6**",
+        "why": "B6 may aid cellular magnesium uptake and the pair is commonly combined for stress/PMS-related calm, though the uptake evidence is limited.",
+        "tier": 1
+      }
+    ]
+  },
+  "l-theanine": {
+    "form": {
+      "buy": "Pure **L-theanine** (the single L-isomer), third-party tested for identity and purity, with the actual L-theanine content stated in milligrams rather than hidden inside a vague 'tea extract' blend.",
+      "avoid": "**Racemic DL-theanine** and unstandardised green-tea extracts that don't declare actual theanine milligrams — both are cheaper but under-studied at the doses that matter.",
+      "withFood": "No food needed; absorption is efficient and largely unaffected by whether the stomach is empty or full.",
+      "bioavailability": "**Rapidly absorbed** and crosses the blood-brain barrier; plasma peaks around 30-50 minutes with a short half-life (~1 hour), which is why effects are felt quickly but fade within a few hours.",
+      "tier": 2
+    },
+    "foodFirst": {
+      "line": "**Green tea** is the natural source, but a typical cup delivers only roughly 8-25 mg of L-theanine — high-grade shade-grown leaf (gyokuro, matcha) is richer (~25-45 mg) but still far below a 100-200 mg supplemental dose.",
+      "note": "You'd need many cups to reach studied doses, and that caffeine load defeats the purpose for a calm/sleep goal — this is a case where a capsule is the practical route.",
+      "tier": 3
+    },
+    "cost": {
+      "perDose": "~S$0.10-0.30 per 100-200 mg dose",
+      "math": "A bottle of 60-120 capsules (100-200 mg each) runs roughly S$15-30, so per-dose cost is low even used daily.",
+      "note": "One of the cheaper foundational supplements; no need to overpay for premium framing.",
+      "tier": 2
+    },
+    "dosing": {
+      "unit": "mg",
+      "cap": "Commonly studied up to ~400 mg per dose; there's no reason to exceed ~400 mg for everyday use.",
+      "note": "Typical effective range is **100-200 mg**. For focus, pair with caffeine; for calm or sleep, use it alone. Per-kg dosing is not standard for this compound.",
+      "tier": 3
+    },
+    "timing": {
+      "line": "For **smooth focus**, take alongside caffeine (a ~2:1 theanine:caffeine ratio, e.g. 200 mg theanine : 100 mg caffeine, is the classic combo). For **calm or sleep**, take 100-200 mg on its own, 30-60 minutes before you want the effect.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "**No cycling needed** — L-theanine shows no known tolerance, dependence, or withdrawal, so daily use is fine. It also doesn't build up; each dose acts and clears within hours.",
+      "tier": 2
+    },
+    "contra": [
+      {
+        "flag": "On blood-pressure medication",
+        "advice": "L-theanine may modestly blunt stress-related blood-pressure rises; evidence for lowering resting blood pressure is limited, but if you're on antihypertensives it's worth mentioning to your doctor.",
+        "tier": 1
+      },
+      {
+        "flag": "Pregnancy or breastfeeding",
+        "advice": "Safety of concentrated supplemental doses hasn't been established — food-level green tea is one thing, 200 mg capsules another; default to omitting.",
+        "tier": 2
+      },
+      {
+        "flag": "Stimulant medications (e.g. for ADHD)",
+        "advice": "Generally well tolerated, but since theanine blunts stimulant 'edge', don't assume your usual stim dose feels the same — introduce it separately so you can tell what's doing what.",
+        "tier": 1
+      }
+    ],
+    "quality": {
+      "line": "Choose products that are **third-party tested** and state the L-isomer explicitly; independent standards such as NSF Certified for Sport or Informed Sport are useful neutral assurance if you compete and need a clean-label guarantee.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "A meaningful minority feel **little subjective effect**, especially taken alone without caffeine — the caffeine-pairing benefit (less jitter, steadier attention) is the most reliably noticed effect. If nothing registers after a couple of weeks, it may simply be a non-responder situation, not a dosing problem.",
+      "tier": 1
+    },
+    "synergy": [
+      {
+        "with": "Caffeine",
+        "why": "The best-supported combination: L-theanine takes the jittery, wired edge off caffeine while attention and reaction-time benefits are preserved or improved — smooth focus instead of a buzz.",
+        "tier": 3
+      },
+      {
+        "with": "Magnesium (glycinate)",
+        "why": "Both support a calmer pre-sleep state through different mechanisms; a reasonable emerging stack for evening wind-down, though evidence for the combination specifically is thin.",
+        "tier": 1
+      }
+    ]
+  },
+  "ashwagandha-withania-somnifera": {
+    "form": {
+      "buy": "**Root extract standardized to withanolides** (typically 2.5-5%). This is the form used in nearly all clinical trials, so the active dose is knowable.",
+      "avoid": "**Non-standardized raw root powder (churna)** with unlisted withanolide content, and cheap products that don't publish a withanolide %.",
+      "withFood": "Withanolides are **fat-soluble**; taking with a meal (or the traditional warm milk) aids absorption and reduces occasional GI upset. Not mandatory.",
+      "bioavailability": "Effects track the **withanolide dose**, not the raw milligrams, so two products at the same mg can differ severalfold in potency.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Morning serum cortisol",
+        "why": "Primary mechanism is turning down the **HPA-axis / cortisol** set point; RCTs and meta-analyses show real reductions, though a biological cortisol drop does not always track subjective stress relief.",
+        "range": "~6-23 mcg/dL (166-635 nmol/L), drawn AM",
+        "when": "Baseline and again at 8 weeks, morning and fasted",
+        "tier": 2
+      },
+      {
+        "marker": "Total testosterone (men)",
+        "why": "Because chronic stress suppresses T, lowering cortisol can produce a **modest T rise** in stressed or subfertile men; not an effect to expect in already-optimized men.",
+        "range": "~300-1000 ng/dL (10.4-34.7 nmol/L), adult male",
+        "when": "Baseline and 8-12 weeks, morning",
+        "tier": 2
+      },
+      {
+        "marker": "TSH and free T4",
+        "why": "Ashwagandha may nudge **thyroid hormones up and TSH down**, but the human data is essentially one trial in subclinical-hypothyroid patients (no change seen in healthy people) — track mainly as a safety check if you have thyroid issues.",
+        "range": "TSH ~0.4-4.0 mIU/L",
+        "when": "Baseline and 8-12 weeks if thyroid status is a concern",
+        "tier": 1
+      }
+    ],
+    "foodFirst": {
+      "line": "No food contains ashwagandha; the **cortisol/sleep/testosterone axis it targets responds first to sleep, resistance training, and reduced alcohol** — fix those before or alongside supplementing.",
+      "note": "Ashwagandha is a lever on stress physiology, not a substitute for the behaviors that set it.",
+      "tier": 2
+    },
+    "cost": {
+      "perDose": "~SGD 0.40-1.20 per daily dose",
+      "math": "A month of standardized root-extract capsules (600 mg/day) typically runs ~SGD 15-35 in Singapore; pharmacy tins of 60 caps sit around SGD 24-32, with online importers cheaper.",
+      "note": "Standardized extracts cost more than plain powder but are what the evidence is built on.",
+      "tier": 2
+    },
+    "dosing": {
+      "unit": "mg/day of standardized root extract",
+      "cap": "600 mg/day covers essentially all positive trials; more is not better-supported",
+      "note": "**300-600 mg/day** of extract standardized to ~5% withanolides is the clinical range; can be a single dose or split AM/PM.",
+      "tier": 3
+    },
+    "timing": {
+      "line": "Any time works; if the goal is **sleep and evening calm, take it with dinner or before bed**. Splitting AM/PM suits general daytime stress.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "Most trials ran **8-12 weeks**, so long-term safety data is limited; some users cycle (e.g. 8-12 weeks on, a short break) though evidence for needing to cycle is thin.",
+      "tier": 1
+    },
+    "contra": [
+      {
+        "flag": "Pregnancy or breastfeeding",
+        "advice": "Avoid — traditionally regarded as an abortifacient and not established as safe.",
+        "tier": 3
+      },
+      {
+        "flag": "Hyperthyroidism or thyroid medication",
+        "advice": "Can raise thyroid hormones; avoid or monitor TSH/T4 closely and involve your doctor.",
+        "tier": 2
+      },
+      {
+        "flag": "Liver disease or other hepatotoxic drugs",
+        "advice": "Rare cases of ashwagandha-associated liver injury are documented; stop immediately if you notice jaundice, dark urine, or right-upper-abdomen pain.",
+        "tier": 2
+      },
+      {
+        "flag": "Sedatives, benzodiazepines, or alcohol",
+        "advice": "Additive sedation is possible; be cautious combining, and stop ~2 weeks before scheduled surgery.",
+        "tier": 2
+      },
+      {
+        "flag": "Autoimmune conditions",
+        "advice": "May stimulate immune activity in theory; discuss with your clinician before use.",
+        "tier": 1
+      }
+    ],
+    "quality": {
+      "line": "Choose products that publish a **withanolide %** and are **third-party tested for heavy metals** — Ayurvedic root herbs can carry lead/arsenic contamination. Independent certification (e.g. NSF, USP) is a plus.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "Effects on stress and sleep are usually subtle; if you notice **no change in sleep, calm, or stress by ~8 weeks** at 600 mg/day, it likely isn't doing much for you.",
+      "tier": 1
+    },
+    "synergy": [
+      {
+        "with": "Magnesium (glycinate) at night",
+        "why": "Complementary support for **sleep quality and evening relaxation**, though the combination hasn't been formally trialed.",
+        "tier": 1
+      },
+      {
+        "with": "L-theanine",
+        "why": "Another well-tolerated **calming** agent that pairs logically for daytime stress; combination evidence is limited.",
+        "tier": 1
+      }
+    ]
+  },
+  "berberine": {
+    "form": {
+      "buy": "**Berberine HCl** is the standard, well-studied form; **dihydroberberine** is a more bioavailable derivative that allows lower doses. Choose high-purity, third-party-tested capsules.",
+      "avoid": "Cheap **blends** that hide the actual berberine dose inside a proprietary matrix, and any product without a stated mg content per capsule.",
+      "withFood": "Take **with or just before a meal** — food improves tolerance and lets it blunt the post-meal glucose rise.",
+      "bioavailability": "Oral bioavailability is **very low (<1%)**, from extensive intestinal first-pass metabolism, poor solubility, and gut P-glycoprotein efflux; this is why dosing is split and dihydroberberine or absorption enhancers are used.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "**Fasting glucose**",
+        "why": "Primary target — berberine's AMPK effect lowers fasting and post-meal glucose.",
+        "range": "Normal 4.0-5.5 mmol/L; pre-diabetes 5.6-6.9 mmol/L",
+        "when": "Baseline, then 8-12 weeks",
+        "tier": 3
+      },
+      {
+        "marker": "**HbA1c**",
+        "why": "Best 3-month average of glycemic control; trials show meaningful reductions in dysglycemic people.",
+        "range": "Normal <5.7%; pre-diabetes 5.7-6.4%",
+        "when": "Baseline, then every 3 months",
+        "tier": 3
+      },
+      {
+        "marker": "**Triglycerides**",
+        "why": "Berberine reliably lowers triglycerides — a core reason to use it.",
+        "range": "Optimal <1.7 mmol/L",
+        "when": "Baseline, then 8-12 weeks",
+        "tier": 3
+      },
+      {
+        "marker": "**LDL cholesterol**",
+        "why": "Modest LDL-lowering via upregulated LDL-receptor expression.",
+        "range": "General target <3.0 mmol/L (lower if higher CV risk)",
+        "when": "Baseline, then 8-12 weeks",
+        "tier": 2
+      },
+      {
+        "marker": "**ALT / liver enzymes**",
+        "why": "Precautionary check for a long-term add-on supplement cleared by the liver; berberine is not a known hepatotoxin, so this is prudence rather than an established need.",
+        "range": "ALT roughly <40 U/L (lab-dependent)",
+        "when": "Baseline and if using long-term",
+        "tier": 1
+      }
+    ],
+    "foodFirst": {
+      "line": "Berberine has **no meaningful dietary source** — it is an isolated plant alkaloid, not a nutrient you can eat your way to.",
+      "note": "The glucose and triglyceride levers it targets respond first to fiber, reduced refined carbs, and post-meal walking; berberine is an add-on to that base, not a replacement.",
+      "tier": 3
+    },
+    "cost": {
+      "perDose": "~SGD $0.20-0.50 per 500 mg capsule",
+      "math": "A bottle of 60-90 high-purity 500 mg caps runs roughly SGD $18-35, so a 1000-1500 mg/day protocol is about $0.40-1.50/day.",
+      "note": "Dihydroberberine costs notably more per equivalent effect.",
+      "tier": 2
+    },
+    "dosing": {
+      "unit": "mg",
+      "cap": "Typically capped around 1500 mg/day total",
+      "note": "Standard is **500 mg taken 2-3x daily with meals** (1000-1500 mg/day). Start with a single daily dose and build up to assess GI tolerance. Per-kg dosing is not used for berberine.",
+      "tier": 3
+    },
+    "timing": {
+      "line": "Split across the day and take **with or ~15-20 min before carb-containing meals** — its glucose-blunting effect and low plasma levels make single large doses both harsher on the gut and less useful.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "Some users **cycle** (e.g. 8-12 weeks on, a short break) partly over gut-microbiome concerns, but there is no strong evidence that cycling is necessary — this is emerging/anecdotal.",
+      "tier": 1
+    },
+    "contra": [
+      {
+        "flag": "**Pregnancy and breastfeeding**",
+        "advice": "Avoid — berberine crosses the placenta and can displace bilirubin, posing a kernicterus risk to the fetus/newborn. Do not give to infants.",
+        "tier": 3
+      },
+      {
+        "flag": "**Taking prescription medications**",
+        "advice": "Berberine inhibits CYP3A4/CYP2D6 and P-glycoprotein, raising blood levels of many drugs (some statins, cyclosporine, and others). Space dosing and clear it with a pharmacist/doctor before combining.",
+        "tier": 3
+      },
+      {
+        "flag": "**On glucose-lowering drugs (metformin, insulin, sulfonylureas)**",
+        "advice": "Additive effect can cause hypoglycemia — monitor closely and involve your prescriber rather than stacking blindly.",
+        "tier": 2
+      },
+      {
+        "flag": "**Sensitive gut**",
+        "advice": "Cramping, diarrhea or constipation are common early on — start with one 500 mg dose with food and titrate up.",
+        "tier": 2
+      }
+    ],
+    "quality": {
+      "line": "Choose products **third-party tested** for actual berberine content and for heavy-metal/contaminant limits; botanical extracts vary widely and cheap material can be adulterated or under-dosed.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "Response varies partly because **gut bacteria (via nitroreductase) convert berberine to the better-absorbed dihydroberberine** — differing microbiomes (and heavy P-glycoprotein efflux) mean some people absorb far less; switching to dihydroberberine can help.",
+      "tier": 1
+    },
+    "synergy": [
+      {
+        "with": "**Dihydroberberine (form switch)**",
+        "why": "Better absorbed than berberine HCl, so a lower dose achieves similar glucose/lipid effects with less GI upset.",
+        "tier": 2
+      },
+      {
+        "with": "**Milk thistle (silymarin)**",
+        "why": "Inhibits P-glycoprotein efflux, which can raise berberine's low absorption — a mechanistically sound but still emerging pairing.",
+        "tier": 1
+      },
+      {
+        "with": "**Diet and post-meal walking**",
+        "why": "Berberine's AMPK/glucose-disposal effect stacks with the same lever pulled by lower refined-carb intake and light post-meal activity.",
+        "tier": 3
+      }
+    ]
+  },
+  "zinc": {
+    "form": {
+      "buy": "**Well-absorbed chelates** — zinc picolinate, citrate, glycinate/bisglycinate, or gluconate. Look for the *elemental* zinc amount on the label, not the salt weight.",
+      "avoid": "**Zinc oxide** — cheap and common in multivitamins but poorly absorbed. Also avoid mega-dose (50 mg+) single tablets for daily use.",
+      "withFood": "Take **with a meal** to prevent nausea. Empty-stomach zinc is the classic cause of that queasy, metallic gut-punch feeling.",
+      "bioavailability": "Absorption is blunted by **phytates** (whole grains, legumes) and by co-ingested calcium and iron; this applies across all forms.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Serum/plasma zinc",
+        "why": "The standard lab, but an **imperfect marker** — it drops in inflammation and doesn't capture tissue stores. Useful for confirming frank deficiency, weak for fine-tuning.",
+        "range": "70–120 µg/dL (≈11–18 µmol/L)",
+        "when": "Fasting morning draw; recheck 8–12 weeks after starting",
+        "tier": 2
+      },
+      {
+        "marker": "Serum copper / ceruloplasmin",
+        "why": "**The one to actually watch.** Sustained zinc supplementation drives copper down; low copper causes anemia and neuropathy. Track it if you dose above ~25 mg/day for months.",
+        "range": "Copper 70–140 µg/dL",
+        "when": "Baseline, then every 3–6 months on ongoing higher-dose zinc",
+        "tier": 3
+      },
+      {
+        "marker": "Total testosterone",
+        "why": "Only relevant to the T goal, and only informative if you were **deficient first** — correcting low zinc can restore T, but topping up a replete man does nothing.",
+        "range": "Adult male ~300–1000 ng/dL",
+        "when": "Baseline before starting if T is your reason for using it",
+        "tier": 2
+      }
+    ],
+    "cofactors": {
+      "depletes": [
+        {
+          "nutrient": "Copper",
+          "role": "High zinc induces intestinal metallothionein, which traps dietary copper — the best-documented downside of chronic supplementation.",
+          "tier": 3
+        },
+        {
+          "nutrient": "Iron (functional)",
+          "role": "Zinc and non-heme iron compete for the same absorption transporters; large zinc doses can lower iron uptake.",
+          "tier": 2
+        }
+      ],
+      "antagonists": [
+        {
+          "nutrient": "Calcium",
+          "role": "Co-ingested calcium (dairy, supplements) reduces zinc absorption — separate them by a couple of hours.",
+          "tier": 2
+        },
+        {
+          "nutrient": "Phytates",
+          "role": "Bind zinc in the gut; a plant-heavy, high-legume/grain diet meaningfully lowers absorbed zinc.",
+          "tier": 3
+        }
+      ]
+    },
+    "foodFirst": {
+      "line": "**Oysters** are the outlier — a few cover a full day's zinc many times over. Red meat, shellfish, poultry, and pumpkin seeds are reliable everyday sources.",
+      "note": "Animal-source zinc is far better absorbed than plant zinc because it isn't locked up by phytates.",
+      "tier": 3
+    },
+    "cost": {
+      "perDose": "~S$0.03–0.10 per daily dose",
+      "math": "A bottle of 100+ tablets typically runs S$8–15, i.e. cents per day.",
+      "note": "One of the cheapest supplements in existence — cost is never the limiting factor.",
+      "tier": 2
+    },
+    "dosing": {
+      "unit": "mg elemental zinc/day",
+      "cap": "40 mg/day (adult tolerable upper limit)",
+      "note": "Everyday maintenance sits around **15–30 mg elemental**. Short high-dose immune protocols (e.g. lozenges at cold onset) run higher but are time-limited, not daily. Chronic dosing near or above 40 mg risks copper deficiency.",
+      "tier": 3
+    },
+    "timing": {
+      "line": "With a meal to avoid nausea, but **separate by 2+ hours from iron or calcium supplements** and from tetracycline/quinolone antibiotics, which zinc binds and inactivates.",
+      "tier": 3
+    },
+    "cycling": {
+      "line": "No formal cycle needed at maintenance doses, but **higher-dose zinc should not run indefinitely** — use it to correct a deficiency or for time-limited immune support, then drop back to food-level or a modest maintenance dose to protect copper.",
+      "tier": 2
+    },
+    "contra": [
+      {
+        "flag": "Long-term high-dose use",
+        "advice": "Chronic intake above ~40 mg/day can cause **copper-deficiency anemia and neuropathy** that may not fully reverse. Pair higher doses with 1–2 mg copper and monitor labs.",
+        "tier": 3
+      },
+      {
+        "flag": "On certain antibiotics",
+        "advice": "Zinc chelates **tetracyclines and fluoroquinolones**, reducing their absorption. Separate doses by several hours.",
+        "tier": 3
+      },
+      {
+        "flag": "Nausea / GI upset",
+        "advice": "Common on an empty stomach or at high single doses. Take with food and split larger amounts.",
+        "tier": 3
+      }
+    ],
+    "quality": {
+      "line": "Zinc is simple and rarely adulterated; choose a **third-party tested** product (USP or NSF verified) and confirm the label states elemental zinc, not just the salt weight.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "If your zinc status is already normal, **extra zinc does nothing** — it won't raise testosterone, immunity, or recovery above baseline. The benefit is deficiency correction, not enhancement.",
+      "tier": 3
+    },
+    "synergy": [
+      {
+        "with": "Copper (1–2 mg)",
+        "why": "Not a performance stack — a **safety pairing**. Adding a little copper offsets the depletion that higher-dose zinc causes.",
+        "tier": 3
+      },
+      {
+        "with": "Magnesium + vitamin B6 (the ZMA pattern)",
+        "why": "Commonly combined for sleep and recovery; benefits are most convincing when one or more of the nutrients was low to begin with.",
+        "tier": 1
+      }
+    ]
+  },
+  "collagen-peptides-vitamin-c": {
+    "form": {
+      "buy": "**Hydrolyzed collagen peptides** (unflavored) — cleaved into di/tripeptides that dissolve fully in cold liquid and survive digestion better than intact gelatin.",
+      "avoid": "Skip pricey **marine vs bovine** marketing claims — for connective-tissue support the amino acid profile (glycine, proline, hydroxyproline) is what matters, not the source animal.",
+      "withFood": "Take on a relatively empty stomach with a small carb/liquid vehicle ~45-60 min pre-training so the amino acid spike lands during loading; a large mixed meal blunts and delays the peak.",
+      "bioavailability": "Peptides like **prolyl-hydroxyproline** appear intact in blood within ~1 hr and transiently raise glycine/proline substrate for collagen synthesis.",
+      "tier": 2
+    },
+    "cofactors": {
+      "needs": [
+        {
+          "nutrient": "Vitamin C (ascorbate)",
+          "role": "Essential cofactor for **prolyl and lysyl hydroxylase**, the enzymes that hydroxylate and stabilize the collagen triple helix — the classic protocol pairs ~50 mg with each dose.",
+          "tier": 3
+        },
+        {
+          "nutrient": "Copper",
+          "role": "Cofactor for **lysyl oxidase**, which cross-links mature collagen fibrils for tensile strength.",
+          "tier": 2
+        }
+      ]
+    },
+    "foodFirst": {
+      "line": "**Bone broth, gelatin, and skin/connective-tissue cuts** deliver the same glycine/proline/hydroxyproline pool.",
+      "note": "Concentration is inconsistent and it's hard to hit ~15 g of collagen-specific amino acids reliably in the pre-training window without a measured peptide dose.",
+      "tier": 2
+    },
+    "cost": {
+      "perDose": "~$1–1.50 SGD per 15 g dose",
+      "math": "Unflavored 500 g tub ≈ $30–45 SGD ÷ ~33 doses of 15 g (≈ $0.90–1.40/dose)",
+      "note": "Cheapest as bulk unflavored powder; flavored/blended tubs cost noticeably more per gram of actual collagen.",
+      "tier": 2
+    },
+    "dosing": {
+      "unit": "g",
+      "cap": "~15 g per pre-training dose",
+      "note": "Controlled loading studies (gelatin + vitamin C) used 5–15 g; 15 g roughly doubled the collagen-synthesis marker (P1NP) versus placebo, with 5 g giving an intermediate response. Doses above ~15 g haven't been shown to add benefit for this purpose.",
+      "tier": 2
+    },
+    "timing": {
+      "line": "Take **~45–60 min before loading** (jumps, sprints, resistance work, or targeted tendon/ligament exercise) so the amino acid peak coincides with mechanical stress on the tissue.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "No cycling needed — benefit accrues from **consistent pre-load dosing over weeks to months**, not from a saturating dose, so daily/training-day use is the point.",
+      "tier": 2
+    },
+    "contra": [
+      {
+        "flag": "Fish or shellfish allergy",
+        "advice": "Avoid **marine-sourced collagen**; choose bovine or porcine peptides instead.",
+        "tier": 2
+      },
+      {
+        "flag": "History of kidney stones",
+        "advice": "Keep the paired vitamin C modest (~50 mg, not gram doses) since high-dose ascorbate can raise urinary **oxalate**.",
+        "tier": 2
+      },
+      {
+        "flag": "Chronic kidney disease / protein-restricted diet",
+        "advice": "Collagen is a protein load — count it toward your daily protein target and clear extra supplemental protein with your clinician.",
+        "tier": 2
+      }
+    ],
+    "quality": {
+      "line": "Choose **third-party-tested, heavy-metal-screened** peptides — collagen extracted from hide/bone can concentrate lead and cadmium; NSF or Informed Sport certification matters if you compete.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "Individual variation in the collagen-synthesis response exists, and the tissue effect is slow — judge over **8–12+ weeks** of consistent pre-load dosing, not days.",
+      "tier": 1
+    },
+    "synergy": [
+      {
+        "with": "Vitamin C",
+        "why": "Rate-limiting cofactor for helix hydroxylation — without adequate ascorbate the collagen you're feeding can't be properly assembled.",
+        "tier": 3
+      },
+      {
+        "with": "Mechanical loading itself",
+        "why": "The pre-training timing exists because **intermittent loading** is the actual stimulus that drives amino acids into new tendon/ligament collagen; the peptides just supply substrate.",
+        "tier": 2
+      }
+    ]
+  },
+  "rhodiola-rosea": {
+    "form": {
+      "buy": "**Standardized extract** to ~3% rosavins and ~1% salidroside (the roughly **3:1 ratio** found in the root and used in most human trials); look for third-party-tested capsules or tablets.",
+      "avoid": "Raw/unstandardized root powder and products listing only 'Rhodiola extract' with no rosavin/salidroside percentage; potency is unpredictable.",
+      "withFood": "Take in the **morning, on an empty stomach** — this is the convention used in trials and keeps dosing early enough to avoid sleep disruption; food is not required.",
+      "bioavailability": "Salidroside and rosavins are absorbed reasonably well orally; the active constituents are what matter, so standardization is the real lever, not formulation.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {
+        "marker": "**Salivary cortisol / cortisol awakening response**",
+        "why": "Rhodiola is studied for blunting the stress-induced cortisol rise; a morning salivary panel can give a rough personal signal of stress-axis response.",
+        "range": "Lab-dependent; interpret change over weeks against your own baseline rather than a fixed cutoff.",
+        "when": "Waking and ~30 min post-waking, before and after 4-8 weeks of use.",
+        "tier": 1
+      }
+    ],
+    "foodFirst": {
+      "line": "No dietary source exists — Rhodiola is a herb, not a nutrient. **Sleep, aerobic base fitness, and load management** address the same stress-linked fatigue Rhodiola nudges and should be fixed first.",
+      "note": "Treat it as an adjunct for stress-linked fatigue, not a substitute for recovery fundamentals.",
+      "tier": 2
+    },
+    "cost": {
+      "perDose": "~S$0.30-0.60 per daily dose",
+      "math": "A bottle of 60 standardized capsules (~S$20-35) at one capsule/day.",
+      "note": "Cheap unstandardized powder costs less but often under-delivers active constituents — false economy.",
+      "tier": 1
+    },
+    "dosing": {
+      "unit": "mg/day of standardized extract",
+      "cap": "~680 mg/day (upper end of trial dosing)",
+      "note": "Chronic anti-fatigue dose is typically **200-400 mg/day**; trials for stress-related fatigue and depression have used up to ~576-680 mg/day. For an acute cognitive/stress task, a single **200-400 mg** dose ~30-60 min before. Onset for chronic fatigue is gradual over 1-2 weeks. Per-kg dosing is not standard.",
+      "tier": 2
+    },
+    "timing": {
+      "line": "**Morning, empty stomach.** It is mildly stimulating — dosing in the afternoon or evening can disrupt sleep.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "Commonly **cycled** (e.g. 6-8 weeks on, 1-2 weeks off) to limit tolerance, though rigorous data on whether cycling is necessary is thin.",
+      "tier": 1
+    },
+    "contra": [
+      {
+        "flag": "**Bipolar disorder / history of mania**",
+        "advice": "Its activating, mood-lifting effect could theoretically trigger agitation or hypomania — avoid unless cleared by your doctor.",
+        "tier": 1
+      },
+      {
+        "flag": "**Stimulant or antidepressant use**",
+        "advice": "Has documented MAO-inhibiting and serotonergic activity in lab studies and may stack with caffeine/other stimulants — be cautious combining with SSRIs/SNRIs/MAOIs and discuss with a clinician.",
+        "tier": 1
+      },
+      {
+        "flag": "**Pregnancy and breastfeeding**",
+        "advice": "Insufficient safety data — avoid.",
+        "tier": 2
+      },
+      {
+        "flag": "**Jitteriness / anxiety in sensitive people**",
+        "advice": "The stimulation can feel like overstimulation or a racing feeling; start at the low end (100-200 mg) and assess.",
+        "tier": 2
+      }
+    ],
+    "quality": {
+      "line": "**Species adulteration is common** — cheaper *Rhodiola crenulata* is often sold as *R. rosea*. Insist on labelled *Rhodiola rosea* with stated rosavin/salidroside percentages and third-party testing.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "A meaningful minority feel **nothing**, while others feel **over-stimulated or jittery** rather than energised; if two weeks at a proper standardized dose does nothing, it is likely a non-response.",
+      "tier": 2
+    },
+    "synergy": [
+      {
+        "with": "**Caffeine**",
+        "why": "Both reduce fatigue and sharpen alertness; a low caffeine dose can complement Rhodiola, but stacking full doses risks jitteriness and overstimulation.",
+        "tier": 1
+      },
+      {
+        "with": "**Ashwagandha (evening)**",
+        "why": "Different profile — Rhodiola is activating/morning, ashwagandha is calming/evening; some pair them across the day for stress without a sedation-vs-stimulation conflict.",
+        "tier": 1
+      }
+    ]
+  },
+  "glycine": {
+    "form": {
+      "buy": "**High-purity crystalline glycine powder** — naturally sweet, dissolves clear in water or tea; capsules exist but powder is far cheaper for the same molecule.",
+      "withFood": "Fine on an empty stomach; for sleep take it shortly before bed. No food needed for absorption.",
+      "bioavailability": "**Rapidly and nearly completely absorbed** orally as a free amino acid.",
+      "tier": 3
+    },
+    "cofactors": {
+      "needs": [
+        {
+          "nutrient": "Vitamin C",
+          "role": "Cofactor for the prolyl/lysyl hydroxylase enzymes that build collagen — the connective-tissue benefit of glycine depends on adequate vitamin C.",
+          "tier": 3
+        },
+        {
+          "nutrient": "Cysteine (e.g. from NAC)",
+          "role": "Co-substrate with glycine and glutamate for **glutathione** synthesis; glycine is frequently the rate-limiting brick.",
+          "tier": 2
+        }
+      ]
+    },
+    "foodFirst": {
+      "line": "**Bone broth, gelatin, and collagen-rich cuts** (skin, tendon, slow-cooked connective tissue) are naturally loaded with glycine.",
+      "note": "Muscle-meat-heavy modern diets skew relatively low in glycine because the connective tissue that carries it is often discarded — this is the main gap supplementation fills.",
+      "tier": 3
+    },
+    "cost": {
+      "perDose": "roughly ~$0.10 SGD per 3 g dose",
+      "math": "~$30-40 SGD/kg bulk powder ÷ ~330 doses of 3 g",
+      "note": "One of the cheapest supplements in existence; bulk powder is dramatically cheaper than capsules for the identical compound.",
+      "tier": 2
+    },
+    "dosing": {
+      "unit": "g",
+      "cap": "Typical self-use 3-5 g; research doses of ~15-30 g/day (and higher in schizophrenia trials) have been used safely short-term.",
+      "note": "**3 g before bed** is the dose used in the sleep trials; larger amounts are used for collagen/glutathione goals. Start low — high single doses can cause mild GI upset.",
+      "tier": 2
+    },
+    "timing": {
+      "line": "For sleep, take **~3 g about 30-60 minutes before bed**. For connective-tissue or glutathione goals timing is irrelevant — take any time, ideally alongside vitamin C for collagen.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "**No cycling needed** — glycine is a dietary amino acid safe for continuous daily use, with no known tolerance or dependence.",
+      "tier": 3
+    },
+    "contra": [
+      {
+        "flag": "Taking clozapine",
+        "advice": "Placebo-controlled trials suggest glycine can **blunt clozapine's antipsychotic effect** — do not supplement without psychiatric guidance.",
+        "tier": 2
+      },
+      {
+        "flag": "Advanced kidney or liver disease",
+        "advice": "Clear high-dose amino-acid supplementation with your doctor first, as impaired nitrogen/protein handling changes the calculus.",
+        "tier": 2
+      }
+    ],
+    "quality": {
+      "line": "Choose **pharmaceutical / USP-grade crystalline glycine**, third-party tested for heavy metals and purity; it should taste faintly sweet and dissolve to a clear solution.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "Not everyone feels a **sleep or calming effect** — but the connective-tissue and glutathione-substrate roles are structural biochemistry and don't depend on a noticeable subjective response.",
+      "tier": 2
+    },
+    "synergy": [
+      {
+        "with": "NAC / cysteine (GlyNAC)",
+        "why": "Supplies both limiting substrates for **glutathione**, the body's master antioxidant; the combination has been studied in aging and metabolic health.",
+        "tier": 2
+      },
+      {
+        "with": "Vitamin C",
+        "why": "Required cofactor for **collagen cross-linking** — pairs naturally with glycine for skin and connective-tissue support.",
+        "tier": 3
+      },
+      {
+        "with": "Magnesium",
+        "why": "Both are calming to the nervous system and are commonly stacked for **sleep and relaxation**, though the combined benefit is more anecdotal than proven.",
+        "tier": 1
+      }
+    ]
+  },
+  "l-citrulline-citrulline-malate": {
+    "form": {
+      "buy": "Both **pure L-citrulline** and **citrulline malate** (citrulline bound to malic acid) are effective; choose high-purity, third-party-tested amino-acid powder.",
+      "avoid": "**L-arginine as a substitute** — oral arginine is largely destroyed by intestinal and hepatic arginase, so it raises plasma arginine less reliably than citrulline.",
+      "withFood": "Works either way; an **empty stomach** speeds absorption but is not required for benefit.",
+      "bioavailability": "Citrulline **bypasses first-pass arginase**, so gram-for-gram it raises plasma arginine and nitric-oxide output more than oral arginine itself.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Resting blood pressure",
+        "why": "Primary trackable outcome — citrulline modestly lowers resting BP (meta-analyses ~4/2.5 mmHg) via nitric-oxide vasodilation, with larger effects in people with elevated baseline readings.",
+        "range": "Optimal resting <120/80 mmHg",
+        "when": "Home cuff, seated, mornings; compare over 4-8 weeks",
+        "tier": 2
+      }
+    ],
+    "cofactors": {
+      "needs": [
+        {
+          "nutrient": "Tetrahydrobiopterin (BH4)",
+          "role": "Essential NOS cofactor for converting arginine into nitric oxide; when depleted the enzyme uncouples",
+          "tier": 2
+        },
+        {
+          "nutrient": "Vitamin C",
+          "role": "Helps recycle and stabilise BH4, supporting nitric-oxide production",
+          "tier": 1
+        }
+      ]
+    },
+    "foodFirst": {
+      "line": "**Watermelon** is the richest common dietary source of citrulline (found mainly in the flesh, with the rind also contributing).",
+      "note": "Flesh holds only ~3 g citrulline per kg, so you'd need roughly 2 kg to reach a performance dose — food is a top-up, not a replacement for supplemental dosing.",
+      "tier": 2
+    },
+    "cost": {
+      "perDose": "~S$0.50-1.00 per 6-8 g dose",
+      "math": "Bulk citrulline-malate powder ~S$25-35 per 250 g ≈ S$0.10-0.14/g",
+      "note": "Powder is far cheaper than capsules; malate needs a larger scoop than pure citrulline for the same citrulline content.",
+      "tier": 2
+    },
+    "dosing": {
+      "unit": "g",
+      "cap": "Above ~10 g adds little and may cause mild GI discomfort.",
+      "note": "**L-citrulline 3-6 g/day** for blood pressure; **6-8 g L-citrulline (or ~8 g citrulline malate)** pre-exercise for pump and endurance. Per-kg dosing is not standard.",
+      "tier": 3
+    },
+    "timing": {
+      "line": "For pump and performance take **~60 minutes before training**; for blood pressure, dose **daily** — the vascular effect builds over days to weeks, not from a single dose.",
+      "tier": 2
+    },
+    "cycling": {
+      "line": "**No cycling needed** — citrulline does not cause tolerance or receptor downregulation.",
+      "tier": 2
+    },
+    "contra": [
+      {
+        "flag": "On nitrates or PDE5 inhibitors (e.g. sildenafil)",
+        "advice": "Additive vasodilation can drop blood pressure too far — do not combine without medical guidance.",
+        "tier": 2
+      },
+      {
+        "flag": "On blood-pressure / antihypertensive medication",
+        "advice": "May add to the BP-lowering effect; monitor readings and discuss with your doctor.",
+        "tier": 2
+      }
+    ],
+    "quality": {
+      "line": "Choose amino-acid powder that is **third-party tested** (e.g. NSF, Informed Sport); for malate, confirm the **stated malate ratio** (commonly 2:1 or 1:1) so you know the actual citrulline content.",
+      "tier": 2
+    },
+    "nonResponders": {
+      "line": "**Pump is subjective and variable**, and performance gains are modest; blood-pressure and endurance effects are more consistently measurable. GI tolerance is good — citrulline is gentler on the gut than arginine.",
+      "tier": 2
+    },
+    "synergy": [
+      {
+        "with": "Dietary nitrate (beetroot)",
+        "why": "Raises nitric oxide through a separate, NOS-independent pathway — complementary vasodilation and endurance benefit.",
+        "tier": 2
+      },
+      {
+        "with": "L-arginine",
+        "why": "Co-ingestion can raise plasma arginine more than either alone by pairing acute delivery with sustained conversion.",
+        "tier": 1
+      },
+      {
+        "with": "Glutathione",
+        "why": "May help sustain nitric oxide by protecting it from oxidative breakdown.",
+        "tier": 1
+      }
     ]
   }
 }
