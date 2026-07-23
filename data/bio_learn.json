@@ -8499,5 +8499,2209 @@
         "tier": 1
       }
     ]
+  },
+  "semaglutide-ozempic-wegovy-rybelsus": {
+    "access": "prescription",
+    "accessNote": "Prescribed for type-2 diabetes and, at higher doses, chronic weight management, started and supervised by a doctor.",
+    "typicalDose": {
+      "line": "A doctor decides the dose and titrates it slowly to limit nausea. As a reference only, the once-weekly injectable form is typically started very low and stepped up over several months toward a maintenance dose, with the weight-management ceiling higher than the diabetes ceiling; a separate daily oral form exists at its own fixed strengths. This is not a recommendation or a dosing instruction — only a clinician can set or change it.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Overdose or too-fast dose escalation causes severe persistent nausea and vomiting leading to dehydration and possible acute kidney injury; with insulin or a sulfonylurea it can cause dangerous hypoglycaemia. Its ~1-week half-life makes effects prolonged, and treatment is supportive with no rapid antidote.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "Skipping the slow titration or self-doubling doses triggers violent vomiting, dehydration and possible pancreatitis; stopping abruptly reverses glycaemic control and typically leads to weight regain. Grey-market or compounded vials carry real dosing-error and contamination risk, and combining it with insulin/sulfonylureas without medical adjustment can cause severe hypoglycaemia.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {
+        "marker": "HbA1c",
+        "range": "individualised, often <7% (<53 mmol/mol) in T2D",
+        "when": "every 3 months",
+        "why": "Tracks the glycaemic control the drug is prescribed to improve.",
+        "tier": 3
+      },
+      {
+        "marker": "eGFR / serum creatinine",
+        "range": "eGFR >60 mL/min/1.73m2",
+        "when": "baseline, then if vomiting/dehydration",
+        "why": "Severe GI fluid loss can cause acute kidney injury.",
+        "tier": 2
+      },
+      {
+        "marker": "Lipase / amylase",
+        "range": "lipase >3x ULN suggests pancreatitis",
+        "when": "only if severe abdominal pain",
+        "why": "Acute pancreatitis is a recognised, uncommon adverse effect.",
+        "tier": 2
+      },
+      {
+        "marker": "Resting heart rate",
+        "range": "watch for rise of a few bpm",
+        "when": "periodically",
+        "why": "GLP-1 agonists modestly increase resting heart rate.",
+        "tier": 2
+      },
+      {
+        "marker": "Body weight / BMI",
+        "range": "trend over time",
+        "when": "each visit",
+        "why": "Primary efficacy marker for weight-management use.",
+        "tier": 3
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Personal or family history of medullary thyroid carcinoma or MEN2 syndrome",
+        "advice": "Boxed contraindication — rodent studies show C-cell tumours; must not use.",
+        "tier": 3
+      },
+      {
+        "flag": "Prior severe hypersensitivity to semaglutide",
+        "advice": "Absolute contraindication.",
+        "tier": 3
+      },
+      {
+        "flag": "History of pancreatitis",
+        "advice": "Use only with specialist caution and monitoring.",
+        "tier": 2
+      },
+      {
+        "flag": "Pregnancy or breastfeeding / trying to conceive",
+        "advice": "Should be stopped well before a planned pregnancy; avoid.",
+        "tier": 2
+      },
+      {
+        "flag": "Type 1 diabetes or diabetic ketoacidosis",
+        "advice": "Not indicated; does not replace insulin.",
+        "tier": 3
+      },
+      {
+        "flag": "Severe gastroparesis or significant gastrointestinal disease",
+        "advice": "Delayed gastric emptying can worsen symptoms; avoid.",
+        "tier": 2
+      }
+    ]
+  },
+  "tirzepatide-mounjaro-zepbound": {
+    "access": "prescription",
+    "accessNote": "An FDA-approved once-weekly injectable for type-2 diabetes and chronic weight management; a clinician assesses candidacy, sets the dose, and supervises the slow titration.",
+    "typicalDose": {
+      "line": "As a reference only, and always decided and titrated by a prescriber: given as a once-weekly subcutaneous injection, started at a low 2.5 mg 'starter' dose (a tolerance-building step, not a treatment dose) for 4 weeks, then raised in 2.5 mg increments no sooner than every 4 weeks. Effective maintenance doses are 5, 10, or 15 mg once weekly, with 15 mg the maximum. The slow ramp exists to limit gut side effects, not to be rushed.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Overdose or too-rapid escalation drives severe, prolonged nausea, vomiting and diarrhea leading to dehydration and electrolyte disturbance. Reported dosing-error overdoses — often 5 to 20 times the intended dose, frequently from mismeasured multi-dose vials — have caused severe dehydration, GI complications and hospitalization. Hypoglycemia severe enough to need emergency care occurs mainly when tirzepatide is combined with insulin or a sulfonylurea, not on its own. There is no antidote, effects persist because the half-life is ~5 days, and management is supportive with extended monitoring.",
+      "tier": 2
+    },
+    "misuse": {
+      "line": "The dangers come from ignoring the prescription: skipping the titration or jumping to a high dose causes violent GI effects and dehydration; 'doubling up' after a missed dose stacks a ~5-day-half-life drug; pairing it with insulin or a sulfonylurea without a prescriber lowering those first can cause severe hypoglycemia; and stacking it with another GLP-1 drug or self-injecting an unregulated compounded product invites dosing errors that have landed people in emergency and intensive care.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "HbA1c",
+        "range": "individualized, often <7% in diabetes",
+        "when": "baseline then every 3 months",
+        "why": "Tracks glycemic control and guides dose changes in type-2 diabetes.",
+        "tier": 3
+      },
+      {
+        "marker": "Fasting / self-monitored blood glucose",
+        "range": "hypoglycemia <70 mg/dL (3.9 mmol/L)",
+        "when": "regularly, especially alongside insulin or a sulfonylurea",
+        "why": "Detects hypoglycemia, the main acute risk when combined with other glucose-lowering drugs.",
+        "tier": 3
+      },
+      {
+        "marker": "Lipase",
+        "range": ">3x upper limit of normal suggests pancreatitis",
+        "when": "if severe persistent abdominal pain occurs",
+        "why": "GLP-1/GIP agonists are linked to acute pancreatitis; checked to investigate suggestive symptoms.",
+        "tier": 2
+      },
+      {
+        "marker": "Creatinine / eGFR",
+        "range": "watch for acute rise; eGFR fall",
+        "when": "if prolonged vomiting or diarrhea",
+        "why": "Volume loss from GI side effects can cause acute kidney injury.",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Personal or family history of medullary thyroid carcinoma (MTC)",
+        "advice": "Contraindicated — boxed warning; rodent studies showed dose-dependent thyroid C-cell tumors.",
+        "tier": 3
+      },
+      {
+        "flag": "Multiple Endocrine Neoplasia syndrome type 2 (MEN 2)",
+        "advice": "Contraindicated for the same C-cell tumor risk.",
+        "tier": 3
+      },
+      {
+        "flag": "Known serious hypersensitivity to tirzepatide",
+        "advice": "Contraindicated — anaphylaxis and angioedema have been reported.",
+        "tier": 3
+      },
+      {
+        "flag": "History of pancreatitis",
+        "advice": "Not an absolute bar but requires caution and prescriber judgment; discontinue if pancreatitis is suspected.",
+        "tier": 2
+      },
+      {
+        "flag": "Pregnancy or planning pregnancy",
+        "advice": "Weight-loss use is not appropriate in pregnancy; discussed with and managed by a clinician.",
+        "tier": 2
+      },
+      {
+        "flag": "Severe gastrointestinal disease or gastroparesis",
+        "advice": "Delayed gastric emptying can worsen these conditions; requires medical assessment.",
+        "tier": 2
+      }
+    ]
+  },
+  "retatrutide": {
+    "access": "unapproved",
+    "accessNote": "It is an investigational triple GIP/GLP-1/glucagon agonist still in phase 3 obesity trials; outside a supervised trial it reaches people only through grey-market \"research chemical\" peptide vials with no quality control, verified concentration, or sterility.",
+    "overdose": {
+      "line": "As a GLP-1-class agonist, excess dose causes severe, protracted nausea, repeated vomiting and diarrhea leading to dehydration and, in the trials, acute pancreatitis in isolated cases; combined with insulin or a sulfonylurea it can drive dangerous hypoglycemia, while the glucagon component can instead push blood glucose upward. Grey-market vials carry no verified concentration, so an intended 'small' dose can be several-fold higher than assumed.",
+      "tier": 2
+    },
+    "misuse": {
+      "line": "There is no established safe DIY dose: it is unapproved and every trial regimen relied on slow, months-long, physician-supervised dose titration precisely because rapid escalation amplifies vomiting, dehydration, gallbladder disease, pancreatitis and a resting heart-rate rise of about 5-10 bpm. Unregulated peptide vials vary in content, purity and sterility, and long-term safety in humans is simply unknown.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {
+        "marker": "Resting heart rate",
+        "range": "normal 60-100 bpm; drug adds ~5-10 bpm, peaking around week 24",
+        "why": "A dose-dependent rise in resting heart rate was seen across the trials",
+        "when": "Baseline and periodically during use",
+        "tier": 3
+      },
+      {
+        "marker": "Lipase",
+        "range": "normal roughly <60 U/L; >3x upper limit with abdominal pain suggests pancreatitis",
+        "why": "Class-wide pancreatitis signal; asymptomatic lipase/amylase rises and one acute pancreatitis case occurred in trials",
+        "when": "Baseline and if abdominal pain develops",
+        "tier": 2
+      },
+      {
+        "marker": "Fasting glucose / HbA1c",
+        "range": "fasting 4.0-5.5 mmol/L; HbA1c <5.7%",
+        "why": "The glucagon-receptor component can raise hepatic glucose output, so glycemia must be watched rather than assumed to fall",
+        "when": "Baseline and periodically",
+        "tier": 2
+      },
+      {
+        "marker": "Creatinine / eGFR",
+        "range": "eGFR >90 mL/min/1.73m2",
+        "why": "Vomiting and diarrhea can cause dehydration and acute kidney injury",
+        "when": "If GI symptoms are significant",
+        "tier": 2
+      },
+      {
+        "marker": "ALT / AST",
+        "range": "ALT <40 U/L",
+        "why": "Hepatic effects are monitored across this drug class and in its MASLD studies",
+        "when": "Baseline and periodically",
+        "tier": 1
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Personal or family history of medullary thyroid carcinoma or MEN2",
+        "advice": "Absolute avoid — GLP-1-class agonists caused thyroid C-cell tumors in rodents, a boxed concern for the whole class",
+        "tier": 3
+      },
+      {
+        "flag": "Pregnancy or breastfeeding",
+        "advice": "Must not use — no human safety data and rapid weight loss is harmful in pregnancy",
+        "tier": 3
+      },
+      {
+        "flag": "History of pancreatitis or symptomatic gallbladder disease",
+        "advice": "Avoid — both are documented risks of this drug class",
+        "tier": 2
+      },
+      {
+        "flag": "Type 1 diabetes, or use of insulin or a sulfonylurea",
+        "advice": "Do not combine without medical supervision — serious hypoglycemia risk",
+        "tier": 2
+      },
+      {
+        "flag": "Severe gastroparesis or severe gastrointestinal disease",
+        "advice": "Avoid — delayed gastric emptying worsens symptoms and dehydration",
+        "tier": 2
+      },
+      {
+        "flag": "Anyone outside a supervised clinical trial",
+        "advice": "No verified dose, product, or long-term safety exists — this is not an established therapy",
+        "tier": 3
+      }
+    ]
+  },
+  "liraglutide-saxenda-victoza": {
+    "access": "prescription",
+    "accessNote": "A GLP-1 receptor agonist prescribed for type 2 diabetes and, at a higher dose, for chronic weight management, given as a once-daily subcutaneous injection under medical supervision.",
+    "typicalDose": {
+      "line": "For reference only, and always decided and titrated by the prescribing doctor: it is started low (0.6 mg once daily) and stepped up slowly, usually weekly, to reduce nausea. Diabetes use is capped around 1.8 mg/day; weight-management use titrates toward roughly 3.0 mg/day. This is not a recommendation, and the schedule is individualised by a clinician.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Overdoses many times the intended dose have been reported. The dominant effects are severe, protracted nausea and vomiting, which can cause dehydration, low blood pressure and acute kidney injury. Dangerous hypoglycaemia (sweating, confusion, tremor, loss of consciousness) is most likely when combined with insulin or a sulfonylurea. There is no antidote; management is supportive medical care.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "Skipping the slow titration or self-escalating the dose sharply worsens nausea, vomiting and dehydration and raises pancreatitis risk. Doubling up after a missed dose is unsafe. Combining it with insulin or a sulfonylurea without a doctor adjusting those drugs can trigger severe hypoglycaemia. Stopping abruptly commonly returns blood glucose and lost weight. Using it without prescribed monitoring means warning signs (pancreatitis, gallbladder disease, kidney injury) can be missed.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "HbA1c",
+        "why": "Tracks glycaemic control in diabetes use and guides dose and co-medication changes.",
+        "range": "Target individualised, often <7% (53 mmol/mol)",
+        "when": "Every 3 months until stable",
+        "tier": 3
+      },
+      {
+        "marker": "Fasting glucose",
+        "why": "Detects both inadequate control and hypoglycaemia risk, especially alongside insulin or sulfonylureas.",
+        "range": "~4.0-7.0 mmol/L fasting",
+        "when": "Periodically during titration",
+        "tier": 3
+      },
+      {
+        "marker": "Lipase / amylase",
+        "why": "Checked when acute pancreatitis is suspected (severe persistent abdominal pain radiating to the back); GLP-1 agonists carry a pancreatitis warning.",
+        "range": "Lipase >3x upper limit suggests pancreatitis",
+        "when": "If abdominal-pain symptoms occur",
+        "tier": 2
+      },
+      {
+        "marker": "Serum creatinine / eGFR",
+        "why": "Vomiting and dehydration from the drug can precipitate acute kidney injury; monitored if GI side effects are significant.",
+        "range": "eGFR >60 mL/min/1.73m2 normal",
+        "when": "If persistent vomiting or diarrhoea",
+        "tier": 2
+      },
+      {
+        "marker": "Resting heart rate",
+        "why": "GLP-1 agonists cause a small mean increase in heart rate that is monitored clinically.",
+        "range": "Baseline-dependent; a sustained rise is a flag",
+        "when": "At routine reviews",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Personal or family history of medullary thyroid carcinoma, or MEN2 syndrome",
+        "advice": "Contraindicated due to thyroid C-cell tumour signal seen in rodents; must not be used.",
+        "tier": 3
+      },
+      {
+        "flag": "History of pancreatitis",
+        "advice": "Use is generally avoided; discuss risk with a doctor, as GLP-1 agonists carry a pancreatitis warning.",
+        "tier": 2
+      },
+      {
+        "flag": "Type 1 diabetes or diabetic ketoacidosis",
+        "advice": "Not a substitute for insulin and not indicated; must not be used to treat these.",
+        "tier": 3
+      },
+      {
+        "flag": "Pregnancy and breastfeeding",
+        "advice": "Not recommended; weight-loss use should be stopped when pregnancy is planned or confirmed.",
+        "tier": 2
+      },
+      {
+        "flag": "Severe gastrointestinal disease or gastroparesis",
+        "advice": "Delayed gastric emptying can worsen symptoms; use with caution or avoid under medical advice.",
+        "tier": 2
+      },
+      {
+        "flag": "Prior serious hypersensitivity to liraglutide or GLP-1 agonists",
+        "advice": "Contraindicated; must not be re-exposed.",
+        "tier": 3
+      }
+    ]
+  },
+  "orforglipron": {
+    "access": "prescription",
+    "accessNote": "A once-daily oral GLP-1 receptor agonist approved in the US (April 2026) for chronic weight management in adults with obesity or overweight; it is dispensed only after a prescriber evaluates and monitors the patient. A type 2 diabetes indication had not been granted as of approval.",
+    "typicalDose": {
+      "line": "Taken by mouth once daily, at any time of day with or without food or water. A prescriber starts at a low dose (1 mg) and titrates upward gradually at roughly 4-week intervals toward a maintenance dose in about the 6-36 mg/day range, choosing the level by tolerability and response. This is reference information a doctor decides on, not a recommendation or a self-dosing schedule.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Toxicity is dominated by severe, persistent nausea, vomiting and diarrhea, which can cause dehydration, electrolyte loss and acute kidney injury. Severe or unrelenting abdominal pain radiating to the back can signal acute pancreatitis. On its own it rarely causes low blood sugar, but combined with insulin or a sulfonylurea it can drive dangerous hypoglycemia (shakiness, confusion, sweating, loss of consciousness). A modest rise in resting heart rate is also seen with the class.",
+      "tier": 2
+    },
+    "misuse": {
+      "line": "Skipping the slow titration and jumping to a high dose sharply worsens vomiting and dehydration; doubling doses does not speed weight loss but raises the risk of kidney injury and pancreatitis. Because it slows gastric emptying, it can alter absorption of other oral medications, and pairing it with insulin or a sulfonylurea without a doctor adjusting those drugs can cause severe hypoglycemia. Obtaining unregulated or compounded versions outside a prescription means no guarantee of identity, dose or purity.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {
+        "marker": "HbA1c / fasting glucose",
+        "range": "individualized to target",
+        "when": "baseline then periodically if diabetic or co-treated",
+        "why": "Tracks glycemic response and guides adjustment of any co-prescribed diabetes drugs.",
+        "tier": 3
+      },
+      {
+        "marker": "Renal function (creatinine, eGFR)",
+        "range": "eGFR >60 mL/min/1.73m2 normal",
+        "when": "if vomiting/diarrhea are significant",
+        "why": "GI fluid loss can cause dehydration and acute kidney injury.",
+        "tier": 2
+      },
+      {
+        "marker": "Resting heart rate",
+        "range": "60-100 bpm",
+        "when": "at follow-up visits",
+        "why": "GLP-1 agonists modestly raise heart rate as a class effect.",
+        "tier": 2
+      },
+      {
+        "marker": "Lipase",
+        "range": "assay-dependent; >3x upper limit is the usual diagnostic threshold",
+        "when": "only if pancreatitis is suspected",
+        "why": "Marked elevation supports a diagnosis of acute pancreatitis in a symptomatic patient; not a routine screen.",
+        "tier": 2
+      },
+      {
+        "marker": "Body weight / BMI",
+        "range": "individualized",
+        "when": "ongoing",
+        "why": "Primary efficacy measure and a check on excessive or unintended loss.",
+        "tier": 3
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Personal or family history of medullary thyroid carcinoma or MEN2",
+        "advice": "A class-wide precaution for GLP-1 agonists based on rodent C-cell tumor findings; these individuals should not use it.",
+        "tier": 2
+      },
+      {
+        "flag": "Pregnancy, breastfeeding, or planning pregnancy",
+        "advice": "Not used in pregnancy; intentional weight loss and this drug class are not advised, and it should be stopped before a planned pregnancy.",
+        "tier": 2
+      },
+      {
+        "flag": "History of pancreatitis",
+        "advice": "Prior pancreatitis raises the risk of recurrence and warrants avoidance or close specialist oversight.",
+        "tier": 2
+      },
+      {
+        "flag": "Severe gastrointestinal disease or gastroparesis",
+        "advice": "Delayed gastric emptying can be worsened, aggravating symptoms.",
+        "tier": 2
+      },
+      {
+        "flag": "Type 1 diabetes / history of diabetic ketoacidosis",
+        "advice": "Not a substitute for insulin and not indicated in this setting.",
+        "tier": 2
+      }
+    ]
+  },
+  "ephedrine-ec-eca-stack": {
+    "access": "prescription",
+    "accessNote": "Approved as a bronchodilator and decongestant, and given by injection to treat low blood pressure during anesthesia; it is scheduled or sale-restricted in many places because of stimulant misuse and its role as a methamphetamine precursor.",
+    "typicalDose": {
+      "line": "For reference only, and always set by a prescriber: oral ephedrine sulfate for bronchospasm or nasal congestion is usually in the range of about 12.5-25 mg per dose, not exceeding roughly 150 mg in 24 hours in adults; injectable ephedrine for anesthesia-induced hypotension is given by clinicians in small titrated IV boluses. There is no established 'fat-loss' dose recognised in medicine, and the appetite/energy-expenditure effects sit on top of the same cardiovascular stimulation, so no self-selected dose is safe.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Toxicity presents as a sympathetic storm: fast or irregular heartbeat, chest pain, dangerously high blood pressure, tremor, severe agitation, sweating, headache, high body temperature, and paranoia or hallucinations. Severe cases progress to ventricular arrhythmias, seizures, heart attack, and hemorrhagic stroke from a sudden blood-pressure surge. Estimated lethal doses are high (on the order of tens of mg/kg), but life-threatening events can occur at far lower amounts in people with heart disease, and even sub-therapeutic doses can trigger a hypertensive crisis in anyone taking an MAO inhibitor.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "The main harm is non-medical use for weight loss, especially stacking ephedrine with caffeine (and sometimes aspirin). This drives sustained increases in heart rate and blood pressure and is linked in case reports and safety reviews to arrhythmias, heart attack, stroke, seizures, and psychiatric episodes. Doubling doses, redosing to chase appetite suppression, or combining with other stimulants, decongestants, or MAO inhibitors sharply raises the risk of a hypertensive crisis. Tolerance builds to the appetite effect but not reliably to the cardiovascular strain, so people escalate into more dangerous territory.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Resting heart rate",
+        "range": "60-100 bpm",
+        "why": "Ephedrine raises heart rate; a persistently elevated or irregular rate signals ongoing sympathetic overstimulation.",
+        "when": "Baseline and during use",
+        "tier": 3
+      },
+      {
+        "marker": "Blood pressure",
+        "range": "<130/80 mmHg",
+        "why": "The most direct risk marker; sustained elevation reflects the pressor effect that drives stroke and cardiac risk.",
+        "when": "Baseline and periodically",
+        "tier": 3
+      },
+      {
+        "marker": "ECG (rate, rhythm, QT)",
+        "range": "Normal sinus rhythm",
+        "why": "Screens for arrhythmia and conduction changes before and during exposure to a cardiac stimulant.",
+        "when": "Baseline in anyone with cardiac risk",
+        "tier": 3
+      },
+      {
+        "marker": "Serum potassium",
+        "range": "3.5-5.0 mmol/L",
+        "why": "Beta-adrenergic stimulation can shift potassium into cells, and low potassium compounds arrhythmia risk.",
+        "when": "If symptomatic or with heavy use",
+        "tier": 2
+      },
+      {
+        "marker": "Fasting glucose",
+        "range": "3.9-5.5 mmol/L (fasting)",
+        "why": "Sympathomimetics raise blood glucose and can worsen glycaemic control in people with diabetes.",
+        "when": "If diabetic or on high intake",
+        "tier": 2
+      },
+      {
+        "marker": "TSH",
+        "range": "0.4-4.0 mIU/L",
+        "why": "Undiagnosed hyperthyroidism dramatically amplifies cardiovascular sensitivity to a stimulant.",
+        "when": "Baseline if symptoms suggest thyroid excess",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Coronary artery disease or prior heart attack",
+        "advice": "Must not use; the added cardiac workload and vasoconstriction can precipitate ischaemia or infarction.",
+        "tier": 3
+      },
+      {
+        "flag": "Uncontrolled or significant hypertension",
+        "advice": "Must not use; ephedrine further raises blood pressure and risks a hypertensive crisis or stroke.",
+        "tier": 3
+      },
+      {
+        "flag": "Arrhythmia or structural heart disease",
+        "advice": "Must not use; sympathetic stimulation can provoke dangerous ventricular rhythms.",
+        "tier": 3
+      },
+      {
+        "flag": "MAO inhibitor use (or within 14 days of stopping one)",
+        "advice": "Absolute contraindication; even small doses can cause a severe, potentially fatal hypertensive crisis.",
+        "tier": 3
+      },
+      {
+        "flag": "Hyperthyroidism",
+        "advice": "Must not use; thyroid excess magnifies the cardiovascular and neurological response.",
+        "tier": 3
+      },
+      {
+        "flag": "Pheochromocytoma",
+        "advice": "Must not use; layering a sympathomimetic onto catecholamine excess can be catastrophic.",
+        "tier": 3
+      },
+      {
+        "flag": "Closed-angle glaucoma",
+        "advice": "Avoid; pupil dilation can precipitate an acute angle-closure attack.",
+        "tier": 2
+      },
+      {
+        "flag": "Prostatic enlargement or urinary retention",
+        "advice": "Avoid; alpha stimulation worsens bladder outlet obstruction.",
+        "tier": 2
+      },
+      {
+        "flag": "Pregnancy and breastfeeding",
+        "advice": "Avoid outside supervised obstetric/anaesthetic use; not for self-directed use.",
+        "tier": 2
+      },
+      {
+        "flag": "Anxiety, panic, or psychotic disorders",
+        "advice": "Avoid; stimulant load can trigger severe anxiety, agitation, or psychosis.",
+        "tier": 2
+      }
+    ]
+  },
+  "clenbuterol": {
+    "access": "unapproved",
+    "accessNote": "It is a veterinary/livestock bronchodilator with no approved human use in the US, Canada, and most of Europe; supply for fat loss comes entirely from unregulated underground sources.",
+    "overdose": {
+      "line": "Overdose presents as a hyperadrenergic crisis: heart rates of 120-180+ bpm, palpitations, chest pain, severe whole-body tremor, agitation, nausea and vomiting. Bloodwork typically shows marked hypokalemia, hyperglycemia and lactic acidosis. The danger is cardiac: atrial fibrillation, ventricular arrhythmias, myocardial injury and, at high exposure, cardiac arrest. Because the drug has a long half-life (roughly a day or more in humans), symptoms persist for many hours and repeated or stacked doses accumulate. Emergency care is supportive (potassium repletion, beta-blockade, cardiac monitoring); there is no antidote.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "There is no established safe human dose. The margin between a fat-loss effect and toxicity is narrow, the long half-life makes it easy to accumulate a dangerous level over days, and underground product is frequently mislabeled, over-concentrated, or contaminated. Documented harms from non-medical use and from contaminated meat include hypokalemia, sustained tachycardia and arrhythmia, cardiac hypertrophy, and hospitalization; fatalities have occurred. Self-experimentation with dose escalation is exactly the pattern that produces cardiac events.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Serum potassium",
+        "range": "3.5-5.0 mmol/L; toxicity drives it below 3.0",
+        "when": "Immediately if palpitations, cramps or weakness",
+        "why": "Beta-2 agonism shifts potassium into cells; hypokalemia is the most consistent lab sign and a direct arrhythmia trigger",
+        "tier": 3
+      },
+      {
+        "marker": "ECG (rhythm and QT)",
+        "range": "Sinus rhythm; watch for tachycardia, AF, QT prolongation",
+        "when": "During any symptomatic episode",
+        "why": "Detects the tachyarrhythmias that cause the serious harm",
+        "tier": 3
+      },
+      {
+        "marker": "High-sensitivity troponin",
+        "range": "Below assay 99th-percentile cutoff",
+        "when": "With chest pain or after an overdose",
+        "why": "Rises with catecholamine-driven myocardial injury",
+        "tier": 2
+      },
+      {
+        "marker": "Blood glucose",
+        "range": "4-7 mmol/L fasting",
+        "when": "During toxicity",
+        "why": "Beta-2 stimulation raises glucose and can unmask hyperglycemia",
+        "tier": 3
+      },
+      {
+        "marker": "Venous lactate",
+        "range": "<2 mmol/L",
+        "when": "In acute overdose",
+        "why": "Beta-2 driven glycogenolysis and impaired mitochondrial oxidative phosphorylation produce a type-B lactic acidosis",
+        "tier": 2
+      },
+      {
+        "marker": "Echocardiogram (LV mass/wall thickness)",
+        "range": "Normal LV wall thickness and mass index",
+        "when": "After sustained use",
+        "why": "Chronic beta-2 agonist exposure is linked to cardiac hypertrophy; emerging human signal, established in animal models",
+        "tier": 1
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Any cardiovascular disease, arrhythmia, or history of tachyarrhythmia",
+        "advice": "Absolutely must not use; the drug's cardiac stimulation and arrhythmia risk are the primary killers",
+        "tier": 3
+      },
+      {
+        "flag": "Hypertension or ischemic heart disease",
+        "advice": "Must avoid; increased heart rate and myocardial oxygen demand can precipitate ischemia or a hypertensive event",
+        "tier": 3
+      },
+      {
+        "flag": "Hyperthyroidism",
+        "advice": "Must avoid; adds to an already elevated adrenergic and metabolic state",
+        "tier": 2
+      },
+      {
+        "flag": "Pre-existing hypokalemia or use of potassium-lowering drugs (thiazide/loop diuretics)",
+        "advice": "Must avoid; compounds the potassium shift and arrhythmia risk",
+        "tier": 2
+      },
+      {
+        "flag": "Pregnancy or breastfeeding",
+        "advice": "Must avoid; no human safety data and known cardiovascular strain",
+        "tier": 2
+      },
+      {
+        "flag": "Anxiety, panic, or seizure disorders",
+        "advice": "Must avoid; adrenergic stimulation worsens tremor, agitation and lowers seizure threshold",
+        "tier": 1
+      }
+    ]
+  },
+  "2-4-dinitrophenol-dnp": {
+    "access": "unapproved",
+    "accessNote": "An industrial chemical (dye, wood preservative and explosives precursor) sold illicitly as a fat-burner; banned for human consumption and repeatedly fatal even at \"typical\" bodybuilding amounts.",
+    "overdose": {
+      "line": "DNP has essentially no safe margin: it uncouples mitochondrial oxidative phosphorylation so food energy is dumped as heat. Toxicity presents as uncontrollable hyperthermia (core temperature often >40°C, rising toward 43°C+), drenching sweat, flushed skin, marked tachycardia and tachypnea, agitation and yellow staining of skin. This progresses to rhabdomyolysis, severe lactic (metabolic) acidosis, acute kidney injury, seizures, coma and cardiovascular collapse. There is no proven antidote — dantrolene is not a reliable rescue because the heat is generated inside the mitochondria rather than by muscle calcium release — and once hyperthermia is established many patients die despite aggressive cooling and ICU care, often within about a day of ingestion. Death has followed both single large ingestions and gradual accumulation over days.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "There is no established safe dose for human use and no legitimate medical version — the same milligram amount that produces fat loss can also kill, and effects worsen with heat, exercise, dehydration and stimulants. Because DNP clears slowly and accumulates, a dose tolerated one day can be lethal the next, and fatal overdose has occurred at amounts commonly taken for weight loss. Illicit powder is unregulated and frequently mislabelled or wrongly measured, so even a 'careful' user cannot know the true amount taken.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Core body temperature",
+        "why": "DNP-driven uncoupling converts stored energy directly into heat; uncontrolled hyperthermia is the direct mechanism of death, so a rising core temperature is the single most important danger sign.",
+        "range": ">40°C is a medical emergency; can exceed 43°C",
+        "when": "Onset within hours of ingestion",
+        "tier": 3
+      },
+      {
+        "marker": "Creatine kinase (CK)",
+        "why": "Severe hyperthermia and muscle breakdown cause rhabdomyolysis, releasing CK and myoglobin that can obstruct the kidneys.",
+        "range": "Normal <200 U/L; toxicity can push it into the thousands to hundreds of thousands",
+        "tier": 3
+      },
+      {
+        "marker": "Creatinine / eGFR",
+        "why": "Acute kidney injury from rhabdomyolysis, dehydration and hyperthermia is a common and dangerous complication.",
+        "tier": 3
+      },
+      {
+        "marker": "Arterial pH, bicarbonate and lactate",
+        "why": "Blocking normal ATP production forces anaerobic metabolism, producing a profound lactic (metabolic) acidosis that tracks severity.",
+        "range": "pH <7.3 with high lactate and low bicarbonate indicates serious toxicity",
+        "tier": 3
+      },
+      {
+        "marker": "Liver transaminases (ALT/AST)",
+        "why": "DNP is hepatotoxic and liver injury is reported in serious poisonings.",
+        "tier": 2
+      },
+      {
+        "marker": "Methaemoglobin",
+        "why": "Dinitrophenols can oxidise haemoglobin, impairing oxygen delivery and adding to tissue hypoxia; documented but not a leading feature of most poisonings.",
+        "tier": 2
+      },
+      {
+        "marker": "Full blood count",
+        "why": "Chronic DNP exposure historically caused bone-marrow suppression and agranulocytosis (dangerous drop in white cells) alongside cataract formation.",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Anyone considering it for weight loss or physique",
+        "advice": "There is no safe dose and no medical use — DNP has caused death in otherwise healthy young people at amounts marketed for fat loss; it should not be taken at all.",
+        "tier": 3
+      },
+      {
+        "flag": "Hot or humid environments and strenuous exercise",
+        "advice": "Heat and exertion stack directly onto DNP's heat production and have precipitated fatal hyperthermia; this compound and physical training or hot climates are a lethal combination.",
+        "tier": 3
+      },
+      {
+        "flag": "Cardiovascular disease or arrhythmia",
+        "advice": "The extreme tachycardia and metabolic stress can trigger fatal cardiac events.",
+        "tier": 2
+      },
+      {
+        "flag": "Renal or hepatic impairment",
+        "advice": "DNP is cleared slowly and is toxic to liver and kidneys, so impaired organs accelerate accumulation and injury.",
+        "tier": 2
+      },
+      {
+        "flag": "Concurrent stimulants, thyroid hormone or other thermogenic/serotonergic drugs",
+        "advice": "These compound heat generation and cardiovascular strain and sharply raise the risk of fatal hyperthermia.",
+        "tier": 2
+      },
+      {
+        "flag": "G6PD deficiency",
+        "advice": "Higher susceptibility to oxidative blood effects such as methaemoglobinaemia and haemolysis.",
+        "tier": 1
+      }
+    ]
+  },
+  "naltrexone-bupropion-contrave": {
+    "access": "prescription",
+    "accessNote": "It is approved as an adjunct to a reduced-calorie diet and exercise for chronic weight management in adults with obesity, or with overweight plus a weight-related condition such as type 2 diabetes or hypertension.",
+    "typicalDose": {
+      "line": "As a reference only, the prescribed regimen a doctor sets uses fixed 8 mg naltrexone / 90 mg bupropion extended-release tablets titrated over 4 weeks (week 1: one tablet each morning; week 2: one morning and one evening; week 3: two morning and one evening; week 4 onward: two morning and two evening), reaching a target maintenance of 32 mg naltrexone / 360 mg bupropion per day, which is also the maximum. The slow titration exists to limit nausea and seizure risk, and the prescriber reassesses response at about 12 weeks and stops it if meaningful weight loss has not occurred. This is not a recommendation or an instruction to take it.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Toxicity is driven mainly by the bupropion component. Overdose can cause generalized seizures (which may be delayed for many hours because of the extended-release formulation), tachycardia, hypertension, agitation, hallucinations, and cardiac conduction abnormalities including widened QRS and prolonged QT that can progress to arrhythmias, cardiovascular collapse, and death; the naltrexone component can additionally precipitate acute opioid withdrawal in anyone physically dependent on opioids. Any suspected overdose is a medical emergency requiring immediate poison-control or emergency care.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "The extended-release tablets must be swallowed whole; crushing, chewing, or splitting them dumps the full bupropion dose at once and sharply raises seizure risk, as does taking more than prescribed, doubling a missed dose, or combining it with other bupropion-containing products, alcohol binges, or abrupt withdrawal from alcohol, benzodiazepines, or sedatives. Because it carries a boxed warning for suicidal thoughts and behavior, stopping or changing it without medical guidance during a mood change is also dangerous, and taking any opioid alongside it can trigger acute withdrawal.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Blood pressure and resting heart rate",
+        "range": "Watch for sustained rises above ~140/90 mmHg or clinically significant HR increases",
+        "when": "Baseline and periodically, especially in the first months",
+        "why": "Bupropion can raise blood pressure and heart rate; it is contraindicated in uncontrolled hypertension.",
+        "tier": 3
+      },
+      {
+        "marker": "ALT, AST, bilirubin (liver function)",
+        "range": "ALT/AST roughly <40 U/L; investigate persistent elevations >3x upper limit",
+        "when": "Baseline and if symptoms of liver injury appear",
+        "why": "Naltrexone carries dose-related hepatotoxicity potential; new abdominal pain, dark urine, or jaundice warrants stopping and testing.",
+        "tier": 2
+      },
+      {
+        "marker": "Fasting glucose / HbA1c",
+        "range": "Individualized; HbA1c target set by the treating clinician",
+        "when": "In people with type 2 diabetes, before and during treatment",
+        "why": "Weight loss can lower glucose and cause hypoglycemia if insulin or sulfonylureas are not adjusted downward.",
+        "tier": 2
+      },
+      {
+        "marker": "Body weight (percent change)",
+        "range": "Clinically meaningful response is generally taken as >=5% loss by ~12 weeks",
+        "when": "At about 12 weeks on the maintenance dose",
+        "why": "Used to decide whether continued treatment is justified; typical trial weight loss is roughly 5-9%.",
+        "tier": 3
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Seizure disorder, or any condition/medication that lowers the seizure threshold",
+        "advice": "Absolutely contraindicated because bupropion is proconvulsant.",
+        "tier": 3
+      },
+      {
+        "flag": "Bulimia or anorexia nervosa (current or prior)",
+        "advice": "Contraindicated due to markedly higher seizure risk in these patients.",
+        "tier": 3
+      },
+      {
+        "flag": "Chronic opioid use, opioid dependence, or acute opioid withdrawal",
+        "advice": "Contraindicated; the naltrexone component blocks opioids and can precipitate severe withdrawal, and opioids will not work for pain.",
+        "tier": 3
+      },
+      {
+        "flag": "Abrupt discontinuation of alcohol, benzodiazepines, barbiturates, or antiseizure drugs",
+        "advice": "Contraindicated because withdrawal states sharply increase seizure risk.",
+        "tier": 3
+      },
+      {
+        "flag": "Uncontrolled hypertension",
+        "advice": "Contraindicated until blood pressure is controlled.",
+        "tier": 3
+      },
+      {
+        "flag": "Use of an MAO inhibitor within the last 14 days",
+        "advice": "Contraindicated; concurrent use risks hypertensive reactions.",
+        "tier": 3
+      },
+      {
+        "flag": "Pregnancy",
+        "advice": "Should not be used; weight loss offers no benefit and is potentially harmful in pregnancy.",
+        "tier": 3
+      },
+      {
+        "flag": "Known allergy to bupropion or naltrexone",
+        "advice": "Contraindicated.",
+        "tier": 3
+      }
+    ]
+  },
+  "phentermine-qsymia-phentermine-topiramate": {
+    "access": "prescription",
+    "accessNote": "Prescribed for chronic weight management alongside diet and exercise; a Schedule IV controlled substance (stimulant), so it is dispensed only under a doctor's supervision and monitoring.",
+    "typicalDose": {
+      "line": "For reference only, and always titrated by the prescribing doctor: phentermine alone is usually given as 15–37.5 mg once in the morning (short-term). The phentermine–topiramate ER combination is started low (phentermine 3.75 mg / topiramate 23 mg once daily for 14 days), stepped up to 7.5 mg / 46 mg, and only escalated (via 11.25 mg / 69 mg) toward a ceiling of 15 mg / 92 mg if the doctor judges the response inadequate. It is taken in the morning to limit insomnia, and the dose is capped lower in kidney or liver impairment. None of this is a recommendation to take it or a self-dosing guide.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Phentermine overdose is a sympathomimetic crisis: restlessness, tremor, rapid breathing, confusion, hallucinations, panic, dangerously high heart rate and blood pressure, arrhythmia, high body temperature, seizures, and — in severe cases — circulatory collapse. The topiramate component adds severe non-anion-gap metabolic acidosis, drowsiness, blurred or double vision, dizziness, speech disturbance, stupor, seizures and coma. Deaths have been reported. Overdose is a medical emergency.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "Taking more than prescribed or dosing later in the day drives insomnia, agitation and cardiovascular strain and does not accelerate weight loss. Combining it with an MAOI (or within 14 days of stopping one) can trigger a hypertensive crisis, and stacking it with other stimulants or serotonergic drugs raises the risk of dangerous heart rhythms or serotonin syndrome. Because of the topiramate, stopping abruptly at higher doses can provoke seizures — discontinuation is tapered by a doctor. Ignoring palpitations, chest pain or breathlessness rather than reporting them is a serious mistake, as is diverting or using it without a prescription and monitoring.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Blood pressure and resting heart rate",
+        "range": "BP <130/80 mmHg, HR <100 bpm at rest",
+        "when": "Baseline then periodically",
+        "why": "Phentermine is a stimulant that can raise both; a rise or sustained tachycardia can prompt dose reduction or stopping.",
+        "tier": 3
+      },
+      {
+        "marker": "Serum bicarbonate",
+        "range": "22–29 mmol/L",
+        "when": "Baseline then periodically",
+        "why": "Topiramate causes hyperchloremic non-anion-gap metabolic acidosis; a falling bicarbonate signals it before symptoms appear.",
+        "tier": 3
+      },
+      {
+        "marker": "Pregnancy test (beta-hCG)",
+        "range": "Negative before and during therapy",
+        "when": "Before starting and periodically in anyone who can become pregnant",
+        "why": "Topiramate in the first trimester raises the risk of oral clefts; this is why it is dispensed under a risk-management program.",
+        "tier": 3
+      },
+      {
+        "marker": "Serum creatinine / eGFR",
+        "range": "eGFR >60 mL/min/1.73m2",
+        "when": "Baseline and as clinically indicated",
+        "why": "Both components need dose limits in renal impairment; also flags nephrolithiasis risk from topiramate.",
+        "tier": 2
+      },
+      {
+        "marker": "Serum potassium",
+        "range": "3.5–5.0 mmol/L",
+        "when": "Baseline and periodically",
+        "why": "Chronic acidosis and topiramate can be associated with low potassium.",
+        "tier": 2
+      },
+      {
+        "marker": "Fasting glucose / HbA1c",
+        "range": "Individualised in diabetics",
+        "when": "In people with diabetes on glucose-lowering drugs",
+        "why": "Weight loss and reduced intake can cause hypoglycemia, needing diabetes medication adjustment.",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Pregnancy or planning pregnancy, and breastfeeding",
+        "advice": "Contraindicated in pregnancy — topiramate raises the risk of oral clefts; effective contraception is required and it should not be used while breastfeeding.",
+        "tier": 3
+      },
+      {
+        "flag": "Cardiovascular disease",
+        "advice": "Must not be used with coronary artery disease, uncontrolled or significant hypertension, arrhythmias, heart failure, or recent stroke — the stimulant load is unsafe.",
+        "tier": 3
+      },
+      {
+        "flag": "Hyperthyroidism",
+        "advice": "Contraindicated; the sympathomimetic effect compounds an already overactive thyroid state.",
+        "tier": 3
+      },
+      {
+        "flag": "Glaucoma",
+        "advice": "Contraindicated — phentermine is unsafe in glaucoma and topiramate can trigger acute angle-closure glaucoma with vision loss.",
+        "tier": 3
+      },
+      {
+        "flag": "MAOI use within the last 14 days",
+        "advice": "Do not combine — the interaction can cause a hypertensive crisis.",
+        "tier": 3
+      },
+      {
+        "flag": "History of drug or stimulant misuse, or agitated states",
+        "advice": "Phentermine is a controlled stimulant with abuse potential and is avoided in these situations.",
+        "tier": 2
+      },
+      {
+        "flag": "Known hypersensitivity to sympathomimetic amines or to topiramate",
+        "advice": "Contraindicated in anyone with a prior reaction to either component.",
+        "tier": 3
+      }
+    ]
+  },
+  "testosterone-trt": {
+    "access": "prescription",
+    "accessNote": "Prescribed for men with diagnosed hypogonadism confirmed by symptoms plus repeat low morning testosterone; it is a Schedule III controlled substance because of its heavy non-medical use for muscle-building.",
+    "typicalDose": {
+      "line": "As a reference only, a doctor titrates the dose to reach a mid-normal trough level: typical prescribed regimens are roughly 50-100 mg of injectable testosterone (cypionate/enanthate) weekly or 100-200 mg every two weeks, transdermal gel around 50-100 mg daily, or long-acting undecanoate injections at multi-week intervals. The form, dose and interval are chosen and adjusted by the prescriber against blood levels; this is not a recommendation to take or self-dose testosterone.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Testosterone has no classic acute lethal overdose, but supraphysiologic exposure is dangerous: it thickens the blood (rising hematocrit/polycythemia), raising the risk of clots, stroke and heart attack. Excess also causes acne, fluid retention and raised blood pressure, breast tissue growth (gynecomastia), worsening sleep apnea, testicular shrinkage and infertility, and mood swings or aggression. Signs of too much include flushing, headaches, high blood pressure, and unusually thick/dark blood on labs.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "The main danger is treating a prescribed dose as a starting point and pushing higher for muscle gain: this drives hematocrit up and can trigger dangerous clots, and it shuts down the body's own production so testes shrink and fertility falls. Stopping abruptly after suppression causes a crash of fatigue, low libido and low mood while natural production recovers over months. Skipping the required blood monitoring lets rising blood thickness or prostate changes go undetected, and stacking testosterone with other anabolic steroids multiplies cardiac and liver risk.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Total testosterone (trough)",
+        "range": "target mid-normal, ~400-700 ng/dL (14-24 nmol/L)",
+        "when": "before therapy, then after dose changes and periodically",
+        "why": "Confirms the diagnosis and checks the dose is replacing, not overshooting.",
+        "tier": 3
+      },
+      {
+        "marker": "Hematocrit",
+        "range": "reduce/hold if >54%",
+        "when": "baseline, ~3-6 months, then annually",
+        "why": "Testosterone raises red cell mass; a high hematocrit signals clot, stroke and heart-attack risk.",
+        "tier": 3
+      },
+      {
+        "marker": "Hemoglobin",
+        "range": "watch for rise above lab reference (~13.5-17.5 g/dL)",
+        "when": "alongside hematocrit",
+        "why": "Tracks the same blood-thickening effect.",
+        "tier": 3
+      },
+      {
+        "marker": "PSA (prostate-specific antigen)",
+        "range": "investigate a rise >1.4 ng/mL in a year or absolute >4",
+        "when": "baseline and periodically, especially over 40",
+        "why": "Testosterone can accelerate an existing prostate cancer, so unexpected rises are flagged.",
+        "tier": 2
+      },
+      {
+        "marker": "Estradiol",
+        "range": "typically <40-50 pg/mL in men",
+        "when": "if gynecomastia, fluid retention or mood symptoms appear",
+        "why": "Some testosterone aromatizes to estrogen; excess causes breast tissue growth and swelling.",
+        "tier": 2
+      },
+      {
+        "marker": "LH and FSH",
+        "range": "suppressed (often low/undetectable on therapy)",
+        "when": "baseline for diagnosis; relevant if fertility matters",
+        "why": "Confirms the pituitary axis is suppressed, explaining the drop in sperm production.",
+        "tier": 2
+      },
+      {
+        "marker": "Lipid panel (HDL)",
+        "range": "watch for falling HDL",
+        "when": "baseline and periodically",
+        "why": "Testosterone, especially at high doses, can lower protective HDL cholesterol.",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Known or suspected prostate cancer or male breast cancer",
+        "advice": "Must not use; testosterone can stimulate these hormone-sensitive cancers.",
+        "tier": 3
+      },
+      {
+        "flag": "Men trying to conceive",
+        "advice": "Avoid; testosterone suppresses sperm production and can cause temporary or lasting infertility.",
+        "tier": 3
+      },
+      {
+        "flag": "Elevated baseline hematocrit / untreated erythrocytosis",
+        "advice": "Do not start until corrected; guidelines caution against initiating when baseline hematocrit is high (roughly >48-50%), as already-thick blood plus testosterone sharply raises clot risk.",
+        "tier": 3
+      },
+      {
+        "flag": "Pregnancy",
+        "advice": "Absolutely contraindicated; it is teratogenic and virilizes a female fetus, and pregnant partners should avoid skin contact with gels.",
+        "tier": 3
+      },
+      {
+        "flag": "Severe untreated heart failure or recent heart attack/stroke",
+        "advice": "Avoid; fluid retention and blood-thickening add cardiovascular strain.",
+        "tier": 2
+      },
+      {
+        "flag": "Untreated severe obstructive sleep apnea",
+        "advice": "Treat the apnea first; testosterone can worsen it.",
+        "tier": 2
+      }
+    ]
+  },
+  "hcg-human-chorionic-gonadotropin": {
+    "access": "prescription",
+    "accessNote": "Used to preserve testicular size and sperm production in men on testosterone therapy, and to treat hypogonadotropic hypogonadism and some cases of male or female infertility.",
+    "typicalDose": {
+      "line": "As a reference only, and always set by a prescribing doctor: as a TRT adjunct it is typically dosed around 250-500 IU subcutaneously two to three times per week; for hypogonadotropic hypogonadism or fertility, roughly 1,000-2,000 IU two to three times weekly, sometimes combined with FSH. Exact dose is individualised to labs and response — this is not a recommendation or a self-dosing guide.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Excess hCG overstimulates the gonads. In women this can trigger ovarian hyperstimulation syndrome — enlarged painful ovaries, abdominal bloating, nausea, rapid weight gain, shortness of breath and fluid shifts that in severe cases cause blood clots, kidney injury or fluid on the lungs, a medical emergency. In men, over-dosing sharply raises estradiol (breast tenderness/gynecomastia, water retention, mood swings) and can push testosterone and hematocrit high enough to thicken the blood; testicular ache and, with chronic overstimulation, Leydig-cell desensitisation also occur.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "Not following the prescription is the main hazard. Self-dosing high amounts (common in bodybuilding to 'restart' natural production after steroid cycles) desensitises the testes and spikes estradiol; abruptly stopping without a plan can leave the gonadal axis suppressed. The separate 'hCG diet' — hCG paired with a 500-calorie regimen for weight loss — is not supported by evidence and the starvation diet itself is dangerous; hCG has no proven fat-loss effect. Product bought outside a pharmacy has no guarantee of identity, dose or sterility.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Total testosterone",
+        "why": "Confirms the Leydig cells are responding and guards against an excessive rise",
+        "range": "Men roughly 300-1000 ng/dL, targeted to symptoms",
+        "when": "Before starting and periodically during treatment",
+        "tier": 3
+      },
+      {
+        "marker": "Estradiol (E2)",
+        "why": "hCG-driven testosterone aromatises to estrogen; high E2 causes gynecomastia and fluid retention",
+        "range": "Men typically kept under ~40-50 pg/mL (sensitive assay)",
+        "when": "Baseline and during dose adjustment",
+        "tier": 2
+      },
+      {
+        "marker": "Hematocrit / hemoglobin",
+        "why": "A rising androgen level can thicken the blood and raise clot and stroke risk",
+        "range": "Hold/reassess if hematocrit exceeds ~54%",
+        "when": "Baseline and periodically",
+        "tier": 2
+      },
+      {
+        "marker": "Semen analysis (sperm count)",
+        "why": "The fertility endpoint when hCG is used to restore or preserve spermatogenesis",
+        "range": "Normal sperm concentration >=15 million/mL",
+        "when": "Baseline and after several months of therapy",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Known or suspected hormone-sensitive cancer (prostate cancer, male breast cancer, androgen-dependent tumours)",
+        "advice": "hCG raises testosterone and estrogen, which can drive these tumours; it must not be used",
+        "tier": 3
+      },
+      {
+        "flag": "Precocious (early) puberty",
+        "advice": "Contraindicated, as it further stimulates the sex-hormone axis",
+        "tier": 3
+      },
+      {
+        "flag": "Prior hypersensitivity reaction to hCG",
+        "advice": "A previous allergic reaction rules out further use",
+        "tier": 3
+      },
+      {
+        "flag": "Pregnancy or suspected pregnancy",
+        "advice": "hCG may cause fetal harm and has no role in pregnancy; discuss any possibility of pregnancy with the prescriber",
+        "tier": 2
+      },
+      {
+        "flag": "Active thromboembolic disorder or high clot risk",
+        "advice": "Fluid shifts and raised hematocrit can worsen clotting risk; needs specialist assessment first",
+        "tier": 2
+      }
+    ]
+  },
+  "enclomiphene-clomiphene-clomid": {
+    "access": "prescription",
+    "accessNote": "Clomiphene is an approved prescription medicine used to induce ovulation in women; its testosterone-raising use in men is off-label, and enclomiphene as a separate molecule is not FDA-approved at all (available only via compounding pharmacies by prescription). Either way a physician's prescription and lab monitoring are required.",
+    "typicalDose": {
+      "line": "For the approved use of inducing ovulation in women, a physician typically starts clomiphene at 50 mg once daily for 5 days per cycle, increased to at most 100 mg/day for 5 days if needed, using the lowest effective dose. Off-label male hormone-recovery regimens a doctor may choose are lower and intermittent (on the order of 12.5-50 mg daily or every other day). These are reference figures a prescriber decides and titrates against bloodwork, not a recommendation or a dose to self-select.",
+      "tier": 2
+    },
+    "overdose": {
+      "line": "Excess dosing or accumulation produces exaggerated antiestrogen and hormonal effects: visual disturbances (blurred vision, flashes, floaters, scotomata) that can occasionally persist after stopping and are a recognised warning sign to discontinue; hot flushes, nausea and vomiting, headache, and mood disturbance. In women, ovarian overstimulation (OHSS) can cause marked ovarian enlargement, abdominal/pelvic pain, bloating, ascites, and in severe cases fluid shifts and thromboembolism requiring urgent care.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "Taken outside a prescription — bought as a grey-market 'research chemical', self-dosed, or run as unsupervised steroid post-cycle therapy — it is used without the estradiol, LH/FSH and testosterone monitoring that makes it safe, and new or worsening visual symptoms (a signal to stop) get ignored. Doubling doses, stacking with other hormonal agents, or continuing despite side effects raises the risk of vision changes, estrogenic effects, mood disturbance and, in women, dangerous ovarian hyperstimulation and multiple pregnancy.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {
+        "marker": "Total testosterone",
+        "range": "men ~300-1000 ng/dL; aim mid-normal",
+        "why": "Primary efficacy marker in male off-label use; guides whether and how a doctor titrates.",
+        "when": "Baseline, then ~4-6 weeks after starting or dose change",
+        "tier": 3
+      },
+      {
+        "marker": "LH and FSH",
+        "range": "track response vs baseline",
+        "why": "Clomiphene works by raising pituitary gonadotropins; confirms the drug is acting and distinguishes response type.",
+        "when": "Baseline and on follow-up",
+        "tier": 3
+      },
+      {
+        "marker": "Estradiol (E2)",
+        "range": "men typically kept <~40-50 pg/mL",
+        "why": "A SERM can drive estradiol up; a rise can cause side effects and needs a prescriber's judgement.",
+        "when": "Baseline and on follow-up",
+        "tier": 2
+      },
+      {
+        "marker": "Mid-luteal progesterone",
+        "range": ">3 ng/mL suggests ovulation occurred",
+        "why": "In the approved female use, confirms the cycle ovulated and guides dosing.",
+        "when": "~7 days after expected ovulation",
+        "tier": 3
+      },
+      {
+        "marker": "Liver enzymes (ALT/AST)",
+        "range": "within normal reference range",
+        "why": "Hepatic dysfunction is a contraindication, so baseline liver status is checked before prescribing.",
+        "when": "Baseline",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Pregnancy or possible pregnancy",
+        "advice": "Contraindicated — it has no benefit once pregnant and must not be taken; pregnancy is excluded before each course.",
+        "tier": 3
+      },
+      {
+        "flag": "Liver disease or hepatic dysfunction",
+        "advice": "Contraindicated with active liver disease; a prescriber assesses liver status first.",
+        "tier": 3
+      },
+      {
+        "flag": "Abnormal uterine bleeding of unknown cause",
+        "advice": "Must be evaluated by a doctor before use, as it can mask or coincide with serious pathology.",
+        "tier": 3
+      },
+      {
+        "flag": "Ovarian enlargement or cysts not due to PCOS",
+        "advice": "Contraindicated — stimulation can worsen enlargement and trigger hyperstimulation.",
+        "tier": 3
+      },
+      {
+        "flag": "Prior visual disturbance on a SERM",
+        "advice": "A previous episode of vision changes on clomiphene is a reason not to restart it without specialist review.",
+        "tier": 2
+      },
+      {
+        "flag": "Uncontrolled thyroid or adrenal dysfunction, or a hormone-dependent tumour",
+        "advice": "These should be evaluated and managed by a physician before any hormonal SERM is considered.",
+        "tier": 2
+      }
+    ]
+  },
+  "anastrozole-exemestane-aromatase-inhibitors": {
+    "access": "prescription",
+    "accessNote": "Approved to treat hormone-receptor-positive breast cancer, mainly in postmenopausal women; the potent estrogen-lowering effect is what drives non-medical use in men on testosterone or anabolic steroids.",
+    "typicalDose": {
+      "line": "Where a doctor prescribes it, anastrozole is usually 1 mg once daily and exemestane 25 mg once daily for breast-cancer indications; any off-label estrogen-control use in men is far lower, intermittent and individualised by a physician against blood levels. Reference only, never a recommendation or instruction to dose yourself.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "There is no specific antidote; harm comes from over-suppressing estradiol rather than acute lethality. An estrogen-deficiency picture emerges: severe joint and bone pain, accelerated bone loss and fracture risk, hot flushes, crashed libido and erectile function, depressed mood, fatigue and worsening cholesterol. Chronic over-suppression is the real danger, and it can persist for weeks after the last dose.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "Skipping, doubling or stopping the prescribed schedule, or self-dosing to 'control estrogen' on a steroid or testosterone cycle, routinely drives estradiol below the physiological range — producing joint pain, erectile dysfunction, low libido, depression and bone loss — because it removes the estradiol testing a doctor uses to keep levels in range.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Estradiol (sensitive LC-MS/MS assay)",
+        "range": "intentionally suppressed in breast-cancer therapy; the normal male range is roughly 8-35 pg/mL, and where estrogen control is used in men the aim is to stay physiological (around 20-30 pg/mL) and avoid crashing below ~10-20 pg/mL",
+        "when": "baseline and periodically on therapy",
+        "why": "the single most important check for over-suppression; a standard immunoassay is unreliable at low male levels",
+        "tier": 3
+      },
+      {
+        "marker": "Bone mineral density (DEXA, T-score)",
+        "range": "monitor for decline; osteopenia T-score -1.0 to -2.5, osteoporosis <= -2.5",
+        "when": "baseline and periodically during prolonged use",
+        "why": "aromatase inhibitors accelerate bone loss and raise fracture risk",
+        "tier": 3
+      },
+      {
+        "marker": "Lipid panel (LDL, HDL, total cholesterol)",
+        "range": "watch for rising LDL",
+        "when": "baseline and periodically",
+        "why": "lowered estrogen tends to worsen the lipid profile and cardiovascular risk",
+        "tier": 2
+      },
+      {
+        "marker": "Testosterone, LH and FSH (in men)",
+        "range": "interpreted against age-appropriate reference",
+        "when": "when used off-label in men",
+        "why": "aromatase inhibition raises testosterone and gonadotropins; tracks the hormonal effect and detects overshoot",
+        "tier": 2
+      },
+      {
+        "marker": "Liver enzymes (ALT, AST)",
+        "range": "within normal limits",
+        "when": "if symptoms or on long-term use",
+        "why": "hepatic metabolism; occasional transaminase elevation",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Pregnancy or possibility of pregnancy",
+        "advice": "Contraindicated — embryotoxic and potentially teratogenic; effective contraception is required in anyone who could become pregnant.",
+        "tier": 3
+      },
+      {
+        "flag": "Premenopausal women without ovarian suppression, and breastfeeding",
+        "advice": "Not appropriate — the ovaries override the drug, so it is ineffective and inappropriate unless a specialist has added ovarian suppression.",
+        "tier": 3
+      },
+      {
+        "flag": "Known hypersensitivity to the drug or excipients",
+        "advice": "Must not take it.",
+        "tier": 3
+      },
+      {
+        "flag": "Pre-existing osteoporosis or significant low bone density",
+        "advice": "Use only under specialist supervision with bone protection, given the added bone-loss risk.",
+        "tier": 2
+      },
+      {
+        "flag": "Severe hepatic impairment",
+        "advice": "Caution and physician oversight — the drug is cleared by the liver.",
+        "tier": 2
+      }
+    ]
+  },
+  "tamoxifen-nolvadex": {
+    "access": "prescription",
+    "accessNote": "A selective estrogen receptor modulator prescribed to treat and prevent hormone-receptor-positive breast cancer, and used off-label under medical supervision for gynecomastia and to restore endogenous hormone signalling.",
+    "typicalDose": {
+      "line": "A doctor decides the dose; as a reference point, the usual prescribed adult dose for breast cancer is 20 mg once daily (some regimens use 20-40 mg/day, higher doses in divided doses), typically continued for 5-10 years. This is not a recommendation and is not a self-dosing guide.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Acute overdose is uncommon and poorly documented, but at very high doses tamoxifen can cause dose-dependent neurotoxicity — tremor, hyperreflexia, unsteady gait and dizziness — and QT-interval prolongation on ECG, which raises the risk of dangerous arrhythmia; seizures have been reported rarely, though the causal link is not firmly established. There is no specific antidote and management is supportive.",
+      "tier": 2
+    },
+    "misuse": {
+      "line": "Stopping early or skipping doses reduces cancer-recurrence protection, while the drug's own risks — venous thromboembolism (DVT, pulmonary embolism), stroke, and endometrial hyperplasia or cancer with prolonged use — require ongoing medical monitoring. Strong CYP2D6 inhibitors (e.g. paroxetine, fluoxetine, bupropion) block conversion to the active metabolite endoxifen and can silently undermine effectiveness. Self-dosing without prescription (including bodybuilding 'PCT' use) removes the monitoring that catches clots and endometrial changes before they become life-threatening.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Liver function tests (ALT, AST, ALP, bilirubin)",
+        "why": "Tamoxifen can cause hepatic enzyme elevation and, rarely, steatosis or cholestasis; monitored periodically.",
+        "when": "Baseline and periodically during therapy",
+        "range": "ALT/AST roughly 7-40 U/L",
+        "tier": 3
+      },
+      {
+        "marker": "Fasting lipid panel (triglycerides)",
+        "why": "Can markedly raise serum triglycerides, occasionally provoking pancreatitis.",
+        "when": "Baseline and periodically",
+        "range": "Triglycerides <1.7 mmol/L (<150 mg/dL)",
+        "tier": 2
+      },
+      {
+        "marker": "Endometrial assessment (transvaginal ultrasound / evaluation of any abnormal bleeding)",
+        "why": "Increases risk of endometrial hyperplasia and cancer; any postmenopausal or abnormal vaginal bleeding is investigated promptly.",
+        "when": "Annual gynaecologic review; urgently if abnormal bleeding",
+        "range": "Postmenopausal endometrial thickness typically <4-5 mm",
+        "tier": 3
+      },
+      {
+        "marker": "Complete blood count",
+        "why": "Can cause reversible leukopenia and thrombocytopenia.",
+        "when": "Periodically during therapy",
+        "range": "Platelets ~150-400 x10^9/L",
+        "tier": 2
+      },
+      {
+        "marker": "Ophthalmologic examination",
+        "why": "Long-term or high-dose use is linked to cataracts and retinopathy; visual symptoms prompt review.",
+        "when": "Baseline if risk factors, then as symptoms arise",
+        "range": "Qualitative (no lens or retinal changes)",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Pregnancy or trying to conceive",
+        "advice": "Tamoxifen is teratogenic and can harm the fetus; effective non-hormonal contraception is required and it must not be used in pregnancy. A doctor must be told before conception is attempted.",
+        "tier": 3
+      },
+      {
+        "flag": "Breastfeeding",
+        "advice": "It may suppress lactation and its safety in a nursing infant is not established; it is avoided while breastfeeding.",
+        "tier": 2
+      },
+      {
+        "flag": "History of venous thromboembolism (DVT/PE) or on anticoagulation, especially in the risk-reduction setting",
+        "advice": "The added clot risk can outweigh benefit; use is contraindicated for breast-cancer prevention in people with a history of DVT/PE or pulmonary embolus and requires specialist judgement.",
+        "tier": 3
+      },
+      {
+        "flag": "Concurrent strong CYP2D6-inhibiting antidepressants",
+        "advice": "Drugs like paroxetine and fluoxetine can substantially cut conversion to the active metabolite; a prescriber should review antidepressant choice rather than the patient adjusting anything alone.",
+        "tier": 2
+      },
+      {
+        "flag": "Known hypersensitivity to tamoxifen",
+        "advice": "Prior allergic reaction is an absolute contraindication.",
+        "tier": 3
+      }
+    ]
+  },
+  "finasteride-dutasteride": {
+    "access": "prescription",
+    "accessNote": "Prescribed for male-pattern hair loss (finasteride 1 mg) and benign prostatic enlargement (finasteride 5 mg, dutasteride 0.5 mg), where a doctor weighs the benefit against known sexual and mood side effects.",
+    "typicalDose": {
+      "line": "For reference only, the doses a doctor decides on: finasteride 1 mg daily for androgenetic alopecia and 5 mg daily for prostate enlargement; dutasteride 0.5 mg daily for prostate enlargement. These are set and monitored by a prescriber, not chosen by the user.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "Acute overdose is not the main danger with these drugs: single doses up to 400 mg and repeated doses up to 80 mg/day for months have been taken in studies without serious acute toxicity, and there is no specific antidote. The real harm is chronic — persistent sexual dysfunction (low libido, erectile dysfunction, reduced ejaculate) and mood changes that can outlast stopping the drug in a subset of users. Seek medical care for any large ingestion, especially in a child.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "The biggest hazard is a pregnant woman (or one who could become pregnant) handling crushed or broken tablets — these drugs are teratogenic and can disrupt genital development of a male fetus, so damaged tablets should not be handled by such individuals. Taking more than prescribed does not improve hair or prostate outcomes and only raises side-effect risk; stopping abruptly for hair loss reverses any regrowth within months. They lower PSA by roughly half, which can mask a rising PSA and delay prostate-cancer detection if a doctor is not adjusting for it. Self-dosing outside a prescriber removes the monitoring that makes these drugs reasonably safe.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "PSA (prostate-specific antigen)",
+        "range": "drops ~50% after 6-12 months; a doctor doubles the measured value to interpret it",
+        "why": "5-alpha-reductase inhibitors suppress PSA, so an unadjusted 'normal' reading can hide prostate cancer",
+        "when": "baseline, then ~6-12 months after starting and periodically",
+        "tier": 3
+      },
+      {
+        "marker": "DHT (dihydrotestosterone)",
+        "range": "serum falls ~65-70% (finasteride) to >90% (dutasteride)",
+        "why": "direct pharmacodynamic marker confirming the drug is acting on the target enzyme",
+        "when": "if effect or adherence is in question",
+        "tier": 3
+      },
+      {
+        "marker": "Testosterone",
+        "range": "modest rise (roughly 10-20%), usually staying within normal range",
+        "why": "blocked conversion to DHT shunts substrate back toward testosterone",
+        "when": "if hormonal symptoms are being evaluated",
+        "tier": 2
+      },
+      {
+        "marker": "ALT / liver enzymes",
+        "range": "within normal limits",
+        "why": "both are metabolized hepatically (CYP3A4); caution and monitoring in liver impairment",
+        "when": "if hepatic disease is present or suspected",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Women who are pregnant or may become pregnant, and children/adolescents",
+        "advice": "Absolutely contraindicated — teratogenic risk to a male fetus; such individuals should not take these drugs or even handle crushed or broken tablets.",
+        "tier": 3
+      },
+      {
+        "flag": "Known hypersensitivity to finasteride or dutasteride",
+        "advice": "Do not take; risk of angioedema and other allergic reactions.",
+        "tier": 3
+      },
+      {
+        "flag": "History of depression, suicidal ideation, or significant mood disorder",
+        "advice": "Discuss carefully with a prescriber — mood changes, depression and suicidal thoughts are documented warnings and warrant close monitoring or avoidance.",
+        "tier": 2
+      },
+      {
+        "flag": "Significant liver impairment",
+        "advice": "Use with caution and medical supervision, as both drugs are extensively hepatically metabolized.",
+        "tier": 2
+      }
+    ]
+  },
+  "fadogia-agrestis": {
+    "access": "unapproved",
+    "accessNote": "A West African herbal (Fadogia agrestis stem) sold as a \"testosterone-boosting\" supplement, but it has never been tested in humans and the only controlled data — in rats — show testicular, liver and kidney toxicity.",
+    "overdose": {
+      "line": "There is no established safe or toxic dose in humans because no human trials exist. The best-documented harm is testicular: in controlled rat studies the aqueous stem extract raised serum testosterone but damaged the sperm-producing (seminiferous) tubules over 28 days, with the injury reversible only at the lowest dose tested and irreversible at higher doses. Separate rat work found the extract also disrupted liver and kidney enzyme markers and raised oxidative-stress markers at every dose tested, including the lowest, so no dose was free of organ toxicity in animals. No human liver injury has been formally documented, but the animal liver and kidney signal is a genuine concern. Warning signs that would warrant stopping and seeing a doctor include right-upper-abdominal pain, dark urine, jaundice, unusual fatigue, and testicular pain or shrinkage.",
+      "tier": 2
+    },
+    "misuse": {
+      "line": "There is no DIY-safe dose: no human study has ever defined an effective or safe amount, purity and extract strength are unverified, and the animal studies that showed a testosterone rise showed testicular toxicity at the same time. \"More\" is specifically dangerous here, since the tubular damage in rats was dose-dependent and became irreversible at higher doses, and liver and kidney markers were disrupted even at the lowest dose. Stacking it with other androgenic or hepatotoxic supplements compounds the hormonal and organ risk.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {
+        "marker": "ALT / AST (liver enzymes)",
+        "range": "ALT roughly <40 U/L; a rise flags possible liver injury",
+        "why": "Rat studies show the extract disrupts liver enzyme activity and raises oxidative-stress markers; human hepatotoxicity is unproven, but a baseline and follow-up would catch any drug-induced liver injury early.",
+        "when": "Before any use and if symptoms appear",
+        "tier": 2
+      },
+      {
+        "marker": "Total testosterone",
+        "range": "~300–1000 ng/dL (adult male)",
+        "why": "The compound is marketed to raise testosterone; tracking it distinguishes any effect from harm and detects supraphysiologic levels.",
+        "when": "Baseline and periodically",
+        "tier": 2
+      },
+      {
+        "marker": "LH and FSH",
+        "range": "LH ~1.5–9 IU/L; FSH ~1.5–12.4 IU/L",
+        "why": "Detects suppression or disruption of the hypothalamic-pituitary-gonadal axis that can follow exogenous androgenic stimulation.",
+        "when": "Baseline and follow-up",
+        "tier": 1
+      },
+      {
+        "marker": "Semen analysis (sperm concentration/motility)",
+        "range": "Concentration ≥15 million/mL; normal motility/morphology",
+        "why": "Rat data show damaged seminiferous tubules and impaired spermatogenesis, so fertility parameters are the most direct measure of the documented harm.",
+        "when": "If fertility is a concern or with prolonged use",
+        "tier": 1
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Men trying to conceive or with fertility concerns",
+        "advice": "Avoid: the only controlled animal evidence shows dose-dependent testicular and sperm damage, with no human safety data to reassure otherwise.",
+        "tier": 2
+      },
+      {
+        "flag": "Existing liver or kidney disease, or use of other hepatotoxic medication/supplements",
+        "advice": "Avoid: rat studies show liver and kidney toxicity and the extract's organ safety in humans is entirely untested.",
+        "tier": 2
+      },
+      {
+        "flag": "Hormone-sensitive conditions (e.g. prostate cancer, prostate enlargement)",
+        "advice": "Avoid: an androgen-raising agent can worsen androgen-driven disease; hormone decisions belong with an oncologist/urologist.",
+        "tier": 2
+      },
+      {
+        "flag": "Under 18, or pregnant or breastfeeding",
+        "advice": "Avoid entirely: no safety data exist and hormonal effects are especially inappropriate in these groups.",
+        "tier": 3
+      },
+      {
+        "flag": "Anyone using it without medical supervision",
+        "advice": "There is no approved human use, no defined dose, and unverified purity — it should not be self-administered.",
+        "tier": 3
+      }
+    ]
+  },
+  "nandrolone-deca-durabolin": {
+    "access": "prescription",
+    "accessNote": "Approved in several countries as nandrolone decanoate for anemia of renal insufficiency and some wasting/osteoporosis indications, but it is a Schedule III controlled substance that is heavily diverted and abused for muscle-building.",
+    "typicalDose": {
+      "line": "As a doctor-decided reference only (not a recommendation): when prescribed, e.g. for anemia of renal insufficiency, nandrolone decanoate has been given per the label as a deep intramuscular injection roughly 100-200 mg per week in men and 50-100 mg per week in women, with the dose, interval and total duration set entirely by the prescriber, reviewed against labs, and stopped if there is no hematologic response within about six months.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "There is no classic acute lethal 'overdose' syndrome from a single dose; the real danger is cumulative supraphysiologic exposure. Excess drives polycythemia (thickened blood, raising stroke and clot risk), left ventricular hypertrophy, cardiomyopathy and arrhythmia, dangerous drops in HDL with rising LDL, hypertension, fluid retention, liver strain including reported peliosis hepatis (blood-filled hepatic cysts), severe testicular shutdown, mood instability and aggression, and virilization in women (deepened voice, facial hair, clitoral enlargement) that can be irreversible.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "Taking it without a prescription, or at the multiples of prescribed doses used in bodybuilding, is where the documented harm concentrates: profound suppression of the natural testosterone axis that can leave men hypogonadal for months to permanently, marked libido and erectile dysfunction (its strong progestogenic activity and low DHT conversion make 'deca dick' notorious), gynecomastia, non-sterile or shared-needle injection causing abscesses and blood-borne infection, and stopping abruptly after long use triggering a crash of low mood, fatigue and lost libido. Illicit vials are also unregulated in dose and purity.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Hematocrit / hemoglobin",
+        "range": "hematocrit kept <52% in men; rising values signal polycythemia",
+        "why": "AAS stimulate red-cell production, thickening blood and raising clot/stroke risk",
+        "when": "baseline then periodically",
+        "tier": 3
+      },
+      {
+        "marker": "Lipid panel (HDL, LDL)",
+        "range": "watch for HDL falling well below ~1.0 mmol/L and LDL rising",
+        "why": "Nandrolone sharply suppresses HDL and raises LDL, accelerating cardiovascular risk",
+        "when": "baseline and on therapy",
+        "tier": 3
+      },
+      {
+        "marker": "LH, FSH, total testosterone",
+        "range": "LH/FSH suppressed toward undetectable; testosterone falls",
+        "why": "Documents hypothalamic-pituitary-gonadal shutdown and guides recovery",
+        "when": "baseline and after use",
+        "tier": 3
+      },
+      {
+        "marker": "ALT / AST (liver enzymes)",
+        "range": "elevations above the upper reference limit",
+        "why": "Chronic use can cause liver strain, though injectable nandrolone is less hepatotoxic than oral 17-alkylated steroids",
+        "when": "periodically",
+        "tier": 2
+      },
+      {
+        "marker": "Estradiol",
+        "range": "context-dependent",
+        "why": "Weak aromatization plus progestogenic effects can drive gynecomastia and fluid retention",
+        "when": "if symptomatic",
+        "tier": 2
+      },
+      {
+        "marker": "PSA (older men)",
+        "range": "rising trend warrants urology review",
+        "why": "Androgens can stimulate prostate tissue",
+        "when": "in men over ~40 before and during",
+        "tier": 2
+      },
+      {
+        "marker": "Blood pressure",
+        "range": "treat if sustained >130-140/80-90 mmHg",
+        "why": "Fluid retention and polycythemia raise blood pressure",
+        "when": "each review",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Pregnancy",
+        "advice": "Absolutely contraindicated; androgens cause virilization of a female fetus",
+        "tier": 3
+      },
+      {
+        "flag": "Breastfeeding",
+        "advice": "Avoid; passes to the infant and unsafe during lactation",
+        "tier": 3
+      },
+      {
+        "flag": "Known or suspected prostate cancer, or male breast cancer",
+        "advice": "Contraindicated; androgen exposure can stimulate these hormone-sensitive tumors",
+        "tier": 3
+      },
+      {
+        "flag": "Breast cancer with hypercalcemia",
+        "advice": "Contraindicated; androgens can worsen hypercalcemia",
+        "tier": 3
+      },
+      {
+        "flag": "Severe liver disease or nephrosis / the nephrotic phase of nephritis",
+        "advice": "Contraindicated per label; worsens fluid retention and liver handling",
+        "tier": 2
+      },
+      {
+        "flag": "Established cardiovascular disease, heart failure or prior heart attack",
+        "advice": "Avoid; fluid retention, polycythemia and adverse lipids raise cardiac risk",
+        "tier": 2
+      },
+      {
+        "flag": "Adolescents with open growth plates",
+        "advice": "Avoid; androgens can prematurely close epiphyses and stunt final height",
+        "tier": 2
+      }
+    ]
+  },
+  "trenbolone": {
+    "access": "unapproved",
+    "accessNote": "A veterinary cattle-growth steroid (implant pellets for livestock) with no human medical indication; every human use is non-medical, and material is sourced from unregulated underground labs.",
+    "overdose": {
+      "line": "There is no established safe human dose, so 'overdose' means cumulative toxicity from any use: acute severe hypertension, sustained tachycardia and palpitations, chest tightness, and the bronchospasm/coughing fit ('tren cough') on injection. Higher or prolonged exposure drives rapid HDL collapse, dangerous polycythemia raising clot/stroke risk, and cases of acute kidney injury (rhabdomyolysis-linked and direct). Neuropsychiatric toxicity — severe insomnia, drenching night sweats, anxiety, paranoia, and aggression — is prominent and can appear early.",
+      "tier": 2
+    },
+    "misuse": {
+      "line": "There is no safe DIY dose because trenbolone was never developed or tested for humans — there is no therapeutic window, no purity guarantee, and underground-lab vials are frequently underdosed, overdosed, or contaminated. It is roughly three to five times more androgenic/anabolic than testosterone and does not aromatize but is strongly progestogenic, so it stacks cardiovascular, renal, lipid and neuropsychiatric harm faster than most steroids. Documented harms include cardiomyopathy and left-ventricular hypertrophy, atherogenic lipid profiles, suppressed endogenous testosterone with infertility and gynecomastia, mood disorders and psychosis. Stopping does not reliably reverse cardiac remodeling or the HPTA shutdown.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {
+        "marker": "HDL cholesterol",
+        "range": "often crashes below 20-30 mg/dL; total/LDL profile turns strongly atherogenic",
+        "why": "Anabolic steroids, and trenbolone especially, severely suppress HDL and raise cardiovascular risk — one of the earliest and most reliable lab signals of harm.",
+        "tier": 3
+      },
+      {
+        "marker": "Hematocrit / hemoglobin",
+        "range": "hematocrit rising above ~52% (polycythemia)",
+        "why": "AAS stimulate erythropoiesis; thickened blood raises thrombosis, stroke and MI risk.",
+        "tier": 3
+      },
+      {
+        "marker": "LH and FSH",
+        "range": "suppressed to near-undetectable",
+        "why": "Exogenous androgen shuts down the hypothalamic-pituitary-gonadal axis; a direct marker of endogenous shutdown.",
+        "tier": 3
+      },
+      {
+        "marker": "Total testosterone (endogenous)",
+        "range": "suppressed; recovery after cessation is slow and sometimes incomplete",
+        "why": "HPTA suppression causes hypogonadism, infertility and dependence on continued use.",
+        "tier": 3
+      },
+      {
+        "marker": "Blood pressure",
+        "range": "frequently hypertensive (>140/90 mmHg, often higher)",
+        "why": "Trenbolone commonly drives hypertension, compounding cardiac and renal strain.",
+        "tier": 3
+      },
+      {
+        "marker": "Creatinine / eGFR",
+        "range": "rising creatinine, falling eGFR",
+        "why": "Cases of steroid-associated nephropathy and acute kidney injury; renal function tracks damage (interpret creatinine cautiously given increased muscle mass).",
+        "tier": 2
+      },
+      {
+        "marker": "Prolactin",
+        "range": "may be elevated",
+        "why": "Trenbolone's progestogenic activity may raise prolactin, contributing to gynecomastia and sexual dysfunction, though direct evidence of prolactin elevation from trenbolone is mixed.",
+        "tier": 1
+      },
+      {
+        "marker": "Liver enzymes (ALT/AST)",
+        "range": "mild elevations possible",
+        "why": "Injectable trenbolone is less hepatotoxic than oral 17-alpha-alkylated steroids, but transaminases are still monitored for injury (interpret alongside muscle-derived enzymes).",
+        "tier": 2
+      },
+      {
+        "marker": "Left-ventricular structure/function (echocardiography)",
+        "range": "increased LV wall thickness, reduced diastolic function",
+        "why": "Chronic AAS use causes cardiac hypertrophy and remodeling that may not fully reverse.",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Everyone — no human medical use exists",
+        "advice": "Trenbolone is not approved for humans; there is no clinical scenario in which its use is medically indicated or considered safe.",
+        "tier": 3
+      },
+      {
+        "flag": "Existing or family history of cardiovascular disease, hypertension, or high clot risk",
+        "advice": "HDL collapse, hypertension, polycythemia and cardiac remodeling make cardiovascular events markedly more likely.",
+        "tier": 3
+      },
+      {
+        "flag": "Women, especially pregnant or breastfeeding",
+        "advice": "Potent androgen causing irreversible virilization (voice deepening, hair growth, clitoral enlargement) and fetal harm.",
+        "tier": 3
+      },
+      {
+        "flag": "Adolescents and anyone with open growth plates",
+        "advice": "Androgens prematurely fuse growth plates, permanently stunting height, and disrupt normal endocrine development.",
+        "tier": 3
+      },
+      {
+        "flag": "Hormone-sensitive cancers (prostate, breast) or elevated prostate risk",
+        "advice": "Androgens can accelerate growth of androgen-sensitive tumors.",
+        "tier": 2
+      },
+      {
+        "flag": "Pre-existing kidney, liver, or psychiatric conditions",
+        "advice": "Trenbolone worsens renal strain, adds hepatic load, and can trigger severe mood disturbance, aggression, paranoia or psychosis.",
+        "tier": 2
+      }
+    ]
+  },
+  "oxandrolone-anavar": {
+    "access": "prescription",
+    "accessNote": "A Schedule III controlled anabolic steroid that is FDA-approved and prescribed to help regain weight after surgery, trauma, chronic infection or long-term corticosteroid use, and for certain other wasting conditions.",
+    "typicalDose": {
+      "line": "The dose is set entirely by a physician. As reference only, adults are commonly prescribed 2.5-20 mg per day divided into 2-4 doses, given in short 2-4 week courses that may be repeated intermittently. This is not a recommendation, and the drug is chosen and monitored by a doctor.",
+      "tier": 3
+    },
+    "overdose": {
+      "line": "A single large ingestion rarely causes immediate life-threatening poisoning, but toxicity is dose- and time-dependent and serious. Warning signs include cholestatic jaundice and drug-induced liver injury (yellow skin/eyes, dark urine, right-upper-abdominal pain, nausea), marked fluid retention and swelling, and sharply worsened cholesterol. Higher risk of blood clots, stroke and heart events follows. Rare but severe: peliosis hepatis (blood-filled liver cysts) and liver tumours. Seek medical care for jaundice or sudden swelling.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "There is no safe way to self-dose this drug. Skipping the prescribed schedule, doubling up, or the supraphysiologic bodybuilding doses used for lean gains (often many times a therapeutic dose) shut down the body's own testosterone (testicular shrinkage, low libido, infertility), crash HDL cholesterol, strain the liver, and cause blood clots. In women, virilisation (deepened voice, facial hair, clitoral enlargement) can be permanent; in adolescents it can prematurely fuse growth plates and stunt height. Stopping abruptly after suppression leaves the reader hypogonadal for weeks to months. It also potentiates warfarin (dangerous bleeding) and affects blood-sugar/insulin needs.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "ALT / AST (liver transaminases)",
+        "range": "normal roughly <40 U/L; concern if >3x upper limit",
+        "when": "baseline, then periodically during use",
+        "why": "Oxandrolone is hepatotoxic; rising transaminases flag drug-induced liver injury.",
+        "tier": 3
+      },
+      {
+        "marker": "Bilirubin (total/direct)",
+        "range": "total <21 umol/L (<1.2 mg/dL)",
+        "when": "with liver panel if symptoms or long courses",
+        "why": "Cholestatic jaundice is a hallmark of anabolic-steroid liver toxicity.",
+        "tier": 3
+      },
+      {
+        "marker": "Lipid panel (HDL, LDL)",
+        "range": "HDL falls (men ideally >1.0 mmol/L); LDL rises",
+        "when": "baseline and during use",
+        "why": "Oral 17-alpha-alkylated steroids sharply suppress HDL and raise LDL, driving cardiovascular risk.",
+        "tier": 3
+      },
+      {
+        "marker": "Total testosterone, LH, FSH",
+        "range": "LH/FSH suppressed; endogenous testosterone falls",
+        "when": "if used non-medically or with fertility/libido symptoms",
+        "why": "Shows hypothalamic-pituitary-gonadal axis suppression.",
+        "tier": 2
+      },
+      {
+        "marker": "Haemoglobin / haematocrit",
+        "range": "haematocrit ideally <0.52-0.54",
+        "when": "periodically",
+        "why": "Androgens can raise red-cell mass, thickening blood and raising clot risk.",
+        "tier": 2
+      },
+      {
+        "marker": "INR (if on warfarin)",
+        "range": "target set by indication",
+        "why": "Oxandrolone potentiates warfarin, raising bleeding risk; dose must be re-checked.",
+        "tier": 3
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Pregnancy",
+        "advice": "Contraindicated; androgens can virilise a female fetus. Avoid entirely if pregnant or trying to conceive.",
+        "tier": 3
+      },
+      {
+        "flag": "Known or suspected prostate or male breast cancer",
+        "advice": "Contraindicated; androgens can stimulate hormone-sensitive tumour growth.",
+        "tier": 3
+      },
+      {
+        "flag": "Breast cancer with hypercalcaemia",
+        "advice": "Contraindicated; androgens can worsen calcium levels.",
+        "tier": 3
+      },
+      {
+        "flag": "Severe liver, kidney or heart disease / nephrotic syndrome",
+        "advice": "Avoid; the liver toxicity and fluid/salt retention can be dangerous. Any use must be physician-supervised.",
+        "tier": 3
+      },
+      {
+        "flag": "Adolescents near puberty",
+        "advice": "Use only under specialist care; androgens can prematurely close growth plates and permanently reduce adult height.",
+        "tier": 2
+      },
+      {
+        "flag": "Breastfeeding",
+        "advice": "Avoid; safety in nursing infants is not established.",
+        "tier": 2
+      }
+    ]
+  },
+  "stanozolol-winstrol": {
+    "access": "unapproved",
+    "accessNote": "A 17-alpha-alkylated anabolic steroid whose human formulations have been withdrawn or discontinued in most major markets; it is a controlled substance obtained illicitly and used non-medically for a lean, hard physique.",
+    "overdose": {
+      "line": "There is no acute lethal dose in the opioid sense, but its toxicity is cumulative and organ-level. Because it is 17-alpha-alkylated, it strains the liver directly: cholestatic jaundice (yellow skin/eyes, dark urine, pale stool, itching) that typically appears within 1-4 months of use, and with heavier or longer exposure the rare but documented peliosis hepatis (blood-filled liver cavities) and hepatic adenomas that can rupture and bleed. It also severely suppresses HDL and raises LDL, and can raise blood pressure and, less consistently, thicken the blood (raised hematocrit), compounding stroke, clot and heart-attack risk. It is anecdotally reported to worsen joint and connective-tissue discomfort, and anabolic-steroid use has been associated with tendon rupture.",
+      "tier": 3
+    },
+    "misuse": {
+      "line": "There is no established safe do-it-yourself dose: it is not manufactured to a verified human standard here, illicit product is frequently underdosed, overdosed, or contaminated, and the harms scale with exposure. Stacking it with other oral steroids multiplies liver load; running it alongside testosterone still shuts down the body's own testosterone production, causing testicular shrinkage and, on stopping, low-testosterone crashes, low mood and infertility. It does not aromatise, so users often wrongly assume it is 'mild' while the lipid and joint damage accumulate silently.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "ALT / AST",
+        "range": "can rise above 2-3x the upper limit of normal (ULN ~40 U/L), though injury is often predominantly cholestatic",
+        "why": "Hepatocellular strain from the 17-alpha-alkyl structure; a core early signal of liver injury.",
+        "tier": 3,
+        "when": "Baseline and periodically during any exposure"
+      },
+      {
+        "marker": "GGT, ALP, total & direct bilirubin",
+        "range": "bilirubin >1.2 mg/dL (>21 umol/L) with cholestasis",
+        "why": "Rises with the cholestatic, jaundice-type liver injury this drug characteristically causes.",
+        "tier": 3
+      },
+      {
+        "marker": "HDL cholesterol",
+        "range": "can fall below 20 mg/dL (<0.5 mmol/L)",
+        "why": "Oral anabolic steroids, and stanozolol especially, suppress HDL severely (clinical studies show 33-53% reductions), a direct cardiovascular-risk marker.",
+        "tier": 3
+      },
+      {
+        "marker": "LDL cholesterol",
+        "range": "frequently elevated above 130 mg/dL (>3.4 mmol/L)",
+        "why": "Rises in parallel with the HDL crash, worsening atherogenic risk.",
+        "tier": 3
+      },
+      {
+        "marker": "Haematocrit / haemoglobin",
+        "range": "haematocrit >52% (men)",
+        "why": "Androgens stimulate red-cell production; thickened blood raises clot and stroke risk.",
+        "tier": 2
+      },
+      {
+        "marker": "Total testosterone, LH, FSH",
+        "range": "suppressed below reference (total T often <300 ng/dL)",
+        "why": "Exogenous androgen suppresses the HPTA; shows the degree of natural shutdown and recovery.",
+        "tier": 3
+      },
+      {
+        "marker": "SHBG",
+        "range": "markedly reduced (studies show ~48% within a week)",
+        "why": "Stanozolol strongly lowers SHBG, altering free hormone balance.",
+        "tier": 3
+      },
+      {
+        "marker": "Blood pressure",
+        "range": "sustained >130/80 mmHg",
+        "why": "Androgens and fluid/lipid effects raise pressure, adding cardiovascular load.",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Pregnancy or breastfeeding",
+        "advice": "Absolutely must not be used; androgens cause virilisation of a female fetus and are contraindicated in pregnancy.",
+        "tier": 3
+      },
+      {
+        "flag": "Known or suspected prostate cancer, or male breast cancer",
+        "advice": "Androgens can stimulate these hormone-sensitive cancers; use is contraindicated.",
+        "tier": 3
+      },
+      {
+        "flag": "Existing liver disease or abnormal liver function",
+        "advice": "A 17-alpha-alkylated oral steroid adds direct hepatotoxic load and must be avoided.",
+        "tier": 3
+      },
+      {
+        "flag": "Cardiovascular disease, dyslipidaemia or hypertension",
+        "advice": "The severe HDL suppression, blood thickening and pressure rise sharply worsen cardiac and stroke risk.",
+        "tier": 2
+      },
+      {
+        "flag": "Nephrosis or significant kidney impairment",
+        "advice": "Fluid retention and renal strain make use unsafe.",
+        "tier": 2
+      },
+      {
+        "flag": "Hypercalcaemia (including breast-cancer-related)",
+        "advice": "Androgens can worsen calcium levels and are contraindicated.",
+        "tier": 2
+      },
+      {
+        "flag": "Adolescents / not-yet-fully-grown",
+        "advice": "Androgens can prematurely close growth plates and permanently stunt height.",
+        "tier": 2
+      },
+      {
+        "flag": "Women",
+        "advice": "Even low exposure risks irreversible virilisation: voice deepening, hair growth, clitoral enlargement.",
+        "tier": 3
+      }
+    ]
+  },
+  "methandrostenolone-dianabol": {
+    "access": "unapproved",
+    "accessNote": "Withdrawn from legitimate medical use and now a Schedule III controlled substance; its only real-world supply is the unregulated black market for physique and strength enhancement.",
+    "overdose": {
+      "line": "Anabolic steroids rarely cause a sudden lethal overdose, but high or stacked doses drive acute harm: cholestatic jaundice with dark urine, pale stools and severe itch; right-upper-quadrant pain from liver injury or peliosis hepatis (blood-filled liver cysts that can rupture and bleed); hypertensive crisis with headache, visual disturbance and chest pain; and a sharply raised clot risk (DVT, pulmonary embolism, stroke, heart attack) as haematocrit rises and the blood thickens. Severe mood disturbance, mania and aggression can also occur.",
+      "tier": 2
+    },
+    "misuse": {
+      "line": "There is no established safe dose because it is not approved for human use and every black-market tablet is of unknown purity, strength and content. It is 17-alpha-alkylated to survive oral absorption, which makes it directly toxic to the liver, and it aromatises to estrogen, causing water retention, high blood pressure and gynaecomastia. Documented harms from non-medical use include drug-induced hepatitis and peliosis hepatis, dyslipidaemia (crashed HDL, raised LDL), left-ventricular hypertrophy and cardiomyopathy, suppression of the body's own testosterone with testicular shrinkage and infertility, and dependence. Stacking, 'blast-and-cruise' and self-managed post-cycle regimens amplify rather than reduce these risks.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {
+        "marker": "ALT / AST",
+        "why": "Hepatocellular injury from the 17-alpha-alkylated oral steroid; often rises within weeks of use.",
+        "range": "ULN roughly 40 U/L; use commonly pushes ALT/AST well above this",
+        "when": "Baseline and periodically during any exposure",
+        "tier": 3
+      },
+      {
+        "marker": "GGT and bilirubin",
+        "why": "Cholestatic pattern with jaundice is characteristic; GGT/bilirubin help distinguish liver injury from muscle-derived transaminase rises.",
+        "range": "Bilirubin >2-3x ULN signals significant cholestasis",
+        "tier": 2
+      },
+      {
+        "marker": "HDL cholesterol",
+        "why": "Oral anabolic steroids suppress HDL dramatically, a marker of accelerated cardiovascular risk.",
+        "range": "Can fall below 0.5 mmol/L (very low)",
+        "tier": 3
+      },
+      {
+        "marker": "LDL cholesterol",
+        "why": "Can rise alongside HDL suppression, worsening the atherogenic profile, though the response is less consistent than the HDL crash.",
+        "range": "May be pushed above 3.4 mmol/L",
+        "tier": 2
+      },
+      {
+        "marker": "Haematocrit / haemoglobin",
+        "why": "Androgens stimulate erythropoiesis; polycythaemia raises thrombosis and stroke risk.",
+        "range": "Haematocrit above ~0.52 (52%) is a red flag",
+        "tier": 3
+      },
+      {
+        "marker": "Blood pressure",
+        "why": "Estrogenic water retention and androgenic effects commonly drive hypertension.",
+        "range": "Sustained >140/90 mmHg warrants concern",
+        "tier": 3
+      },
+      {
+        "marker": "LH, FSH and total testosterone",
+        "why": "Exogenous steroid suppresses the HPG axis; low LH/FSH with shut-down endogenous testosterone shows the degree of suppression and infertility risk.",
+        "range": "Suppressed LH/FSH near zero during use",
+        "tier": 3
+      },
+      {
+        "marker": "Estradiol",
+        "why": "Methandrostenolone aromatises readily; elevated estradiol underlies gynaecomastia and fluid retention.",
+        "when": "During and after exposure",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Existing or prior liver disease",
+        "advice": "The 17-alpha-alkylated oral form is directly hepatotoxic and can cause cholestasis, peliosis hepatis and tumours; must not be used.",
+        "tier": 3
+      },
+      {
+        "flag": "Cardiovascular disease, hypertension or dyslipidaemia",
+        "advice": "Raises blood pressure, crashes HDL and thickens the blood, sharply worsening heart-attack and stroke risk.",
+        "tier": 3
+      },
+      {
+        "flag": "Pregnancy or breastfeeding",
+        "advice": "Androgens are teratogenic and can virilise a female fetus; absolutely contraindicated.",
+        "tier": 3
+      },
+      {
+        "flag": "Prostate or breast cancer, or men at high prostate-cancer risk",
+        "advice": "Androgen-sensitive tumours can be stimulated by anabolic steroids.",
+        "tier": 3
+      },
+      {
+        "flag": "Women and adolescents",
+        "advice": "Causes irreversible virilisation (voice deepening, hirsutism, clitoral enlargement) in women and premature growth-plate closure with stunted height in adolescents.",
+        "tier": 3
+      },
+      {
+        "flag": "History of mood disorder or steroid-induced aggression",
+        "advice": "Can precipitate mania, aggression and depression, including during withdrawal.",
+        "tier": 2
+      },
+      {
+        "flag": "Men seeking fertility",
+        "advice": "Suppresses LH/FSH and sperm production, causing testicular atrophy and potentially lasting infertility.",
+        "tier": 3
+      }
+    ]
+  },
+  "ostarine-mk-2866-enobosarm": {
+    "access": "unapproved",
+    "accessNote": "It was investigated as a treatment for muscle wasting and cancer cachexia but never gained approval from any regulator, and now circulates only as a grey-market \"research chemical.\"",
+    "overdose": {
+      "line": "Ostarine is not a classic acute poison, but higher or prolonged dosing drives drug-induced liver injury — cholestatic hepatitis with jaundice, dark urine, pale stools, itching, right-upper-quadrant pain and nausea has been reported even at recreational doses — alongside deepening testosterone suppression; there is no antidote, and management is stopping the drug and supportive care.",
+      "tier": 2
+    },
+    "misuse": {
+      "line": "There is no established safe human dose: no regulator has set one, grey-market products are routinely mislabeled or contaminated (independent analyses have found vials containing no ostarine, a different undisclosed SARM, or prohormones), and documented harms include hepatotoxicity and suppression of natural testosterone that can take months to recover — self-dosing means gambling on an unstandardized, unmonitored compound.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {
+        "marker": "Total testosterone",
+        "why": "Ostarine suppresses the hypothalamic-pituitary-gonadal axis; total testosterone falls dose-dependently, often below the normal male range.",
+        "range": "Normal adult male ~300–1000 ng/dL",
+        "when": "Baseline and after exposure",
+        "tier": 3
+      },
+      {
+        "marker": "LH and FSH",
+        "why": "Gonadotropins can fall with ostarine, pointing to central HPG-axis suppression; the effect is variable and generally milder than with anabolic steroids, so these are supportive rather than definitive markers.",
+        "range": "LH ~1.5–9.3 IU/L, FSH ~1.5–12 IU/L",
+        "when": "With testosterone panel",
+        "tier": 2
+      },
+      {
+        "marker": "ALT / AST",
+        "why": "Hepatocellular injury is the best-documented harm; SARM-associated transaminase elevations, sometimes marked, appear in FDA warnings and case reports.",
+        "range": "Normal ALT <40 U/L; >3x upper limit signals injury",
+        "when": "Baseline and if symptoms of liver injury appear",
+        "tier": 2
+      },
+      {
+        "marker": "Total and direct bilirubin",
+        "why": "Cholestatic pattern of drug-induced liver injury raises bilirubin and produces clinical jaundice.",
+        "range": "Normal total <1.2 mg/dL",
+        "when": "If jaundice, dark urine or itching occur",
+        "tier": 2
+      },
+      {
+        "marker": "HDL cholesterol",
+        "why": "SARMs, like anabolic androgens, lower HDL, shifting the lipid profile toward cardiovascular risk.",
+        "range": "Desirable HDL >40 mg/dL (men)",
+        "when": "Baseline and follow-up",
+        "tier": 2
+      },
+      {
+        "marker": "SHBG",
+        "why": "Falls with ostarine exposure, a marker of androgenic activity that also complicates interpretation of hormone panels.",
+        "range": "Normal adult male ~10–57 nmol/L",
+        "when": "With hormone panel",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Pregnancy, breastfeeding, or trying to conceive",
+        "advice": "Androgenic activity risks fetal virilization and impairs fertility; must not be used.",
+        "tier": 3
+      },
+      {
+        "flag": "Adolescents and young adults with a still-maturing hormonal axis",
+        "advice": "HPG-axis suppression in a developing system carries added risk; must not be used.",
+        "tier": 2
+      },
+      {
+        "flag": "Existing liver disease or raised liver enzymes",
+        "advice": "Hepatotoxicity is the primary documented harm; layering it onto compromised liver function is dangerous.",
+        "tier": 3
+      },
+      {
+        "flag": "Cardiovascular disease or dyslipidemia",
+        "advice": "HDL-lowering and the FDA's heart-attack and stroke warnings for SARMs make this hazardous.",
+        "tier": 2
+      },
+      {
+        "flag": "Competitive or drug-tested athletes",
+        "advice": "Ostarine is prohibited by WADA at all times and triggers anti-doping sanctions.",
+        "tier": 3
+      }
+    ]
+  },
+  "ligandrol-lgd-4033": {
+    "access": "unapproved",
+    "accessNote": "Sold only as a grey-market \"research chemical,\" so no legitimate manufacturing standard, verified dose or purity control exists, and products are routinely mislabelled or contaminated.",
+    "overdose": {
+      "line": "There is no antidote and no established safe ceiling. Higher or prolonged dosing (e.g. ~10 mg/day in published case reports) has caused cholestatic drug-induced liver injury: jaundice, dark urine, pale stools, intense itching, right-upper-quadrant pain, nausea and marked fatigue, sometimes weeks after starting. Deeper hormonal shutdown, worsening lipids and mood disturbance also occur; liver injury can take weeks to months to resolve after stopping.",
+      "tier": 2
+    },
+    "misuse": {
+      "line": "Because it is unapproved there is no verified safe DIY dose: grey-market products are frequently mislabelled, under- or over-dosed, or contaminated with other SARMs or steroids, so users cannot know what they are taking. Even trial microdoses of ~1 mg/day for 3 weeks cut total testosterone roughly in half and suppressed LH and FSH; self-experimenters take far more, with no monitoring, risking hepatotoxicity, adverse lipid changes and prolonged endocrine suppression. It is banned in sport by WADA at all times.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {
+        "marker": "Total and free testosterone",
+        "why": "Dose-dependent HPG-axis suppression; total testosterone fell ~50% at just 1 mg/day over 21 days in the phase 1 trial",
+        "when": "Baseline and after exposure; recovery took ~5 weeks after stopping in the trial",
+        "range": "Suppressed below the male reference range",
+        "tier": 3
+      },
+      {
+        "marker": "LH and FSH",
+        "why": "Central suppression of gonadotropins confirms HPG shutdown driving low testosterone",
+        "range": "Suppressed; can be markedly reduced with heavier exposure",
+        "tier": 3
+      },
+      {
+        "marker": "SHBG",
+        "why": "Fell dose-dependently in the phase 1 trial, distorting free-testosterone interpretation",
+        "range": "Reduced below reference range",
+        "tier": 2
+      },
+      {
+        "marker": "ALT and AST",
+        "why": "Hepatocellular injury marker; elevated in documented liver-injury cases",
+        "range": "Elevated, sometimes several-fold above upper limit",
+        "tier": 2
+      },
+      {
+        "marker": "Total and direct bilirubin",
+        "why": "Rises with the cholestatic liver injury pattern reported (jaundice)",
+        "range": "Elevated; direct/conjugated fraction raised",
+        "tier": 2
+      },
+      {
+        "marker": "ALP and GGT",
+        "why": "Track the cholestatic component of SARM-associated liver injury",
+        "range": "Elevated in cholestatic DILI",
+        "tier": 2
+      },
+      {
+        "marker": "HDL cholesterol",
+        "why": "Fell dose-dependently in the phase 1 trial, an adverse cardiovascular signal",
+        "range": "Reduced below baseline",
+        "tier": 2
+      },
+      {
+        "marker": "Haemoglobin / haematocrit",
+        "why": "Androgen receptor activation can raise red cell mass over time",
+        "range": "May rise; haematocrit >0.52 is a concern",
+        "tier": 1
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Anyone — it is not approved for human use",
+        "advice": "No human indication, dose standard or safety approval exists; there is no medically sanctioned way to take it.",
+        "tier": 3
+      },
+      {
+        "flag": "Existing liver disease or raised liver enzymes",
+        "advice": "Documented cholestatic liver injury makes any hepatic impairment a hard stop.",
+        "tier": 2
+      },
+      {
+        "flag": "Cardiovascular disease or dyslipidaemia",
+        "advice": "HDL-lowering and other lipid changes worsen cardiovascular risk.",
+        "tier": 2
+      },
+      {
+        "flag": "Men wanting to preserve fertility",
+        "advice": "Strongly suppresses testosterone, LH and FSH, impairing sperm production.",
+        "tier": 3
+      },
+      {
+        "flag": "Women, especially if pregnant or breastfeeding",
+        "advice": "Androgenic activity risks virilisation and fetal harm; never used in pregnancy or lactation.",
+        "tier": 3
+      },
+      {
+        "flag": "Adolescents and under-18s",
+        "advice": "Interferes with a developing hormonal axis; no safety data.",
+        "tier": 2
+      },
+      {
+        "flag": "Competitive or tested athletes",
+        "advice": "Prohibited by WADA at all times; use causes anti-doping sanctions.",
+        "tier": 3
+      },
+      {
+        "flag": "History of hormone-sensitive cancer (e.g. prostate)",
+        "advice": "Androgen-receptor stimulation is best avoided where androgen-driven tumours are a concern.",
+        "tier": 1
+      }
+    ]
+  },
+  "testolone-rad-140": {
+    "access": "unapproved",
+    "accessNote": "An investigational SARM originally researched for breast cancer and muscle-wasting that never completed clinical trials and is sold only as a grey-market \"research chemical,\" so purity, dose and contamination are entirely unregulated.",
+    "overdose": {
+      "line": "There is no established safe dose, so toxicity is defined by cumulative exposure rather than a single threshold. The best-documented harm is idiosyncratic drug-induced liver injury, typically cholestatic, appearing weeks into use: jaundice (yellow eyes/skin), dark urine, pale stools, intense itching, nausea, right-upper-quadrant pain and profound fatigue. Published case reports also describe myopericarditis (chest pain, breathlessness, raised cardiac enzymes) in young users, and one case of arterial thrombosis in a middle-aged man using it alongside testosterone. Liver injury can take weeks to months to resolve and in severe cholestatic cases risks progression to liver failure.",
+      "tier": 2
+    },
+    "misuse": {
+      "line": "Because it is unapproved, no human dosing has ever been validated for safety, so there is no DIY dose that can be called safe. Grey-market products are frequently mislabeled, under- or over-concentrated, or contain a different undisclosed SARM or steroid entirely, meaning the actual exposure is unknown. Documented harms from real-world use include cholestatic hepatitis, myopericarditis, arterial clots, suppression of the body's own testosterone, and falling HDL cholesterol; 'PCT' or 'liver support' supplements do not reliably prevent any of these.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {
+        "marker": "ALT / AST",
+        "range": "can rise above 3x the upper limit of normal (ULN ~40 U/L); hundreds of U/L in reported liver-injury cases",
+        "why": "Flags hepatocellular liver injury; liver damage is the most consistently reported serious harm",
+        "when": "Baseline and if any symptoms of liver injury appear",
+        "tier": 3
+      },
+      {
+        "marker": "Total & direct bilirubin",
+        "range": "markedly elevated (>2 mg/dL, and much higher — into the tens of mg/dL — in severe cholestatic cases) with jaundice",
+        "why": "Marks the cholestatic pattern seen in the RAD-140 DILI case reports",
+        "when": "If jaundice, dark urine or itching develop",
+        "tier": 3
+      },
+      {
+        "marker": "ALP / GGT",
+        "range": "elevated above reference range",
+        "why": "Supports a cholestatic (bile-flow) injury pattern, the predominant liver picture reported",
+        "when": "Alongside bilirubin if liver injury suspected",
+        "tier": 3
+      },
+      {
+        "marker": "Total & free testosterone",
+        "range": "suppressed below the male reference range",
+        "why": "SARMs suppress the body's own androgen production via the HPG axis",
+        "when": "During and after exposure",
+        "tier": 2
+      },
+      {
+        "marker": "LH & FSH",
+        "range": "suppressed below reference range",
+        "why": "Confirms central (hypothalamic-pituitary) suppression driving low testosterone",
+        "when": "During and after exposure",
+        "tier": 2
+      },
+      {
+        "marker": "HDL cholesterol",
+        "range": "reduced, often substantially, from baseline",
+        "why": "Androgenic compounds lower HDL, an adverse cardiovascular shift",
+        "when": "During multi-week exposure",
+        "tier": 2
+      }
+    ],
+    "contra": [
+      {
+        "flag": "Any existing or prior liver disease, or concurrent hepatotoxic drugs/alcohol",
+        "advice": "RAD-140 has caused liver injury in previously healthy people; pre-existing liver disease compounds the risk",
+        "tier": 3
+      },
+      {
+        "flag": "Cardiovascular disease, clotting disorders or prior cardiac events",
+        "advice": "Case reports link it to myopericarditis and (with concurrent testosterone) arterial thrombosis, so any cardiac or thrombotic history is a strong reason to avoid it",
+        "tier": 2
+      },
+      {
+        "flag": "Pregnancy or breastfeeding",
+        "advice": "Androgenic activity can virilize a female fetus; there is no safe exposure in pregnancy or lactation",
+        "tier": 3
+      },
+      {
+        "flag": "Adolescents / anyone not skeletally mature",
+        "advice": "Androgens can prematurely close growth plates and disrupt normal hormonal development",
+        "tier": 2
+      },
+      {
+        "flag": "Women seeking to avoid virilization",
+        "advice": "Androgenic effects (voice deepening, hair changes) may be irreversible",
+        "tier": 2
+      }
+    ]
   }
 }
