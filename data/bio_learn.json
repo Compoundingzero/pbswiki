@@ -1,0 +1,113 @@
+{
+  "creatine-monohydrate": {
+    "form": {
+      "buy": "Plain **creatine monohydrate**. Micronised dissolves better but is chemically identical. **Creapure®** is the German quality mark worth paying a little for.",
+      "avoid": "‘Advanced’ forms — HCl, ethyl ester, buffered (Kre-Alkalyn), nitrate, liquid. None beat monohydrate head-to-head, and they cost 3–10× more for the same or worse result.",
+      "withFood": "Doesn't need food. Co-ingesting carbs/protein raises insulin, which nudges muscle uptake — but once you're saturated this barely matters.",
+      "bioavailability": "Near-complete oral absorption at doses ≤5 g; essentially ~100% bioavailable as monohydrate.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {"marker": "Scale weight", "why": "Creatine pulls water into muscle. A +0.5–2 kg jump in the first 1–2 weeks confirms it's loading into the tissue.", "range": "+1–2% body weight", "when": "Baseline, then week 2", "tier": 3},
+      {"marker": "Serum creatinine", "why": "Rises modestly on creatine — a benign lab artifact from the extra substrate, **not** kidney damage. Know this before a routine panel so a high reading isn't misread.", "range": "May rise ~0.1–0.3 mg/dL", "when": "Flag it before any eGFR/kidney test", "tier": 3}
+    ],
+    "cofactors": {
+      "needs": [{"nutrient": "Carbohydrate (insulin)", "role": "Insulin drives creatine into muscle via GLUT4; co-ingesting carbs raised uptake in early loading studies.", "tier": 2}],
+      "depletes": [],
+      "antagonists": [{"nutrient": "Caffeine (very high, acute)", "role": "Some evidence a large acute caffeine dose blunts creatine's ergogenic effect the same session — the interaction is small and debated, and daily coffee is fine.", "tier": 1}]
+    },
+    "foodFirst": {
+      "line": "~450 g (1 lb) of **raw** red meat or fish supplies roughly **2 g** creatine — about half a daily dose. Cooking destroys 20–30% of it.",
+      "note": "This is why vegetarians and vegans carry lower muscle creatine and tend to respond the strongest to supplementing.",
+      "tier": 3
+    },
+    "cost": {"perDose": "~S$0.10–0.20 per 5 g dose", "math": "≈ S$25–40 tub ÷ ~200 servings", "note": "The cheapest evidence-backed supplement there is, per effective dose.", "tier": 3},
+    "dosing": {"perKg": 0.03, "unit": "g/kg/day", "cap": "5 g", "note": "A flat **3–5 g/day** works for almost everyone — per-kg only matters at the extremes. Optional loading: 0.3 g/kg/day split into 4 doses for 5–7 days saturates faster, then drop to maintenance.", "tier": 2},
+    "timing": {"line": "Barely matters — it's a saturation game, not a pre-workout stopwatch. If you want the tiny edge, take it **post-workout with carbs/protein**. Consistency (daily) beats timing.", "tier": 2},
+    "cycling": {"line": "**No cycling needed.** No tolerance, no receptor downregulation, no washout. Take it daily, indefinitely. Stopping just lets muscle stores fade over ~4–6 weeks.", "tier": 3},
+    "contra": [{"flag": "Pre-existing kidney disease", "advice": "Monohydrate is safe for healthy kidneys, but data in established CKD is thin — clear it with a doctor first.", "tier": 2}],
+    "quality": {"line": "Pick **Creapure®** or a brand with third-party testing (Informed Sport / NSF). Cheap bulk creatine from poor synthesis can carry contaminants like dicyandiamide and excess creatinine.", "tier": 2},
+    "nonResponders": {"line": "~20–30% see little scale/strength jump — usually because their muscle creatine is **already near-full** from a meat-heavy diet, so there's no room to top up. Vegetarians almost always respond.", "tier": 3},
+    "synergy": [
+      {"with": "Resistance training", "why": "Creatine only expresses its benefit when you supply the training stimulus it fuels — it's a battery, not a spark.", "tier": 3},
+      {"with": "Carbohydrate", "why": "The insulin bump drives more creatine into muscle during loading.", "tier": 2}
+    ]
+  },
+
+  "vitamin-d3-k2": {
+    "form": {
+      "buy": "**D3 (cholecalciferol)** — raises blood levels more effectively than D2. Choose an **oil-based softgel** (it's fat-soluble) and pair K2 as **MK-7** for its long half-life.",
+      "avoid": "D2 (ergocalciferol) for daily use, and dry tablets taken on an empty stomach — both absorb poorly. Mega-'immune' megadoses without a blood test.",
+      "withFood": "**Take with the day's fattiest meal** — fat-soluble vitamins need dietary fat present, which can raise absorption by ~30–50%.",
+      "bioavailability": "Highly variable and food-dependent; absorption climbs substantially when taken with fat vs. fasted.",
+      "tier": 3
+    },
+    "biomarkers": [
+      {"marker": "Serum 25-OH-D", "why": "The single number that matters — it's your actual vitamin D status. Dose to the target, don't guess.", "range": "Target ~30–50 ng/mL (75–125 nmol/L)", "when": "Baseline, then ~8–12 weeks after a dose change; twice a year", "tier": 3},
+      {"marker": "Serum calcium", "why": "The safety check. Sustained high-dose D can push calcium up (hypercalcemia) — the main real risk of over-supplementing.", "range": "Stay within lab reference range", "when": "If taking >4000 IU/day long-term", "tier": 2}
+    ],
+    "cofactors": {
+      "needs": [
+        {"nutrient": "Magnesium", "role": "A required cofactor for the enzymes that activate vitamin D. Low magnesium blunts your response no matter how much D you take.", "tier": 2},
+        {"nutrient": "Vitamin K2 (MK-7)", "role": "Directs the calcium D absorbs **into bone** and away from arteries — which is why they're paired.", "tier": 2}
+      ],
+      "depletes": [{"nutrient": "Magnesium / K2", "role": "High-dose D increases demand for both — supplementing D alone can unmask a magnesium or K2 shortfall.", "tier": 1}],
+      "antagonists": []
+    },
+    "foodFirst": {
+      "line": "Fatty fish leads: **salmon ~400–600 IU per 100 g**, plus egg yolks and UV-grown mushrooms. But food rarely covers a deficit — **10–30 min of midday sun** makes far more, if your latitude and skin allow. For K2: **natto** is off the charts, then hard cheeses and egg yolk.",
+      "note": "Above ~35° latitude you make almost no vitamin D from sun in winter — which is when supplementing matters most.",
+      "tier": 3
+    },
+    "cost": {"perDose": "~S$0.03–0.10 per day", "math": "≈ S$15–25 bottle ÷ ~250 days", "note": "Pennies a day to correct a genuine deficiency — one of the highest value-per-dollar supplements when you're actually low.", "tier": 3},
+    "timing": {"line": "**With your largest fatty meal**, any time of day. A few people report high evening doses disturb sleep (weak evidence) — if that's you, take it in the morning. D3's long half-life means a weekly dose works as well as daily.", "tier": 2},
+    "cycling": {"line": "No cycling. D3 stores in fat with a **~2–3 week half-life**, so daily or once-weekly dosing both work. Re-test and titrate to your 25-OH-D target rather than cycling.", "tier": 3},
+    "contra": [
+      {"flag": "Sarcoidosis / granulomatous disease", "advice": "These conditions dysregulate vitamin D activation and can cause hypercalcemia even at normal doses — supplement only under medical supervision.", "tier": 3},
+      {"flag": "Thiazide diuretics or a history of calcium kidney stones", "advice": "Both raise hypercalcemia/stone risk when stacked with high-dose D — get calcium monitored.", "tier": 2}
+    ],
+    "quality": {"line": "Choose **USP-verified** products. Independent testing has repeatedly found softgel D content ranging from ~9% to ~140% of the label. For K2, look for **all-trans MK-7**.", "tier": 2},
+    "nonResponders": {"line": "If your 25-OH-D won't budge, suspect: **obesity** (D sequesters in fat), **fat malabsorption** (celiac, IBD, bariatric surgery), or **low magnesium** (can't activate it). Genetic GC/VDR variants also shift where your set-point lands.", "tier": 2},
+    "synergy": [
+      {"with": "Vitamin K2 (MK-7)", "why": "Routes the extra absorbed calcium into bone instead of soft tissue and arteries.", "tier": 2},
+      {"with": "Magnesium", "why": "Powers the enzymes that convert D to its active form — the missing link in many non-responders.", "tier": 2}
+    ]
+  },
+
+  "omega-3-epa-dha": {
+    "form": {
+      "buy": "Read the label for **EPA + DHA content**, not total 'fish oil' mg. **Triglyceride (rTG/TG)** form absorbs better than ethyl ester; **phospholipid** (krill) is well-absorbed too. Enteric-coated caps cut the fishy burps.",
+      "avoid": "Cheap **ethyl ester (EE)** concentrates taken fasted — absorption is markedly lower without food. And rancid, oxidised oil (see quality).",
+      "withFood": "**Take with a fat-containing meal.** Absorption of EE form especially collapses when fasted and roughly triples with a high-fat meal.",
+      "bioavailability": "Form- and meal-dependent: rTG > phospholipid ≈ free-fatty-acid > ethyl ester; all improve substantially taken with fat.",
+      "tier": 2
+    },
+    "biomarkers": [
+      {"marker": "Omega-3 Index", "why": "Red-blood-cell EPA+DHA — the validated status marker. It's the omega-3 equivalent of 25-OH-D.", "range": "Target ≥ 8%", "when": "Baseline, then ~3–4 months later", "tier": 2},
+      {"marker": "Fasting triglycerides", "why": "The clearest dose-dependent effect — high-dose fish oil lowers triglycerides.", "range": "Drops noticeably at ≥2–4 g/day EPA+DHA", "when": "If taking it for lipids", "tier": 3}
+    ],
+    "cofactors": {
+      "needs": [{"nutrient": "Vitamin E / antioxidants", "role": "Polyunsaturated oils oxidise easily; a little vitamin E (many products add it) protects the oil and your tissue stores.", "tier": 2}],
+      "depletes": [],
+      "antagonists": [{"nutrient": "High omega-6 (seed-oil-heavy diet)", "role": "Omega-6 and omega-3 compete for the same desaturase/elongase enzymes and eicosanoid pathways — a very high omega-6 intake works against your omega-3 status.", "tier": 2}]
+    },
+    "foodFirst": {
+      "line": "**Fatty fish twice a week** basically covers general needs — salmon, mackerel and sardines give ~1–2 g EPA+DHA per serving. Plant ALA (flax, chia, walnuts) is **not** a substitute: conversion is <10% to EPA and ~1% to DHA.",
+      "note": "If you eat oily fish regularly you may not need a supplement at all — test your Omega-3 Index before buying.",
+      "tier": 3
+    },
+    "cost": {"perDose": "~S$0.15–0.60 per 1 g EPA+DHA", "math": "Cost varies with concentration — a concentrated rTG can be cheaper per gram of actual EPA+DHA than a bulk low-strength oil.", "note": "Compare on cost-per-gram-EPA+DHA, not per capsule — low-strength oils hide the real price.", "tier": 2},
+    "timing": {"line": "**With a fatty meal**, and split larger doses across two meals to cut burps and steady absorption. Time of day doesn't matter for the benefit.", "tier": 2},
+    "cycling": {"line": "No cycling — it's a status you build and maintain, like vitamin D. Stores decline over months if you stop. Steady daily intake keeps the Omega-3 Index up.", "tier": 3},
+    "contra": [
+      {"flag": "Anticoagulant / antiplatelet medication", "advice": "High doses modestly affect bleeding time; the clinical bleeding risk is small but worth flagging to your doctor, especially before surgery.", "tier": 2},
+      {"flag": "History of atrial fibrillation", "advice": "Large trials (REDUCE-IT, STRENGTH) found a small increase in AF signal at **≥4 g/day** — relevant only at prescription-level doses.", "tier": 2}
+    ],
+    "quality": {"line": "Oxidation is the real problem — a lot of retail fish oil is already **rancid**. Look for **IFOS certification** and low oxidation markers (TOTOX), plus heavy-metal and PCB testing. A fish oil that smells strongly fishy is oxidised.", "tier": 2},
+    "nonResponders": {"line": "Poor **ALA→EPA/DHA converters** (common, and worse with **FADS gene** variants) get little from plant sources and must use fish/algae oil directly. Women convert ALA somewhat better than men.", "tier": 2},
+    "synergy": [
+      {"with": "Vitamin E", "why": "Protects the fragile PUFA from oxidising before and after you absorb it.", "tier": 2},
+      {"with": "A fatty meal", "why": "Dietary fat triggers the bile and lipase that carry omega-3s across the gut.", "tier": 3}
+    ]
+  }
+}

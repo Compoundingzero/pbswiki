@@ -1516,6 +1516,35 @@
     </div>`;
   }
 
+  // ---- Biohacker / nutritionist layer (c.bio): form, biomarkers, cofactors, food-first, cost/dose,
+  // per-kg dosing, timing, cycling, contraindications, quality, non-responders, synergy. Omit-if-absent. ----
+  const BIO_TIER_LBL = ['', 'emerging', 'good evidence', 'well established'];
+  function bioTierChip(t) { if (!t) return ''; return `<span class="bio-tier bt${t}" title="Evidence strength: ${BIO_TIER_LBL[t] || ''}">${'●'.repeat(t)}${'○'.repeat(3 - t)}</span>`; }
+  function bioCard(ico, title, html, tier) { if (!html) return ''; return `<div class="bio-card"><div class="bio-card-h"><span class="bio-ico">${ico}</span><h4>${esc(title)}</h4>${tier ? bioTierChip(tier) : ''}</div><div class="bio-card-b">${html}</div></div>`; }
+  function bioSection(c) {
+    const b = c.bio; if (!b) return '';
+    const cards = [];
+    if (b.form) cards.push(bioCard('💊', 'Form & bioavailability', [
+      b.form.buy ? `<div class="bio-line bio-buy"><b>Buy:</b> ${mdInline(b.form.buy)}</div>` : '',
+      b.form.avoid ? `<div class="bio-line bio-avoid"><b>Skip:</b> ${mdInline(b.form.avoid)}</div>` : '',
+      b.form.withFood ? `<div class="bio-line"><b>With food:</b> ${mdInline(b.form.withFood)}</div>` : '',
+      b.form.bioavailability ? `<div class="bio-line bio-muted"><b>Absorption:</b> ${mdInline(b.form.bioavailability)}</div>` : '',
+    ].join(''), b.form.tier));
+    if (Array.isArray(b.biomarkers) && b.biomarkers.length) cards.push(bioCard('🩸', 'Biomarkers to track', `<div class="bio-tbl-wrap"><table class="bio-tbl"><thead><tr><th>Marker</th><th>What it tells you</th><th>Target / note</th></tr></thead><tbody>${b.biomarkers.map(m => `<tr><td><b>${esc(m.marker)}</b>${m.when ? `<div class="bio-when">${esc(m.when)}</div>` : ''}${bioTierChip(m.tier)}</td><td>${mdInline(m.why)}</td><td>${mdInline(m.range || '')}</td></tr>`).join('')}</tbody></table></div>`));
+    if (b.cofactors) { const co = b.cofactors; const grp = (t, arr, ic) => (arr && arr.length) ? `<div class="bio-co-grp"><div class="bio-co-h">${ic} ${t}</div><ul>${arr.map(x => `<li><b>${esc(x.nutrient)}</b> — ${mdInline(x.role)} ${bioTierChip(x.tier)}</li>`).join('')}</ul></div>` : ''; const html = grp('Needs / cofactors', co.needs, '➕') + grp('Depletes', co.depletes, '➖') + grp('Antagonists', co.antagonists, '⛔'); if (html) cards.push(bioCard('🔗', 'Cofactors, depletions & antagonists', html)); }
+    if (b.foodFirst) cards.push(bioCard('🥗', 'Food first', `<div class="bio-line">${mdInline(b.foodFirst.line)}</div>${b.foodFirst.note ? `<div class="bio-note">${mdInline(b.foodFirst.note)}</div>` : ''}`, b.foodFirst.tier));
+    if (b.cost) cards.push(bioCard('💲', 'Cost per effective dose', `<div class="bio-cost-big">${esc(b.cost.perDose || '')}</div>${b.cost.math ? `<div class="bio-note">${mdInline(b.cost.math)}</div>` : ''}${b.cost.note ? `<div class="bio-line">${mdInline(b.cost.note)}</div>` : ''}`, b.cost.tier));
+    if (b.dosing && b.dosing.perKg) cards.push(bioCard('⚖️', 'Personalized dose', `<div class="bio-dose" data-perkg="${esc(String(b.dosing.perKg))}" data-cap="${esc(b.dosing.cap || '')}" data-unit="${esc(b.dosing.unit || 'g')}"><label>Your body weight <input type="number" class="bio-dose-w" placeholder="70" min="30" max="250" inputmode="numeric"> kg</label><div class="bio-dose-out">— enter your weight —</div></div>${b.dosing.note ? `<div class="bio-note">${mdInline(b.dosing.note)}</div>` : ''}`, b.dosing.tier));
+    if (b.timing) cards.push(bioCard('⏰', 'Timing', mdInline(b.timing.line), b.timing.tier));
+    if (b.cycling) cards.push(bioCard('🔄', 'Cycling & tolerance', mdInline(b.cycling.line), b.cycling.tier));
+    if (Array.isArray(b.contra) && b.contra.length) cards.push(bioCard('⚠️', 'Personalized cautions', `<ul class="bio-contra">${b.contra.map(x => `<li><b>${esc(x.flag)}:</b> ${mdInline(x.advice)} ${bioTierChip(x.tier)}</li>`).join('')}</ul>`));
+    if (b.quality) cards.push(bioCard('🔬', 'Quality & sourcing', mdInline(b.quality.line), b.quality.tier));
+    if (b.nonResponders) cards.push(bioCard('🧬', 'Are you a non-responder?', mdInline(b.nonResponders.line), b.nonResponders.tier));
+    if (Array.isArray(b.synergy) && b.synergy.length) cards.push(bioCard('🤝', 'Goes well with — and why', `<ul class="bio-syn">${b.synergy.map(x => { const cs = slug(x.with); const link = bySlug[cs] ? `<a href="#/c/${cs}">${esc(x.with)}</a>` : esc(x.with); return `<li><b>${link}</b> — ${mdInline(x.why)} ${bioTierChip(x.tier)}</li>`; }).join('')}</ul>`));
+    if (!cards.length) return '';
+    return `<section class="bio-section" id="sec-bio"><div class="bio-head"><h2>🎯 Dial it in — the biohacker layer</h2><p class="bio-sub">Form, dose, timing, biomarkers and quality — how to actually get the result, not just swallow the molecule. Each card is tagged by how strong the evidence is.</p></div><div class="bio-cards">${cards.join('')}</div></section>`;
+  }
+
   function detail(s) {
     const c = bySlug[s]; if (!c) return notFound();
     setTimeout(() => {
@@ -1549,9 +1578,12 @@
     const ch4 = evidenceBlock + positioningPlot(c) + exploreBlock + callout('bottom', 'Bottom line', c.bottom);
     const ch5 = expertFramework(c) + (c.mechSteps && c.mechanism ? callout('mechanism-full', 'The full mechanism — the original technical write-up', c.mechanism) : '') + biotechDeepDive(c);
     const ch6 = selfTestBox(c) + feynmanBox(c) + graduationBlock(c) + journeyBlock('compound', c.id);
+    const chBio = bioSection(c);
     const chapterDefs = [
       { n: 1, icon: '🌱', label: 'Start here', html: ch1, check: 'start' }, { n: 2, icon: '⚙️', label: 'How it works', html: ch2, check: 'how' },
-      { n: 3, icon: _tui.icon, label: _tui.label, html: ch3, check: 'use' }, { n: 4, icon: '📊', label: 'The evidence', html: ch4, check: 'evidence' },
+      { n: 3, icon: _tui.icon, label: _tui.label, html: ch3, check: 'use' },
+      { n: 7, icon: '🎯', label: 'Dial it in', html: chBio },
+      { n: 4, icon: '📊', label: 'The evidence', html: ch4, check: 'evidence' },
       { n: 5, icon: '🔬', label: 'Deep dive', html: ch5 }, { n: 6, icon: '🎓', label: 'Prove it', html: ch6 },
     ].filter(ch => ch.html && ch.html.trim());
     // Numbered mastery spine — a course stepper that checks off as you read
@@ -6324,4 +6356,14 @@
   document.addEventListener('click', e => { const b = e.target.closest('[data-suggest]'); if (b) { e.preventDefault(); openSuggestModal(b.dataset.suggest, b.dataset.ref); } });
   document.addEventListener('click', e => { if (e.target.closest('[data-mastery-map]')) { e.preventDefault(); masteryMapModal(); } });
   document.addEventListener('click', e => { const b = e.target.closest('[data-share-short]'); if (b) { e.preventDefault(); shareShortModal(b.getAttribute('data-share-short')); } });
+  // Personalized per-kg dose calculator (biohacker layer)
+  document.addEventListener('input', e => {
+    const i = e.target.closest('.bio-dose-w'); if (!i) return;
+    const box = i.closest('.bio-dose'); const out = box.querySelector('.bio-dose-out');
+    const pk = parseFloat(box.getAttribute('data-perkg')); const unit = (box.getAttribute('data-unit') || 'g').split('/')[0];
+    const cap = parseFloat(box.getAttribute('data-cap')); const w = parseFloat(i.value);
+    if (!w || w < 20 || w > 300) { out.textContent = '— enter your weight —'; return; }
+    let d = pk * w; let capped = false; if (!isNaN(cap) && d > cap) { d = cap; capped = true; }
+    out.innerHTML = `≈ <b>${Math.round(d * 10) / 10} ${esc(unit)}</b> / day${capped ? ` <span class="bio-dose-cap">(capped at ${esc(String(cap))} ${esc(unit)})</span>` : ''}`;
+  });
 })();

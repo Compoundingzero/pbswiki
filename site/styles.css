@@ -2721,6 +2721,44 @@ a.dp-name:hover{color:var(--accent)}
 .sc-foot b{font-weight:800}
 @media(max-width:560px){.share-card{width:100%;max-width:288px;margin:0 auto}}
 
+/* ---- Biohacker / nutritionist layer ---- */
+.bio-section{margin:1.6rem 0;padding:1.3rem 1.4rem;border-radius:18px;border:1px solid var(--line);background:var(--panel)}
+.bio-head h2{margin:0 0 .3rem;font-size:1.35rem}
+.bio-sub{margin:0 0 1.1rem;color:var(--muted);font-size:.9rem;line-height:1.5}
+.bio-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}
+.bio-card{border:1px solid var(--line);border-radius:14px;padding:.95rem 1.05rem;background:var(--bg,#fff);display:flex;flex-direction:column}
+.bio-card-h{display:flex;align-items:center;gap:.5rem;margin-bottom:.55rem}
+.bio-card-h h4{margin:0;font-size:1rem;flex:1;line-height:1.2}
+.bio-ico{font-size:1.15rem;line-height:1}
+.bio-card-b{font-size:.9rem;line-height:1.5}
+.bio-line{margin:.3rem 0}
+.bio-line.bio-buy b{color:#16a34a}
+.bio-line.bio-avoid b{color:#dc2626}
+.bio-line.bio-muted{color:var(--muted);font-size:.85rem}
+.bio-note{margin-top:.45rem;font-size:.82rem;color:var(--muted);font-style:italic;line-height:1.45}
+.bio-tier{font-size:.7rem;letter-spacing:1px;white-space:nowrap;color:#94a3b8}
+.bio-tier.bt3{color:#16a34a}.bio-tier.bt2{color:#f59e0b}.bio-tier.bt1{color:#94a3b8}
+.bio-tbl-wrap{overflow-x:auto}
+.bio-tbl{width:100%;border-collapse:collapse;font-size:.84rem}
+.bio-tbl th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:.3rem .5rem .3rem 0;border-bottom:1px solid var(--line)}
+.bio-tbl td{padding:.45rem .5rem .45rem 0;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.4}
+.bio-tbl tr:last-child td{border-bottom:none}
+.bio-when{font-size:.74rem;color:var(--muted);margin-top:.15rem}
+.bio-co-grp{margin:.5rem 0}
+.bio-co-h{font-size:.8rem;font-weight:700;margin-bottom:.2rem}
+.bio-co-grp ul{margin:.1rem 0;padding-left:1.1rem}
+.bio-co-grp li{margin:.25rem 0;line-height:1.45}
+.bio-cost-big{font-size:1.15rem;font-weight:800;color:#16a34a}
+.bio-contra,.bio-syn{margin:.1rem 0;padding-left:1.1rem}
+.bio-contra li,.bio-syn li{margin:.35rem 0;line-height:1.45}
+.bio-dose{border:1px dashed var(--line);border-radius:10px;padding:.7rem .8rem;background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.bio-dose label{font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.bio-dose-w{width:5rem;padding:.35rem .5rem;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg,#fff);color:inherit}
+.bio-dose-out{margin-top:.55rem;font-size:1.05rem}
+.bio-dose-out b{color:var(--accent)}
+.bio-dose-cap{font-size:.78rem;color:var(--muted);font-weight:400}
+@media(max-width:560px){.bio-cards{grid-template-columns:1fr}}
+
 /* share modal overlay (no generic .modal-ov existed) */
 .share-ov{position:fixed;inset:0;z-index:2000;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto}
 .share-ov .share-modal{background:var(--bg,#fff);color:var(--ink);border-radius:18px;padding:1.5rem 1.6rem;position:relative;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
