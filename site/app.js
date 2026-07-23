@@ -4657,6 +4657,87 @@
       <div class="sc-foot">${esc(sp.foot || 'Full breakdown →')} <b>rnawiki.com</b></div>
     </div>`;
   }
+  // ---- Native-SVG rasterizer: exports the card as a real PNG, no external libs. ----
+  // Rendered from `spec` as pure SVG shapes+text (NOT an <foreignObject> image), so the
+  // canvas is not tainted and toBlob() yields a downloadable file. Graceful alert fallback.
+  const SC_NODE_FILL = { '': 'rgba(255,255,255,0.14)', 'sc-symptom': 'rgba(251,191,36,0.28)', 'sc-trigger': 'rgba(56,189,248,0.24)', 'sc-mediator': 'rgba(168,85,247,0.24)', 'sc-tissue': 'rgba(52,211,153,0.22)', 'sc-myth': 'rgba(239,68,68,0.28)', 'sc-truth': 'rgba(34,197,94,0.26)' };
+  const SC_FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+  const _measCtx = (() => { try { return document.createElement('canvas').getContext('2d'); } catch (e) { return null; } })();
+  function _wrap(text, fontPx, weight, maxW) {
+    text = String(text == null ? '' : text);
+    if (!_measCtx) return [text];
+    _measCtx.font = `${weight} ${fontPx}px ${SC_FONT}`;
+    const words = text.split(/\s+/).filter(Boolean); const lines = []; let cur = '';
+    for (const w of words) { const t = cur ? cur + ' ' + w : w; if (_measCtx.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t; }
+    if (cur) lines.push(cur); return lines.length ? lines : [''];
+  }
+  function _gradStops(grad) {
+    grad = grad || 'linear-gradient(160deg,#0f172a,#4c1d95 60%,#be185d)';
+    const m = grad.match(/linear-gradient\(\s*([\-\d.]+)deg\s*,(.+)\)\s*$/);
+    let angle = 160, gbody = '#0f172a,#4c1d95 60%,#be185d';
+    if (m) { angle = parseFloat(m[1]); gbody = m[2]; }
+    const parts = gbody.split(',').map(s => s.trim());
+    const stops = parts.map((p, i) => { const mm = p.match(/(#[0-9a-fA-F]{3,8})\s*(?:([\d.]+)%)?/); const color = mm ? mm[1] : '#000'; const off = (mm && mm[2] != null) ? parseFloat(mm[2]) : (i / Math.max(1, parts.length - 1)) * 100; return { color, off }; });
+    return { angle, stops };
+  }
+  function shareCardSvg(spec, scale) {
+    scale = scale || 3;
+    const W = 288, H = 512, padX = 19, padY = 21, cw = W - padX * 2;
+    const esc2 = s => esc(String(s == null ? '' : s));
+    const g = _gradStops(spec.grad);
+    const a = g.angle * Math.PI / 180, gx = Math.sin(a), gy = -Math.cos(a);
+    const x1 = (0.5 - gx / 2).toFixed(4), y1 = (0.5 - gy / 2).toFixed(4), x2 = (0.5 + gx / 2).toFixed(4), y2 = (0.5 + gy / 2).toFixed(4);
+    let body = ''; let y = padY;
+    const line = (txt, size, weight, opacity, extra) => { body += `<text x="${padX}" y="${(y + size).toFixed(1)}" font-family="${SC_FONT}" font-size="${size}" font-weight="${weight}" fill="#fff"${opacity != null ? ` opacity="${opacity}"` : ''}${extra || ''}>${esc2(txt)}</text>`; y += size * 1.18; };
+    line('🧬 RNAwiki', 12.8, 800, 0.92); y += 4;
+    if (spec.kicker) { line(String(spec.kicker).toUpperCase(), 10.9, 700, 0.75, ' letter-spacing="1.1"'); y += 2; }
+    _wrap(spec.title, 27.2, 800, cw).slice(0, 3).forEach(tl => { body += `<text x="${padX}" y="${(y + 24).toFixed(1)}" font-family="${SC_FONT}" font-size="27.2" font-weight="800" fill="#fff">${esc2(tl)}</text>`; y += 28.5; });
+    y += 3;
+    if (spec.count) { line(spec.count, 13.1, 500, 0.85); y += 4; }
+    (spec.nodes || []).forEach((n, i) => {
+      const label = (n.ico ? n.ico + ' ' : '') + n.text;
+      const fw = (n.cls === 'sc-truth' || n.cls === 'sc-symptom') ? 700 : 400;
+      const nl = _wrap(label, 13.1, fw, cw - 20).slice(0, 4);
+      const ph = nl.length * 16 + 12;
+      body += `<rect x="${padX}" y="${y.toFixed(1)}" width="${cw}" height="${ph.toFixed(1)}" rx="9" fill="${SC_NODE_FILL[n.cls] || SC_NODE_FILL['']}"/>`;
+      let ty = y + 10; nl.forEach(l => { body += `<text x="${padX + 10}" y="${(ty + 11).toFixed(1)}" font-family="${SC_FONT}" font-size="13.1" font-weight="${fw}" fill="#fff">${esc2(l)}</text>`; ty += 16; });
+      y += ph;
+      if (spec.arrows && i < spec.nodes.length - 1) { body += `<text x="${W / 2}" y="${(y + 11).toFixed(1)}" text-anchor="middle" font-family="${SC_FONT}" font-size="12" fill="#fff" opacity="0.6">↓</text>`; y += 15; } else { y += 3; }
+    });
+    if (spec.big) {
+      const bl = _wrap(spec.big, 16.3, 600, cw - 22).slice(0, 7);
+      const bh = bl.length * 21 + 20;
+      body += `<rect x="${padX}" y="${y.toFixed(1)}" width="${cw}" height="${bh.toFixed(1)}" rx="11" fill="rgba(255,255,255,0.14)"/>`;
+      let ty = y + 12; bl.forEach(l => { body += `<text x="${padX + 11}" y="${(ty + 14).toFixed(1)}" font-family="${SC_FONT}" font-size="16.3" font-weight="600" fill="#fff">${esc2(l)}</text>`; ty += 21; });
+      y += bh + 6;
+    }
+    if (spec.fix) {
+      const fl = _wrap(spec.fix, 13.1, 600, cw - 20).slice(0, 3);
+      const fh = fl.length * 17 + 14;
+      body += `<rect x="${padX}" y="${y.toFixed(1)}" width="${cw}" height="${fh.toFixed(1)}" rx="9" fill="rgba(34,197,94,0.25)"/>`;
+      let ty = y + 11; fl.forEach(l => { body += `<text x="${padX + 10}" y="${(ty + 11).toFixed(1)}" font-family="${SC_FONT}" font-size="13.1" font-weight="600" fill="#fff">${esc2(l)}</text>`; ty += 17; });
+    }
+    body += `<text x="${W / 2}" y="${H - padY - 4}" text-anchor="middle" font-family="${SC_FONT}" font-size="12.8" fill="#fff" opacity="0.92">${esc2((spec.foot || 'Full breakdown →') + ' rnawiki.com')}</text>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${W * scale}" height="${H * scale}" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="scg" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}">${g.stops.map(s => `<stop offset="${s.off}%" stop-color="${s.color}"/>`).join('')}</linearGradient><clipPath id="scc"><rect x="0" y="0" width="${W}" height="${H}" rx="20"/></clipPath></defs><g clip-path="url(#scc)"><rect x="0" y="0" width="${W}" height="${H}" fill="url(#scg)"/>${body}</g></svg>`;
+  }
+  function shareDownloadPng(spec, name, btn) {
+    const fail = () => { if (btn) { btn.textContent = 'Screenshot the card instead'; setTimeout(() => btn.textContent = '⬇ Download PNG', 2600); } };
+    try {
+      const blob = new Blob([shareCardSvg(spec, 3)], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas'); canvas.width = 288 * 3; canvas.height = 512 * 3;
+          canvas.getContext('2d').drawImage(img, 0, 0);
+          URL.revokeObjectURL(url);
+          canvas.toBlob(b => { if (!b) return fail(); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = (name || 'rnawiki-short') + '.png'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); if (btn) { btn.textContent = '✓ Saved'; setTimeout(() => btn.textContent = '⬇ Download PNG', 1800); } }, 'image/png');
+        } catch (e) { URL.revokeObjectURL(url); fail(); }
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); fail(); };
+      img.src = url;
+    } catch (e) { fail(); }
+  }
   function shareShortModal(ref) {
     // ref = "type:id". Back-compat: a bare id (no ":") is treated as a cause problem id.
     let type, id;
@@ -4669,9 +4750,9 @@
     const ov = document.createElement('div'); ov.className = 'modal-ov share-ov';
     ov.innerHTML = `<div class="modal share-modal"><button class="modal-x" aria-label="Close">×</button>
       <h3 class="share-h">📱 Make a short — ${esc(built.name)}</h3>
-      <p class="share-sub">Screenshot the card for your cover, then film (voice-over or captions) with the script. No face needed.</p>
+      <p class="share-sub">Download the card as a PNG (or screenshot it) for your cover, then film — voice-over or captions — with the script. No face needed.</p>
       <div class="share-grid">
-        <div class="share-card-wrap">${shareCardFromSpec(built.spec)}</div>
+        <div class="share-card-wrap">${shareCardFromSpec(built.spec)}<button class="cta-primary share-dl">⬇ Download PNG</button></div>
         <div class="share-script-wrap"><label>Ready-to-film script</label><textarea class="share-script" readonly rows="16">${esc(built.script)}</textarea>
           <button class="cta-primary share-copy">Copy script</button></div>
       </div></div>`;
@@ -4679,6 +4760,7 @@
     const close = () => ov.remove();
     ov.querySelector('.modal-x').onclick = close;
     ov.onclick = e => { if (e.target === ov) close(); };
+    ov.querySelector('.share-dl').onclick = () => { const b = ov.querySelector('.share-dl'); b.textContent = 'Rendering…'; shareDownloadPng(built.spec, slug(built.name) + '-' + type, b); };
     ov.querySelector('.share-copy').onclick = () => { const t = ov.querySelector('.share-script'); t.select(); try { navigator.clipboard.writeText(t.value); } catch (e) { document.execCommand('copy'); } const b = ov.querySelector('.share-copy'); b.textContent = '✓ Copied'; setTimeout(() => b.textContent = 'Copy script', 1600); };
   }
   async function renderProtocol(pid, rcid, clinicHandle) {
