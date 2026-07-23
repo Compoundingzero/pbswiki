@@ -902,33 +902,33 @@
      {
       "node": "High-glycemic carbs, sugary drinks + dairy (skim milk, whey)",
       "type": "trigger",
-      "say": "“High-glycemic” simply means food your body turns into blood sugar very fast — white bread, white rice, sweets, sugary drinks. Dairy, especially skim milk and whey protein, does something similar by a separate route. Both dump a fast, big load into your bloodstream, and that surge is the spark that starts this whole chain.",
-      "lay": "You eat fast-sugar food, or drink milk"
+      "say": "First, the trigger. **“Glycemic”** simply describes how fast a food raises your blood sugar. A **high-glycemic** food is one your gut breaks down and absorbs very quickly — white bread, white rice, potatoes, sweets, sugary drinks. Within minutes, a big wave of sugar (glucose) floods into your bloodstream. **Dairy** is the surprising one: milk isn’t sweet, but its proteins — especially **whey**, the protein in skim milk and protein shakes — set off the *same* “grow and store” response through a separate hormonal route we’ll follow in the next step. Either way, you’ve just delivered a fast, heavy load of sugar or milk-protein signals into your blood, and everything below is your body reacting to that surge.",
+      "lay": "You eat fast-digesting sugar, or drink milk"
      },
      {
       "node": "Insulin & IGF-1 surge",
       "type": "mediator",
       "ref": "IGF1",
-      "say": "Here’s the link to the last step: when blood sugar shoots up quickly, your pancreas releases **insulin** — the hormone whose job is to pull that sugar out of your blood and into your cells. The bigger and faster the sugar spike, the bigger the insulin burst. That insulin also switches on a second growth hormone, **IGF-1** (and dairy raises IGF-1 directly). Both are “grow and store” signals — they tell cells to build, grow and stockpile fuel.",
+      "say": "Your blood sugar isn’t allowed to stay high, so your **pancreas** (an organ tucked behind your stomach) instantly releases **insulin**. Insulin is a hormone that works like a key: it unlocks your cells so sugar can leave the blood and move inside them to be burned for energy or stored. The faster and higher the sugar spike, the bigger the insulin burst. Insulin doesn’t act alone — it also raises a partner hormone called **IGF-1** (that stands for *insulin-like growth factor-1*), and milk raises IGF-1 directly, which is dairy’s “separate route.” The one idea to hold onto: insulin and IGF-1 are your body’s **“grow and store” signals** — their whole job is to tell cells to take in fuel, build and grow. Handy after a meal, but as you’ll see, your oil glands hear that “grow” order too.",
       "lay": "Your body releases a big burst of insulin"
      },
      {
       "node": "AKT suppresses FoxO1, activating mTORC1/SREBP-1",
       "type": "mediator",
       "ref": "mTOR",
-      "say": "When insulin and IGF-1 reach the cells of your oil glands, they trip an internal relay. Picture two controls inside the cell: a **brake** that normally keeps oil-making in check (a protein called FoxO1), and an **accelerator** that ramps oil-making up (called mTOR). The insulin signal takes the brake *off* and presses the accelerator *on* — so the cell loses its restraint and starts building oil in earnest.",
+      "say": "Now the signal arrives at the cells of your oil glands. On the outer surface of each cell sits a **receptor** — think of it as a docking port shaped to catch a specific hormone, here insulin and IGF-1. When they dock, they set off a relay of tiny messenger molecules inside the cell (the first is a protein called **AKT**) that reaches two master controls. Picture a **brake** and an **accelerator** for oil production. The brake is a protein called **FoxO1** that normally holds oil-making back; the accelerator is a protein called **mTOR** that speeds it up. The insulin/IGF-1 signal does both at once — it pushes the brake *off* and the accelerator *on*. With nothing restraining it and everything pushing it, the cell shifts into full oil-building mode.",
       "lay": "Inside the oil gland, a growth switch flips on"
      },
      {
       "node": "Sebocyte lipogenesis and androgen-receptor activity rise",
       "type": "tissue",
-      "say": "With the brake off, the oil-gland cells (**sebocytes**) do two things. First, they pump out far more oil (**sebum**). Second, they grow more docking points for testosterone-type hormones (**androgens**), which push oil production harder still. So the gland is now flooding the pore with oil *and* primed to respond to hormones — a double hit.",
+      "say": "With that switch flipped, the oil-gland cells — their proper name is **sebocytes** — do two things. First, they crank up production of **sebum**, the oily substance that normally waterproofs your skin; now they make far too much of it. Second, they build *more* docking ports for **androgens** (the family of testosterone-type hormones) and grow more sensitive to them — and androgens are themselves a strong “make more oil” signal. So this step is a double hit: the gland is overproducing oil on its own **and** turning up its sensitivity to a second hormone that pushes oil even harder. The pore is now receiving far more oil than it can clear.",
       "lay": "The gland makes more oil — and tunes in to hormones"
      },
      {
       "node": "Oily skin, comedones and inflammatory papules",
       "type": "symptom",
-      "say": "All that extra oil mixes with dead skin cells and plugs the pore. That plug is a **comedone** — a blackhead if it’s open to the air, a whitehead if it’s sealed over. Bacteria that normally live on your skin feed on the trapped oil, the area turns red and swollen, and you get an **inflammatory papule** — a pimple. The visible result: oily skin and breakouts.",
+      "say": "Here it becomes something you can see. A pore is really a tiny tunnel in the skin (called a **follicle**) with an oil gland at its base. All that excess oil mixes with dead skin cells shedding off the tunnel walls and jams together into a plug — the medical word is a **comedone**. If the plug’s surface is open to the air it oxidises and darkens into a **blackhead**; if it’s sealed over it stays a **whitehead**. Bacteria that live on everyone’s skin feed on the trapped oil and multiply, your immune system reacts, and the spot turns red, raised and sore — an **inflammatory papule**, i.e. an ordinary pimple. That full sequence — fast sugar or milk raises insulin, insulin flips the growth switch inside the gland, the gland floods the pore with oil, and the clogged pore then inflames — is the whole story of this cause.",
       "lay": "The pore clogs, and a pimple forms"
      }
     ],
@@ -977,33 +977,33 @@
      {
       "node": "Higher androgens (testosterone) and/or low SHBG raising free androgen",
       "type": "trigger",
-      "say": "**Androgens** are the family of hormones that includes testosterone. Most of your testosterone travels “handcuffed” to a carrier protein called **SHBG**, which keeps it inactive. This cause begins when you either make more androgens, or your SHBG runs low — either way, more testosterone is left *free* and active to reach your skin. In women this often comes alongside irregular periods.",
+      "say": "This cause is driven by **androgens** — the family of hormones that includes **testosterone**. (Both men and women make them; women simply make far less.) Here’s the detail that matters: most of your testosterone doesn’t drift around freely. It travels stuck to a carrier protein in your blood called **SHBG** — think of SHBG as a handcuff that keeps testosterone parked and inactive. Only the small **“free”** slice that *isn’t* handcuffed can actually reach your skin and act on it. This cause begins when that free slice rises — either because you’re making more androgens, or because your SHBG level falls (fewer handcuffs means more free hormone). In women this often comes with irregular periods, which is why doctors screen for **PCOS** (a common hormone condition) here.",
       "lay": "You have more “free” testosterone-type hormone"
      },
      {
       "node": "5-alpha-reductase converts testosterone to DHT in the skin",
       "type": "mediator",
       "ref": "DHT",
-      "say": "Here’s the link: when that free testosterone reaches your skin, an enzyme there (**5-alpha-reductase**) converts it into **DHT** — a version several times more powerful at driving oil glands. So your skin doesn’t just receive testosterone; it *amplifies* it into something stronger right where the acne forms.",
+      "say": "The free testosterone now reaches your skin — but it doesn’t act directly. Your skin carries an **enzyme** (a molecular tool that changes one substance into another) called **5-alpha-reductase**, and it converts testosterone into a different molecule called **DHT** (dihydrotestosterone). Why that’s the crux: DHT is roughly five to ten times *more powerful* at switching on oil glands than plain testosterone. So your skin isn’t just receiving a hormone — it’s taking testosterone and **amplifying** it into a much stronger form, right where acne forms. Someone whose skin has very active 5-alpha-reductase makes more DHT from the same testosterone, and tends to get more hormonal acne.",
       "lay": "Your skin converts it into a much stronger version"
      },
      {
       "node": "DHT binds the sebocyte androgen receptor",
       "type": "mediator",
       "ref": "AR",
-      "say": "DHT works by locking onto a specific **receptor** — a docking point — on the oil-gland cells (the *androgen receptor*). Think of a key fitting a lock: once DHT clicks in, it sends the instruction to grow and make oil. The more docking points you have, and the more sensitive they are, the louder that instruction — which is why two people with the same hormone levels can have very different skin.",
+      "say": "DHT delivers its message through a **receptor** — the docking port on the oil-gland cell built specifically to catch androgens (the **androgen receptor**). Picture a key fitting a lock: when DHT clicks into the lock, the receptor carries that signal into the cell’s control centre and switches on the genes that tell the gland to grow and pour out oil. Crucially, the strength of the effect depends on two things you can’t feel — how *many* of these locks a person has, and how *sensitive* they are. That’s why two people with identical blood-hormone levels can have completely different skin: same key, different number of locks.",
       "lay": "That stronger hormone switches the oil gland on"
      },
      {
       "node": "Sebaceous gland enlarges and sebum output climbs",
       "type": "tissue",
-      "say": "Following that instruction, the gland physically enlarges and pumps out a lot of thick, sticky **sebum** (oil). This is why hormonal acne tends to be deep and stubborn rather than surface blackheads — the entire gland is enlarged and overactive, not just the pore opening.",
-      "lay": "The gland grows and floods the pore with thick oil"
+      "say": "Acting on that instruction, the oil gland physically **enlarges** — like a muscle that’s been told to grow — and pumps out a large volume of thick, sticky **sebum** (the skin’s natural oil). This is the key difference from other acne: because the *whole gland* is bigger and overactive, the oil is produced deep and in bulk rather than just at the surface. That sets up the deep, stubborn spots this cause is known for, instead of shallow blackheads.",
+      "lay": "The oil gland grows and floods the pore with thick oil"
      },
      {
       "node": "Deep, tender cysts on jaw/chin/neck; premenstrual flares",
       "type": "symptom",
-      "say": "That thick oil clogs the follicle deep down, and the trapped, inflamed contents build into a painful **cyst** rather than a small surface bump. Because the glands on the jaw, chin and neck are the most hormone-sensitive, that’s where they cluster — and in women they flare in the week before a period, when the hormone balance tips toward androgens.",
+      "say": "Finally, that deep flood of thick oil clogs the follicle far below the surface. Because it’s trapped deep down, the blocked, inflamed contents build into a large, painful lump under the skin — a **cyst** — rather than a small bump you can pop the top off. The oil glands on the **jaw, chin and neck** are the most androgen-sensitive on the face, so that’s where these cysts gather. And in women they typically **flare in the week before a period**, because that’s when estrogen dips and the balance tips toward androgens — the very hormones driving this whole chain.",
       "lay": "Deep, tender cysts form along the jaw"
      }
     ],
@@ -1047,32 +1047,32 @@
      {
       "node": "Abnormal keratinocyte shedding + sebum low in linoleic acid",
       "type": "trigger",
-      "say": "Your pores are lined with skin cells (**keratinocytes**) that should shed and wash away one at a time. In acne they clump and stick together instead — partly because the sebum is low in a particular fatty acid (**linoleic acid**) that normally keeps the lining healthy. So the exit of the pore starts to gum up.",
-      "lay": "Your pore lining gets sticky and stops shedding"
+      "say": "Every pore is a tiny tunnel in the skin (a **follicle**), and its walls are lined with skin cells called **keratinocytes**. Normally these cells shed off one at a time and rinse away, keeping the tunnel clear. In acne-prone skin they do the opposite — they turn sticky and clump together instead of shedding. Part of the reason: the skin’s oil is low in a particular healthy fatty acid (**linoleic acid**), and without enough of it the pore lining stops behaving normally. The upshot is that the mouth of the pore begins to gum up instead of staying open.",
+      "lay": "Your pore lining gets sticky and stops shedding cleanly"
      },
      {
       "node": "Microcomedo (plugged follicle) forms",
       "type": "tissue",
-      "say": "Those sticky cells, mixed with oil, form a microscopic plug wedged in the follicle — a **microcomedo**. It’s invisible at this stage, but it’s the seed of every spot: nothing can drain out anymore, so oil and debris begin backing up behind it.",
+      "say": "Those sticky cells, bound together with oil, pack into a microscopic plug wedged inside the follicle — the medical name is a **microcomedo** (“micro” because it’s far too small to see). This is the true seed of every spot. Once the plug forms, the tunnel is effectively sealed: the oil the gland keeps making has nowhere to drain, so it and everything else begins backing up in the closed pocket behind the plug.",
       "lay": "A tiny plug forms deep in the pore"
      },
      {
       "node": "C. acnes overgrowth (loss of phylotype diversity, IA1 dominance) and biofilm in trapped sebum",
       "type": "mediator",
-      "say": "***Cutibacterium acnes*** is a normal bacterium that lives on everyone’s skin — it is *not* an infection you caught. But behind the sealed, oil-filled plug it thrives, and its population shifts toward a more aggressive strain that forms a sticky film. So the real problem isn’t a foreign germ; it’s your own resident bacteria tipping out of balance inside a trapped space.",
+      "say": "A bacterium called ***Cutibacterium acnes*** (usually shortened to *C. acnes*) lives inside the pores of literally everyone — it is a **normal resident, not an infection you caught, and not a sign of being unclean**. Ordinarily it’s harmless. But the sealed, low-oxygen, oil-filled space behind the plug is its ideal home, so it multiplies quickly, and its mix shifts toward a more aggressive, inflammation-provoking strain that also lays down a protective slime layer (a **biofilm**). So the real problem isn’t a foreign germ — it’s your *own* resident bacteria tipping out of balance inside a trapped pocket.",
       "lay": "Your own skin bacteria multiply behind the plug"
      },
      {
       "node": "TLR2 innate-immune activation and IL-1 inflammation",
       "type": "mediator",
       "ref": "TLR2",
-      "say": "Here’s the link to the redness: your immune system has sensors (called **TLR2**) that detect these bacteria and their by-products. When they trip, they release inflammation signals (**IL-1**) that rush blood and immune cells to the spot. That inflammation — not the bacteria themselves — is what turns a quiet clogged pore into a red, swollen pimple.",
-      "lay": "Your immune system reacts and the spot turns red"
+      "say": "This is where an invisible plug becomes a visible pimple. Your immune cells carry sensors called **TLR2** — think of them as tripwires that recognise these bacteria and their by-products. When the tripwires are set off, they release **inflammation** signals (chemical alarm messengers, the main one called **IL-1**) that pull blood and immune cells rushing to the spot. That inflammatory reaction — the swelling, warmth and redness — is *your body’s* response, not something the bacteria do directly. It’s the reason a quiet clogged pore turns into a red, sore, raised spot.",
+      "lay": "Your immune system reacts, and the spot turns red"
      },
      {
       "node": "Blackheads, whiteheads, red papules and pustules",
       "type": "symptom",
-      "say": "Depending on whether the plug is open to the air (blackhead) or closed over (whitehead), and how much inflammation kicks in, you get the visible mix: comedones plus red **papules** and pus-filled **pustules**. Because this clog-and-inflame sequence is where *every* type of acne ends up, unclogging the pore (with a retinoid) helps almost everyone.",
+      "say": "What you finally see depends on the plug and the inflammation. If the plug’s top is open to the air it darkens into a **blackhead** (that colour is oxidised oil and skin pigment, **not** trapped dirt); if it stays sealed under the surface it’s a **whitehead**. Add the immune inflammation from the last step and you get red, raised **papules** and pus-filled **pustules** — classic pimples. Because *every* type of acne, whatever first set it off, ends up funnelling through this same clog-then-inflame sequence, treatments that keep the pore unplugged (**retinoids**) help almost everyone.",
       "lay": "Blackheads, whiteheads and red pimples appear"
      }
     ],
@@ -1117,25 +1117,25 @@
      {
       "node": "Comedogenic products, occlusion, friction, or over-washing",
       "type": "trigger",
-      "say": "This cause comes from the outside, not from your hormones. Heavy, pore-blocking (**comedogenic**) creams and oils, a mask or helmet pressing on the skin (**occlusion**), repeated rubbing (**friction**), or harsh over-washing all start it. The common thread: an outside factor is either sealing the pore shut or damaging the skin’s surface.",
+      "say": "Unlike the other causes, this one comes entirely from the *outside* — nothing to do with your hormones or your diet. It’s triggered by things sitting on or rubbing your skin: heavy, pore-blocking creams and oils (the word for pore-blocking is **comedogenic**), a face mask or helmet pressing down (**occlusion** — simply meaning something sealing the surface), repeated rubbing from a strap, phone or hand (**friction**), or harsh scrubbing and over-washing. The common thread is simple: an outside object is either sealing your pores shut or wearing down the skin’s surface — often both at once.",
       "lay": "Something on your skin clogs or irritates it"
      },
      {
       "node": "Pore occlusion plus a stripped, damaged barrier",
       "type": "tissue",
-      "say": "Two things happen together. Heavy products or friction physically block the pore opening. And over-washing or scrubbing strips away the skin’s **barrier** — the thin protective layer that holds moisture in and irritants out. A blocked pore sitting on top of a raw, unprotected surface is the perfect setup for a breakout.",
+      "say": "Two problems now stack on top of each other. First, the heavy product or constant rubbing physically blocks the opening of the pore, trapping oil inside. Second — the part most people miss — over-washing or scrubbing strips away the skin’s **barrier**. The barrier is the skin’s thin outer shield, a layer of cells and natural oils that locks moisture in and keeps irritants out. A pore that’s blocked, sitting on skin whose shield has been scrubbed raw, is the ideal setup for a breakout.",
       "lay": "The pore blocks while the skin’s barrier is stripped"
      },
      {
       "node": "Reactive irritation and impaired barrier lowering the threshold for plugging",
       "type": "mediator",
-      "say": "With the barrier damaged, the skin is irritated and reactive, and its threshold for forming a clog drops. Minor triggers that healthy skin would shrug off now tip it straight into plugged, inflamed pores. It becomes a loop: irritation → more breakouts → more product or washing to “fix” it → more irritation.",
+      "say": "With the barrier damaged, the skin is left irritated, reactive and inflamed — and its **threshold** for forming a clog drops sharply (in other words, it now takes far less to tip it over the edge). Things that healthy, protected skin would easily shrug off are suddenly enough to push it into blocked, inflamed pores. Worse, it becomes a self-feeding loop: the irritation causes breakouts → you apply more product or wash harder to fix them → that strips and irritates the skin further → more breakouts. The skin never gets a calm enough stretch to repair itself.",
       "lay": "The raw skin inflames and plugs more easily"
      },
      {
       "node": "Bumps mapped to where products, mask or hair touch skin",
       "type": "symptom",
-      "say": "The giveaway for this cause is the **map**: the bumps line up precisely with where a product sits, a mask rubs, hair rests on your forehead, or a phone touches your cheek. If your breakouts trace an object rather than your hormone-sensitive jaw, this is usually the culprit — and removing the trigger clears it quickly.",
+      "say": "The dead giveaway for this cause is the **map** of your breakouts. The bumps line up precisely with wherever the trigger touches — a band across the forehead from a hat or fringe, a stripe where a mask edge sits, patches where a phone or a resting hand contacts the cheek, or the hairline where hair products run down. If your spots trace an *object* rather than clustering on the hormone-sensitive jaw, this is almost always the cause — and the encouraging part is that removing the offending product or friction usually clears it within a few weeks.",
       "lay": "Breakouts appear exactly where the trigger touches"
      }
     ],
@@ -1174,26 +1174,26 @@
      {
       "node": "Chronic stress and short sleep",
       "type": "trigger",
-      "say": "The trigger here is sustained pressure — a deadline stretch, exams, life stress — usually paired with too little sleep. On its own that feels purely mental, but your body converts it into chemistry, and that’s where your skin gets pulled in.",
+      "say": "The trigger here is **sustained** stress — a run of deadlines, exams or life pressure — almost always paired with too little sleep. On its own that sounds purely mental, something happening only in your head. But your body doesn’t keep stress in your head; it converts it into hormones and chemistry that travel everywhere, including to your skin. The next two steps show exactly how a *feeling* turns into a breakout.",
       "lay": "You go through a stretch of stress and poor sleep"
      },
      {
       "node": "CRH acts on sebocyte CRH-R1 (autocrine), driving lipogenesis and 3-beta-HSD",
       "type": "mediator",
       "ref": "cortisol",
-      "say": "Here’s the surprising link: your oil glands carry receptors for stress signals. Under stress your body releases a hormone called **CRH**, and the oil-gland cells have the exact docking point (**CRH-R1**) that CRH plugs into. When it does, it directly tells the gland to make more oil — and even lets the gland brew its own stress hormones on the spot. So stress arrives at your skin as a chemical instruction, not just a feeling.",
+      "say": "This is the surprising link. When you’re under stress, your body releases a hormone called **CRH** (corticotropin-releasing hormone) — the opening signal of your whole stress response. It turns out your oil glands carry the exact **receptor** (the docking port for it, called **CRH-R1**) that CRH plugs into. When CRH docks there, it directly orders the gland to make more oil — and even switches on the gland’s ability to brew its *own* stress hormones on the spot. So stress doesn’t reach your skin as an emotion; it arrives as a chemical key that unlocks oil production.",
       "lay": "Stress hormones tell the oil gland to switch on"
      },
      {
       "node": "More sebum, higher systemic inflammation, worse insulin sensitivity",
       "type": "tissue",
-      "say": "That stress signalling pushes three things the wrong way at once: the gland makes more oil, body-wide **inflammation** ticks up (so spots redden more easily), and your **insulin sensitivity** worsens — which quietly feeds back into the diet-and-insulin cause above. Too little sleep amplifies all three.",
+      "say": "That stress signalling pushes three things the wrong way at the same time. One, the oil gland makes more **sebum** (oil), exactly as in the diet cause. Two, **inflammation** across your whole body ticks up, so any clogged pore reddens and swells more easily. Three, your **insulin sensitivity** worsens — meaning your body handles sugar less well — which quietly feeds straight back into the insulin/IGF-1 cause at the top of this list. Too little sleep makes all three worse. So stress doesn’t drive acne through one channel; it nudges several of the other causes at once.",
       "lay": "Oil rises, inflammation rises, blood-sugar control dips"
      },
      {
       "node": "Flares during deadline weeks and poor-sleep stretches",
       "type": "symptom",
-      "say": "The tell-tale sign is timing: skin worsens through the high-pressure, low-sleep stretches and settles when you rest or take a holiday. One honest caveat — stressful weeks usually also mean more sugar, more dairy and less sleep, so some “stress acne” is really the diet cause in disguise. Watch which one actually tracks your flares.",
+      "say": "The tell-tale sign of this cause is **timing**, not location. Your skin worsens during the high-pressure, low-sleep stretches and noticeably calms when you rest, sleep properly or take a holiday. One honest caveat worth holding: stressful weeks usually *also* bring more sugar, more dairy and worse sleep — so some of what looks like “stress acne” is really the diet cause wearing a disguise. The useful move is to watch which actually tracks your flares: the stress itself, or the habits that ride along with it.",
       "lay": "Breakouts flare in the hard weeks, calm on holiday"
      }
     ],
